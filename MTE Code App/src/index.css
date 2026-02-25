@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+:root {
+        /* UI FONT: "Business Standard" 
+           Clean, neutral, professional. Used by banks and enterprise software. */
+        --font-ui: "Inter", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+
+        /* LEGAL FONT: "Screen Serif"
+           Georgia is the gold standard for readable serif text on screens.
+           It looks serious but not archaic. */
+        --font-legal: "Inter", Georgia, "Times New Roman", Times, serif;
+
+        /* COLORS */
+        --color-purple: #7654A1;
+        --color-teal: #0099A7;
+        --color-bg: #f8f9fa;
+        
+        /* READER SETTINGS */
+        /* Bumped up slightly (1.05rem) because Arial/Georgia are 
+           visually smaller than the old Merriweather font. */
+        --reader-font-size: 1.05rem;     
+        --reader-line-height: 1.6;
+        --reader-paragraph-spacing: 0.9rem;
+    }
+
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0);
+  border: 0;
+}
+
+.reader-content,
+.reader-content p,
+.reader-content ul,
+.reader-content ol,
+.reader-content li,
+.reader-content div {
+  font-size: var(--reader-font-size) !important;
+  line-height: var(--reader-line-height) !important;
+}
+.reader-content p,
+.reader-content ul,
+.reader-content ol {
+  margin-bottom: var(--reader-paragraph-spacing) !important;
+  margin-top: 0 !important;
+}
+
+        body { 
+        /* This forces the whole app to use the new System UI font */
+        font-family: var(--font-ui); 
+        background-color: var(--color-bg); 
+        color: #1e293b;
+        margin: 0;
+    }
+
+    /* This forces the legal text sections to use Georgia/Serif */
+    .font-legal { font-family: var(--font-legal); }
+    
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .custom-scrollbar:hover::-webkit-scrollbar-thumb { background: #94a3b8; }
+    
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+
+    .chapter-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--color-teal);
+    }
