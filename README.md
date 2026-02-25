@@ -1,10 +1,6 @@
 # TheCodeApp - MedTech Europe Code of Ethical Business Practice
 
-Welcome to the source code for **TheCodeApp**! This application is a digital, highly searchable, and installable version of the MedTech Europe Code of Ethical Business Practice. 
-
-This guide is written to help anyone—whether you are a seasoned software engineer or someone looking at code for the first time—understand how the app is built, where to find things, and how it all works together.
-
----
+This application is a digital, highly searchable, and installable version of the MedTech Europe Code of Ethical Business Practice. 
 
 ## 📁 Folder & File Structure
 
