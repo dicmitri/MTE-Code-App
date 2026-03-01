@@ -6,7 +6,9 @@ import { Logo } from './Logo';
 export const LandingPage = ({ onSelectChapter }) => (
     <div className="animate-fade-in py-10 px-4 max-w-6xl mx-auto overflow-y-auto h-full custom-scrollbar pb-24">
         <div className="text-center mb-16">
-            <Logo size={64} className="justify-center mb-6" />
+            <div className="scale-[0.7] sm:scale-90 md:scale-100 origin-center flex justify-center">
+                <Logo size={64} className="justify-center mb-6" />
+            </div>
             <h1 className="text-4xl font-bold text-gray-900 mb-4 tracking-tight">The MedTech Europe Code of Ethical Business Practice</h1>
             <p className="text-xl text-gray-500 max-w-2xl mx-auto font-light leading-relaxed">
                 Digital version 1.0. Code text: September 2024. 

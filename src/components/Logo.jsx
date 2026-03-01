@@ -144,12 +144,33 @@ M136.890472,101.653625
     C135.955093,88.329201 138.194839,93.872322 136.890472,101.653625 
 z"/>
     </svg>
-    <span
-      className="font-bold text-gray-800 tracking-tight"
-      style={{ fontSize: `${size * 0.6}px` }}
-    >
-      The<span className="text-[#0099A7]">Code</span>
-      <span className="text-[#7654A1]">App</span>
-    </span>
+    <div className="flex flex-col justify-center">
+      <span
+        className="font-bold text-[#5D2B86] tracking-tight leading-none whitespace-nowrap"
+        style={{ fontSize: `${size * 0.6}px` }}
+      >
+        MedTech Europe
+      </span>
+      <div className="flex items-center mt-1 whitespace-nowrap">
+        <span
+          className="font-bold text-gray-500 leading-none"
+          style={{ fontSize: `${size * 0.24}px` }}
+        >
+          from diagnosis to cure
+        </span>
+        <span
+          className="font-bold text-gray-300 mx-1.5 leading-none"
+          style={{ fontSize: `${size * 0.24}px` }}
+        >
+          |
+        </span>
+        <span
+          className="font-bold text-gray-800 tracking-tight leading-none"
+          style={{ fontSize: `${size * 0.32}px` }}
+        >
+          The<span className="text-[#0099A7]">Code</span><span className="text-[#7654A1]">App</span>
+        </span>
+      </div>
+    </div>
   </div>
 );
