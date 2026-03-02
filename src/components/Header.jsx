@@ -22,28 +22,28 @@ export const Header = ({
   setReaderSpace
 }) => {
   return (
-    <header className="h-16 flex-none border-b border-gray-200 flex items-center justify-between px-4 md:px-8 bg-white/95 backdrop-blur-sm z-30 shadow-sm relative">
-      <div className="flex items-center gap-3">
+    <header className="h-20 flex-none border-b border-gray-200 flex items-center justify-between px-2 sm:px-4 md:px-8 bg-white/95 backdrop-blur-sm z-30 shadow-sm relative">
+      <div className="flex items-center gap-1 sm:gap-3 z-10">
         <button
           onClick={() => setSidebarOpen(true)}
-          className="md:hidden p-2 text-gray-500 hover:bg-gray-100 rounded-lg"
+          className="md:hidden p-1.5 sm:p-2 text-gray-500 hover:bg-gray-100 rounded-lg"
         >
           <AppIcon name="Menu" size={24} />
         </button>
 
         <button
           onClick={() => setActiveId('home')}
-          className="hover:opacity-80 transition-opacity flex items-center gap-2 scale-[0.8] sm:scale-90 md:scale-100 origin-left"
+          className={`hover:opacity-80 transition-opacity items-center gap-2 ${activeId !== 'home' ? 'hidden md:flex' : 'flex'}`}
         >
-          <Logo size={40} className="shrink-0" />
+          <Logo size={60} className="shrink-0" />
         </button>
       </div>
 
       {activeId !== 'home' && (
-        <div className="flex bg-slate-100 p-0 md:p-2 text-[10px] md:text-xs rounded-lg border border-slate-200 gap-0 md:gap-2 shrink-0 items-start h-8 md:h-auto">
+        <div className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex bg-slate-100 p-0.5 md:p-2 text-[10px] md:text-xs rounded-lg border border-slate-200 gap-0.5 md:gap-2 shrink-0 items-center h-8 md:h-auto animate-slide-in-right z-10">
           <button
             onClick={() => setShowSummary(!showSummary)}
-            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-2 ${
+            className={`px-2 py-1 md:px-3 md:py-1.5 text-xs font-bold rounded-md md:rounded-lg transition-all flex items-center gap-1 md:gap-2 ${
               showSummary
                 ? 'bg-white text-[#7654A1] shadow-sm'
                 : 'text-gray-400 hover:text-gray-600'
@@ -55,7 +55,7 @@ export const Header = ({
           </button>
           <button
             onClick={() => setShowFullText(!showFullText)}
-            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-2 ${
+            className={`px-2 py-1 md:px-3 md:py-1.5 text-xs font-bold rounded-md md:rounded-lg transition-all flex items-center gap-1 md:gap-2 ${
               showFullText
                 ? 'bg-white text-[#7654A1] shadow-sm'
                 : 'text-gray-400 hover:text-gray-600'
@@ -67,7 +67,7 @@ export const Header = ({
           </button>
           <button
             onClick={() => setShowQA(!showQA)}
-            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-2 ${
+            className={`px-2 py-1 md:px-3 md:py-1.5 text-xs font-bold rounded-md md:rounded-lg transition-all flex items-center gap-1 md:gap-2 ${
               showQA
                 ? 'bg-white text-[#7654A1] shadow-sm'
                 : 'text-gray-400 hover:text-gray-600'
@@ -81,7 +81,7 @@ export const Header = ({
           <div className="relative">
             <button
               onClick={() => setReaderOpen((v) => !v)}
-              className="px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-2 bg-white text-gray-700 shadow-sm"
+              className="px-2 py-1 md:px-3 md:py-1.5 text-xs font-bold rounded-md md:rounded-lg transition-all flex items-center gap-1 md:gap-2 bg-white text-gray-700 shadow-sm"
               title="Reading settings"
               aria-expanded={readerOpen}
             >
