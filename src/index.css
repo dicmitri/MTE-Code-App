@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@source "./data/codeData.json";
 
 :root {
         /* UI FONT: "Business Standard" 
