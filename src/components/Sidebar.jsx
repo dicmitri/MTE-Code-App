@@ -89,7 +89,7 @@ export const Sidebar = ({
       <nav
         className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-8"
         style={{
-          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 5rem)',
+          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 1rem)',
         }}
       >
         {[
@@ -203,28 +203,29 @@ export const Sidebar = ({
                     )}
                   </button>
                 ))}
-                {section.id === 'website' &&
-                  (installPromptEvent || isIos) && (
-                    <button
-                      onClick={(e) => {
-                        if (isIos) {
-                          setShowIosPrompt(true);
-                        } else if (installPromptEvent) {
-                          handleInstallClick(e);
-                        }
-                      }}
-                      className="flex items-center w-full px-3 py-2 mt-2 text-sm font-medium rounded-lg text-white bg-pink-600 hover:bg-pink-700 transition-colors"
-                    >
-                      <span className="truncate flex-1 font-bold text-center">
-                        {isIos ? 'Install on iOS' : 'Install TheCodeApp'}
-                      </span>
-                    </button>
-                  )}
               </div>
             </div>
           );
         })}
       </nav>
+
+      <div className="p-4 border-t border-gray-200 bg-gray-50 shrink-0">
+        <button
+          onClick={(e) => {
+            if (isIos) {
+              setShowIosPrompt(true);
+            } else if (installPromptEvent) {
+              handleInstallClick(e);
+            } else {
+              alert("To install the app, look for the install icon in your browser's address bar or menu.");
+            }
+          }}
+          className="flex items-center justify-center w-full px-4 py-3 text-sm font-bold rounded-xl text-white bg-[#7654A1] hover:bg-[#634488] transition-colors shadow-sm gap-2"
+        >
+          <AppIcon name="Download" size={18} />
+          Install TheCodeApp
+        </button>
+      </div>
     </aside>
   );
 };
