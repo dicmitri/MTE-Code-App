@@ -21,7 +21,7 @@ export const Sidebar = ({
   return (
     <aside
       className={`
-        w-80 bg-white border-r border-gray-200 flex flex-col h-screen shrink-0 shadow-sm z-40
+        w-80 bg-white border-r border-gray-200 flex flex-col h-full shrink-0 shadow-sm z-40
         fixed inset-y-0 left-0 transition-transform duration-300
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         md:translate-x-0 md:sticky md:top-0
@@ -89,7 +89,7 @@ export const Sidebar = ({
       <nav
         className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-8"
         style={{
-          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 1rem)',
+          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 2rem)',
         }}
       >
         {[
@@ -99,9 +99,7 @@ export const Sidebar = ({
           { id: 'part3', label: 'Part 3: Annexes & Glossary' },
           { id: 'website', label: 'Website' },
         ].map((section) => {
-          const items = FULL_CODE_DATA.filter(
-            (ch) => ch.part === section.id
-          )
+          const items = FULL_CODE_DATA.filter((ch) => ch.part === section.id)
             .map((ch) => {
               if (!debouncedSearch) return { ...ch, matchCount: 0 };
 
@@ -207,25 +205,25 @@ export const Sidebar = ({
             </div>
           );
         })}
-      </nav>
 
-      <div className="p-4 border-t border-gray-200 bg-gray-50 shrink-0">
-        <button
-          onClick={(e) => {
-            if (isIos) {
-              setShowIosPrompt(true);
-            } else if (installPromptEvent) {
-              handleInstallClick(e);
-            } else {
-              alert("To install the app, look for the install icon in your browser's address bar or menu.");
-            }
-          }}
-          className="flex items-center justify-center w-full px-4 py-3 text-sm font-bold rounded-xl text-white bg-[#7654A1] hover:bg-[#634488] transition-colors shadow-sm gap-2"
-        >
-          <AppIcon name="Download" size={18} />
-          Install TheCodeApp
-        </button>
-      </div>
+        <div className="pt-4 border-t border-gray-100 mt-4">
+          <button
+            onClick={(e) => {
+              if (isIos) {
+                setShowIosPrompt(true);
+              } else if (installPromptEvent) {
+                handleInstallClick(e);
+              } else {
+                alert("To install the app, look for the install icon in your browser's address bar or menu.");
+              }
+            }}
+            className="flex items-center justify-center w-full px-4 py-3 text-sm font-bold rounded-xl text-white bg-[#7654A1] hover:bg-[#634488] transition-colors shadow-sm gap-2"
+          >
+            <AppIcon name="Download" size={18} />
+            Install TheCodeApp
+          </button>
+        </div>
+      </nav>
     </aside>
   );
 };
