@@ -14,6 +14,7 @@ The app is built using **React** and **Vite**. All the important files you will 
 /src
  ├── /components/    # The building blocks of the UI (Buttons, Header, Sidebar, etc.)
  ├── /data/          # The actual text/content of the legal code
+ ├── /hooks/         # Custom React hooks (logic for PWA, bookmarks, routing, keyboard)
  ├── /utils/         # Helper functions (like the search highlight logic)
  ├── App.jsx         # The main "brain" that connects everything together
  └── index.css       # Global styles and fonts
@@ -21,7 +22,31 @@ The app is built using **React** and **Vite**. All the important files you will 
 
 ---
 
-## 📝 1. How to Edit the Legal Content (`FULL_CODE_DATA`)
+## ⚙️ 1. Technical Architecture & Key Features
+
+TheCodeApp uses a custom-built architecture optimized for performance and offline reading:
+
+### 🧩 Hash-Routing & State (No React Router)
+Instead of a heavy routing library, the app uses URL hash fragments (`#part1-section-1`) to track the exact section a user is viewing. The custom hook `useHashRouting.js` listens to these hashes and seamlessly scrolls the user directly to the section without reloading the page. 
+
+### 🔍 Dynamic Search Engine
+The search bar lives in the `Sidebar`. It splits the user's query and counts matches across **titles, summaries, full legal texts, and Q&As**.
+- Highlighting is handled dynamically in `utils/textUtils.js` which wraps matching terms in a `<mark>` tag.
+- Keyboard shortcut: Users can press `/` anywhere to immediately focus the search bar, or `Escape` to clear it.
+
+### 📱 Progressive Web App (PWA) Offline Capabilities
+This app caches all assets (via `vite-plugin-pwa`) so that traveling users can open the app without an internet connection. 
+- The installation logic relies on the `usePWAInstall.js` hook, which intercepts the browser's `beforeinstallprompt` and shows a custom install button. iOS requires manual installation via Safari's "Add to Home Screen" share action, which the UI explicitly handles.
+
+### ⭐ Bookmarks
+Users can save specific sections to a personalized "Bookmarks" tab in the sidebar. This works by storing section and chapter IDs directly inside the user's browser using `window.localStorage` (via the `useBookmarks.js` hook). No backend or user accounts are needed.
+
+### 🖨️ Print & Export Mode
+The app features an optimized Print Mode. By pressing the **Print** icon in the header (or pressing `Ctrl+P`), the `index.css` `@media print` query strips away the Sidebar, Header, and interactive elements. It presents a clean, high-contrast, black-and-white view of the legal text—perfect for generating PDFs.
+
+---
+
+## 📝 2. How to Edit the Legal Content (`FULL_CODE_DATA`)
 
 All the text, chapters, annexes, and Q&As are stored in a single file:
 👉 **`src/data/codeData.json`**
@@ -66,7 +91,7 @@ If you open `codeData.json`, you will see a list of objects that look like this:
 
 ---
 
-## 🎨 2. How to Edit Styles and Colors
+## 🎨 3. How to Edit Styles and Colors
 
 This app uses **Tailwind CSS** for styling. This means you won't find traditional `.css` files full of styling rules. Instead, styles are applied directly to elements using "utility classes".
 
@@ -93,7 +118,7 @@ If you need to change the **font family** or the background color of the entire 
 
 ---
 
-## 🖼️ 3. How to Edit Logos and Icons
+## 🖼️ 4. How to Edit Logos and Icons
 
 ### The Main Logo
 The main MedTech Europe logo (seen in the Header and on the Landing Page) is controlled by a single file:
@@ -111,7 +136,7 @@ This file uses a library called `lucide-react`. If you want to change an icon, y
 
 ---
 
-## 🚀 4. How to Preview and Publish Your Changes
+## 🚀 5. How to Preview and Publish Your Changes
 
 Once you have made your edits, you'll want to see them and publish them.
 

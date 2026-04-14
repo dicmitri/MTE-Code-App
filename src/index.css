@@ -48,6 +48,32 @@
   margin-top: 0 !important;
 }
 
+@media print {
+  body {
+    background-color: white !important;
+    color: black !important;
+  }
+  .print\:hidden {
+    display: none !important;
+  }
+  .print\:bg-transparent {
+    background-color: transparent !important;
+  }
+  .print\:border-none {
+    border: none !important;
+  }
+  .print\:p-0 {
+    padding: 0 !important;
+  }
+  .print\:my-4 {
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+  #sidebar, aside, header {
+    display: none !important;
+  }
+}
+
         body { 
         /* This forces the whole app to use the new System UI font */
         font-family: var(--font-ui); 

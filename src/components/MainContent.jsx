@@ -17,7 +17,9 @@ export const MainContent = ({
   handleTermClick,
   scrollRef,
   showIosPrompt,
-  setShowIosPrompt
+  setShowIosPrompt,
+  bookmarksControls,
+  searchFilters
 }) => {
   return (
     <main
@@ -48,7 +50,7 @@ export const MainContent = ({
                 <div className="text-lg text-gray-700 font-light reader-content">
                   <Highlight
                     text={activeContent?.summary}
-                    query={debouncedSearch}
+                    query={searchFilters?.text ? debouncedSearch : ''}
                   />
                 </div>
               </div>
@@ -59,13 +61,15 @@ export const MainContent = ({
             <div className="animate-fade-in border-t border-gray-100 pt-10">
               <div className="flex items-center gap-2 mb-8">
                 <h2 className="text-2xl font-extrabold text-gray-900 tracking-tight">
-                  {isNaN(activeContent?.icon)
-                    ? activeContent?.title
-                    : `Chapter ${activeContent?.icon}: ${activeContent?.title}`}
+                  <Highlight 
+                    text={isNaN(activeContent?.icon) ? activeContent?.title : `Chapter ${activeContent?.icon}: ${activeContent?.title}`} 
+                    query={searchFilters?.titles ? debouncedSearch : ''} 
+                  />
                 </h2>
               </div>
 
               {activeContent?.sections?.map((section) => {
+                const chapterPrefix = isNaN(activeContent?.icon) ? '' : `Ch ${activeContent?.icon} - `;
                 return (
                   <FullTextSection
                     key={section.computedId}
@@ -73,8 +77,11 @@ export const MainContent = ({
                     section={section}
                     showQA={showQA}
                     query={debouncedSearch}
+                    searchFilters={searchFilters}
                     glossaryMap={glossaryMap}
                     onTermClick={handleTermClick}
+                    bookmarksControls={bookmarksControls}
+                    chapterPrefix={chapterPrefix}
                   />
                 );
               })}

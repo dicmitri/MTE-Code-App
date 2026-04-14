@@ -40,10 +40,11 @@ export const Header = ({
       </div>
 
       {activeId !== 'home' && (
-        <div className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex bg-slate-100 p-0.5 md:p-2 text-[10px] md:text-xs rounded-lg border border-slate-200 gap-0.5 md:gap-2 shrink-0 items-center h-8 md:h-auto animate-slide-in-right z-10">
+        <div className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex bg-slate-100 p-0.5 md:p-1.5 text-[10px] md:text-xs rounded-lg border border-slate-200 gap-0.5 md:gap-1.5 shrink-0 items-center h-8 md:h-auto animate-slide-in-right z-10 no-print">
+          
           <button
             onClick={() => setShowSummary(!showSummary)}
-            className={`px-2 py-1 md:px-3 md:py-1.5 text-xs font-bold rounded-md md:rounded-lg transition-all flex items-center gap-1 md:gap-2 ${
+            className={`px-2 py-1 md:px-3 md:py-1.5 text-xs font-bold rounded-md md:rounded-lg transition-all flex items-center gap-1 md:gap-2 h-full ${
               showSummary
                 ? 'bg-white text-[#7654A1] shadow-sm'
                 : 'text-gray-400 hover:text-gray-600'
@@ -53,9 +54,10 @@ export const Header = ({
             <AppIcon name="List" size={16} />
             <span className="hidden md:inline">Summary</span>
           </button>
+          
           <button
             onClick={() => setShowFullText(!showFullText)}
-            className={`px-2 py-1 md:px-3 md:py-1.5 text-xs font-bold rounded-md md:rounded-lg transition-all flex items-center gap-1 md:gap-2 ${
+            className={`px-2 py-1 md:px-3 md:py-1.5 text-xs font-bold rounded-md md:rounded-lg transition-all flex items-center gap-1 md:gap-2 h-full ${
               showFullText
                 ? 'bg-white text-[#7654A1] shadow-sm'
                 : 'text-gray-400 hover:text-gray-600'
@@ -65,9 +67,10 @@ export const Header = ({
             <AppIcon name="FileText" size={16} />
             <span className="hidden md:inline">Full Text</span>
           </button>
+          
           <button
             onClick={() => setShowQA(!showQA)}
-            className={`px-2 py-1 md:px-3 md:py-1.5 text-xs font-bold rounded-md md:rounded-lg transition-all flex items-center gap-1 md:gap-2 ${
+            className={`px-2 py-1 md:px-3 md:py-1.5 text-xs font-bold rounded-md md:rounded-lg transition-all flex items-center gap-1 md:gap-2 h-full ${
               showQA
                 ? 'bg-white text-[#7654A1] shadow-sm'
                 : 'text-gray-400 hover:text-gray-600'
@@ -78,10 +81,12 @@ export const Header = ({
             <span className="hidden md:inline">Q&A</span>
           </button>
 
+          <div className="w-px h-4 bg-gray-300 mx-0.5"></div>
+
           <div className="relative">
             <button
               onClick={() => setReaderOpen((v) => !v)}
-              className="px-2 py-1 md:px-3 md:py-1.5 text-xs font-bold rounded-md md:rounded-lg transition-all flex items-center gap-1 md:gap-2 bg-white text-gray-700 shadow-sm"
+              className="px-2 py-1 md:px-3 md:py-1.5 text-xs font-bold rounded-md md:rounded-lg transition-all flex items-center gap-1 md:gap-2 h-full bg-white text-[#7654A1] shadow-sm hover:opacity-80"
               title="Reading settings"
               aria-expanded={readerOpen}
             >
@@ -168,6 +173,16 @@ export const Header = ({
               </div>
             )}
           </div>
+
+          <button
+            onClick={() => window.print()}
+            className="px-2 py-1 md:px-3 md:py-1.5 text-xs font-bold rounded-md md:rounded-lg transition-all flex items-center gap-1 md:gap-2 h-full bg-white text-[#7654A1] shadow-sm hover:opacity-80"
+            title="Print Current View"
+          >
+            <AppIcon name="Printer" size={16} />
+            <span className="hidden md:inline">Print</span>
+          </button>
+
         </div>
       )}
     </header>

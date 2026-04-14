@@ -16,7 +16,11 @@ export const Sidebar = ({
   installPromptEvent,
   isIos,
   setShowIosPrompt,
-  handleInstallClick
+  handleInstallClick,
+  bookmarks = [],
+  recentHistory = [],
+  searchFilters = { titles: true, text: true, qa: true },
+  setSearchFilters
 }) => {
   return (
     <aside
@@ -71,6 +75,29 @@ export const Sidebar = ({
           )}
         </div>
 
+        {searchTerm && (
+          <div className="mb-6 px-2 flex flex-wrap gap-1.5 animate-fade-in no-print">
+            {[
+              { key: 'titles', label: 'Titles' },
+              { key: 'text', label: 'Full Text' },
+              { key: 'qa', label: 'Q&As' }
+            ].map(f => (
+              <button
+                key={f.key}
+                onClick={() => setSearchFilters(prev => ({ ...prev, [f.key]: !prev[f.key] }))}
+                className={`px-2 py-0.5 text-[10px] font-bold rounded-md border transition-colors ${
+                  searchFilters[f.key]
+                    ? 'bg-purple-100 text-purple-700 border-purple-200'
+                    : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100'
+                }`}
+                type="button"
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        )}
+
         <button
           onClick={() => {
             setActiveId('home');
@@ -92,6 +119,39 @@ export const Sidebar = ({
           paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 2rem)',
         }}
       >
+        {!debouncedSearch && bookmarks && bookmarks.length > 0 && (
+          <div className="space-y-2">
+            <div className="flex justify-between items-center px-4 mb-2">
+              <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
+                <AppIcon name="Star" size={12} /> Bookmarks
+              </div>
+            </div>
+            <div className="space-y-1">
+              {bookmarks.map((b) => (
+                <button
+                  key={`bm-${b.id}`}
+                  onClick={() => {
+                    setActiveId(b.chapterId);
+                    setTimeout(() => {
+                      const el = document.getElementById(b.id);
+                      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                    setSidebarOpen(false);
+                  }}
+                  className="w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 text-purple-700 hover:bg-purple-50 hover:text-purple-900 border border-transparent hover:border-purple-200"
+                >
+                  <span className="shrink-0 text-purple-400">
+                    <AppIcon name="Bookmark" size={16} />
+                  </span>
+                  <span className="truncate flex-1 font-medium text-xs">
+                    {b.title}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {[
           { id: 'intro', label: 'Introductory Chapters' },
           { id: 'part1', label: 'Part 1: The Code' },
@@ -107,13 +167,19 @@ export const Sidebar = ({
               const count = (txt) =>
                 (txt || '').toString().toLowerCase().split(term).length - 1;
 
-              let matches = count(ch.title) + count(ch.summary);
+              let matches = 0;
+              if (searchFilters.titles) matches += count(ch.title);
+              if (searchFilters.text) matches += count(ch.summary);
 
               (ch.sections || []).forEach((s) => {
-                matches += count(s.title) + count(s.legalText);
-                (s.qas || []).forEach(
-                  (q) => (matches += count(q.q) + count(q.a))
-                );
+                if (searchFilters.titles) matches += count(s.title);
+                if (searchFilters.text) matches += count(s.legalText);
+                
+                if (searchFilters.qa) {
+                    (s.qas || []).forEach(
+                      (q) => (matches += count(q.q) + count(q.a))
+                    );
+                }
               });
 
               return { ...ch, matchCount: matches };
@@ -205,6 +271,36 @@ export const Sidebar = ({
             </div>
           );
         })}
+
+        {!debouncedSearch && recentHistory && recentHistory.length > 0 && (
+          <div className="space-y-2 mt-8">
+            <div className="flex justify-between items-center px-4 mb-2">
+              <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
+                <AppIcon name="Clock" size={12} /> Recently Viewed
+              </div>
+            </div>
+            <div className="space-y-1">
+              {recentHistory.map((h) => (
+                <button
+                  key={`history-${h.timestamp}`}
+                  onClick={() => {
+                    setActiveId(h.id);
+                    setSidebarOpen(false);
+                    window.scrollTo(0, 0);
+                  }}
+                  className="w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 border border-transparent hover:border-slate-200"
+                >
+                  <span className="shrink-0 text-slate-400">
+                    <AppIcon name={h.icon || 'BookOpen'} size={16} />
+                  </span>
+                  <span className="truncate flex-1 font-medium text-xs">
+                    {h.title}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="pt-4 border-t border-gray-100 mt-4">
           <button

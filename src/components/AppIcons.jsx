@@ -13,7 +13,10 @@ import {
   Eye,
   EyeOff,
   Search,
-  Download
+  Download,
+  Star,
+  Bookmark,
+  Printer
 } from 'lucide-react';
 
 export {
@@ -30,7 +33,10 @@ export {
   Eye,
   EyeOff,
   Search,
-  Download
+  Download,
+  Star,
+  Bookmark,
+  Printer
 };
 
 const CustomSvgWrapper = ({ size = 18, className = "", children }) => (
@@ -150,7 +156,7 @@ const customIconMap = {
 
 const lucideIconMap = {
   Home, Info, ShieldCheck, Globe, FileText, Menu, X, HelpCircle, 
-  ChevronRight, List, Eye, EyeOff, Search, Download
+  ChevronRight, List, Eye, EyeOff, Search, Download, Star, Bookmark, Printer
 };
 
 export const AppIcon = ({ name, size = 18, className = "" }) => {

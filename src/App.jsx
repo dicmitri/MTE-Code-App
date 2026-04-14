@@ -1,8 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FULL_CODE_DATA, updateSearchStatus } from './data/codeData';
+import { FULL_CODE_DATA } from './data/codeData';
 import { DefinitionPopup } from './components/DefinitionPopup';
 import { extractGlossaryMap, generateSectionId } from './utils/textUtils';
 import { useDebounce } from './hooks/useDebounce';
+import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
+import { usePWAInstall } from './hooks/usePWAInstall';
+import { useHashRouting } from './hooks/useHashRouting';
+import { useBookmarks } from './hooks/useBookmarks';
+import { useRecentHistory } from './hooks/useRecentHistory';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { MainContent } from './components/MainContent';
@@ -30,67 +35,19 @@ const App = () => {
   const [readerSpace, setReaderSpace] = useState('0.75rem');
   const [glossaryMap, setGlossaryMap] = useState({});
   const [activeDefinition, setActiveDefinition] = useState(null);
-  const [installPromptEvent, setInstallPromptEvent] = useState(null);
-  const [isIos, setIsIos] = useState(false);
-  const [showIosPrompt, setShowIosPrompt] = useState(false);
 
-  useEffect(() => {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    const isIosDevice = /iphone|ipad|ipod/.test(userAgent);
-    const isInStandaloneMode =
-      'standalone' in window.navigator && window.navigator.standalone;
+  // Custom Hooks
+  useKeyboardShortcuts(setSearchTerm);
+  const { installPromptEvent, isIos, showIosPrompt, setShowIosPrompt, handleInstallClick } = usePWAInstall();
+  useHashRouting(setActiveId, setShowSummary, setShowFullText);
+  const { bookmarks, toggleBookmark, isBookmarked } = useBookmarks();
+  const { history, addHistory } = useRecentHistory();
 
-    if (isIosDevice && !isInStandaloneMode) {
-      setIsIos(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    const handleKeydown = (e) => {
-      if (
-        e.key === '/' &&
-        !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)
-      ) {
-        e.preventDefault();
-        document.getElementById('searchTerm')?.focus();
-      }
-      if (e.key === 'Escape') {
-        const searchInput = document.getElementById('searchTerm');
-        if (searchInput && searchInput === document.activeElement) {
-          setSearchTerm('');
-          updateSearchStatus('Search cleared');
-          searchInput.blur();
-        }
-      }
-    };
-
-    document.addEventListener('keydown', handleKeydown);
-    return () => document.removeEventListener('keydown', handleKeydown);
-  }, [setSearchTerm]);
-
-  useEffect(() => {
-    const handleBeforeInstallPrompt = (e) => {
-      e.preventDefault();
-      setInstallPromptEvent(e);
-    };
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    return () => {
-      window.removeEventListener(
-        'beforeinstallprompt',
-        handleBeforeInstallPrompt
-      );
-    };
-  }, []);
-
-  const handleInstallClick = async () => {
-    if (!installPromptEvent) {
-      return;
-    }
-    installPromptEvent.prompt();
-    const { outcome } = await installPromptEvent.userChoice;
-    console.log(`User response to the install prompt: ${outcome}`);
-    setInstallPromptEvent(null);
-  };
+  const [searchFilters, setSearchFilters] = useState({
+    titles: true,
+    text: true,
+    qa: true
+  });
 
   const scrollRef = useRef(null);
 
@@ -99,6 +56,12 @@ const App = () => {
     setGlossaryMap(map);
   }, []);
 
+  useEffect(() => {
+    if (activeId !== 'home') {
+      addHistory(activeId);
+    }
+  }, [activeId, addHistory]);
+
   const handleTermClick = (termKey) => {
     const definition = glossaryMap[termKey];
     if (definition) {
@@ -106,51 +69,6 @@ const App = () => {
       setActiveDefinition({ term: displayTitle, definition });
     }
   };
-
-  useEffect(() => {
-    const hash = window.location.hash.replace('#', '');
-    if (!hash) return;
-
-    const getHashId = (chId, title, idx) => {
-      let slug;
-      if (title) {
-        slug = title
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, '-')
-          .replace(/(^-|-$)+/g, '');
-      } else {
-        slug = `section-${idx}`;
-      }
-      return `${chId}-${slug}`;
-    };
-
-    const targetChapter = FULL_CODE_DATA.find((ch) => {
-      if (ch.id === hash) return true;
-      return (
-        ch.sections &&
-        ch.sections.some((s, i) => getHashId(ch.id, s.title, i) === hash)
-      );
-    });
-
-    if (targetChapter) {
-      setActiveId(targetChapter.id);
-      setShowSummary(true);
-      setShowFullText(true);
-
-      setTimeout(() => {
-        const element = document.getElementById(hash);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          element.classList.add(
-            'bg-yellow-50',
-            'transition-colors',
-            'duration-1000'
-          );
-          setTimeout(() => element.classList.remove('bg-yellow-50'), 2000);
-        }
-      }, 500);
-    }
-  }, []);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -218,6 +136,10 @@ const App = () => {
           isIos={isIos}
           setShowIosPrompt={setShowIosPrompt}
           handleInstallClick={handleInstallClick}
+          bookmarks={bookmarks}
+          recentHistory={history}
+          searchFilters={searchFilters}
+          setSearchFilters={setSearchFilters}
         />
 
         {sidebarOpen && (
@@ -241,6 +163,8 @@ const App = () => {
           scrollRef={scrollRef}
           showIosPrompt={showIosPrompt}
           setShowIosPrompt={setShowIosPrompt}
+          bookmarksControls={{ toggleBookmark, isBookmarked }}
+          searchFilters={searchFilters}
         />
       </div>
     </div>
@@ -248,3 +172,4 @@ const App = () => {
 };
 
 export default App;
+

@@ -1,4 +1,5 @@
 import React from 'react';
+import DOMPurify from 'dompurify';
 
 export const DefinitionPopup = ({ term, definition, onClose }) => {
     if (!term) return null;
@@ -11,8 +12,9 @@ export const DefinitionPopup = ({ term, definition, onClose }) => {
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                 </div>
-                <div className="p-6 max-h-[60vh] overflow-y-auto prose prose-sm leading-relaxed text-gray-700" dangerouslySetInnerHTML={{ __html: definition }} />
+                <div className="p-6 max-h-[60vh] overflow-y-auto prose prose-sm leading-relaxed text-gray-700" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(definition) }} />
             </div>
         </div>
     );
 };
+
