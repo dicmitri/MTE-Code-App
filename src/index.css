@@ -2,33 +2,36 @@
 @source "./data/codeData.json";
 
 :root {
-        /* UI FONT: "Business Standard" 
+  /* UI FONT: "Business Standard" 
            Clean, neutral, professional. Used by banks and enterprise software. */
-        --font-ui: "Inter", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  --font-ui: "Inter", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 
-        /* LEGAL FONT: "Screen Serif"
+  /* LEGAL FONT: "Screen Serif"
            Georgia is the gold standard for readable serif text on screens.
            It looks serious but not archaic. */
-        --font-legal: "Inter", Georgia, "Times New Roman", Times, serif;
+  --font-legal: "Inter", Georgia, "Times New Roman", Times, serif;
 
-        /* COLORS */
-        --color-purple: #7654A1;
-        --color-teal: #0099A7;
-        --color-bg: #f8f9fa;
-        
-        /* READER SETTINGS */
-        /* Bumped up slightly (1.05rem) because Arial/Georgia are 
+  /* COLORS */
+  --color-purple: #7654A1;
+  --color-teal: #0099A7;
+  --color-bg: #f8f9fa;
+
+  /* READER SETTINGS */
+  /* Bumped up slightly (1.05rem) because Arial/Georgia are 
            visually smaller than the old Merriweather font. */
-        --reader-font-size: 1.05rem;     
-        --reader-line-height: 1.6;
-        --reader-paragraph-spacing: 0.9rem;
-    }
+  --reader-font-size: 1.05rem;
+  --reader-line-height: 1.6;
+  --reader-paragraph-spacing: 0.9rem;
+}
 
 .sr-only {
   position: absolute !important;
-  width: 1px; height: 1px;
-  padding: 0; margin: -1px;
-  overflow: hidden; clip: rect(0,0,0,0);
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
   border: 0;
 }
 
@@ -41,6 +44,7 @@
   font-size: var(--reader-font-size) !important;
   line-height: var(--reader-line-height) !important;
 }
+
 .reader-content p,
 .reader-content ul,
 .reader-content ol {
@@ -53,55 +57,96 @@
     background-color: white !important;
     color: black !important;
   }
+
   .print\:hidden {
     display: none !important;
   }
+
   .print\:bg-transparent {
     background-color: transparent !important;
   }
+
   .print\:border-none {
     border: none !important;
   }
+
   .print\:p-0 {
     padding: 0 !important;
   }
+
   .print\:my-4 {
     margin-top: 1rem !important;
     margin-bottom: 1rem !important;
   }
-  #sidebar, aside, header {
+
+  #sidebar,
+  aside,
+  header {
     display: none !important;
   }
 }
 
-        body { 
-        /* This forces the whole app to use the new System UI font */
-        font-family: var(--font-ui); 
-        background-color: var(--color-bg); 
-        color: #1e293b;
-        margin: 0;
-    }
+body {
+  /* This forces the whole app to use the new System UI font */
+  font-family: var(--font-ui);
+  background-color: var(--color-bg);
+  color: #1e293b;
+  margin: 0;
+}
 
-    /* This forces the legal text sections to use Georgia/Serif */
-    .font-legal { font-family: var(--font-legal); }
-    
-    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-    .custom-scrollbar:hover::-webkit-scrollbar-thumb { background: #94a3b8; }
-    
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+/* This forces the legal text sections to use Georgia/Serif */
+.font-legal {
+  font-family: var(--font-legal);
+}
 
-    @keyframes slideInRight {
-      from { transform: translateX(30px); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-    .animate-slide-in-right {
-      animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
 
-    .chapter-card:hover {
-        transform: translateY(-4px);
-        border-color: var(--color-teal);
-    }
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.chapter-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-teal);
+}

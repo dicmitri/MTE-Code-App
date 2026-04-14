@@ -31,6 +31,7 @@ Instead of a heavy routing library, the app uses URL hash fragments (`#part1-sec
 
 ### 🔍 Dynamic Search Engine
 The search bar lives in the `Sidebar`. It splits the user's query and counts matches across **titles, summaries, full legal texts, and Q&As**.
+- Users can toggle **Advanced Search Filters** ("Titles", "Full Text", "Q&As") to restrict precisely where the app hunts for matches.
 - Highlighting is handled dynamically in `utils/textUtils.js` which wraps matching terms in a `<mark>` tag.
 - Keyboard shortcut: Users can press `/` anywhere to immediately focus the search bar, or `Escape` to clear it.
 
@@ -38,8 +39,14 @@ The search bar lives in the `Sidebar`. It splits the user's query and counts mat
 This app caches all assets (via `vite-plugin-pwa`) so that traveling users can open the app without an internet connection. 
 - The installation logic relies on the `usePWAInstall.js` hook, which intercepts the browser's `beforeinstallprompt` and shows a custom install button. iOS requires manual installation via Safari's "Add to Home Screen" share action, which the UI explicitly handles.
 
-### ⭐ Bookmarks
-Users can save specific sections to a personalized "Bookmarks" tab in the sidebar. This works by storing section and chapter IDs directly inside the user's browser using `window.localStorage` (via the `useBookmarks.js` hook). No backend or user accounts are needed.
+### ⭐ Bookmarks & History
+Users can save specific sections to a personalized "Bookmarks" tab in the sidebar (via `useBookmarks.js`). Additionally, the app automatically tracks your last 5 visited chapters under the **Recently Viewed** list (via `useRecentHistory.js`). Both systems save data silently to `window.localStorage` so they persist without user accounts.
+
+### 📑 Reading Utilities
+To facilitate heavy professional reference usage, the app includes several quality-of-life tools:
+- **Table of Contents (On This Page):** A sticky, scroll-tracking minimap located on the right side of the screen on desktop displays.
+- **Copy Citation:** Alongside standard URL linking, a dedicated `[Cite]` button instantly copies a professionally formatted citation block to the clipboard.
+- **Next/Prev Navigation:** Large footer buttons at the bottom of every document allow for linear reading of the entire legal code without returning to the sidebar.
 
 ### 🖨️ Print & Export Mode
 The app features an optimized Print Mode. By pressing the **Print** icon in the header (or pressing `Ctrl+P`), the `index.css` `@media print` query strips away the Sidebar, Header, and interactive elements. It presents a clean, high-contrast, black-and-white view of the legal text—perfect for generating PDFs.

@@ -13,13 +13,23 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
 
     const sanitizedHtml = useMemo(() => DOMPurify.sanitize(processedHtml), [processedHtml]);
 
-    const [showCopyMsg, setShowCopyMsg] = useState(false);
+    const [copyMsg, setCopyMsg] = useState(null);
 
     const copyLink = (sectionId) => {
         const url = `${window.location.origin}${window.location.pathname}#${sectionId}`;
         navigator.clipboard.writeText(url).then(() => {
-            setShowCopyMsg(true);
-            setTimeout(() => setShowCopyMsg(false), 2000);
+            setCopyMsg("Link copied to clipboard!");
+            setTimeout(() => setCopyMsg(null), 2000);
+        });
+    };
+
+    const copyCitation = (sectionId, sectionTitle) => {
+        const url = `${window.location.origin}${window.location.pathname}#${sectionId}`;
+        const prefix = chapterPrefix ? chapterPrefix : '';
+        const citation = `MedTech Europe Code of Ethical Business Practice, ${prefix}${sectionTitle}. Accessed via: ${url}`;
+        navigator.clipboard.writeText(citation).then(() => {
+            setCopyMsg("Citation copied to clipboard!");
+            setTimeout(() => setCopyMsg(null), 2000);
         });
     };
 
@@ -52,9 +62,16 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
                             </button>
                         )}
                         <button
+                            onClick={(e) => { e.stopPropagation(); copyCitation(id, section.title); }}
+                            className="text-sm text-[#0099A7] hover:text-[#007A86] border border-transparent hover:border-cyan-100 rounded px-2 py-1"
+                            title="Copy formal citation for this section"
+                        >
+                            Cite
+                        </button>
+                        <button
                             onClick={(e) => { e.stopPropagation(); copyLink(id); }}
-                            className="text-sm text-purple-600 hover:text-blue-800 border border-transparent hover:border-blue-100 rounded px-2 py-1"
-                            title="Copy link to this section"
+                            className="text-sm text-purple-600 hover:text-purple-800 border border-transparent hover:border-purple-100 rounded px-2 py-1"
+                            title="Copy raw link to this section"
                         >
                             Link
                         </button>
@@ -62,9 +79,9 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
                 </div>
             )}
             <div className="prose prose-slate max-w-none text-gray-800 leading-relaxed reader-content" dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />
-            {showCopyMsg && (
+            {copyMsg && (
                 <div className="fixed bottom-5 right-5 bg-[#7654A1] text-white px-4 py-2 rounded shadow-lg z-50 transition-opacity duration-300 print:hidden">
-                    Link copied to clipboard!
+                    {copyMsg}
                 </div>
             )}
             {showQA && section.qas && (
