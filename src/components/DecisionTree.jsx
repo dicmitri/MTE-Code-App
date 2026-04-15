@@ -7,6 +7,10 @@ const OUTCOME_STYLES = {
   'non-compliant': { bg: 'bg-red-50',      border: 'border-red-200',     text: 'text-red-800',     icon: '❌', label: 'Non-Compliant' },
   'conditional':   { bg: 'bg-amber-50',    border: 'border-amber-200',   text: 'text-amber-800',   icon: '⚠️', label: 'Conditional' },
   'consult-legal': { bg: 'bg-blue-50',     border: 'border-blue-200',    text: 'text-blue-800',    icon: '⚖️', label: 'Consult Legal' },
+  'not-required':  { bg: 'bg-teal-50',     border: 'border-teal-200',    text: 'text-teal-800',    icon: 'ℹ️', label: 'CVS Assessment Not Required' },
+  'out-of-scope':  { bg: 'bg-purple-50',   border: 'border-purple-200',  text: 'text-purple-800',  icon: '➖', label: 'Out of Scope' },
+  'not-applicable':{ bg: 'bg-purple-50',   border: 'border-purple-200',  text: 'text-purple-800',  icon: '➖', label: 'Not Applicable' },
+  'prior-review':  { bg: 'bg-purple-50',   border: 'border-purple-200',  text: 'text-purple-800',  icon: '📋', label: 'Prior Review Required' },
 };
 
 export const DecisionTree = ({ treeId, onShowVisualization }) => {

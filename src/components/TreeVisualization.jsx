@@ -7,6 +7,10 @@ const OUTCOME_COLORS = {
   'non-compliant': { bg: '#fef2f2', border: '#fca5a5', text: '#991b1b' },
   'conditional':   { bg: '#fffbeb', border: '#fcd34d', text: '#92400e' },
   'consult-legal': { bg: '#eff6ff', border: '#93c5fd', text: '#1e40af' },
+  'not-required':  { bg: '#f0fdfa', border: '#5eead4', text: '#115e59' }, // teal
+  'out-of-scope':  { bg: '#faf5ff', border: '#d8b4fe', text: '#6b21a8' }, // purple
+  'not-applicable':{ bg: '#faf5ff', border: '#d8b4fe', text: '#6b21a8' }, // purple
+  'prior-review':  { bg: '#faf5ff', border: '#d8b4fe', text: '#6b21a8' }, // purple
 };
 
 /**

@@ -455,7 +455,7 @@
           },
           {
             "label": "Direct Sponsorship of HCPs",
-            "next": "q_loc_sponsorship"
+            "next": "q_sponsorship_role"
           }
         ]
       },
@@ -620,15 +620,15 @@
         "options": [
           {
             "label": "IN MTE Area: National (delegates are local HCPs only)",
-            "next": "res_not_allowed"
+            "next": "res_sponsorship_national"
           },
           {
             "label": "IN MTE Area: International (delegates from >=2 MTE area countries)",
-            "next": "res_not_allowed"
+            "next": "res_sponsorship_international"
           },
           {
             "label": "OUTSIDE MTE Area: International (MTE area HCPs attend)",
-            "next": "res_not_allowed"
+            "next": "res_sponsorship_international"
           },
           {
             "label": "OUTSIDE MTE Area: International (No MTE area HCPs attend)",
@@ -639,8 +639,8 @@
       {
         "id": "res_national_grant",
         "type": "result",
-        "outcome": "compliant",
-        "text": "CVS approval is NOT required. However, the Code and local laws and regulations still apply.",
+        "outcome": "not-required",
+        "text": "CVS decission not required, but the Chapter 1, General Criteria for Events still applies. CVS and companies apply the same criteria, the only difference is who makes the asessment",
         "reference": "Annex I — National Events"
       },
       {
@@ -653,14 +653,14 @@
       {
         "id": "res_allowed_not_cvs",
         "type": "result",
-        "outcome": "compliant",
+        "outcome": "not-required",
         "text": "Allowed. Not subject to CVS decision.",
         "reference": "Annex I — International Events"
       },
       {
         "id": "res_prior_review",
         "type": "result",
-        "outcome": "compliant",
+        "outcome": "prior-review",
         "text": "Member Company prior internal review against Code principles required.",
         "reference": "Annex I"
       },
@@ -674,16 +674,371 @@
       {
         "id": "res_out_of_scope",
         "type": "result",
-        "outcome": "compliant",
+        "outcome": "out-of-scope",
         "text": "Out of scope of the application of the Code.",
         "reference": "Annex I — Out of scope"
       },
       {
         "id": "res_na",
         "type": "result",
-        "outcome": "compliant",
-        "text": "N/A - Not Applicable or Out of Scope.",
+        "outcome": "not-applicable",
+        "text": "Not Applicable / Out of Scope",
         "reference": "Annex I"
+      },
+      {
+        "id": "q_sponsorship_role",
+        "type": "question",
+        "text": "What is the intended role of the sponsored HCP?",
+        "options": [
+          {
+            "label": "Delegates (passive participation)",
+            "next": "q_loc_sponsorship"
+          },
+          {
+            "label": "Speaker/Faculty in the main programm",
+            "next": "q_loc_sponsorship"
+          }
+        ]
+      },
+      {
+        "id": "res_sponsorship_national",
+        "type": "result",
+        "outcome": "not-required",
+        "text": "CVS decission not required, direct support generally not permitted, but please check the Direct Sponsorship decission tree",
+        "reference": "Annex I — Direct Sponsorship"
+      },
+      {
+        "id": "res_sponsorship_international",
+        "type": "result",
+        "outcome": "conditional",
+        "text": "CVS decission REQUIRED, direct support generally NOT permitted, but please check the Direct Sponsorship decission tree",
+        "reference": "Annex I — Direct Sponsorship"
+      }
+    ]
+  },
+  {
+    "id": "dt-ch4-grants-donations",
+    "title": "Grants and Charitable Donations",
+    "relatedChapter": "ch4",
+    "relatedSection": null,
+    "category": "grants",
+    "description": "Determine if you can provide a grant or donation to a specific entity, and evaluate what conditions can be lawfully imposed under the General Criteria.",
+    "nodes": [
+      {
+        "id": "start",
+        "type": "question",
+        "text": "General Criteria: Who is deciding upon, or approving, the provision of these funds?",
+        "helpText": "Chapter 4 explicitly mandates an independent review process to mitigate corruption risks.",
+        "options": [
+          {
+            "label": "The Sales or Commercial function is making/approving the decision",
+            "next": "res_sales_influence"
+          },
+          {
+            "label": "An independent function (e.g., Legal, Compliance, Finance)",
+            "next": "q_contingency"
+          }
+        ]
+      },
+      {
+        "id": "q_contingency",
+        "type": "question",
+        "text": "General Criteria: Are these funds contingent in any way on past, present, or potential future purchases, leases, prescriptions, or recommendations of the Member Company’s products?",
+        "options": [
+          {
+            "label": "Yes, there is a commercial expectation or contingency",
+            "next": "res_no_commercial_link"
+          },
+          {
+            "label": "No, there is no commercial tie",
+            "next": "q_entity_target"
+          }
+        ]
+      },
+      {
+        "id": "q_entity_target",
+        "type": "question",
+        "text": "To what type of entity does the Member Company intend to provide the funds or in-kind support?",
+        "options": [
+          {
+            "label": "Individual Healthcare Professional (HCP)",
+            "next": "res_no_individual"
+          },
+          {
+            "label": "An HCP designated charity (in lieu of paying the HCP a professional fee)",
+            "next": "res_no_lieu_of_fee"
+          },
+          {
+            "label": "For-profit organisation (e.g., standalone commercial PCO)",
+            "next": "res_for_profit"
+          },
+          {
+            "label": "Patient Organisation",
+            "next": "res_patient_org"
+          },
+          {
+            "label": "Non-profit Hospital or Healthcare Organisation (HCO)",
+            "next": "q_hco_purpose"
+          },
+          {
+            "label": "Charitable or philanthropic organisation",
+            "next": "q_charity_purpose"
+          }
+        ]
+      },
+      {
+        "id": "q_hco_purpose",
+        "type": "question",
+        "text": "What is the intended purpose of the funds provided to the Healthcare Organisation (HCO)?",
+        "options": [
+          {
+            "label": "Charitable Donation (philanthropic aid or financial support)",
+            "next": "q_hco_hardship"
+          },
+          {
+            "label": "Educational Grant (e.g., supporting third-party events, or fellowships)",
+            "next": "q_grant_conditions"
+          },
+          {
+            "label": "To cover the HCO normal overhead or routine operational costs",
+            "next": "res_no_overhead"
+          }
+        ]
+      },
+      {
+        "id": "q_charity_purpose",
+        "type": "question",
+        "text": "What is the intended purpose of the funds provided to the charitable/philanthropic organisation?",
+        "options": [
+          {
+            "label": "Charitable Donation (for philanthropic relief/charity)",
+            "next": "q_donation_conditions"
+          },
+          {
+            "label": "Educational Grant (for advancement of medical education)",
+            "next": "q_grant_conditions"
+          },
+          {
+            "label": "We are participating in their fundraiser (e.g., charity dinner, golf tournament)",
+            "next": "q_fundraiser"
+          }
+        ]
+      },
+      {
+        "id": "q_hco_hardship",
+        "type": "question",
+        "text": "Are these Charitable Donations intended to address a demonstrated Financial Hardship of the non-profit hospital/HCO?",
+        "helpText": "Hospitals are not philanthropic entities by nature. Donations to them are strictly limited.",
+        "options": [
+          {
+            "label": "Yes, there is documented hardship (and it benefits patients or specific needs)",
+            "next": "q_donation_conditions"
+          },
+          {
+            "label": "No, it is a general Charitable Donation to support the hospital",
+            "next": "res_no_general_hco_donation"
+          }
+        ]
+      },
+      {
+        "id": "q_fundraiser",
+        "type": "question",
+        "text": "Are you inviting Healthcare Professionals (HCPs) to attend the fundraiser at the Member Company expense?",
+        "options": [
+          {
+            "label": "Yes, we intend to invite HCPs or suggest names to the organiser",
+            "next": "res_no_fundraiser_hcps"
+          },
+          {
+            "label": "No, tickets will be used internally by our employees or returned",
+            "next": "res_fundraiser_allowed"
+          }
+        ]
+      },
+      {
+        "id": "q_donation_conditions",
+        "type": "question",
+        "text": "What conditions or specifications does the Member Company intend to impose on the Charitable Donation?",
+        "options": [
+          {
+            "label": "We want to control the specific, final use of the funds by the recipient",
+            "next": "res_no_control"
+          },
+          {
+            "label": "We will specify a broad, general purpose (e.g., relief for a specific disaster) without final control",
+            "next": "res_donation_broad"
+          },
+          {
+            "label": "No specific controls; the recipient decides how to apply it within their philanthropic mandate",
+            "next": "res_donation_allowed"
+          }
+        ]
+      },
+      {
+        "id": "q_grant_conditions",
+        "type": "question",
+        "text": "What conditions or controls does the Member Company intend to impose on the Educational Grant?",
+        "helpText": "The Code demands extreme separation between providing funds and directing their use.",
+        "options": [
+          {
+            "label": "We intend to select, or proactively seek the names of, the individual HCP beneficiaries",
+            "next": "res_no_hcp_selection"
+          },
+          {
+            "label": "We want to direct the educational program content or select the Faculty",
+            "next": "res_no_program_control"
+          },
+          {
+            "label": "We will provide parameters/objective criteria (e.g., specialty, country) for the HCO to allocate funds",
+            "next": "q_grant_identifiable"
+          },
+          {
+            "label": "No control requested. We simply require a written agreement and proof of intended use",
+            "next": "res_grant_allowed"
+          }
+        ]
+      },
+      {
+        "id": "q_grant_identifiable",
+        "type": "question",
+        "text": "Are the objective criteria or the chosen hospital department so narrow that you can effectively identify the individual HCP beneficiaries upfront?",
+        "helpText": "e.g., granting funds to a specific sub-department that only employs one or two specific doctors.",
+        "options": [
+          {
+            "label": "Yes, the final beneficiaries are practically known to us",
+            "next": "res_no_identifiable"
+          },
+          {
+            "label": "No, the ultimate HCP beneficiaries are completely unknown to us",
+            "next": "res_grant_criteria_allowed"
+          }
+        ]
+      },
+      {
+        "id": "res_sales_influence",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "NOT ALLOWED. The Member Company sales and/or commercial function shall not decide upon and/or approve decisions to provide Grants or Charitable Donations. An independent review process is mandatory.",
+        "reference": "Chapter 4 — General Principles (e)"
+      },
+      {
+        "id": "res_no_commercial_link",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "NOT ALLOWED. Grants and Donations shall NEVER be contingent in any way on past, present or potential future purchase, lease, or recommendation of products.",
+        "reference": "Chapter 4 — General Principles (b)"
+      },
+      {
+        "id": "res_no_individual",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "NOT ALLOWED. A Member Company shall not provide Grants or Charitable Donations to individual Healthcare Professionals. Funds must go directly to a qualifying entity.",
+        "reference": "Chapter 4 — General Principles (c)"
+      },
+      {
+        "id": "res_no_lieu_of_fee",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "NOT ALLOWED. It is not appropriate to support the favourite charity of a Healthcare Professional in response to a request by that HCP in lieu of a professional fee.",
+        "reference": "Chapter 4 — Q&A 28"
+      },
+      {
+        "id": "res_for_profit",
+        "type": "result",
+        "outcome": "out-of-scope",
+        "text": "OUT OF SCOPE. For-profit organisations (like commercial PCOs) do not fall within the definition of Educational Grants or Donations. Such arrangements are commercial sponsorships.",
+        "reference": "Chapter 4 — Q&A 35"
+      },
+      {
+        "id": "res_patient_org",
+        "type": "result",
+        "outcome": "not-applicable",
+        "text": "NOT APPLICABLE. The Code does not cover Grants or Charitable Donations to Patient Organisations. Please refer to the MedTech Europe Patient Organisation Guidelines.",
+        "reference": "Chapter 4 — General Principles (a)"
+      },
+      {
+        "id": "res_no_general_hco_donation",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "NOT ALLOWED. A Member Company cannot make a general Charitable Donation to support an HCO. Hospitals have health functions, not philanthropic functions as their main purposes.",
+        "reference": "Chapter 4 — Q&A 26"
+      },
+      {
+        "id": "res_no_overhead",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "NOT ALLOWED. Member Companies must not cover an HCO normal overhead or routine costs of operation.",
+        "reference": "Chapter 4 — Q&A 36"
+      },
+      {
+        "id": "res_no_control",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "NOT ALLOWED. Member Companies shall have no control over the specific, final use of funds they provide as Charitable Donations.",
+        "reference": "Chapter 4 — Charitable Donations"
+      },
+      {
+        "id": "res_donation_broad",
+        "type": "result",
+        "outcome": "compliant",
+        "text": "COMPLIANT. Specifying a broad, general purpose (e.g., relief of a specific disaster) is ALLOWED, provided the company carefully exercises NO control over the specific, final use.",
+        "reference": "Chapter 4 — Q&A 27"
+      },
+      {
+        "id": "res_donation_allowed",
+        "type": "result",
+        "outcome": "compliant",
+        "text": "COMPLIANT. Charitable Donations to philanthropic entities (or HCOs under demonstrated hardship) are ALLOWED without specific final controls.",
+        "reference": "Chapter 4"
+      },
+      {
+        "id": "res_no_fundraiser_hcps",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "NOT ALLOWED. A Member Company shall not invite HCPs to attend a fundraiser at its expense, nor suggest names of HCPs to the sponsoring organisation.",
+        "reference": "Chapter 4 — Fundraisers"
+      },
+      {
+        "id": "res_fundraiser_allowed",
+        "type": "result",
+        "outcome": "compliant",
+        "text": "COMPLIANT. Participating in fundraisers is ALLOWED provided tickets are used by employees or returned, and no HCPs are subsidized by the Member Company.",
+        "reference": "Chapter 4 — Fundraisers"
+      },
+      {
+        "id": "res_no_hcp_selection",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "NOT ALLOWED. The receiving HCO must be solely responsible for HCP selection. Member Companies must not proactively seek to receive the names of HCP beneficiaries.",
+        "reference": "Chapter 4 — Educational Grants (1)"
+      },
+      {
+        "id": "res_no_program_control",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "NOT ALLOWED. Member Companies shall not have any detailed involvement in determining the educational program content or selecting Faculty.",
+        "reference": "Chapter 4 — Educational Grants (2)"
+      },
+      {
+        "id": "res_no_identifiable",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "NOT ALLOWED. Grants are prohibited if the geographical/specialty criteria or chosen hospital department are so narrow that the final beneficiaries are identifiable upfront.",
+        "reference": "Chapter 4 — Q&A 30 & 31"
+      },
+      {
+        "id": "res_grant_criteria_allowed",
+        "type": "result",
+        "outcome": "compliant",
+        "text": "COMPLIANT. Providing objective criteria to assist the HCO is ALLOWED, provided the metrics are relevant to educational needs and do not effectively identify individual HCPs.",
+        "reference": "Chapter 4 — Q&A 33"
+      },
+      {
+        "id": "res_grant_allowed",
+        "type": "result",
+        "outcome": "compliant",
+        "text": "COMPLIANT. Providing Educational Grants is ALLOWED, provided a written agreement secures your right to verify intended use.",
+        "reference": "Chapter 4 — Educational Grants"
       }
     ]
   }
