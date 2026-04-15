@@ -4,7 +4,7 @@
     "title": "Is this interaction in scope of the Code?",
     "relatedChapter": "scope",
     "relatedSection": null,
-    "category": "default",
+    "category": "scope",
     "description": "Determine if an interaction, event, or activity is governed by the MedTech Europe Code based on geography and affiliations.",
     "nodes": [
       {

@@ -3,6 +3,7 @@ import { AppIcon } from './AppIcons';
 import { TREE_DATA } from '../data/treeData';
 
 const CATEGORY_CONFIG = {
+  scope:      { label: 'Scope & Applicability', color: '#e11d48', icon: 'Compass' },
   events:     { label: 'Events',                color: '#0099A7', icon: 'Globe' },
   grants:     { label: 'Grants and Donations',  color: '#e67e22', icon: 'Star' },
   consulting: { label: 'Consulting Agreements', color: '#7654A1', icon: 'FileText' },
