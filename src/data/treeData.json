@@ -430,5 +430,261 @@
         "reference": "Annex VI — Direct support for HCP attendance"
       }
     ]
+  },
+  {
+    "id": "dt-annex1-cvs-scope",
+    "title": "When are CVS assessments required?",
+    "relatedChapter": "annex1",
+    "relatedSection": null,
+    "category": "events",
+    "description": "Determine if a Third Party Organised Educational Event requires prior submission to the Conference Vetting System (CVS).",
+    "nodes": [
+      {
+        "id": "start",
+        "type": "question",
+        "text": "What type of support or activity is the Member Company planning?",
+        "helpText": "Select the primary category of support provided to the Third Party Organised Educational Event.",
+        "options": [
+          {
+            "label": "Educational Grant",
+            "next": "q_grant_type"
+          },
+          {
+            "label": "Commercial Activity",
+            "next": "q_commercial_type"
+          },
+          {
+            "label": "Direct Sponsorship of HCPs",
+            "next": "q_loc_sponsorship"
+          }
+        ]
+      },
+      {
+        "id": "q_grant_type",
+        "type": "question",
+        "text": "What is the specific nature of the Educational Grant?",
+        "options": [
+          {
+            "label": "To support the general running of a conference",
+            "next": "q_loc_grant_general"
+          },
+          {
+            "label": "To support HCP attendance to the conference",
+            "next": "q_loc_grant_hcp"
+          },
+          {
+            "label": "To support Faculty",
+            "next": "q_loc_grant_faculty"
+          }
+        ]
+      },
+      {
+        "id": "q_commercial_type",
+        "type": "question",
+        "text": "What is the specific Commercial Activity?",
+        "options": [
+          {
+            "label": "Consultancy agreement for speakers in satellite symposia",
+            "next": "q_loc_fac_sat"
+          },
+          {
+            "label": "Booths / advertising",
+            "next": "q_loc_booth"
+          },
+          {
+            "label": "Attendance of Member Company Representatives",
+            "next": "res_prior_review"
+          }
+        ]
+      },
+      {
+        "id": "q_loc_grant_general",
+        "type": "question",
+        "text": "What is the location and audience scope of the event?",
+        "helpText": "Identify if the event is National or International, and if it is inside or outside the MedTech Europe Geographic Area.",
+        "options": [
+          {
+            "label": "IN MTE Area: National (delegates are local HCPs only)",
+            "next": "res_national_grant"
+          },
+          {
+            "label": "IN MTE Area: International (delegates from >=2 MTE area countries)",
+            "next": "res_subject_to_cvs"
+          },
+          {
+            "label": "OUTSIDE MTE Area: International (MTE area HCPs attend)",
+            "next": "res_allowed_not_cvs"
+          },
+          {
+            "label": "OUTSIDE MTE Area: International (No MTE area HCPs attend)",
+            "next": "res_out_of_scope"
+          }
+        ]
+      },
+      {
+        "id": "q_loc_grant_hcp",
+        "type": "question",
+        "text": "What is the location and audience scope of the event?",
+        "options": [
+          {
+            "label": "IN MTE Area: National (delegates are local HCPs only)",
+            "next": "res_national_grant"
+          },
+          {
+            "label": "IN MTE Area: International (delegates from >=2 MTE area countries)",
+            "next": "res_subject_to_cvs"
+          },
+          {
+            "label": "OUTSIDE MTE Area: International (MTE area HCPs attend)",
+            "next": "res_subject_to_cvs"
+          },
+          {
+            "label": "OUTSIDE MTE Area: International (No MTE area HCPs attend)",
+            "next": "res_na"
+          }
+        ]
+      },
+      {
+        "id": "q_loc_grant_faculty",
+        "type": "question",
+        "text": "What is the location and audience scope of the event?",
+        "options": [
+          {
+            "label": "IN MTE Area: National (delegates are local HCPs only)",
+            "next": "res_national_grant"
+          },
+          {
+            "label": "IN MTE Area: International (delegates from >=2 MTE area countries)",
+            "next": "res_subject_to_cvs"
+          },
+          {
+            "label": "OUTSIDE MTE Area: International (MTE area HCPs attend)",
+            "next": "res_allowed_not_cvs"
+          },
+          {
+            "label": "OUTSIDE MTE Area: International (No MTE area HCPs attend)",
+            "next": "res_na"
+          }
+        ]
+      },
+      {
+        "id": "q_loc_fac_sat",
+        "type": "question",
+        "text": "What is the location and audience scope of the event?",
+        "options": [
+          {
+            "label": "IN MTE Area: National (delegates are local HCPs only)",
+            "next": "res_national_grant"
+          },
+          {
+            "label": "IN MTE Area: International (delegates from >=2 MTE area countries)",
+            "next": "res_subject_to_cvs"
+          },
+          {
+            "label": "OUTSIDE MTE Area: International (MTE area HCPs attend)",
+            "next": "res_allowed_not_cvs"
+          },
+          {
+            "label": "OUTSIDE MTE Area: International (No MTE area HCPs attend)",
+            "next": "res_na"
+          }
+        ]
+      },
+      {
+        "id": "q_loc_booth",
+        "type": "question",
+        "text": "What is the location and audience scope of the event?",
+        "options": [
+          {
+            "label": "IN MTE Area: National (delegates are local HCPs only)",
+            "next": "res_national_grant"
+          },
+          {
+            "label": "IN MTE Area: International (delegates from >=2 MTE area countries)",
+            "next": "res_subject_to_cvs"
+          },
+          {
+            "label": "OUTSIDE MTE Area: International (MTE area HCPs attend)",
+            "next": "res_allowed_not_cvs"
+          },
+          {
+            "label": "OUTSIDE MTE Area: International (No MTE area HCPs attend)",
+            "next": "res_prior_review"
+          }
+        ]
+      },
+      {
+        "id": "q_loc_sponsorship",
+        "type": "question",
+        "text": "What is the location and audience scope of the event?",
+        "options": [
+          {
+            "label": "IN MTE Area: National (delegates are local HCPs only)",
+            "next": "res_not_allowed"
+          },
+          {
+            "label": "IN MTE Area: International (delegates from >=2 MTE area countries)",
+            "next": "res_not_allowed"
+          },
+          {
+            "label": "OUTSIDE MTE Area: International (MTE area HCPs attend)",
+            "next": "res_not_allowed"
+          },
+          {
+            "label": "OUTSIDE MTE Area: International (No MTE area HCPs attend)",
+            "next": "res_na"
+          }
+        ]
+      },
+      {
+        "id": "res_national_grant",
+        "type": "result",
+        "outcome": "compliant",
+        "text": "CVS approval is NOT required. However, the Code and local laws and regulations still apply.",
+        "reference": "Annex I — National Events"
+      },
+      {
+        "id": "res_subject_to_cvs",
+        "type": "result",
+        "outcome": "conditional",
+        "text": "This event is SUBJECT TO CVS DECISION. The Member Company must check the Conference Vetting System.",
+        "reference": "Annex I — International Events"
+      },
+      {
+        "id": "res_allowed_not_cvs",
+        "type": "result",
+        "outcome": "compliant",
+        "text": "Allowed. Not subject to CVS decision.",
+        "reference": "Annex I — International Events"
+      },
+      {
+        "id": "res_prior_review",
+        "type": "result",
+        "outcome": "compliant",
+        "text": "Member Company prior internal review against Code principles required.",
+        "reference": "Annex I"
+      },
+      {
+        "id": "res_not_allowed",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "Not allowed. Direct sponsorship of HCPs registered and practising in the MedTech Europe Geographic Area is prohibited.",
+        "reference": "Annex I — Direct Sponsorship"
+      },
+      {
+        "id": "res_out_of_scope",
+        "type": "result",
+        "outcome": "compliant",
+        "text": "Out of scope of the application of the Code.",
+        "reference": "Annex I — Out of scope"
+      },
+      {
+        "id": "res_na",
+        "type": "result",
+        "outcome": "compliant",
+        "text": "N/A - Not Applicable or Out of Scope.",
+        "reference": "Annex I"
+      }
+    ]
   }
 ]
