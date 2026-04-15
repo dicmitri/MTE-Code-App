@@ -1088,7 +1088,7 @@
             "next": "res_no_improper_intent"
           },
           {
-            "label": "None of the above. It is a standard provision of an item or prize draw.",
+            "label": "None of the above.",
             "next": "q_recipient"
           }
         ]
@@ -1246,6 +1246,92 @@
         "outcome": "compliant",
         "text": "COMPLIANT. A Member Company may occasionally provide educational items of greater value to an HCO provided appropriate records are maintained.",
         "reference": "Chapter 8"
+      }
+    ]
+  },
+  {
+    "id": "dt-ch10-tpi",
+    "title": "Third Party Intermediaries (TPI)",
+    "relatedChapter": "ch10",
+    "relatedSection": null,
+    "category": "default",
+    "description": "Evaluate the compliance and liability risks when engaging a Third Party Intermediary to act on your behalf.",
+    "nodes": [
+      {
+        "id": "start",
+        "type": "question",
+        "text": "Does the contractual documentation with the Third Party Intermediary (TPI) explicitly impose obligations to comply with the Code and other applicable guidelines?",
+        "helpText": "Local laws permitting, this is a mandatory requirement to limit Member Company liability.",
+        "options": [
+          {
+            "label": "Yes, compliance obligations and appropriate oversight mechanisms are formally contracted",
+            "next": "q_dd_risk"
+          },
+          {
+            "label": "No, the contract does not include specific compliance obligations",
+            "next": "res_mandatory_fail"
+          }
+        ]
+      },
+      {
+        "id": "q_dd_risk",
+        "type": "question",
+        "text": "Has the Member Company performed a Risk Assessment and robust Due Diligence process on the TPI?",
+        "helpText": "Assessing risk profiles and local market requirements is highly recommended prior to engagement.",
+        "options": [
+          {
+            "label": "Yes, we perform rigorous pre-engagement and renewal due diligence",
+            "next": "q_training_oversight"
+          },
+          {
+            "label": "No, due diligence or risk assessment has not been thoroughly performed",
+            "next": "res_dd_fail"
+          }
+        ]
+      },
+      {
+        "id": "q_training_oversight",
+        "type": "question",
+        "text": "Does the Member Company maintain an assessment of the TPI training needs, provide necessary training, AND exercise risk-based monitoring?",
+        "helpText": "Member Companies are expected to audit and train intermediaries.",
+        "options": [
+          {
+            "label": "Yes, we oversee their training and actively monitor their compliance",
+            "next": "res_compliant_tpi"
+          },
+          {
+            "label": "No, training or active compliance monitoring is generally lacking",
+            "next": "res_oversight_fail"
+          }
+        ]
+      },
+      {
+        "id": "res_mandatory_fail",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "NOT ALLOWED. Member Companies SHALL ensure contractual documentation imposes obligations on the TPI to comply with the Code and provides for appropriate oversight.",
+        "reference": "Chapter 10"
+      },
+      {
+        "id": "res_dd_fail",
+        "type": "result",
+        "outcome": "conditional",
+        "text": "HIGH RISK. While the contract may be sound, the Code strongly requires that Member Companies evaluate risk profiles and perform robust due diligence to identify and mitigate risks.",
+        "reference": "Chapter 10 — Risk Assessment & Due diligence"
+      },
+      {
+        "id": "res_oversight_fail",
+        "type": "result",
+        "outcome": "conditional",
+        "text": "HIGH RISK. The Code strongly recommends assessing training needs, providing regular training, and performing risk-based routine monitoring of TPIs to prevent liability.",
+        "reference": "Chapter 10 — Training & Oversight"
+      },
+      {
+        "id": "res_compliant_tpi",
+        "type": "result",
+        "outcome": "compliant",
+        "text": "COMPLIANT. The TPI arrangement includes mandatory contractual obligations and strictly follows the recommended due diligence, training, and oversight processes.",
+        "reference": "Chapter 10"
       }
     ]
   }

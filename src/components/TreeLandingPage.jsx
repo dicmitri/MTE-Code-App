@@ -33,8 +33,11 @@ export const TreeLandingPage = ({ onSelectTree }) => {
         </p>
       </div>
 
-      {Object.entries(grouped).map(([category, trees]) => {
-        const config = CATEGORY_CONFIG[category] || CATEGORY_CONFIG.default;
+      {Object.keys(CATEGORY_CONFIG).map((category) => {
+        const trees = grouped[category];
+        if (!trees || trees.length === 0) return null;
+        
+        const config = CATEGORY_CONFIG[category];
         return (
           <div key={category} className="mb-10">
             <div className="flex items-center gap-2 mb-4 px-1">
