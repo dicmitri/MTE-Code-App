@@ -946,7 +946,7 @@
         "id": "res_for_profit",
         "type": "result",
         "outcome": "out-of-scope",
-        "text": "OUT OF SCOPE. For-profit organisations (like commercial PCOs) do not fall within the definition of Educational Grants or Donations. Such arrangements are commercial sponsorships.",
+        "text": "OUT OF SCOPE. For-profit organisations (like commercial PCOs) do not fall within the definition of Educational Grants or Donations. Such arrangements are generally commercial agreements.",
         "reference": "Chapter 4 — Q&A 35"
       },
       {
@@ -1039,6 +1039,213 @@
         "outcome": "compliant",
         "text": "COMPLIANT. Providing Educational Grants is ALLOWED, provided a written agreement secures your right to verify intended use.",
         "reference": "Chapter 4 — Educational Grants"
+      }
+    ]
+  },
+  {
+    "id": "dt-ch8-items",
+    "title": "Educational and Promotional Items",
+    "relatedChapter": "ch8",
+    "relatedSection": null,
+    "category": "items",
+    "description": "Determine if you can provide a specific item, gift, or prize to a Healthcare Professional or Healthcare Organisation.",
+    "nodes": [
+      {
+        "id": "start",
+        "type": "question",
+        "text": "What is the format or nature of the item the Member Company intends to provide?",
+        "options": [
+          {
+            "label": "Cash or cash equivalents",
+            "next": "res_no_cash"
+          },
+          {
+            "label": "Evaluation Product, Demonstration Product, or Sample",
+            "next": "res_out_of_scope_samples"
+          },
+          {
+            "label": "Educational item, Promotional item, or Event Prize",
+            "next": "q_intent_triggers"
+          }
+        ]
+      },
+      {
+        "id": "q_intent_triggers",
+        "type": "question",
+        "text": "Are any of the following statements true regarding this specific item?",
+        "helpText": "Select the statement that applies, or None.",
+        "options": [
+          {
+            "label": "It is intended to mark a significant life event (e.g., birthday, wedding)",
+            "next": "res_no_improper_intent"
+          },
+          {
+            "label": "It is being provided in response to a proactive request made by an HCP",
+            "next": "res_no_improper_intent"
+          },
+          {
+            "label": "It is an incentive to purchase products, or a gift in lieu of a declined consulting fee",
+            "next": "res_no_improper_intent"
+          },
+          {
+            "label": "None of the above. It is a standard provision of an item or prize draw.",
+            "next": "q_recipient"
+          }
+        ]
+      },
+      {
+        "id": "q_recipient",
+        "type": "question",
+        "text": "Who is the direct, intended recipient of the Educational or Promotional Item?",
+        "options": [
+          {
+            "label": "Individual Healthcare Professional (HCP)",
+            "next": "q_item_value_hcp"
+          },
+          {
+            "label": "Healthcare Organisation (HCO) or hospital",
+            "next": "q_item_value_hco"
+          }
+        ]
+      },
+      {
+        "id": "q_item_value_hcp",
+        "type": "question",
+        "text": "What is the monetary value of the item being provided locally?",
+        "options": [
+          {
+            "label": "It is of Modest / Inexpensive value (within limits of national laws/codes)",
+            "next": "q_hcp_item_nature"
+          },
+          {
+            "label": "It is an item of Greater value",
+            "next": "res_no_high_value_hcp"
+          }
+        ]
+      },
+      {
+        "id": "q_hcp_item_nature",
+        "type": "question",
+        "text": "Does the modest-value item relate to the HCP practice, benefit patients, or serve a genuine educational function without being mainly for personal use?",
+        "helpText": "For example, stationary or clinical wipes vs. food, alcohol or home/car items.",
+        "options": [
+          {
+            "label": "Yes, it is relevant to their practice/educational and NOT mainly for personal use",
+            "next": "res_hcp_allowed"
+          },
+          {
+            "label": "No, it consists of food, alcohol, or is primarily for use in the home or car",
+            "next": "res_no_personal_use"
+          }
+        ]
+      },
+      {
+        "id": "q_item_value_hco",
+        "type": "question",
+        "text": "What is the monetary value of the item being provided to the HCO?",
+        "options": [
+          {
+            "label": "It is of Modest / Inexpensive value",
+            "next": "q_hcp_item_nature"
+          },
+          {
+            "label": "It is an educational item of Greater value (e.g., medical textbooks, anatomical models)",
+            "next": "q_hco_greater_value_conditions"
+          }
+        ]
+      },
+      {
+        "id": "q_hco_greater_value_conditions",
+        "type": "question",
+        "text": "Does the higher value item serve a genuine educational function/benefit patients AND directly relate to the therapeutic area of the Member Company?",
+        "options": [
+          {
+            "label": "Yes, it relates to our therapeutic area and serves an educational/patient benefit",
+            "next": "q_hco_overhead_check"
+          },
+          {
+            "label": "No, it is unrelated or given to HCPs purely for personal use",
+            "next": "res_no_hco_unrelated"
+          }
+        ]
+      },
+      {
+        "id": "q_hco_overhead_check",
+        "type": "question",
+        "text": "Is this higher-value item offsetting the HCO normal overheads or routine costs of operation?",
+        "options": [
+          {
+            "label": "Yes, it covers routine operational overhead",
+            "next": "res_no_overhead_items"
+          },
+          {
+            "label": "No, it does not. (And we will maintain appropriate records of its provision)",
+            "next": "res_hco_greater_value_allowed"
+          }
+        ]
+      },
+      {
+        "id": "res_no_cash",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "NOT ALLOWED. Educational and promotional items must NEVER be given in the form of cash or cash equivalents.",
+        "reference": "Chapter 8"
+      },
+      {
+        "id": "res_out_of_scope_samples",
+        "type": "result",
+        "outcome": "not-applicable",
+        "text": "OUT OF SCOPE. Please refer to Chapter 9 (Demonstration Products and Samples) or Chapter 6 (Research).",
+        "reference": "Chapter 8"
+      },
+      {
+        "id": "res_no_improper_intent",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "NOT ALLOWED. Items must not mark life events, be given in response to HCP requests, act as commercial incentives, or replace consulting fees (even if declined).",
+        "reference": "Chapter 8 / Q&A 42"
+      },
+      {
+        "id": "res_no_high_value_hcp",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "NOT ALLOWED. Only items of modest/inexpensive value may be provided to an individual HCP. Greater value items can only be provided to an HCO.",
+        "reference": "Chapter 8"
+      },
+      {
+        "id": "res_no_personal_use",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "NOT ALLOWED. Items cannot be mainly for personal/home/car use, nor consist of food/alcohol. They must relate to the HCP practice or benefit patients.",
+        "reference": "Q&A 41"
+      },
+      {
+        "id": "res_hcp_allowed",
+        "type": "result",
+        "outcome": "compliant",
+        "text": "COMPLIANT. Modest-value items related to practice or education are ALLOWED. Prize draws/competitions at events distributing such items are also permissible.",
+        "reference": "Chapter 8"
+      },
+      {
+        "id": "res_no_hco_unrelated",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "NOT ALLOWED. Educational items of greater value to an HCO must strictly relate to the therapeutic areas the Member Company is involved in.",
+        "reference": "Q&A 43"
+      },
+      {
+        "id": "res_no_overhead_items",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "NOT ALLOWED. Member Companies cannot provide higher value educational items that simply offset the HCO normal overhead or routine operational costs.",
+        "reference": "Chapter 8"
+      },
+      {
+        "id": "res_hco_greater_value_allowed",
+        "type": "result",
+        "outcome": "compliant",
+        "text": "COMPLIANT. A Member Company may occasionally provide educational items of greater value to an HCO provided appropriate records are maintained.",
+        "reference": "Chapter 8"
       }
     ]
   }

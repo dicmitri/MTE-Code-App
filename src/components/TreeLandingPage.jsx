@@ -3,11 +3,12 @@ import { AppIcon } from './AppIcons';
 import { TREE_DATA } from '../data/treeData';
 
 const CATEGORY_CONFIG = {
-  events:     { label: 'Events',       color: '#0099A7', icon: 'Globe' },
-  consulting: { label: 'Consulting',   color: '#7654A1', icon: 'FileText' },
-  grants:     { label: 'Grants',       color: '#e67e22', icon: 'Star' },
-  research:   { label: 'Research',     color: '#2ecc71', icon: 'Search' },
-  default:    { label: 'General',      color: '#95a5a6', icon: 'GitBranch' },
+  events:     { label: 'Events',                color: '#0099A7', icon: 'Globe' },
+  grants:     { label: 'Grants and Donations',  color: '#e67e22', icon: 'Star' },
+  consulting: { label: 'Consulting Agreements', color: '#7654A1', icon: 'FileText' },
+  items:      { label: 'Educational & Promotional Items', color: '#3b82f6', icon: 'Gift' },
+  research:   { label: 'Research',              color: '#2ecc71', icon: 'Search' },
+  default:    { label: 'General',               color: '#95a5a6', icon: 'GitBranch' },
 };
 
 export const TreeLandingPage = ({ onSelectTree }) => {
