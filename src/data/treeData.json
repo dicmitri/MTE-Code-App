@@ -216,5 +216,219 @@
         "reference": "Chapter 5 — Consulting Arrangements"
       }
     ]
+  },
+  {
+    "id": "dt-direct-support-hcp-events",
+    "title": "Direct Support to HCP Participation in Events",
+    "relatedChapter": [
+      "ch2",
+      "annex6"
+    ],
+    "relatedSection": null,
+    "category": "events",
+    "description": "Determine if direct support for Healthcare Professional (HCP) attendance at an event is compliant based on Annex VI rules.",
+    "nodes": [
+      {
+        "id": "start",
+        "type": "question",
+        "text": "What type of event is the direct support intended for?",
+        "helpText": "Support rules differ significantly depending on the event type.",
+        "options": [
+          {
+            "label": "Third Party Organised Educational Conference (TPOE)",
+            "next": "q_tpoe_setting"
+          },
+          {
+            "label": "Third Party Organised Procedure Training meeting",
+            "next": "res_proc_training_allowed"
+          },
+          {
+            "label": "Company Event",
+            "next": "q_company_event_type"
+          }
+        ]
+      },
+      {
+        "id": "q_tpoe_setting",
+        "type": "question",
+        "text": "What is the specific setting within the Third Party Organised Educational Conference?",
+        "helpText": "Support restrictions apply differently to the main event versus satellite symposia or booths.",
+        "options": [
+          {
+            "label": "Main Event / Independent Scientific Program",
+            "next": "res_tpoe_main_fail"
+          },
+          {
+            "label": "Satellite Symposium",
+            "next": "q_tpoe_sat_role"
+          },
+          {
+            "label": "Booth",
+            "next": "q_tpoe_sat_role"
+          }
+        ]
+      },
+      {
+        "id": "q_tpoe_sat_role",
+        "type": "question",
+        "text": "What is the intended role of the Healthcare Professional at the Satellite Symposium or Booth?",
+        "helpText": "Faculty are those considered speakers or moderators needing preparation. Delegates attend passively.",
+        "options": [
+          {
+            "label": "Faculty / Speaker",
+            "next": "res_allowed_faculty_agreement"
+          },
+          {
+            "label": "Delegate",
+            "next": "res_not_allowed_delegate"
+          }
+        ]
+      },
+      {
+        "id": "q_company_event_type",
+        "type": "question",
+        "text": "What type of Company Event is it?",
+        "helpText": "Identify if the primary purpose is procedural training or general product/business promotion.",
+        "options": [
+          {
+            "label": "Product and Procedure Training and Education Event",
+            "next": "q_comp_training_timing"
+          },
+          {
+            "label": "Sales, Promotional and Other Business Meeting",
+            "next": "q_comp_sales_timing"
+          }
+        ]
+      },
+      {
+        "id": "q_comp_training_timing",
+        "type": "question",
+        "text": "Is the Product and Procedure Training and Education Event taking place at or about the same time as a Third Party Organised Educational Event?",
+        "helpText": "Proximity to third-party events alters the compliance logic.",
+        "options": [
+          {
+            "label": "No (NOT at the same time)",
+            "next": "res_comp_training_notime"
+          },
+          {
+            "label": "Yes (At or about the same time)",
+            "next": "q_comp_training_role"
+          }
+        ]
+      },
+      {
+        "id": "q_comp_training_role",
+        "type": "question",
+        "text": "What is the intended role of the Healthcare Professional across the events?",
+        "helpText": "Faculty/Speakers present or moderate. Delegates attend passively.",
+        "options": [
+          {
+            "label": "Faculty / Speaker",
+            "next": "res_allowed_faculty"
+          },
+          {
+            "label": "Delegate",
+            "next": "res_not_allowed_delegate"
+          }
+        ]
+      },
+      {
+        "id": "q_comp_sales_timing",
+        "type": "question",
+        "text": "Is the Sales, Promotional and Other Business Meeting taking place at or about the same time as a Third Party Organised Educational Event?",
+        "helpText": "Proximity to third-party events alters the compliance logic.",
+        "options": [
+          {
+            "label": "No (NOT at the same time)",
+            "next": "q_comp_sales_notime_role"
+          },
+          {
+            "label": "Yes (At or about the same time)",
+            "next": "q_comp_sales_time_role"
+          }
+        ]
+      },
+      {
+        "id": "q_comp_sales_notime_role",
+        "type": "question",
+        "text": "What is the intended role of the Healthcare Professional?",
+        "helpText": "Faculty/Speakers present or moderate. Delegates attend passively.",
+        "options": [
+          {
+            "label": "Faculty / Speaker",
+            "next": "res_allowed_faculty_agreement"
+          },
+          {
+            "label": "Delegate",
+            "next": "res_comp_sales_notime_delegate"
+          }
+        ]
+      },
+      {
+        "id": "q_comp_sales_time_role",
+        "type": "question",
+        "text": "What is the intended role of the Healthcare Professional across the events?",
+        "helpText": "Faculty/Speakers present or moderate. Delegates attend passively.",
+        "options": [
+          {
+            "label": "Faculty / Speaker",
+            "next": "res_allowed_faculty"
+          },
+          {
+            "label": "Delegate",
+            "next": "res_not_allowed_delegate"
+          }
+        ]
+      },
+      {
+        "id": "res_tpoe_main_fail",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "Direct support for HCP attendance at the Main Event / Independent Scientific Program of a Third Party Organised Educational Conference is strictly prohibited for both Faculty/Speakers and Delegates.",
+        "reference": "Annex VI — Third Party Organised Educational Conference"
+      },
+      {
+        "id": "res_proc_training_allowed",
+        "type": "result",
+        "outcome": "compliant",
+        "text": "Direct support for HCP attendance at a Third Party Organised Procedure Training meeting is allowed for both Faculty/Speakers and Delegates.",
+        "reference": "Annex VI — Third Party Organised Procedure Training meeting"
+      },
+      {
+        "id": "res_comp_training_notime",
+        "type": "result",
+        "outcome": "compliant",
+        "text": "Direct support for a Product and Procedure Training and Education Event that is NOT taking place at or about the same time as a TPOE is allowed for both Faculty/Speakers and Delegates.",
+        "reference": "Annex VI — Company Events"
+      },
+      {
+        "id": "res_comp_sales_notime_delegate",
+        "type": "result",
+        "outcome": "conditional",
+        "text": "Direct support for Delegates attending a Sales, Promotional and Other Business Meeting is generally NOT ALLOWED. Exception: Allowed ONLY for demonstration of non-portable equipment.",
+        "reference": "Annex VI — Company Events"
+      },
+      {
+        "id": "res_allowed_faculty",
+        "type": "result",
+        "outcome": "compliant",
+        "text": "Direct support for HCP attendance is ALLOWED for Faculty/Speakers.",
+        "reference": "Annex VI — Direct support for HCP attendance"
+      },
+      {
+        "id": "res_allowed_faculty_agreement",
+        "type": "result",
+        "outcome": "compliant",
+        "text": "Direct support for HCP attendance is ALLOWED for Faculty/Speakers, provided a consulting agreement is required and in place.",
+        "reference": "Annex VI — Direct support for HCP attendance"
+      },
+      {
+        "id": "res_not_allowed_delegate",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "Direct support for HCP attendance is NOT ALLOWED for Delegates in this scenario.",
+        "reference": "Annex VI — Direct support for HCP attendance"
+      }
+    ]
   }
 ]
