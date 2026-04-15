@@ -11,14 +11,14 @@
         "id": "start",
         "type": "question",
         "text": "What type of product or service is the interaction primarily linked to?",
-        "helpText": "The Code governs interactions related to Medical Technologies.",
+        "helpText": "The Code governs interactions related to Medical Technologies, understood as those products under the scope of MDR and IVDR.",
         "options": [
           {
-            "label": "Medical Technologies (or a combination involving Medical Tech)",
+            "label": "Medical Technologies (or a combination involving Medical Technologies)",
             "next": "q_actor"
           },
           {
-            "label": "Exclusively non-Medical Tech (e.g., purely pharma or research-only products without MedTech link)",
+            "label": "Exclusively non-Medical Technologies (e.g., purely pharma or research-only products without MedTech link)",
             "next": "res_not_medtech"
           }
         ]
