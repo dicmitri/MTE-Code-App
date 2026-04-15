@@ -1,0 +1,220 @@
+[
+  {
+    "id": "dt-ch1-event-location",
+    "title": "Is My Event Location Compliant?",
+    "relatedChapter": "ch1",
+    "relatedSection": "ch1-2-event-location-and-venue",
+    "category": "events",
+    "description": "Assess whether a proposed event location meets MedTech Europe Code requirements for venue selection.",
+    "nodes": [
+      {
+        "id": "start",
+        "type": "question",
+        "text": "Is the event taking place in a country where MedTech Europe's Code of Ethical Business Practice applies?",
+        "helpText": "The Code applies to interactions (by Member Companies of MedTech Europe) with Healthcare Professionals (HCPs) in Europe. See Scope chapter.",
+        "options": [
+          {
+            "label": "Yes",
+            "next": "q2"
+          },
+          {
+            "label": "No / Unsure",
+            "next": "result-out-of-scope"
+          }
+        ]
+      },
+      {
+        "id": "q2",
+        "type": "question",
+        "text": "Is the event venue located in a city or town that is a recognised scientific, educational, or business centre?",
+        "helpText": "Venues should be chosen for their appropriateness to the event, and not for their leisure or entertainment attributes.",
+        "options": [
+          {
+            "label": "Yes",
+            "next": "q3"
+          },
+          {
+            "label": "No",
+            "next": "result-fail-location"
+          }
+        ]
+      },
+      {
+        "id": "q3",
+        "type": "question",
+        "text": "Does the selected/proposed venue have a reputation primarily as a leisure or entertainment destination (e.g. ski resort, beach resort, theme park)?",
+        "helpText": "Even if located near a scientific centre, the venue itself must not be known primarily for leisure.",
+        "options": [
+          {
+            "label": "Yes — it is primarily a leisure venue",
+            "next": "result-fail-leisure"
+          },
+          {
+            "label": "No — it is appropriate for a professional event",
+            "next": "q4"
+          }
+        ]
+      },
+      {
+        "id": "q4",
+        "type": "question",
+        "text": "Is the event taking place during the peak tourist season for this location?",
+        "helpText": "Events in seasonal vacation destinations during peak season may create the appearance of impropriety, even if the venue is otherwise appropriate. In Europe, the ski season is considered to run from December 20 - March 31 and the summer season from June 15 - September 15. Equivalent, seasonally adjusted dates apply in other regions of the world.",
+        "options": [
+          {
+            "label": "Yes — during peak season",
+            "next": "result-fail-season"
+          },
+          {
+            "label": "No — outside peak season",
+            "next": "result-pass"
+          }
+        ]
+      },
+      {
+        "id": "result-out-of-scope",
+        "type": "result",
+        "outcome": "conditional",
+        "text": "The MedTech Europe Code may not directly apply, but local regulations and your company's own code of conduct should still be followed.",
+        "reference": "Scope — Geographic applicability of the Code"
+      },
+      {
+        "id": "result-fail-location",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "The venue location does not meet Code requirements. Events must be held in recognised scientific, educational, or business centres.",
+        "reference": "Chapter 1, Section 2 — Event Location and Venue"
+      },
+      {
+        "id": "result-fail-leisure",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "Venues known primarily for leisure or entertainment are not compliant, regardless of their geographic location.",
+        "reference": "Chapter 1, Section 2 — Appropriateness of Venue"
+      },
+      {
+        "id": "result-fail-season",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "Holding an event during peak tourist season at a vacation-associated location creates an appearance of impropriety.",
+        "reference": "Chapter 1, Q&A 7 — Seasonal considerations"
+      },
+      {
+        "id": "result-pass",
+        "type": "result",
+        "outcome": "compliant",
+        "text": "Based on these criteria, the event location appears to meet Code requirements. Ensure all other event criteria (hospitality, faculty, etc.) are also compliant.",
+        "reference": "Chapter 1 — General Criteria for Events"
+      }
+    ]
+  },
+  {
+    "id": "dt-ch5-consulting-arrangement",
+    "title": "Is My Consulting Arrangement Compliant?",
+    "relatedChapter": "ch5",
+    "relatedSection": null,
+    "category": "consulting",
+    "description": "Evaluate whether a proposed consulting arrangement with a Healthcare Professional meets Code requirements.",
+    "nodes": [
+      {
+        "id": "start",
+        "type": "question",
+        "text": "Is there a documented, legitimate business need for the consulting services that is identified in advance?",
+        "helpText": "The need for the services must be clearly identified before selecting the consultant.",
+        "options": [
+          {
+            "label": "Yes",
+            "next": "q2"
+          },
+          {
+            "label": "No",
+            "next": "result-fail-need"
+          }
+        ]
+      },
+      {
+        "id": "q2",
+        "type": "question",
+        "text": "Was the Healthcare Professional selected based on their qualifications and expertise relevant to the identified need?",
+        "helpText": "Selection must be based on qualifications, not on past or potential purchasing decisions.",
+        "options": [
+          {
+            "label": "Yes — selected on merit",
+            "next": "q3"
+          },
+          {
+            "label": "No — selected for other reasons",
+            "next": "result-fail-selection"
+          }
+        ]
+      },
+      {
+        "id": "q3",
+        "type": "question",
+        "text": "Is there a written agreement signed by both parties that specifies the nature of the services, the deliverables, and the compensation?",
+        "helpText": "A written contract must be in place before services begin.",
+        "options": [
+          {
+            "label": "Yes",
+            "next": "q4"
+          },
+          {
+            "label": "No",
+            "next": "result-fail-contract"
+          }
+        ]
+      },
+      {
+        "id": "q4",
+        "type": "question",
+        "text": "Is the compensation reasonable and reflective of fair market value for the services provided?",
+        "helpText": "Compensation must not be excessive and should reflect the consultant's actual time and expertise.",
+        "options": [
+          {
+            "label": "Yes — fair market value",
+            "next": "result-pass"
+          },
+          {
+            "label": "No — may be excessive",
+            "next": "result-fail-compensation"
+          }
+        ]
+      },
+      {
+        "id": "result-fail-need",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "A consulting arrangement must be based on a documented, legitimate business need identified before the consultant is selected.",
+        "reference": "Chapter 5 — Criteria for Consulting Arrangements"
+      },
+      {
+        "id": "result-fail-selection",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "Consultants must be selected based on their qualifications and expertise, not on volume or value of business they generate.",
+        "reference": "Chapter 5 — Selection of Consultants"
+      },
+      {
+        "id": "result-fail-contract",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "A written agreement specifying services, deliverables, and compensation must be signed before services begin.",
+        "reference": "Chapter 5 — Written Agreements"
+      },
+      {
+        "id": "result-fail-compensation",
+        "type": "result",
+        "outcome": "non-compliant",
+        "text": "Compensation must reflect fair market value. Excessive payments may be viewed as an inducement.",
+        "reference": "Chapter 5 — Fair Market Value"
+      },
+      {
+        "id": "result-pass",
+        "type": "result",
+        "outcome": "compliant",
+        "text": "Based on these criteria, the consulting arrangement appears to meet Code requirements. Ensure proper documentation is maintained throughout the engagement.",
+        "reference": "Chapter 5 — Consulting Arrangements"
+      }
+    ]
+  }
+]

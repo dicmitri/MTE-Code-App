@@ -2,8 +2,10 @@ import React, { useState, useMemo } from 'react';
 import DOMPurify from 'dompurify';
 import { highlightSearchTerm, processTextWithTerms } from '../utils/textUtils';
 import { Highlight } from './Highlight';
+import { AppIcon } from './AppIcons';
+import { getTreesBySection, getTreesByChapter } from '../data/treeData';
 
-export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTermClick, bookmarksControls, chapterPrefix, searchFilters }) => {
+export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTermClick, bookmarksControls, chapterPrefix, searchFilters, onNavigateTree }) => {
     const processedHtml = useMemo(() => {
         let html = section.legalText;
         if (query && searchFilters?.text) return highlightSearchTerm(html, query);
@@ -44,6 +46,17 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
 
     const isBookmarked = bookmarksControls?.isBookmarked(id);
 
+    // Find related decision trees for this section
+    const relatedTrees = useMemo(() => {
+        let trees = getTreesBySection(id);
+        if (trees.length === 0) {
+            // Fall back to chapter-level match using the chapter part of the id
+            const chapterId = id.split('-')[0];
+            if (chapterId) trees = getTreesByChapter(chapterId);
+        }
+        return trees;
+    }, [id]);
+
     return (
         <div id={id} className="mb-8 scroll-mt-24" onClick={handleClick}>
             {section.title && (
@@ -79,6 +92,28 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
                 </div>
             )}
             <div className="prose prose-slate max-w-none text-gray-800 leading-relaxed reader-content" dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />
+            {onNavigateTree && relatedTrees.length > 0 && (
+                <div className="mt-4 bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3 print:hidden">
+                    <span className="text-amber-600 shrink-0 mt-0.5">
+                        <AppIcon name="GitBranch" size={18} />
+                    </span>
+                    <div className="flex-1">
+                        <p className="text-xs font-bold text-amber-800 uppercase tracking-wider mb-1">Related Decision Tree{relatedTrees.length > 1 ? 's' : ''}</p>
+                        <div className="space-y-1">
+                            {relatedTrees.map(tree => (
+                                <button
+                                    key={tree.id}
+                                    onClick={(e) => { e.stopPropagation(); onNavigateTree(tree.id); }}
+                                    className="text-sm text-amber-700 hover:text-amber-900 font-medium hover:underline flex items-center gap-1 transition-colors"
+                                >
+                                    {tree.title}
+                                    <AppIcon name="ChevronRight" size={12} />
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
             {copyMsg && (
                 <div className="fixed bottom-5 right-5 bg-[#7654A1] text-white px-4 py-2 rounded shadow-lg z-50 transition-opacity duration-300 print:hidden">
                     {copyMsg}

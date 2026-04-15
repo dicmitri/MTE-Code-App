@@ -12,6 +12,8 @@ import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { MainContent } from './components/MainContent';
 import { InstallPrompt } from './components/InstallPrompt';
+import { HubPage } from './components/HubPage';
+import { TreeContent } from './components/TreeContent';
 
 if (typeof FULL_CODE_DATA !== 'undefined') {
   FULL_CODE_DATA.forEach(chapter => {
@@ -22,6 +24,7 @@ if (typeof FULL_CODE_DATA !== 'undefined') {
 }
 
 const App = () => {
+  const [activeSection, setActiveSection] = useState(null); // null = Home, 'code', 'trees'
   const [activeId, setActiveId] = useState('home');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showSummary, setShowSummary] = useState(true);
@@ -39,7 +42,7 @@ const App = () => {
   // Custom Hooks
   useKeyboardShortcuts(setSearchTerm);
   const { installPromptEvent, isIos, showIosPrompt, setShowIosPrompt, handleInstallClick } = usePWAInstall();
-  useHashRouting(setActiveId, setShowSummary, setShowFullText);
+  useHashRouting(setActiveId, setActiveSection, setShowSummary, setShowFullText);
   const { bookmarks, toggleBookmark, isBookmarked } = useBookmarks();
   const { history, addHistory } = useRecentHistory();
 
@@ -58,9 +61,9 @@ const App = () => {
 
   useEffect(() => {
     if (activeId !== 'home') {
-      addHistory(activeId);
+      addHistory(activeId, activeSection || 'code');
     }
-  }, [activeId, addHistory]);
+  }, [activeId, activeSection, addHistory]);
 
   const handleTermClick = (termKey) => {
     const definition = glossaryMap[termKey];
@@ -79,6 +82,21 @@ const App = () => {
 
   const activeContent = FULL_CODE_DATA.find((c) => c.id === activeId);
 
+  const handleSectionSelect = (sectionId) => {
+    setActiveSection(sectionId);
+    setActiveId('home');
+    setSidebarOpen(false);
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  };
+
+  const handleGoHome = () => {
+    setActiveSection(null);
+    setActiveId('home');
+    setSidebarOpen(false);
+  };
+
   const handleChapterChange = (id) => {
     setActiveId(id);
     setSidebarOpen(false);
@@ -87,6 +105,14 @@ const App = () => {
       setShowFullText(true);
     }
 
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  };
+
+  const handleNavigateTree = (treeId) => {
+    setActiveSection('trees');
+    setActiveId(treeId);
     if (scrollRef.current) {
       scrollRef.current.scrollTo({ top: 0, behavior: 'instant' });
     }
@@ -103,8 +129,10 @@ const App = () => {
 
       <Header
         activeId={activeId}
+        activeSection={activeSection}
         setActiveId={setActiveId}
         setSidebarOpen={setSidebarOpen}
+        onGoHome={handleGoHome}
         showSummary={showSummary}
         setShowSummary={setShowSummary}
         showFullText={showFullText}
@@ -129,9 +157,12 @@ const App = () => {
           setSearchTerm={setSearchTerm}
           debouncedSearch={debouncedSearch}
           activeId={activeId}
+          activeSection={activeSection}
           setActiveId={setActiveId}
+          setActiveSection={setActiveSection}
           setShowSummary={setShowSummary}
           setShowFullText={setShowFullText}
+          onGoHome={handleGoHome}
           installPromptEvent={installPromptEvent}
           isIos={isIos}
           setShowIosPrompt={setShowIosPrompt}
@@ -149,23 +180,36 @@ const App = () => {
           ></div>
         )}
 
-        <MainContent
-          activeId={activeId}
-          activeContent={activeContent}
-          handleChapterChange={handleChapterChange}
-          setActiveId={setActiveId}
-          showSummary={showSummary}
-          showFullText={showFullText}
-          showQA={showQA}
-          debouncedSearch={debouncedSearch}
-          glossaryMap={glossaryMap}
-          handleTermClick={handleTermClick}
-          scrollRef={scrollRef}
-          showIosPrompt={showIosPrompt}
-          setShowIosPrompt={setShowIosPrompt}
-          bookmarksControls={{ toggleBookmark, isBookmarked }}
-          searchFilters={searchFilters}
-        />
+        {activeSection === null ? (
+          <main ref={scrollRef} className="flex-1 overflow-y-auto bg-white custom-scrollbar h-full">
+            <HubPage onSelectSection={handleSectionSelect} />
+          </main>
+        ) : activeSection === 'code' ? (
+          <MainContent
+            activeId={activeId}
+            activeContent={activeContent}
+            handleChapterChange={handleChapterChange}
+            setActiveId={setActiveId}
+            showSummary={showSummary}
+            showFullText={showFullText}
+            showQA={showQA}
+            debouncedSearch={debouncedSearch}
+            glossaryMap={glossaryMap}
+            handleTermClick={handleTermClick}
+            scrollRef={scrollRef}
+            showIosPrompt={showIosPrompt}
+            setShowIosPrompt={setShowIosPrompt}
+            bookmarksControls={{ toggleBookmark, isBookmarked }}
+            searchFilters={searchFilters}
+            onNavigateTree={handleNavigateTree}
+          />
+        ) : (
+          <TreeContent
+            activeId={activeId}
+            setActiveId={setActiveId}
+            scrollRef={scrollRef}
+          />
+        )}
       </div>
     </div>
   );

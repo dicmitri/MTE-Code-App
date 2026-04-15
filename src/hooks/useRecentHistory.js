@@ -12,11 +12,11 @@ export const useRecentHistory = (maxItems = 5) => {
     }
   });
 
-  const addHistory = useCallback((chapterId) => {
+  const addHistory = useCallback((chapterId, section = 'code') => {
     if (!chapterId || chapterId === 'home') return;
     
     setHistory(prev => {
-      // Find the chapter
+      // Find the chapter in Code data
       const chapter = FULL_CODE_DATA.find(c => c.id === chapterId);
       if (!chapter) return prev;
 
@@ -25,6 +25,7 @@ export const useRecentHistory = (maxItems = 5) => {
         title: chapter.title,
         icon: chapter.icon,
         part: chapter.part,
+        section: section || 'code',
         timestamp: Date.now()
       };
 
@@ -44,3 +45,4 @@ export const useRecentHistory = (maxItems = 5) => {
 
   return { history, addHistory };
 };
+

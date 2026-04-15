@@ -4,8 +4,10 @@ import { Logo } from './Logo';
 
 export const Header = ({
   activeId,
+  activeSection,
   setActiveId,
   setSidebarOpen,
+  onGoHome,
   showSummary,
   setShowSummary,
   showFullText,
@@ -32,14 +34,15 @@ export const Header = ({
         </button>
 
         <button
-          onClick={() => setActiveId('home')}
-          className={`hover:opacity-80 transition-opacity items-center gap-2 ${activeId !== 'home' ? 'hidden md:flex' : 'flex'}`}
+          onClick={onGoHome}
+          className={`hover:opacity-80 transition-opacity items-center gap-2 ${activeSection !== null ? 'hidden md:flex' : 'flex'}`}
         >
           <Logo size={60} className="shrink-0" />
         </button>
       </div>
 
-      {activeId !== 'home' && (
+      {/* Code section toolbar */}
+      {activeSection === 'code' && activeId !== 'home' && (
         <div className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex bg-slate-100 p-0.5 md:p-1.5 text-[10px] md:text-xs rounded-lg border border-slate-200 gap-0.5 md:gap-1.5 shrink-0 items-center h-8 md:h-auto animate-slide-in-right z-10 no-print">
           
           <button
@@ -183,6 +186,13 @@ export const Header = ({
             <span className="hidden md:inline">Print</span>
           </button>
 
+        </div>
+      )}
+
+      {/* Trees section toolbar — placeholder for Phase 3 */}
+      {activeSection === 'trees' && (
+        <div className="flex items-center gap-2 z-10 no-print">
+          <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Decision Trees</span>
         </div>
       )}
     </header>

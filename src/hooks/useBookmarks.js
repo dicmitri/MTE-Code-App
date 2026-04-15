@@ -19,9 +19,9 @@ export const useBookmarks = () => {
         }
     }, [bookmarks]);
 
-    const addBookmark = (id, title, chapterId) => {
+    const addBookmark = (id, title, chapterId, section = 'code') => {
         if (!bookmarks.some(b => b.id === id)) {
-            setBookmarks([...bookmarks, { id, title, chapterId, dateAdded: new Date().toISOString() }]);
+            setBookmarks([...bookmarks, { id, title, chapterId, section, dateAdded: new Date().toISOString() }]);
         }
     };
 
@@ -29,11 +29,11 @@ export const useBookmarks = () => {
         setBookmarks(bookmarks.filter(b => b.id !== id));
     };
 
-    const toggleBookmark = (id, title, chapterId) => {
+    const toggleBookmark = (id, title, chapterId, section = 'code') => {
         if (bookmarks.some(b => b.id === id)) {
             removeBookmark(id);
         } else {
-            addBookmark(id, title, chapterId);
+            addBookmark(id, title, chapterId, section);
         }
     };
 
@@ -43,3 +43,4 @@ export const useBookmarks = () => {
 
     return { bookmarks, addBookmark, removeBookmark, toggleBookmark, isBookmarked };
 };
+

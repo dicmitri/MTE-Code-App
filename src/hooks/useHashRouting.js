@@ -1,10 +1,17 @@
 import { useEffect } from 'react';
 import { FULL_CODE_DATA } from '../data/codeData';
 
-export const useHashRouting = (setActiveId, setShowSummary, setShowFullText) => {
+export const useHashRouting = (setActiveId, setActiveSection, setShowSummary, setShowFullText) => {
   useEffect(() => {
     const hash = window.location.hash.replace('#', '');
     if (!hash) return;
+
+    // Decision tree hashes use dt- prefix
+    if (hash.startsWith('dt-')) {
+      setActiveSection('trees');
+      setActiveId(hash);
+      return;
+    }
 
     const getHashId = (chId, title, idx) => {
       let slug;
@@ -28,6 +35,7 @@ export const useHashRouting = (setActiveId, setShowSummary, setShowFullText) => 
     });
 
     if (targetChapter) {
+      setActiveSection('code');
       setActiveId(targetChapter.id);
       setShowSummary(true);
       setShowFullText(true);
@@ -45,5 +53,6 @@ export const useHashRouting = (setActiveId, setShowSummary, setShowFullText) => 
         }
       }, 500);
     }
-  }, [setActiveId, setShowSummary, setShowFullText]);
+  }, [setActiveId, setActiveSection, setShowSummary, setShowFullText]);
 };
+

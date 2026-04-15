@@ -21,7 +21,8 @@ export const MainContent = ({
   showIosPrompt,
   setShowIosPrompt,
   bookmarksControls,
-  searchFilters
+  searchFilters,
+  onNavigateTree
 }) => {
   const currentIndex = FULL_CODE_DATA.findIndex(c => c.id === activeId);
   const prevChapter = currentIndex > 0 ? FULL_CODE_DATA[currentIndex - 1] : null;
@@ -89,6 +90,7 @@ export const MainContent = ({
                       onTermClick={handleTermClick}
                       bookmarksControls={bookmarksControls}
                       chapterPrefix={chapterPrefix}
+                      onNavigateTree={onNavigateTree}
                     />
                   );
                 })}
