@@ -1,5 +1,163 @@
 [
   {
+    "id": "dt-scope",
+    "title": "Is this interaction in scope of the Code?",
+    "relatedChapter": "scope",
+    "relatedSection": null,
+    "category": "default",
+    "description": "Determine if an interaction, event, or activity is governed by the MedTech Europe Code based on geography and affiliations.",
+    "nodes": [
+      {
+        "id": "start",
+        "type": "question",
+        "text": "What type of product or service is the interaction primarily linked to?",
+        "helpText": "The Code governs interactions related to Medical Technologies.",
+        "options": [
+          {
+            "label": "Medical Technologies (or a combination involving Medical Tech)",
+            "next": "q_actor"
+          },
+          {
+            "label": "Exclusively non-Medical Tech (e.g., purely pharma or research-only products without MedTech link)",
+            "next": "res_not_medtech"
+          }
+        ]
+      },
+      {
+        "id": "q_actor",
+        "type": "question",
+        "text": "Who is initiating or conducting the interaction / activity on behalf of the company?",
+        "options": [
+          {
+            "label": "A Member Company Headquarter or a European Subsidiary",
+            "next": "q_hcp_region"
+          },
+          {
+            "label": "An affiliated subsidiary located OUTSIDE the MedTech Europe Area (e.g., US Affiliate)",
+            "next": "q_hcp_region"
+          },
+          {
+            "label": "A Third Party Intermediary (e.g., Distributor, Agent, PCO)",
+            "next": "q_tpi_check"
+          }
+        ]
+      },
+      {
+        "id": "q_tpi_check",
+        "type": "question",
+        "text": "Is the Third Party Intermediary acting on behalf of the Member Company in connection with the sale, promotion, or other activity involving the Member Company products?",
+        "options": [
+          {
+            "label": "Yes, they are acting on our behalf (direct or implicit oversight)",
+            "next": "q_hcp_region"
+          },
+          {
+            "label": "No, they are acting entirely independently for their own business",
+            "next": "res_tpi_independent"
+          }
+        ]
+      },
+      {
+        "id": "q_hcp_region",
+        "type": "question",
+        "text": "Where is the target Healthcare Professional (HCP) or Healthcare Organisation (HCO) registered and practicing?",
+        "helpText": "Coverage is determined by the location of the HCP/HCO, regardless of where the actual activity takes place.",
+        "options": [
+          {
+            "label": "In a MedTech Europe Country (EEA, UK, Switzerland, Turkey, Israel, associated states)",
+            "next": "res_in_scope_hcp"
+          },
+          {
+            "label": "In a Mecomed Territory: Africa (excluding South Africa)",
+            "next": "res_in_scope_hcp"
+          },
+          {
+            "label": "In a Mecomed Territory: Middle East or Central Asia (Iran, Pakistan)",
+            "next": "res_in_scope_hcp"
+          },
+          {
+            "label": "In South Africa",
+            "next": "q_activity_region"
+          },
+          {
+            "label": "Rest of the World (e.g., North/South America, Asia Pacific)",
+            "next": "q_activity_region"
+          },
+          {
+            "label": "No specific HCP/HCO involved (e.g., organizing a general event locally)",
+            "next": "q_activity_region"
+          }
+        ]
+      },
+      {
+        "id": "q_activity_region",
+        "type": "question",
+        "text": "The HCPs themselves do not trigger the Code. However, where is the specific Activity or Event taking place?",
+        "helpText": "The actual physical location of the event/interaction determines if the Code applies to the activity itself.",
+        "options": [
+          {
+            "label": "In a MedTech Europe Country (EEA, UK, Switzerland, Turkey, Israel, etc.)",
+            "next": "res_in_scope_activity"
+          },
+          {
+            "label": "In a Mecomed Territory (Africa, Middle East, Iran, Pakistan)",
+            "next": "res_in_scope_activity"
+          },
+          {
+            "label": "In South Africa",
+            "next": "res_samed"
+          },
+          {
+            "label": "Rest of the World (e.g., Americas, APAC)",
+            "next": "res_out_of_scope"
+          }
+        ]
+      },
+      {
+        "id": "res_not_medtech",
+        "type": "result",
+        "outcome": "out-of-scope",
+        "text": "OUT OF SCOPE. The Code does not apply to interactions linked exclusively to non-Medical Technology products or services.",
+        "reference": "Scope — Q&A 2"
+      },
+      {
+        "id": "res_tpi_independent",
+        "type": "result",
+        "outcome": "not-applicable",
+        "text": "NOT APPLICABLE. If the TPI is acting completely independently, the Code does not directly govern the Member Company. However, monitor Chapter 10 liability closely.",
+        "reference": "Chapter 10"
+      },
+      {
+        "id": "res_in_scope_hcp",
+        "type": "result",
+        "outcome": "in-scope",
+        "text": "IN SCOPE. Because the HCP/HCO is registered in the MedTech Europe Geographic Area, the Code applies as a minimum standard, regardless of where the activity takes place. Note: Even if a non-European subsidiary initiates this, the activity is deemed attributable to the Member Company.",
+        "reference": "Scope — Section 1"
+      },
+      {
+        "id": "res_in_scope_activity",
+        "type": "result",
+        "outcome": "in-scope",
+        "text": "IN SCOPE. Even though the HCPs/HCOs are from outside the territory, the Activity takes place within the MedTech Europe Geographic Area. The Code applies to the event arrangements.",
+        "reference": "Scope — Section 1"
+      },
+      {
+        "id": "res_samed",
+        "type": "result",
+        "outcome": "not-applicable",
+        "text": "SAMED EXCEPTION. Interactions taking place in South Africa, or with South African HCPs locally, are governed by the South African MedTech industry code (SAMED) and are outside the scope of the MTE Code.",
+        "reference": "Annex III"
+      },
+      {
+        "id": "res_out_of_scope",
+        "type": "result",
+        "outcome": "out-of-scope",
+        "text": "OUT OF SCOPE. Both the HCP/HCO and the intended Activity are located entirely outside of the MedTech Europe Geographic Area. The MedTech Europe Code does not apply.",
+        "reference": "Scope — Q&A 1"
+      }
+    ]
+  },
+  {
     "id": "dt-ch1-event-location",
     "title": "Is My Event Location Compliant?",
     "relatedChapter": "ch1",

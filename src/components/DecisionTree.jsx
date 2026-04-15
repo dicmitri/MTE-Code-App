@@ -11,6 +11,7 @@ const OUTCOME_STYLES = {
   'out-of-scope':  { bg: 'bg-purple-50',   border: 'border-purple-200',  text: 'text-purple-800',  icon: '➖', label: 'Out of Scope' },
   'not-applicable':{ bg: 'bg-purple-50',   border: 'border-purple-200',  text: 'text-purple-800',  icon: '➖', label: 'Not Applicable' },
   'prior-review':  { bg: 'bg-purple-50',   border: 'border-purple-200',  text: 'text-purple-800',  icon: '📋', label: 'Prior Review Required' },
+  'in-scope':      { bg: 'bg-indigo-50',   border: 'border-indigo-200',  text: 'text-indigo-800',  icon: '🎯', label: 'In Scope of the Code' },
 };
 
 export const DecisionTree = ({ treeId, onShowVisualization }) => {

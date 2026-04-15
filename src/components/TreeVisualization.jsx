@@ -11,6 +11,7 @@ const OUTCOME_COLORS = {
   'out-of-scope':  { bg: '#faf5ff', border: '#d8b4fe', text: '#6b21a8' }, // purple
   'not-applicable':{ bg: '#faf5ff', border: '#d8b4fe', text: '#6b21a8' }, // purple
   'prior-review':  { bg: '#faf5ff', border: '#d8b4fe', text: '#6b21a8' }, // purple
+  'in-scope':      { bg: '#e0e7ff', border: '#a5b4fc', text: '#3730a3' }, // indigo
 };
 
 /**
