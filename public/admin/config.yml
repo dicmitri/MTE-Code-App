@@ -2,8 +2,8 @@ backend:
   name: github
   repo: dicmitri/MTE-Code-App
   branch: main
-  base_url: https://mtecodeapp.medtecheurope.workers.dev
-  auth_endpoint: /api/auth
+  base_url: https://mte-oauth-proxy.medtecheurope.workers.dev
+  auth_endpoint: /auth
 
 media_folder: public
 public_folder: /
