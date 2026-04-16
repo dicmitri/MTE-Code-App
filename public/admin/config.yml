@@ -20,6 +20,7 @@ collections:
           - label: "Chapters"
             name: "chapters"
             widget: "list"
+            collapsed: true
             summary: "{{fields.title}} ({{fields.id}})"
             fields:
               - label: "ID (URL slug — do not change)"
@@ -44,6 +45,7 @@ collections:
               - label: "Sections"
                 name: "sections"
                 widget: "list"
+                collapsed: true
                 summary: "{{fields.title}}"
                 fields:
                   - label: "Section Title"
@@ -56,6 +58,7 @@ collections:
                   - label: "Q&As"
                     name: "qas"
                     widget: "list"
+                    collapsed: true
                     summary: "{{fields.q}}"
                     fields:
                       - label: "Question"
@@ -77,6 +80,7 @@ collections:
           - label: "Trees"
             name: "trees"
             widget: "list"
+            collapsed: true
             summary: "{{fields.title}}"
             fields:
               - label: "ID"
@@ -103,6 +107,7 @@ collections:
               - label: "Nodes"
                 name: "nodes"
                 widget: "list"
+                collapsed: true
                 summary: "{{fields.id}} — {{fields.type}}"
                 fields:
                   - label: "Node ID"
