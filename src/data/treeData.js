@@ -1,6 +1,6 @@
-import TREE_DATA_JSON from './treeData.json';
+import treeDataJson from './treeData.json';
 
-export const TREE_DATA = TREE_DATA_JSON;
+export const TREE_DATA = treeDataJson.trees;
 
 /**
  * Get all unique categories from tree data.

@@ -52,6 +52,32 @@
   margin-top: 0 !important;
 }
 
+/* Style bare HTML in reader/summary content (for CMS-authored class-free HTML) */
+.reader-content ul,
+.summary-content ul {
+  list-style-type: disc;
+  padding-left: 1.25rem;
+}
+
+.reader-content ul li,
+.summary-content ul li {
+  margin-bottom: 0.25rem;
+}
+
+.reader-content ol,
+.summary-content ol {
+  list-style-type: decimal;
+  padding-left: 1.25rem;
+}
+
+.summary-content p {
+  margin-bottom: 0.75rem;
+}
+
+.summary-content strong {
+  font-weight: 700;
+}
+
 @media print {
   body {
     background-color: white !important;

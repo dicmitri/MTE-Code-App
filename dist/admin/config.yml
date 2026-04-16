@@ -1,0 +1,149 @@
+backend:
+  name: github
+  repo: dicmitri/MTE-Code-App
+  branch: main
+  base_url: https://mtecodeapp.medtecheurope.workers.dev
+  auth_endpoint: /api/auth
+
+media_folder: public
+public_folder: /
+
+collections:
+  # ─── The Code — Chapters ────────────────────────────────────────
+  - name: "code"
+    label: "The Code — Chapters"
+    files:
+      - name: "codeData"
+        label: "All Chapters"
+        file: "src/data/codeData.json"
+        fields:
+          - label: "Chapters"
+            name: "chapters"
+            widget: "list"
+            summary: "{{fields.title}} ({{fields.id}})"
+            fields:
+              - label: "ID (URL slug — do not change)"
+                name: "id"
+                widget: "string"
+                hint: "Changing this breaks all links to this chapter."
+              - label: "Part"
+                name: "part"
+                widget: "select"
+                options: ["intro", "part1", "part2", "part3", "website"]
+                hint: "Which sidebar group this chapter appears in."
+              - label: "Title"
+                name: "title"
+                widget: "string"
+              - label: "Icon"
+                name: "icon"
+                widget: "string"
+                hint: "Must match an icon name in AppIcons.jsx (e.g., Globe, 1, 2, etc.)"
+              - label: "Summary (HTML)"
+                name: "summary"
+                widget: "text"
+              - label: "Sections"
+                name: "sections"
+                widget: "list"
+                summary: "{{fields.title}}"
+                fields:
+                  - label: "Section Title"
+                    name: "title"
+                    widget: "string"
+                  - label: "Legal Text"
+                    name: "legalText"
+                    widget: "markdown"
+                    modes: ["raw", "rich_text"]
+                  - label: "Q&As"
+                    name: "qas"
+                    widget: "list"
+                    summary: "{{fields.q}}"
+                    fields:
+                      - label: "Question"
+                        name: "q"
+                        widget: "string"
+                      - label: "Answer"
+                        name: "a"
+                        widget: "markdown"
+                        modes: ["raw", "rich_text"]
+
+  # ─── Decision Trees ─────────────────────────────────────────────
+  - name: "trees"
+    label: "Decision Trees"
+    files:
+      - name: "treeData"
+        label: "All Decision Trees"
+        file: "src/data/treeData.json"
+        fields:
+          - label: "Trees"
+            name: "trees"
+            widget: "list"
+            summary: "{{fields.title}}"
+            fields:
+              - label: "ID"
+                name: "id"
+                widget: "string"
+                hint: "Do not change — breaks routing."
+              - label: "Title"
+                name: "title"
+                widget: "string"
+              - label: "Category"
+                name: "category"
+                widget: "string"
+              - label: "Description"
+                name: "description"
+                widget: "text"
+              - label: "Related Chapter"
+                name: "relatedChapter"
+                widget: "string"
+                required: false
+              - label: "Related Section"
+                name: "relatedSection"
+                widget: "string"
+                required: false
+              - label: "Nodes"
+                name: "nodes"
+                widget: "list"
+                summary: "{{fields.id}} — {{fields.type}}"
+                fields:
+                  - label: "Node ID"
+                    name: "id"
+                    widget: "string"
+                  - label: "Type"
+                    name: "type"
+                    widget: "select"
+                    options: ["question", "result"]
+                  - label: "Text"
+                    name: "text"
+                    widget: "text"
+                  - label: "Help Text"
+                    name: "helpText"
+                    widget: "text"
+                    required: false
+                  - label: "Outcome"
+                    name: "outcome"
+                    widget: "select"
+                    options:
+                      - "compliant"
+                      - "non-compliant"
+                      - "conditional"
+                      - "in-scope"
+                      - "out-of-scope"
+                      - "not-applicable"
+                      - "not-required"
+                    required: false
+                    hint: "Only for result nodes"
+                  - label: "Reference"
+                    name: "reference"
+                    widget: "string"
+                    required: false
+                  - label: "Options"
+                    name: "options"
+                    widget: "list"
+                    required: false
+                    fields:
+                      - label: "Label"
+                        name: "label"
+                        widget: "string"
+                      - label: "Next Node ID"
+                        name: "next"
+                        widget: "string"

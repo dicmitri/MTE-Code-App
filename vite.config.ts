@@ -13,6 +13,9 @@ export default defineConfig(({mode}) => {
       VitePWA({
         registerType: 'autoUpdate',
         includeAssets: ['logo.png', 'icon-192.png', 'icon-512.png', 'maskable-icon-512x512.png'],
+        workbox: {
+          navigateFallbackDenylist: [/^\/admin/],
+        },
         manifest: {
           name: 'MedTech Europe: The Code App',
           short_name: 'TheCodeApp',
@@ -50,9 +53,13 @@ export default defineConfig(({mode}) => {
       },
     },
     server: {
-      // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
+      proxy: {
+        '^/admin/?$': {
+          target: 'http://localhost:3000',
+          rewrite: () => '/admin/index.html'
+        }
+      }
     },
   };
 });

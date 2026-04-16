@@ -1,9 +1,11 @@
 import React from 'react';
+import DOMPurify from 'dompurify';
 import { AppIcon } from './AppIcons';
 import { Highlight } from './Highlight';
 import { LandingPage } from './LandingPage';
 import { FullTextSection } from './FullTextSection';
 import { TableOfContents } from './TableOfContents';
+import { highlightSearchTerm } from '../utils/textUtils';
 import { FULL_CODE_DATA } from '../data/codeData';
 
 export const MainContent = ({
@@ -55,12 +57,16 @@ export const MainContent = ({
                   <h1 className="text-3xl font-extrabold text-gray-900 mb-4">
                     Summary
                   </h1>
-                  <div className="text-lg text-gray-700 font-light reader-content">
-                    <Highlight
-                      text={activeContent?.summary}
-                      query={searchFilters?.text ? debouncedSearch : ''}
-                    />
-                  </div>
+                  <div
+                    className="text-lg text-gray-700 font-light reader-content summary-content"
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(
+                        searchFilters?.text && debouncedSearch
+                          ? highlightSearchTerm(activeContent?.summary || '', debouncedSearch)
+                          : activeContent?.summary || ''
+                      )
+                    }}
+                  />
                 </div>
               </div>
             )}
