@@ -14,6 +14,7 @@ import { MainContent } from './components/MainContent';
 import { InstallPrompt } from './components/InstallPrompt';
 import { HubPage } from './components/HubPage';
 import { TreeContent } from './components/TreeContent';
+import { QuizContent } from './components/quiz/QuizContent';
 
 if (typeof FULL_CODE_DATA !== 'undefined') {
   FULL_CODE_DATA.forEach(chapter => {
@@ -202,6 +203,11 @@ const App = () => {
             bookmarksControls={{ toggleBookmark, isBookmarked }}
             searchFilters={searchFilters}
             onNavigateTree={handleNavigateTree}
+          />
+        ) : activeSection === 'quiz' ? (
+          <QuizContent
+            setActiveSection={setActiveSection}
+            setActiveId={setActiveId}
           />
         ) : (
           <TreeContent

@@ -21,6 +21,15 @@ export const SECTIONS = [
     color: '#e67e22',
     available: true,
   },
+  {
+    id: 'quiz',
+    title: 'Knowledge Quiz',
+    subtitle: 'Test your understanding of the Code',
+    description: 'Assess your compliance knowledge with interactive multiple-choice questions.',
+    icon: 'BookOpen',
+    color: '#ec4899', // A nice pink/rose color that stands out
+    available: true,
+  },
   // Future sections:
   // {
   //   id: 'materials',

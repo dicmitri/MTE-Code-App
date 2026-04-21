@@ -6,6 +6,12 @@ export const useHashRouting = (setActiveId, setActiveSection, setShowSummary, se
     const hash = window.location.hash.replace('#', '');
     if (!hash) return;
 
+    if (hash.startsWith('quiz')) {
+      setActiveSection('quiz');
+      setActiveId('quiz');
+      return;
+    }
+
     // Decision tree hashes use dt- prefix
     if (hash.startsWith('dt-')) {
       setActiveSection('trees');

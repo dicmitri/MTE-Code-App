@@ -1,0 +1,1742 @@
+[
+    {
+        "id": "q1",
+        "chapterId": "intro",
+        "question": "According to the Principle of Equivalence, how should Member Companies remunerate Healthcare Professionals for professional services?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "Based on the volume of products the HCP prescribes.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "At a Fair Market Value commensurate with the services performed.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "Based on a standard rate decided by the Member Company\u0027s sales team.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "Remuneration must be provided as in-kind educational grants rather than direct payment.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Consider the relationship between the service provided and its actual market value.",
+        "explanation": "The Principle of Equivalence states that remuneration paid by the Member Company must be commensurate with, and represent a Fair Market Value for, the services performed by the Healthcare Professional."
+    },
+    {
+        "id": "q2",
+        "chapterId": "intro",
+        "question": "What does the Principle of Separation dictate regarding interactions of industry with Healthcare Organisations?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "Educational events must be completely separated from any form of hospitality.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "Interactions must not be contingent upon sales transactions or used to influence purchasing decisions.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "Sales representatives must remain physically separated from Healthcare Professionals during Third Party events.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "Consulting arrangements must be handled by a separate third-party intermediary.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "This principle ensures that clinical decision-making remains independent from commercial influence.",
+        "explanation": "The Principle of Separation dictates that interactions must not be misused to influence purchasing decisions through undue advantages, nor should they be contingent upon sales transactions."
+    },
+    {
+        "id": "q3",
+        "chapterId": "intro",
+        "question": "When interacting with a Healthcare Professional, what is the primary requirement under the Principle of Transparency?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "The interaction must comply with national and local disclosure laws, or, if applicable, require prior Employer Notification.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt2",
+                "text": "The Member Company must publicly list all relevant or applicable interactions on their corporate website.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "The Healthcare Professional must inform all affected patients about the interaction.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "The Member Company must disclose the HCP\u0027s personal details to MedTech Europe.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "It concerns making the nature of the relationship known to relevant authorities or employers.",
+        "explanation": "The Principle of Transparency requires interactions to comply with national and local laws, and where no specific laws exist, appropriate transparency must be maintained by requiring prior written Employer Notification in interactions involving transfers of value."
+    },
+    {
+        "id": "q4",
+        "chapterId": "intro",
+        "question": "Under the Code, what constitutes a \u0027Legitimate Business Need\u0027 for engaging a Healthcare Professional?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "The business practice of rewarding the HCP for switching to the company\u0027s products.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "Engaging the HCP to compensate the HCP for the prescription and supply of the Member Company's Medical Technologies.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "The advancement of medical education, clinical research, or the safe and effective use of Medical Technology.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt4",
+                "text": "Selecting the HCP based on the high volume of business they generate.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "The objective must pursue bona fide scientific, educational, or research purposes.",
+        "explanation": "A Legitimate Business Need includes objectives like advancing medical education or clinical research, and can never involve engaging an HCP to influence the prescription or purchase of Medical Technologies."
+    },
+    {
+        "id": "q5",
+        "chapterId": "intro",
+        "question": "Are incidental interactions, such as meals associated with brief educational meetings, subject to the Employer Notification requirement?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "Yes, all interactions, regardless of scope, require Employer Notification.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "No, incidental interactions arising in the normal course of business do not require Employer Notification.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "Yes, unless the meal costs less than 15 EUR.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "No, but they must be reported directly to the MedTech Europe Compliance Panel.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Consider whether minor, everyday business interactions trigger formal hospital administration notices.",
+        "explanation": "Incidental interactions arising in the normal course of business, such as meals associated with educational meetings or modest promotional items, do not require Employer Notification."
+    },
+    {
+        "id": "q6",
+        "chapterId": "ch1",
+        "question": "What is the minimum required duration of scientific sessions for a full-day in-person Event to be compliant?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "4 hours",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "6 hours",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "8 hours",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "3 hours",
+                "isCorrect": false
+            }
+        ],
+        "hint": "The program must present a clear schedule with no significant gaps for the majority of a normal working day.",
+        "explanation": "The minimum duration for a full day for an in-person Event is 6 hours, while a half day requires at least 3 hours."
+    },
+    {
+        "id": "q7",
+        "chapterId": "ch1",
+        "question": "Are Virtual Events subject to the same minimum duration requirements as in-person Events?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "Yes, they must also contain 6 hours of scientific programming for a full day.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "No, Virtual Events are not affected by the duration requirements of Section 1.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "Yes, but the minimum duration is reduced to 4 hours.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "No, Virtual Events do not require any scientific programming.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Think about whether online formats follow the exact same scheduling rigor as physical conferences.",
+        "explanation": "Virtual Events are explicitly exempt from the minimum duration requirements that apply to in-person Events."
+    },
+    {
+        "id": "q8",
+        "chapterId": "ch1",
+        "question": "Can a Healthcare Professional\u0027s spouse (who has no professional interest) participate in event-related hospitality if the HCP pays for their expenses?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "Yes, as long as the Member Company does not facilitate or pay for it.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "No, it is not appropriate for a Guest to participate in related hospitality during such Events.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "Yes, provided the spouse wears a distinct \u0027Guest\u0027 badge.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "No, unless the event takes place in the HCP\u0027s home country.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "The Code heavily restricts the presence of guests at scientific exchanges, even if self-funded.",
+        "explanation": "It is not appropriate for a Guest to participate in related hospitality during Events, such as lunches or coffee breaks, even when the Healthcare Professional pays for the Guest\u0027s expenses."
+    },
+    {
+        "id": "q9",
+        "chapterId": "ch1",
+        "question": "Which of the following Event locations would generally be considered NON-compliant under the MedTech Europe Code?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "A standard conference center in a major European city.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "A hospital or clinic with appropriate meeting facilities.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "A resort hotel renowned for its luxury, golf courses, or casino.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt4",
+                "text": "A university campus during the summer.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "The Principle of Image and Perception prohibits venues that look like they are meant for leisure or tourism.",
+        "explanation": "Cruise ships, golf clubs, health spas, and venues renowned for their entertainment facilities are not appropriate venues and should not be used, as they project a luxury or tourist image."
+    },
+    {
+        "id": "q10",
+        "chapterId": "ch1",
+        "question": "How does the Code address the provision of meals or hospitality to a Healthcare Professional\u0027s home?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "It is permitted for Virtual Events if the meal cost is under 20 EUR.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "It is allowed only if the HCP provides a receipt for reimbursement.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "No home delivery is permitted under any circumstances.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt4",
+                "text": "It is permitted for Key Opinion Leaders during advisory boards.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Consider the strict rules regarding where reasonable hospitality can be provided.",
+        "explanation": "Any hospitality offered must be subordinate in time and focus to the Event purpose, and no home delivery is permitted, such as catering or food delivery services to the HCPs\u0027 home."
+    },
+    {
+        "id": "q11",
+        "chapterId": "ch2",
+        "question": "For a Third Party Organised Procedure Training (TPPT), what is the minimum required proportion of hands-on sessions?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "At least one-third of the full programme.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt2",
+                "text": "More than 50% of the full programme.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "100% of the full programme.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "There is no strict percentage requirement.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "While practical sessions must be more than 50%, actual hands-on components have a slightly lower threshold.",
+        "explanation": "In order to be considered a TPPT, practical sessions must represent more than 50% of the full programme, and hands-on sessions must represent at least one-third of the full programme."
+    },
+    {
+        "id": "q12",
+        "chapterId": "ch2",
+        "question": "Can a Member Company directly support individual HCPs to attend a theoretical Third Party Organised Educational Conference?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "Yes, if the HCP signs a consulting agreement.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "No, direct financial support for individual HCPs to attend theoretical conferences is prohibited.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "Yes, provided the conference venue is not a luxury resort.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "No, unless the HCP is a Key Opinion Leader.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "The phase-out implemented in 2016 strictly banned direct sponsorship for theoretical conferences.",
+        "explanation": "Direct sponsorship of HCPs as delegates for Third Party Organised Educational Conferences is prohibited; such support must be routed indirectly via Educational Grants."
+    },
+    {
+        "id": "q13",
+        "chapterId": "ch2",
+        "question": "When an Educational Grant is provided to support HCP attendance at an event, who is responsible for selecting the HCP beneficiaries?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "The Member Company providing the funds.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "A joint committee of the Member Company and the hospital.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "The Healthcare Organisation (HCO) receiving the Grant.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt4",
+                "text": "The Conference Vetting System (CVS).",
+                "isCorrect": false
+            }
+        ],
+        "hint": "The industry must remain completely separated from the decision of which specific professionals receive the funding.",
+        "explanation": "The Healthcare Organisation receiving the Educational Grant shall be solely responsible for the selection of participants, ensuring the Member Company has no influence over the choice."
+    },
+    {
+        "id": "q14",
+        "chapterId": "ch2",
+        "question": "If an event is submitted to CVS and deemed \u0027Not Compliant\u0027, what must a Member Company do?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "The Member Company cannot provide any financial support to the event.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt2",
+                "text": "The Member Company can only provide an Educational Grant but cannot rent booth space.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "The Member Company can appeal directly to the hospital.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "The Member Company can provide support if they issue an Employer Notification.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "A CVS decision is binding upon all MedTech Europe Member Companies.",
+        "explanation": "Where there is a Conference Vetting System decision in relation to an event, it is binding upon all Member Companies; if \u0027Not Compliant\u0027, they may not support the event."
+    },
+    {
+        "id": "q15",
+        "chapterId": "ch2",
+        "question": "Are Proctorships and Preceptorships subject to CVS approval?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "Yes, because they are a type of Third Party Organised Educational Event.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "Yes, but only if they last longer than a full day.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "No, they normally take place on HCO premises and are not considered Third Party Organised Educational Events.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt4",
+                "text": "No, but they must be reviewed by the MedTech Europe Board of Directors.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "These are clinician-to-clinician trainings usually taking place within specific clinical settings.",
+        "explanation": "Proctorships and Preceptorships normally take place on HCO premises and are not subject to CVS approval as they are not considered Third Party Organised Educational Events."
+    },
+    {
+        "id": "q16",
+        "chapterId": "ch3",
+        "question": "What is the primary requirement for a Company Organised Educational Event?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "It must have a primary sales and marketing objective.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "It must be genuine, bona fide medical education without a primary sales objective.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "It must take place in a luxurious, entertaining destination.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "It must be assessed and approved by the Conference Vetting System.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Think about the balance between scientific rigor and commercial promotion.",
+        "explanation": "The programme must be genuine and bona fide educational, and therefore cannot have a primary sales and marketing objective."
+    },
+    {
+        "id": "q17",
+        "chapterId": "ch3",
+        "question": "Where should Sales, Promotional, and Other Business Meetings generally occur?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "At a recognized international scientific center.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "At or close to the Healthcare Professional\u0027s place of business.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "In a city equidistant between the Member Company and the HCP.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "At the Member Company\u0027s headquarters, regardless of distance.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Because these meetings are commercial in nature, extensive travel is generally discouraged.",
+        "explanation": "Sales, promotional and other business meetings should, as a general rule, occur at or close to the Healthcare Professional\u0027s place of business."
+    },
+    {
+        "id": "q18",
+        "chapterId": "ch3",
+        "question": "When can a Member Company provide travel and accommodation support for an HCP attending a Sales or Promotional Meeting?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "When the meeting lasts longer than two days.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "Except in instances where demonstrations of non-portable equipment are necessary.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "Whenever the HCP requests the support in writing.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "Travel support for sales meetings is never allowed under any circumstances.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Sometimes the products being sold cannot be brought directly to the HCP\u0027s office.",
+        "explanation": "It is not appropriate for travel or accommodation support to be provided to HCPs for sales meetings, except where demonstrations of non-portable equipment are necessary."
+    },
+    {
+        "id": "q19",
+        "chapterId": "ch3",
+        "question": "If a Member Company organises an Advisory Board adjacent to a Third Party Organised Educational Event, what expenses can they cover?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "All travel, accommodation, and the third-party event registration fee.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "Only the contractual remuneration and expenses agreed for the services provided at the Advisory Board.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "The registration fee for the third-party event, but no travel.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "Nothing, as adjacent Company Events are completely banned.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Companies cannot circumvent the direct sponsorship ban by covering incremental costs associated with the third-party event.",
+        "explanation": "Under no circumstances may a Member Company pay for incremental costs relating to the HCP\u0027s attendance at the third-party event; they may only pay the expenses agreed for the Company Organised Event."
+    },
+    {
+        "id": "q20",
+        "chapterId": "ch3",
+        "question": "Are Member Companies permitted to hold Product and Procedure Training Events at their own manufacturing plants?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "No, manufacturing plants are considered non-compliant venues.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "Yes, provided there is a Legitimate Business Purpose and the tour complies with the Code.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "Only if the manufacturing plant is located within the HCP\u0027s country of residence.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "Only if the HCP pays for their own travel and accommodation.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Factory tours can provide genuine medical education on the safe and effective use of technologies.",
+        "explanation": "Where there is a Legitimate Business Purpose, Company Events may take place in a Member Company\u0027s manufacturing plant or reference centres."
+    },
+    {
+        "id": "q21",
+        "chapterId": "ch4",
+        "question": "Can a Member Company provide an Educational Grant directly to a Professional Conference Organiser (PCO) acting independently of a Healthcare Organisation?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "No, because PCOs are for-profit entities and such interactions are strictly commercial.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt2",
+                "text": "Yes, but only if the PCO uses the funds to pay for the HCPs\u0027 entertainment.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "Yes, PCOs are considered Healthcare Organisations under the Code.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "No, unless the PCO is owned by a Key Opinion Leader.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "PCOs are businesses. Interactions with them for event sponsorship are documented as commercial agreements, though funds \u0027earmarked for education\u0027 still follow grant rules.",
+        "explanation": "Arrangements with PCOs do not fall within the definition of Educational Grant as PCOs are for-profit organisations; they are commercial in nature and require commercial agreements."
+    },
+    {
+        "id": "q22",
+        "chapterId": "ch4",
+        "question": "Can a Member Company\u0027s sales function decide upon and approve an Educational Grant?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "Yes, provided the grant is small enough to avoid bribery risks.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "Yes, as long as it is documented in the transparency platform.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "No, an independent decision-making process with criteria that are not sales-oriented is required.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt4",
+                "text": "No, only the MedTech Europe Code Committee can approve grants.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "The Code requires a strict separation between commercial incentives and educational funding.",
+        "explanation": "The Member Company\u0027s sales and/or commercial function shall not decide upon and/or approve decisions to provide Grants or Charitable Donations to prevent potential bribery risks."
+    },
+    {
+        "id": "q23",
+        "chapterId": "ch4",
+        "question": "Is it appropriate to provide a Charitable Donation to support the general running of a hospital?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "Yes, hospitals are inherently charitable institutions.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "No, hospitals generally have health functions as their main purposes, not charitable/philanthropic functions.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "Yes, as long as the hospital administrator approves it.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "No, because hospitals cannot receive any kind of funds from Member Companies.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Charitable Donations must be directed to entities whose primary objects are genuinely philanthropic.",
+        "explanation": "Hospitals generally have health functions as their main purposes and are not considered to have charitable functions as their main objects. Exceptionally, donations to non-profit hospitals may be permissible in cases of demonstrated Financial Hardship."
+    },
+    {
+        "id": "q24",
+        "chapterId": "ch4",
+        "question": "If a Healthcare Professional asks a Member Company to donate to their favorite charity instead of paying them a speaking fee, what should the company do?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "Make the donation, as it supports a good cause.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "Refuse the request, as it is not appropriate to support an HCP\u0027s favorite charity in lieu of a professional fee.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "Make the donation but deduct it from the HCP\u0027s future consulting fees.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "Refuse the request unless the charity is related to medical research.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "The Code forbids routing personal compensation through external charitable organizations.",
+        "explanation": "It is not appropriate for a Member Company to support the favourite charity of an HCP in response to a request by that HCP in lieu of receiving a professional fee."
+    },
+    {
+        "id": "q25",
+        "chapterId": "ch4",
+        "question": "Can Member Companies provide Educational Grants directly to travel agencies to arrange flights for HCPs?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "Yes, if the travel agency offers a discounted rate.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "Yes, but only for flights exceeding 5 hours.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "No, Member Companies may not provide Educational Grants to a third-party travel agency directly.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt4",
+                "text": "No, Member Companies are strictly prohibited from covering flight costs.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Grants must be given to the Healthcare Organisation, which then may coordinate with travel agencies.",
+        "explanation": "Member Companies may not provide an Educational Grant or funds for education to a third party travel agency directly."
+    },
+    {
+        "id": "q26",
+        "chapterId": "ch4",
+        "question": "When a Member Company provides an Educational Grant for a Scholarship or Fellowship, who must select the final beneficiary?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "The Member Company\u0027s compliance officer.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "A joint board of the company and the hospital.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "The Healthcare Organisation offering the fellowship/scholarship.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt4",
+                "text": "The MedTech Europe Compliance Panel.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Member Companies must distance themselves entirely from the selection process.",
+        "explanation": "The Member Company shall not have any involvement in any way in the selection of the HCPs who will benefit from the Educational Grant."
+    },
+    {
+        "id": "q27",
+        "chapterId": "ch5",
+        "question": "Under the Code, which of the following is a valid criterion for selecting a Healthcare Professional as a consultant?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "The volume of business the HCP currently generates for the company.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "The HCP\u0027s potential to prescribe future technologies.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "The relevance of the HCP\u0027s qualifications, expertise, and clinical experience.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt4",
+                "text": "The HCP\u0027s request to be hired to offset a decrease in hospital salary.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Consultants must be hired to fulfill a genuine business need based on their actual abilities.",
+        "explanation": "Selection of consultants must be based on criteria directly related to the identified business need and the relevance of the consultant\u0027s qualifications, expertise and experience; volume or value of business generated is not a relevant criterion."
+    },
+    {
+        "id": "q28",
+        "chapterId": "ch5",
+        "question": "What documentation is strictly required before a consultant can commence their services for a Member Company?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "A verbal agreement logged in the CRM system.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "A signed written agreement specifying the services and the basis for compensation.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "A receipt of payment.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "A public disclosure on the Transparent MedTech platform.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Formal paperwork is necessary to prove the legitimacy and scope of the engagement.",
+        "explanation": "Consulting Arrangements must be documented in a written agreement, signed by the parties in advance of the commencement of the services, specifying the services and compensation."
+    },
+    {
+        "id": "q29",
+        "chapterId": "ch5",
+        "question": "Do the rules regarding Consulting Arrangements apply if the Healthcare Professional declines a fee for their services?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "Yes, the principles apply even if the consultant declines a fee.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt2",
+                "text": "No, uncompensated services are classified as \u0027informal interactions\u0027.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "Yes, but only if the consultant\u0027s employer is a public hospital.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "No, because there is no \u0027transfer of value\u0027.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "The ethical frameworks around \u0027No value consulting agreements\u0027 still require full compliance.",
+        "explanation": "The principles in this chapter are applicable to all Consulting Arrangements, including where a consultant Healthcare Professional declines a fee for provision of their services."
+    },
+    {
+        "id": "q30",
+        "chapterId": "ch5",
+        "question": "How should a Member Company determine the Fair Market Value (FMV) for a consultant\u0027s services?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "By asking the consultant for their standard rate and accepting it without review.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "By basing it on a documented internal method to determine FMV.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "By using the maximum legal limit permitted in the consultant\u0027s home country.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "By matching the compensation offered by the company\u0027s largest competitor.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Companies must establish and use their own systematic approach to calculate appropriate payment.",
+        "explanation": "The compensation paid shall reflect Fair Market Value for the services provided and shall be determined by Member Companies based on a documented internal method to determine FMV."
+    },
+    {
+        "id": "q31",
+        "chapterId": "ch5",
+        "question": "Is it permissible to engage a Healthcare Professional as a consultant for marketing purposes?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "No, marketing is exclusively an internal company function.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "Yes, provided the arrangement complies with the Code and local laws, and conflict of interest is fully disclosed.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "No, engaging an HCP for marketing inherently violates the Principle of Separation.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "Yes, but only if the HCP remains strictly anonymous in the marketing materials.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Marketing engagements (like featuring an HCP in an ad) are allowed if they don\u0027t unlawfully induce purchases and remain transparent.",
+        "explanation": "Engaging an HCP for promotional services does not inherently violate the Code, provided it complies with local laws, Chapter 5 of the Code, and transparency principles are met."
+    },
+    {
+        "id": "q32",
+        "chapterId": "ch6",
+        "question": "Who owns the data generated in Member Company-Initiated Research?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "The hospital where the research is conducted.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "The contracted researchers or Contract Research Organisation.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "The Member Company that initiated and financed the research.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt4",
+                "text": "The MedTech Europe Code Committee.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "In this type of research, the company sponsors and manages the trial to generate data for regulatory or scientific purposes.",
+        "explanation": "In Member Company-initiated research, it is the Member Company who is responsible for all aspects of the research and who owns the data."
+    },
+    {
+        "id": "q33",
+        "chapterId": "ch6",
+        "question": "When a Member Company provides Evaluation Products for a post-market product evaluation, what must they ensure regarding multiple-use products?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "That the products are gifted to the Healthcare Organisation after the evaluation.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "That the Healthcare Professional pays a discounted price to retain them.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "That they retain title to the products and have a process to promptly remove them at the end of the evaluation.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt4",
+                "text": "That the products are transferred to a charitable organization.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Equipment must not become a disguised gift; the company must keep ownership and take it back.",
+        "explanation": "Member Companies shall ensure they retain title to multiple-use Evaluation Products and have a process for promptly removing them at the conclusion of the evaluation period."
+    },
+    {
+        "id": "q34",
+        "chapterId": "ch6",
+        "question": "Which of the following is true regarding Third Party-Initiated Research?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "The Member Company assumes full responsibility for the regulatory submissions of the research.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "The Member Company may provide support via a Research Grant, but the third party manages the research independently.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "The Member Company can select the principal investigator to ensure high-quality data.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "The Member Company must strictly dictate the study protocol before funding it.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "This type of research is driven by independent investigators, with the industry acting only as a financial or in-kind supporter.",
+        "explanation": "Third party-initiated research is sponsored by the third party who independently manages all aspects of the research, though Member Companies may support it financially via Research Grants."
+    },
+    {
+        "id": "q35",
+        "chapterId": "ch6",
+        "question": "What is a mandatory requirement for a Collaborative Research project under the Code?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "It must ensure that all financial benefits go exclusively to individual HCPs.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "It must enhance patient care or be for the benefit of patients, and not constitute an inducement to prescribe.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "It must be conducted solely to support the company\u0027s marketing strategy.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "It must bypass all national transparency laws to protect proprietary data.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Collaboration between industry and healthcare partners must focus on legitimate scientific and medical outcomes.",
+        "explanation": "A collaborative research project must enhance patient care or benefit patients, and must not constitute an inducement to HCPs to prescribe or recommend products."
+    },
+    {
+        "id": "q36",
+        "chapterId": "ch6",
+        "question": "Can a Member Company support the attendance of a poster presenter at a Third Party Organised Educational Conference?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "Yes, by directly paying for their travel, as poster presenters are considered Faculty.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "No, support for poster presenters is strictly prohibited in all cases.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "Yes, via an Educational Grant or within a Research Agreement, provided the selection is made independently by the third-party organiser.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt4",
+                "text": "Yes, but only if the poster presenter is an employee of the Member Company.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Poster presenters are not \u0027Faculty\u0027, meaning direct sponsorship is forbidden, but indirect funding is possible.",
+        "explanation": "Poster presenters are not considered Faculty; however, their participation can be supported through an Educational Grant or Research Agreement if the third-party organiser independently selects them."
+    },
+    {
+        "id": "q37",
+        "chapterId": "ch7",
+        "question": "When entering into a royalty arrangement with a Healthcare Professional, what condition is expressly PROHIBITED?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "Paying the HCP a royalty based on sales to independent hospitals.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "Making the royalty conditional upon the HCP purchasing or recommending the Member Company\u0027s products.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "Documenting the arrangement in a written agreement.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "Paying the HCP for intellectual property they genuinely developed.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Royalties must be compensation for genuine innovation, not a disguised kickback for generating sales.",
+        "explanation": "Royalties paid in exchange for intellectual property should not be conditional on a requirement that the HCP purchase, order, or recommend any product or service of the Member Company."
+    },
+    {
+        "id": "q38",
+        "chapterId": "ch7",
+        "question": "How should a Member Company handle the calculation of royalties concerning products ordered directly by the Healthcare Professional receiving the royalties?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "They must be included to maximize the HCP\u0027s payout.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "They should be excluded from the calculation of royalties, subject to national regulations.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "They should be taxed at a double rate.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "They must be paid directly to the HCP\u0027s hospital instead.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "The industry seeks to prevent situations where an HCP profits by excessively using a product they receive royalties on.",
+        "explanation": "Subject to national regulations, Member Companies should exclude from the calculation of royalties the number of units purchased, prescribed, used, or ordered by the HCP or their practice."
+    },
+    {
+        "id": "q39",
+        "chapterId": "ch7",
+        "question": "A royalty arrangement is only appropriate if the Healthcare Professional has made what kind of contribution?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "A novel, significant, or innovative contribution to the development of a product or technology.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt2",
+                "text": "A commitment to market the product extensively in their clinic.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "A high volume of prescriptions of the company\u0027s previous products.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "A small adjustment to a generic, off-patent device.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Royalties are meant to reward genuine invention and intellectual property ownership.",
+        "explanation": "A royalty arrangement should be entered into only where the HCP is expected to make or has made a novel, significant, or innovative contribution such that they would be considered the owner of intellectual property."
+    },
+    {
+        "id": "q40",
+        "chapterId": "ch8",
+        "question": "Which of the following is an acceptable promotional item to provide to a Healthcare Professional?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "A high-end bottle of wine.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "A modest value item related to their practice, such as surgical gloves or a branded pen.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "An iPad for personal use at home.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "A gift voucher worth 50 EUR.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Items must be of modest value and directly benefit the patient or serve an educational/practice function.",
+        "explanation": "Educational or promotional items must relate to the HCP\u0027s practice, benefit patients, or serve a genuine educational function, and be modest in value; examples include wipes, surgical gloves, and tourniquets."
+    },
+    {
+        "id": "q41",
+        "chapterId": "ch8",
+        "question": "Can a Member Company send a gift to a Healthcare Professional to celebrate their wedding or birthday?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "Yes, as long as it costs less than 20 EUR.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "Yes, if it is a book related to their medical specialty.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "No, educational and promotional items must not be given to mark significant life events.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt4",
+                "text": "No, unless they are a Key Opinion Leader for the company.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "The Code prohibits gifts that are personal in nature, even if the value is modest.",
+        "explanation": "Educational items and/or promotional items must not be given to mark significant life events (e.g., birthday, birth, wedding, etc.)."
+    },
+    {
+        "id": "q42",
+        "chapterId": "ch8",
+        "question": "Are Member Companies allowed to provide higher value educational items, such as expensive anatomical models?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "No, all items must be of inexpensive, modest value.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "Yes, but they may only be provided to a Healthcare Organisation, not to individual HCPs for personal use.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "Yes, they can be given to individual HCPs if approved by the CVS.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "No, unless the anatomical model includes no company branding.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Items of greater value must benefit the broader institution rather than serving as a personal gift to one doctor.",
+        "explanation": "A Member Company may occasionally provide educational items of greater value to a Healthcare Organisation, provided it serves a genuine educational function and is not for the personal use of individual HCPs."
+    },
+    {
+        "id": "q43",
+        "chapterId": "ch8",
+        "question": "Can promotional items be provided in the form of cash equivalents, such as a prepaid gift card?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "No, educational and promotional items must not be given in the form of cash or cash equivalents.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt2",
+                "text": "Yes, if the gift card is only valid at medical bookstores.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "Yes, provided the value does not exceed the national limit.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "No, unless it is given as part of a prize draw.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Cash and its direct equivalents are strictly forbidden to prevent them from acting as bribes.",
+        "explanation": "Educational items and/or promotional items must not be given in the form of cash or cash equivalents."
+    },
+    {
+        "id": "q44",
+        "chapterId": "ch8",
+        "question": "Are Member Companies permitted to organize prize draws at Events?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "Yes, if the prize awarded complies with Chapter 8 (e.g., modest promotional item).",
+                "isCorrect": true
+            },
+            {
+                "id": "opt2",
+                "text": "No, all forms of gambling and prize draws are strictly prohibited.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "Yes, and the prize can be cash up to 100 EUR.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "Yes, provided the prize is a luxury vacation package.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Prize draws are allowed, but the prizes themselves must adhere to the strict rules governing gifts.",
+        "explanation": "Prize draws and other competitions at Events are permissible if the prize awarded complies with Chapter 8 (Educational Items and Promotional Items)."
+    },
+    {
+        "id": "q45",
+        "chapterId": "ch9",
+        "question": "What is the primary purpose of a Demonstration Product (Demo)?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "To be used clinically in patient care.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "To be sold by the hospital for a profit.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "To be used for HCP and patient awareness, education, and training (not for clinical use).",
+                "isCorrect": true
+            },
+            {
+                "id": "opt4",
+                "text": "To serve as a long-term loan of capital equipment.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Demos are often unsterilised mock-ups specifically designed so practitioners can see how they work outside of a real surgery.",
+        "explanation": "Demonstration Products are used for HCP and patient awareness, education and training, and are not intended for clinical use in any patient care."
+    },
+    {
+        "id": "q46",
+        "chapterId": "ch9",
+        "question": "Unlike Demos, what is the intended purpose of providing \u0027Samples\u0027 to Healthcare Professionals?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "To be used purely for theoretical classroom training.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "To allow HCPs to familiarise themselves with the products safely and effectively in actual clinical use.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "To be resold to patients at a discount.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "To substitute for broken products under warranty.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Samples are actual, functional products provided so doctors can gain real-world experience using them on patients.",
+        "explanation": "Samples are provided to allow HCPs to familiarise themselves with the products, acquire experience in dealing with them safely in clinical use, and determine whether to prescribe or use them in the future."
+    },
+    {
+        "id": "q47",
+        "chapterId": "ch9",
+        "question": "When a Member Company provides multiple-use Samples, what administrative process must be in place?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "A process to automatically bill the hospital after 30 days.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "A process ensuring the company retains title and promptly removes the Samples at the end of the familiarisation period.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "A process to formally transfer ownership to the Healthcare Professional.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "A process to ensure the Samples are discarded as medical waste.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "To avoid Samples becoming disguised gifts, the company must retain ownership and take them back.",
+        "explanation": "Member Companies shall ensure that they retain title to multiple-use Samples and have a process in place for promptly removing such Samples at the conclusion of the familiarisation period."
+    },
+    {
+        "id": "q48",
+        "chapterId": "ch9",
+        "question": "How must a Member Company document the provision of Demos and Samples?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "They must be kept entirely off the books to avoid tax implications.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "They only need to be recorded verbally with the hospital\u0027s procurement department.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "The company must maintain records and clearly disclose to the HCP/HCO in writing the no-charge basis.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt4",
+                "text": "They must be reported in the annual shareholder report.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Transparency requires strict documentation and clear communication that the item is free of charge.",
+        "explanation": "Member Companies must maintain appropriate records and clearly disclose to HCPs/HCOs in writing the no-charge basis and other conditions no later than the time of supply."
+    },
+    {
+        "id": "q49",
+        "chapterId": "ch10",
+        "question": "Under Chapter 10, what is a Member Company\u0027s responsibility regarding Third Party Intermediaries (TPIs) like distributors?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "Member Companies are never liable for the actions of independent distributors.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "Member Companies must ensure contractual documents impose obligations on TPIs to comply with the Code.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "TPIs are exempt from the Code unless they are wholly owned subsidiaries.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "Member Companies must pay all TPIs a fixed salary instead of commissions.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Companies cannot avoid compliance by outsourcing bad behavior to sales agents.",
+        "explanation": "Member Companies may be liable for TPIs and must ensure that contractual documentation imposes obligations upon them to comply with the Code."
+    },
+    {
+        "id": "q50",
+        "chapterId": "part2",
+        "question": "Who is eligible to file a complaint concerning an alleged breach of the Code by a Member Company?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "Only the MedTech Europe Board of Directors.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "Only other MedTech Europe Member Companies.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "Any organization or individual directly affected by the activities, including non-members, HCPs, and patients.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt4",
+                "text": "Only governmental regulatory authorities.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "The complaint process is open to anyone impacted by the industry\u0027s behavior.",
+        "explanation": "A complaint can be lodged by any organisation or individual directly affected by the activities, such as sickness funds, HCPs, HCOs, patients, and even non-members."
+    },
+    {
+        "id": "q51",
+        "chapterId": "part2",
+        "question": "Which of the following is a potential sanction that the MedTech Europe Compliance Panel can impose on an offending Member Company?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "A monetary fine of up to 1 million EUR.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "Criminal prosecution of the CEO.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "A written reprimand, mandatory third-party audit, or expulsion from MedTech Europe.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt4",
+                "text": "Confiscation of all the company\u0027s patents.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "As a self-regulatory body, MedTech Europe relies on structural and reputational penalties rather than direct financial or criminal ones.",
+        "explanation": "Sanctions range from a written reprimand, independent third-party audit, and recovery of items, to suspension or expulsion from membership and publication of the decision."
+    },
+    {
+        "id": "q52",
+        "chapterId": "part2",
+        "question": "What ensures the independence of the MedTech Europe Compliance Panel?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "It is composed entirely of current CEOs of major medical device companies.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "It is run directly by the European Commission.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "It is composed of at least three individuals without any employment or consulting link to MedTech Europe or any Member Company.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt4",
+                "text": "It is completely anonymous and members are chosen randomly for each case.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Conflict of interest must be avoided, requiring panel members to be entirely separate from the industry players they judge.",
+        "explanation": "The Compliance Panel is an independent body composed of at least three individuals (including a chair with a legal background) without any link or affiliation with MTE or any Member Company."
+    },
+    {
+        "id": "q53",
+        "chapterId": "admin",
+        "question": "In the CVS 2.0 platform, how far in advance can an event be submitted for \u0027Pre-Clearance\u0027 on location and venue?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "At least 6 months in advance.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt2",
+                "text": "12 months in advance.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "35 days before the event starts.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "There is no Pre-Clearance option in CVS 2.0.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Organizers often want to lock down their venue choice well before they have final scientific programs ready.",
+        "explanation": "The pre-clearance option is for events submitted at least 6 months in advance, and assesses only the location and the venue."
+    },
+    {
+        "id": "q54",
+        "chapterId": "admin",
+        "question": "If an event is deemed \u0027Not Compliant\u0027 by CVS, what is the timeframe allowed for submitting an appeal?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "5 business days.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "10 calendar days.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "30 days.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "Decisions cannot be appealed.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "The window is relatively short to ensure a swift final resolution before the event date approaches.",
+        "explanation": "An appeal via CVS 2.0 must be submitted within 10 calendar days."
+    },
+    {
+        "id": "q55",
+        "chapterId": "admin",
+        "question": "How does the CVS assess entertainment included in an event\u0027s social programme (e.g., a Gala dinner with live music)?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "It is compliant if the Member Company pays for it indirectly.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "It is completely forbidden, and the event will automatically fail.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "It is compliant if the entertainment is outside the educational schedule and paid for separately by the HCPs.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt4",
+                "text": "It is compliant as long as the music is not too loud.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Industry money cannot fund leisure, so delegates must bear those costs out of pocket.",
+        "explanation": "Entertainment must be outside the programme schedule and paid for separately by the HCP delegates; industry cannot fund any entertainment."
+    },
+    {
+        "id": "q56",
+        "chapterId": "admin",
+        "question": "Are \u0027National Events\u0027 (events only attended by local HCPs) subject to mandatory CVS approval?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "Yes, all events big or small must go through CVS.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "No, they are out of scope of CVS, though they must still comply with the Code and local laws.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "Yes, but only if they have more than 500 attendees.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "No, national events are entirely exempt from the MedTech Europe Code.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "CVS primarily handles cross-border/international events, leaving local events to national panels.",
+        "explanation": "National events are out of scope of CVS, but Member Companies must still ensure compliance with the Code and local laws."
+    },
+    {
+        "id": "q57",
+        "chapterId": "admin",
+        "question": "What is the purpose of the \u0027Claim Ownership\u0027 feature in the new CVS 2.0 platform?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "To allow organizers to claim copyright over their event branding.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "To prevent duplicates by allowing the actual organizer to take over and adapt a record submitted by someone else.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "To transfer the financial liability of the event to MedTech Europe.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "To block competitors from attending the event.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Often, a sponsor submits an event before the PCO does, creating multiple entries for the same conference.",
+        "explanation": "The \u0027Claim Ownership\u0027 feature avoids duplicates by allowing the organizer to claim ownership of an existing entry so they can adapt the event details."
+    },
+    {
+        "id": "q58",
+        "chapterId": "admin",
+        "question": "To fall under the scope of \u0027e4ethics\u0027 (the EFPIA alignment within the platform), an event must meet which threshold?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "At least 500 Healthcare Professionals coming from at least 5 EFPIA countries.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt2",
+                "text": "At least 100 Healthcare Professionals from outside Europe.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt3",
+                "text": "Any event lasting longer than 3 full days.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "Only events focused purely on pharmaceuticals.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "e4ethics handles very large, pan-European meetings impacting the pharma sector.",
+        "explanation": "Events in countries within the scope of the EFPIA Code are assessed under e4ethics if they anticipate at least 500 HCPs coming from at least 5 EFPIA countries."
+    },
+    {
+        "id": "q59",
+        "chapterId": "admin",
+        "question": "For an event to qualify as a Third Party Organised Procedure Training (TPPT), where must the hands-on sessions typically be organized?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "In a standard hotel conference room without specialized equipment.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "In a clinical environment or places suitably equipped for simulating medical procedures.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "At a Member Company\u0027s corporate headquarters exclusively.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "Outdoors, to accommodate large equipment.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Because the focus is on practical skill acquisition, the venue must physically support the medical techniques being taught.",
+        "explanation": "TPPT hands-on sessions are typically organised in either a clinical environment or in places suitable for simulating medical procedures."
+    },
+    {
+        "id": "q60",
+        "chapterId": "admin",
+        "question": "What is considered a \u0027good practice\u0027 regarding event communication and websites under CVS criteria?",
+        "options": [
+            {
+                "id": "opt1",
+                "text": "The website should feature prominent pictures of local tourist landmarks to attract attendees.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt2",
+                "text": "The website should highlight the scientific nature of the programme and avoid promoting the destination as a tourist attraction.",
+                "isCorrect": true
+            },
+            {
+                "id": "opt3",
+                "text": "The website must list the names and addresses of all sponsoring Member Companies on the homepage.",
+                "isCorrect": false
+            },
+            {
+                "id": "opt4",
+                "text": "The website should clearly advertise the luxury hotel where delegates will be staying.",
+                "isCorrect": false
+            }
+        ],
+        "hint": "Communication materials should not make the event look like a disguised holiday.",
+        "explanation": "Advertising support should highlight the scientific nature of the programme content, and no material promoting the destination as a tourist attraction should be hosted on the website."
+    }
+]
