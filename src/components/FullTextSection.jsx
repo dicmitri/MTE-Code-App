@@ -3,7 +3,7 @@ import DOMPurify from 'dompurify';
 import { highlightSearchTerm, processTextWithTerms } from '../utils/textUtils';
 import { Highlight } from './Highlight';
 import { AppIcon } from './AppIcons';
-import { getTreesBySection, getTreesByChapter } from '../data/treeData';
+import { getTreesBySection } from '../data/treeData';
 
 export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTermClick, bookmarksControls, chapterPrefix, searchFilters, onNavigateTree }) => {
     const processedHtml = useMemo(() => {
@@ -46,15 +46,9 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
 
     const isBookmarked = bookmarksControls?.isBookmarked(id);
 
-    // Find related decision trees for this section
+    // Find related decision trees for this specific section only (no chapter fallback)
     const relatedTrees = useMemo(() => {
-        let trees = getTreesBySection(id);
-        if (trees.length === 0) {
-            // Fall back to chapter-level match using the chapter part of the id
-            const chapterId = id.split('-')[0];
-            if (chapterId) trees = getTreesByChapter(chapterId);
-        }
-        return trees;
+        return getTreesBySection(id);
     }, [id]);
 
     return (
