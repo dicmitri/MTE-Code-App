@@ -12,9 +12,9 @@ The app is built using **React** and **Vite**. All the important files you will 
 
 ```text
 /src
- ├── /components/    # The building blocks of the UI (Header, Sidebar, Decision Trees, etc.)
+ ├── /components/    # The building blocks of the UI (Header, Decision Trees, Quiz, etc.)
  ├── /config/        # Centralized registries (section definitions)
- ├── /data/          # The actual text/content (legal code + decision trees)
+ ├── /data/          # The actual text/content (legal code, decision trees, quiz data)
  ├── /hooks/         # Custom React hooks (PWA, bookmarks, routing, keyboard, history)
  ├── /utils/         # Helper functions (search highlighting, glossary processing)
  ├── App.jsx         # The main "brain" that connects everything together
@@ -37,6 +37,10 @@ The app is built using **React** and **Vite**. All the important files you will 
 | `LandingPage.jsx` | Code section landing page with chapter grid |
 | `Logo.jsx` | MedTech Europe SVG logo |
 | `MainContent.jsx` | Main content area for the Code section |
+| `QuizContent.jsx` | Main state controller for the Knowledge Quiz feature |
+| `QuizConfig.jsx` | Setup screen for selecting quiz chapters and question count |
+| `QuizResults.jsx` | Displays quiz score, review of incorrect answers, and share link |
+| `QuizSession.jsx` | The interactive gameplay screen for answering questions |
 | `Sidebar.jsx` | Collapsible navigation sidebar with search, bookmarks, and history |
 | `TableOfContents.jsx` | Sticky "On This Page" minimap |
 | `TreeContent.jsx` | Router for the Decision Trees section (landing / interactive / visualization) |
@@ -56,6 +60,7 @@ The app is organized into independently navigable **sections**, all accessible f
 - **Home Hub** — A card-based landing page that links to each section.
 - **The Code** — The full MedTech Europe Code of Ethical Business Practice reader.
 - **Decision Trees** — Interactive compliance decision guides based on the Code.
+- **Knowledge Quiz** — A testing module that challenges users with randomized multiple-choice questions on selected chapters.
 
 The currently active section is tracked via `activeSection` state in `App.jsx` (`null` = Home, `'code'`, `'trees'`). Adding a new section (e.g. "Materials") requires only:
 1. Adding an entry to `src/config/sections.js`.
@@ -246,7 +251,47 @@ Categories are defined in `src/components/TreeLandingPage.jsx` in the `CATEGORY_
 
 ---
 
-## 🏗️ 4. How to Add a New Section
+## 🧠 4. How to Edit the Knowledge Quiz (`quizData.json`)
+
+All quiz questions and options are stored in:
+👉 **`src/data/quizData.json`**
+
+### Understanding the Structure
+Each question is an object with these fields:
+
+```json
+{
+  "id": "q1",
+  "chapterId": "ch1",
+  "question": "What is the minimum required duration for...?",
+  "options": [
+    { "id": "opt1", "text": "4 hours", "isCorrect": false },
+    { "id": "opt2", "text": "6 hours", "isCorrect": true }
+  ],
+  "hint": "The program must present a clear schedule...",
+  "explanation": "The minimum duration for a full day is 6 hours..."
+}
+```
+
+### Key fields:
+| Field | Type | Description |
+|---|---|---|
+| `id` | String | Unique question ID (e.g., `q1`). Used for link-sharing specific challenges. |
+| `chapterId` | String | Must match a chapter `id` in `codeData.json` (e.g., `intro`, `ch1`, `admin`). |
+| `question` | String | The text of the question. |
+| `options` | Array | The possible answers. Exactly **one** should have `"isCorrect": true`. |
+| `hint` | String | Optional clue shown to the user if they get stuck. |
+| `explanation` | String | Shown after the quiz in the "Areas for Review" section if answered incorrectly. |
+
+### The "Challenge" Share Feature
+The quiz supports a specific URL parameter (`?q=`) to share exact challenges.
+If a user completes a randomly generated quiz, the "Share Results" button creates a link like this:
+`https://yoursite.com/#quiz?q=q12,q5,q33`
+When someone clicks this link, the app skips the setup config and instantly generates a quiz using exactly those questions, in that order, guaranteeing a fair challenge!
+
+---
+
+## 🏗️ 5. How to Add a New Section
 
 The app is designed to be scalable. Adding an entirely new top-level section (like "Materials" or "Training") requires minimal changes:
 
@@ -280,7 +325,7 @@ That's it — the Home Hub and Sidebar will automatically pick up the new sectio
 
 ---
 
-## 🎨 5. How to Edit Styles and Colors
+## 🎨 6. How to Edit Styles and Colors
 
 This app uses **Tailwind CSS** for styling. This means you won't find traditional `.css` files full of styling rules. Instead, styles are applied directly to elements using "utility classes".
 
@@ -322,7 +367,7 @@ This file also contains:
 
 ---
 
-## 🖼️ 6. How to Edit Logos and Icons
+## 🖼️ 7. How to Edit Logos and Icons
 
 ### The Main Logo
 The main MedTech Europe logo (seen in the Header and on the Home Hub) is controlled by a single file:
@@ -345,7 +390,7 @@ Currently registered icons include:
 
 ---
 
-## ⌨️ 7. Keyboard Shortcuts
+## ⌨️ 8. Keyboard Shortcuts
 
 | Shortcut | Action |
 |---|---|
@@ -355,7 +400,7 @@ Currently registered icons include:
 
 ---
 
-## 🧪 8. Dependencies
+## 🧪 9. Dependencies
 
 | Package | Version | Purpose |
 |---|---|---|
@@ -371,7 +416,7 @@ Currently registered icons include:
 
 ---
 
-## 🚀 9. How to Preview and Publish Your Changes
+## 🚀 10. How to Preview and Publish Your Changes
 
 Once you have made your edits, you'll want to see them and publish them.
 
@@ -408,7 +453,7 @@ If your project is connected to GitHub:
 
 ---
 
-## 📂 10. Data Flow Overview
+## 📂 11. Data Flow Overview
 
 ```text
 User opens app
@@ -426,15 +471,21 @@ User opens app
      │      └── TableOfContents (sticky "On This Page")
      │
      └── Click "Decision Trees" ──► Trees Section
+     │      │
+     │      ├── TreeLandingPage (tree cards by category)
+     │      ├── DecisionTree (interactive step-by-step)
+     │      └── TreeVisualization (full flowchart)
+     │
+     └── Click "Knowledge Quiz" ──► Quiz Section
             │
-            ├── TreeLandingPage (tree cards by category)
-            ├── DecisionTree (interactive step-by-step)
-            └── TreeVisualization (full flowchart)
+            ├── QuizConfig (Select chapters, count)
+            ├── QuizSession (Answer questions)
+            └── QuizResults (Score, Share, Review)
 ```
 
 ---
 
-## 🔒 11. Security Notes
+## 🔒 12. Security Notes
 
 - All HTML in `legalText` and Q&A answers is sanitized through **DOMPurify** before rendering. This prevents cross-site scripting (XSS) even if someone injects malicious code into the JSON content.
 - The app does not make any external API calls. All data is bundled at build time.
