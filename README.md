@@ -8,18 +8,24 @@ This guide is written specifically for anyone who needs to update the content, c
 
 ## 📁 App Structure Overview
 
-The app is built using **React** and **Vite**. All the important files you will ever need to edit live inside the `src/` (source) folder:
+The app is built using **React**, **Vite**, and **Cloudflare Workers**. All the important UI files live inside the `src/` (source) folder. **Note:** Every subfolder inside `src/` contains its own `README.md` file explaining its local purpose.
 
 ```text
-/src
- ├── /components/    # The building blocks of the UI (Header, Decision Trees, Quiz, etc.)
- ├── /config/        # Centralized registries (section definitions)
- ├── /data/          # The actual text/content (legal code, decision trees, quiz data)
- ├── /hooks/         # Custom React hooks (PWA, bookmarks, routing, keyboard, history)
- ├── /utils/         # Helper functions (search highlighting, glossary processing)
- ├── App.jsx         # The main "brain" that connects everything together
- ├── main.jsx        # React entry point
- └── index.css       # Global styles, fonts, and print rules
+/
+ ├── /public/        # Static assets (icons, manifest, Decap CMS config)
+ ├── /src/
+ │   ├── /components/ # The building blocks of the UI (Header, Decision Trees, Quiz, etc.)
+ │   ├── /config/     # Centralized registries (section definitions)
+ │   ├── /data/       # The actual text/content (legal code, decision trees, quiz data)
+ │   ├── /hooks/      # Custom React hooks (PWA, bookmarks, routing, keyboard, history)
+ │   ├── /utils/      # Helper functions (search highlighting, glossary processing)
+ │   ├── App.jsx      # The main "brain" that connects everything together
+ │   ├── main.jsx     # React entry point
+ │   └── index.css    # Global styles, fonts, and print rules
+ ├── server.js       # Cloudflare Worker script (serves app and handles OAuth)
+ ├── oauth-proxy.js  # Standalone OAuth proxy for Decap CMS
+ ├── AGENTS.md       # AI Agent instructions and global Project Map
+ └── wrangler.toml   # Cloudflare Worker configuration
 ```
 
 ### Components Reference
@@ -114,9 +120,17 @@ To facilitate heavy professional reference usage, the app includes several quali
 ### 🖨️ Print & Export Mode
 The app features an optimized Print Mode. By pressing the **Print** icon in the header (or pressing `Ctrl+P`), the `index.css` `@media print` query strips away the Sidebar, Header, and interactive elements. It presents a clean, high-contrast, black-and-white view of the legal text — perfect for generating PDFs.
 
+### 🛠️ Decap CMS & Cloudflare Worker Integration
+The application uses **Decap CMS** for content management, accessible at `/admin/`.
+- The CMS uses GitHub as its backend.
+- A custom Cloudflare Worker (`server.js`) securely handles the GitHub OAuth flow required by Decap CMS to authenticate users. It implements HMAC-signed state tokens for CSRF protection.
+- The `server.js` script also serves the static React application.
+
 ---
 
 ## 📝 2. How to Edit the Legal Content (`FULL_CODE_DATA`)
+
+You can edit content directly in the JSON files or via the **Decap CMS** at `/admin/`.
 
 All the text, chapters, annexes, and Q&As are stored in a single file:
 👉 **`src/data/codeData.json`**
@@ -148,18 +162,8 @@ If you open `codeData.json`, you will see a list of objects that look like this:
 }
 ```
 
-### Key fields:
-| Field | Type | Description |
-|---|---|---|
-| `id` | String | Unique chapter ID (e.g. `ch1`, `scope`, `glossary`). Used for routing. |
-| `part` | String | Which part the chapter belongs to (`intro`, `part1`, `part2`, `part3`, `website`). Controls sidebar grouping. |
-| `title` | String | Display name in sidebar & headings. |
-| `icon` | String | Chapter number or icon name (e.g. `"1"`, `"Globe"`, `"ABC"`). |
-| `summary` | String | Brief overview shown in the Summary panel. |
-| `sections` | Array | The individual sections with `title`, `legalText` (HTML), and `qas` (Array of `{q, a}`). |
-
 ### How to make changes:
-1. **Fixing Typos:** Simply use `Ctrl+F` (or `Cmd+F`) in `codeData.json` to find the typo and change the text.
+1. **Fixing Typos:** Simply use `Ctrl+F` (or `Cmd+F`) in `codeData.json` to find the typo and change the text. Alternatively, use the CMS.
 2. **Formatting Text:** The `legalText` and `a` (answer) fields use standard HTML.
    - Use `<strong>text</strong>` for bold.
    - Use `<em>text</em>` for italics.
@@ -191,44 +195,6 @@ Each tree is an object with these fields:
 }
 ```
 
-### Key fields:
-| Field | Type | Description |
-|---|---|---|
-| `id` | String | Unique tree ID. Must start with `dt-` (this is how the router identifies tree hashes). |
-| `title` | String | Display name on the tree card and in the header. |
-| `relatedChapter` | String | The `id` of the Code chapter this tree relates to (e.g. `"ch1"`). Used for cross-linking. |
-| `relatedSection` | String or null | The specific `computedId` of a Code section. If set, the "Related Decision Tree" callout appears on that section. If null, it falls back to chapter-level matching. |
-| `category` | String | Grouping key for the tree landing page (e.g. `"events"`, `"consulting"`). |
-| `description` | String | Short description shown on the card. |
-| `nodes` | Array | The tree's decision logic (see below). |
-
-### Node types:
-
-**Question nodes** ask the user something and branch based on their answer:
-```json
-{
-  "id": "start",
-  "type": "question",
-  "text": "Is the event in a country where the Code applies?",
-  "helpText": "Optional contextual guidance shown in a blue box.",
-  "options": [
-    { "label": "Yes", "next": "q2" },
-    { "label": "No", "next": "result-out-of-scope" }
-  ]
-}
-```
-
-**Result nodes** are the terminal outcomes of a path:
-```json
-{
-  "id": "result-pass",
-  "type": "result",
-  "outcome": "compliant",
-  "text": "The event location appears to meet Code requirements.",
-  "reference": "Chapter 1 — General Criteria for Events"
-}
-```
-
 ### Supported `outcome` values:
 | Value | Color | Icon | Meaning |
 |---|---|---|---|
@@ -238,16 +204,13 @@ Each tree is an object with these fields:
 | `consult-legal` | Blue | ⚖️ | Seek legal counsel |
 
 ### How to add a new tree:
-1. Open `treeData.json`.
+1. Open `treeData.json` (or use Decap CMS).
 2. Add a new object to the top-level array.
 3. Give it a unique `id` starting with `dt-`.
 4. Set `relatedChapter` to the Code chapter's `id` (e.g. `"ch3"` for Company Events).
 5. Optionally set `relatedSection` to a specific section's `computedId` for precise cross-linking.
 6. Add your `nodes` array. The first question node **must** have `"id": "start"`.
 7. Make sure every `"next"` value in every option points to a valid node `id`.
-
-### Category configuration
-Categories are defined in `src/components/TreeLandingPage.jsx` in the `CATEGORY_CONFIG` object. To add a new category, add an entry there with `label`, `color`, and `icon`.
 
 ---
 
@@ -272,22 +235,6 @@ Each question is an object with these fields:
   "explanation": "The minimum duration for a full day is 6 hours..."
 }
 ```
-
-### Key fields:
-| Field | Type | Description |
-|---|---|---|
-| `id` | String | Unique question ID (e.g., `q1`). Used for link-sharing specific challenges. |
-| `chapterId` | String | Must match a chapter `id` in `codeData.json` (e.g., `intro`, `ch1`, `admin`). |
-| `question` | String | The text of the question. |
-| `options` | Array | The possible answers. Exactly **one** should have `"isCorrect": true`. |
-| `hint` | String | Optional clue shown to the user if they get stuck. |
-| `explanation` | String | Shown after the quiz in the "Areas for Review" section if answered incorrectly. |
-
-### The "Challenge" Share Feature
-The quiz supports a specific URL parameter (`?q=`) to share exact challenges.
-If a user completes a randomly generated quiz, the "Share Results" button creates a link like this:
-`https://yoursite.com/#quiz?q=q12,q5,q33`
-When someone clicks this link, the app skips the setup config and instantly generates a quiz using exactly those questions, in that order, guaranteeing a fair challenge!
 
 ---
 
@@ -359,12 +306,6 @@ Tailwind has a built-in color palette. If you want to change a blue button to a 
 If you need to change the **font family** or the background color of the entire website, look in:
 👉 **`src/index.css`**
 
-This file also contains:
-- CSS custom properties (`--color-teal`, `--color-purple`, etc.)
-- The `.chapter-card` and `.hub-card` hover animations
-- The `@media print` rules for print mode
-- Custom scrollbar styling
-
 ---
 
 ## 🖼️ 7. How to Edit Logos and Icons
@@ -373,18 +314,11 @@ This file also contains:
 The main MedTech Europe logo (seen in the Header and on the Home Hub) is controlled by a single file:
 👉 **`src/components/Logo.jsx`**
 
-If you open this file, you will see an `<svg>` tag. This is the vector graphic of the logo.
-- **To change the logo:** You can replace the `<svg>...</svg>` block with a new SVG code, OR you can replace it with a standard image tag like `<img src="/my-new-logo.png" alt="Logo" />` (if you do this, place the image file in the `/public/` folder).
-- **To change the text next to the logo:** You will see the text "MedTech Europe" and "from diagnosis to cure" right inside this file. You can edit them directly.
-
 ### Other Icons
-The icons used in the sidebar and throughout the app (like the menu icon, search icon, or document icons) are stored in:
+The icons used in the sidebar and throughout the app are stored in:
 👉 **`src/components/AppIcons.jsx`**
 
 This file uses a library called `lucide-react`. If you want to change an icon, you can go to [lucide.dev/icons](https://lucide.dev/icons), find the name of the icon you want, and update it in `AppIcons.jsx`.
-
-Currently registered icons include:
-`Search`, `Star`, `X`, `Menu`, `Eye`, `Bookmark`, `FileText`, `List`, `Globe`, `ChevronLeft`, `ChevronRight`, `ChevronDown`, `ChevronUp`, `Home`, `Printer`, `Download`, `BookOpen`, `Clock`, `Info`, `GitBranch`, `RotateCcw`, and more.
 
 > **Important:** All icons must be imported through `AppIcons.jsx`. Do not import `lucide-react` directly in other components — this keeps the bundle size predictable and icons consistent.
 
@@ -413,6 +347,7 @@ Currently registered icons include:
 | `dompurify` | ^3.3.3 | HTML sanitizer (prevents XSS in legal text) |
 | `motion` | ^12.23.24 | Animation library |
 | `vite-plugin-pwa` | ^1.2.0 | Service worker generation for offline support |
+| `@google/genai` | ^1.29.0 | Integration with Google Generative AI |
 
 ---
 
@@ -432,8 +367,9 @@ npm run build
 ```
 The optimized output will be placed in the `dist/` folder. This is what gets deployed.
 
-### To publish to the live website (Cloudflare Pages):
-If your project is connected to GitHub:
+### To publish to Cloudflare Workers (Live Website):
+This project is configured as a Cloudflare Worker with Assets (`wrangler.toml`).
+If connected to GitHub, push your changes:
 1. Save your files.
 2. Run the following commands in your terminal:
    ```bash
@@ -441,7 +377,8 @@ If your project is connected to GitHub:
    git commit -m "Describe what you changed here"
    git push
    ```
-3. Cloudflare will automatically detect the change and update the live website within 2-3 minutes!
+3. Cloudflare will automatically detect the change and deploy the updated Worker.
+Alternatively, you can manually deploy using `npx wrangler deploy`.
 
 ### Other useful commands:
 | Command | What it does |
@@ -450,6 +387,7 @@ If your project is connected to GitHub:
 | `npm run build` | Create a production-optimized build |
 | `npm run preview` | Preview the production build locally |
 | `npm run clean` | Delete the `dist/` folder |
+| `npm run lint` | Run TypeScript checks without emitting files |
 
 ---
 
@@ -488,5 +426,5 @@ User opens app
 ## 🔒 12. Security Notes
 
 - All HTML in `legalText` and Q&A answers is sanitized through **DOMPurify** before rendering. This prevents cross-site scripting (XSS) even if someone injects malicious code into the JSON content.
-- The app does not make any external API calls. All data is bundled at build time.
+- The app uses a custom OAuth proxy via Cloudflare Workers (`server.js`) with HMAC-signed state tokens for CSRF protection.
 - No user data is sent to any server. Bookmarks and history are stored exclusively in `localStorage`.
