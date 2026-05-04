@@ -346,7 +346,80 @@ Validation:
 - Deep link to quiz.
 - Confirm bookmarks still work.
 
-## 8. Add A Visible Changes / What's New Section
+## 8. Replace Hash Links With Clean Deep-Linkable URLs
+
+Ease: Medium  
+Impact: High  
+Complexity: Medium
+
+Move from fragment routes such as `/#ch1-...` and `/#dt-...` to canonical browser URLs such as `/code/ch1/introduction`, `/trees/dt-ch1-event-location`, and `/quiz`.
+
+Why it matters:
+
+- Clean URLs are easier to share, cite, index, and understand.
+- Normative-content readers often need durable links for policies, emails, training material, and formal references.
+- This change also makes future profile routes, checklists, and "What's new" pages feel like first-class app areas rather than internal views.
+
+Recommended route shape:
+
+```text
+/                         Home Hub
+/code                     Code landing
+/code/:chapterId          Chapter
+/code/:chapterId/:sectionSlug  Exact section
+/trees                    Decision tree landing
+/trees/:treeId            Interactive tree
+/quiz                     Quiz
+/quiz/challenge/:ids      Shared quiz challenge
+```
+
+Likely files affected:
+
+- `src/hooks/useHashRouting.js`, likely replaced by `src/hooks/useAppRouting.js`
+- `src/utils/textUtils.js`, or a new `src/utils/routeUtils.js`
+- `src/App.jsx`
+- `src/components/Sidebar.jsx`
+- `src/components/MainContent.jsx`
+- `src/components/FullTextSection.jsx`
+- `src/components/TreeContent.jsx`
+- `src/components/TreeLandingPage.jsx`
+- `src/components/quiz/QuizContent.jsx`
+- `src/components/quiz/QuizResults.jsx`
+- `src/hooks/useBookmarks.js`
+- `src/hooks/useRecentHistory.js`
+- `server.js`
+- `vite.config.ts` if dev-server fallback behavior needs adjustment
+- `scripts/validate-data.mjs` if item 1 exists
+
+Implementation notes:
+
+- Do this after item 7 so route generation and parsing are centralized first.
+- Prefer lowercase, URL-safe slugs, for example `/code/ch1/introduction`, not `/code/ch1/Introduction`.
+- Keep stable machine IDs in the route. Use `chapterId` and generated section slug so title changes can be migrated deliberately.
+- Add backward compatibility for existing hash links:
+  - `/#ch1-...` should resolve or redirect to the equivalent clean URL.
+  - `/#dt-...` should resolve or redirect to `/trees/:treeId`.
+  - `/#quiz?q=...` should resolve or redirect to `/quiz/challenge/:ids`.
+- Use `history.pushState` / `replaceState` if staying router-free.
+- Alternatively add `react-router-dom` if the app is expected to keep growing. This adds a dependency but reduces custom routing complexity.
+- Update copy-link and citation utilities so new links are canonical.
+- Update Cloudflare Worker fallback in `server.js` so deep routes serve `index.html`.
+- Ensure PWA navigation fallback still works for deep routes and still excludes `/admin`.
+
+Possible dependency:
+
+- Optional: `react-router-dom`. Not required, but reasonable if more top-level sections, profiles, checklists, and nested routes are coming.
+
+Validation:
+
+- Directly open `/code`, `/code/ch1`, `/code/ch1/<section-slug>`, `/trees`, `/trees/<treeId>`, and `/quiz`.
+- Reload each deep URL in dev, preview, and Cloudflare/Worker environment.
+- Verify old hash links still work.
+- Verify bookmarks, recent history, copy link, copy citation, quiz share links, and decision-tree cross-links use clean URLs.
+- Verify browser Back/Forward behaves naturally.
+- Verify PWA offline navigation still resolves deep URLs.
+
+## 9. Add A Visible Changes / What's New Section
 
 Ease: Medium  
 Impact: High  
@@ -392,7 +465,7 @@ Validation:
 - Confirm links resolve.
 - Confirm print mode either hides or formats the section cleanly.
 
-## 9. Add Focused Tests
+## 10. Add Focused Tests
 
 Ease: Medium  
 Impact: High  
@@ -432,7 +505,7 @@ Validation:
   - `"test": "vitest run"`
   - `"test:watch": "vitest"`
 
-## 10. Add Accessibility Checks And Interaction Polish
+## 11. Add Accessibility Checks And Interaction Polish
 
 Ease: Medium  
 Impact: High  
@@ -470,7 +543,7 @@ Validation:
 - Screen reader labels for major controls.
 - Visual check for focus rings.
 
-## 11. Add "Check Before You Start" Scenario Wizards
+## 12. Add "Check Before You Start" Scenario Wizards
 
 Ease: Medium  
 Impact: High  
@@ -507,7 +580,7 @@ Validation:
 - Confirm every result has a reference.
 - Confirm "I do not know" or "Not sure" is available where valid.
 
-## 12. Add Task-List / Checklist Experiences
+## 13. Add Task-List / Checklist Experiences
 
 Ease: Medium to hard  
 Impact: High  
@@ -568,7 +641,7 @@ Validation:
 - Complete tasks, reload, confirm persistence.
 - Export or clear progress only with clear user action.
 
-## 13. Add Richer Cross-Links Between Code, Trees, Quiz, And Glossary
+## 14. Add Richer Cross-Links Between Code, Trees, Quiz, And Glossary
 
 Ease: Medium  
 Impact: Medium to high  
@@ -606,7 +679,7 @@ Validation:
 - Validate all references.
 - Confirm relationship links do not create noisy UI.
 
-## 14. Split Large UI Files Into Smaller Components And Hooks
+## 15. Split Large UI Files Into Smaller Components And Hooks
 
 Ease: Medium  
 Impact: Medium  
@@ -644,7 +717,7 @@ Validation:
 - Run `npm run lint`.
 - Manual smoke test sidebar, search, tree visualization, print tree.
 
-## 15. Remove Or Quarantine Unused AI Plumbing
+## 16. Remove Or Quarantine Unused AI Plumbing
 
 Ease: Medium  
 Impact: Medium  
@@ -680,7 +753,7 @@ Validation:
 - Run `npm install` if dependency changes.
 - Run `npm run build`.
 
-## 16. Add Export Bundles
+## 17. Add Export Bundles
 
 Ease: Medium to hard  
 Impact: Medium  
@@ -719,7 +792,7 @@ Validation:
 - Test print/PDF output on desktop.
 - Confirm confidential local notes are not included unless explicitly selected.
 
-## 17. Add Optional Local User Notes
+## 18. Add Optional Local User Notes
 
 Ease: Medium to hard  
 Impact: Medium  
@@ -747,7 +820,7 @@ Validation:
 - Reload and confirm persistence.
 - Confirm notes do not break section layout or print mode.
 
-## 18. Consider Accounts And Team Sync Later
+## 19. Consider Accounts And Team Sync Later
 
 Ease: Hard  
 Impact: Medium to high  
@@ -779,7 +852,7 @@ Validation:
 - Security review required.
 - Data deletion and access-control tests required.
 
-## 19. Add "Ask The Code" Assistant Only After Citation Infrastructure
+## 20. Add "Ask The Code" Assistant Only After Citation Infrastructure
 
 Ease: Hard  
 Impact: Potentially high  
@@ -820,7 +893,7 @@ Validation:
 - Test hallucination resistance with known edge cases.
 - Check that every answer includes source links.
 
-## 20. Defer Large Platform Features
+## 21. Defer Large Platform Features
 
 Ease: Hard  
 Impact: Variable  
@@ -857,10 +930,11 @@ If a future AI or developer has one short sprint, implement in this order:
 
 1. Data validation script.
 2. Route/ID centralization.
-3. Cross-section recent history fix.
-4. Version/review metadata fields and display.
-5. Taxonomy fields and CMS updates.
-6. Basic profile landing filter.
+3. Clean deep-linkable URLs.
+4. Cross-section recent history fix.
+5. Version/review metadata fields and display.
+6. Taxonomy fields and CMS updates.
+7. Basic profile landing filter.
 
 This sequence strengthens the content foundation first, then adds user-visible value without forcing a backend or account system.
 

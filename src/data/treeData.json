@@ -4,7 +4,7 @@
       "id": "dt-scope",
       "title": "Is this interaction in scope of the Code?",
       "relatedChapter": "scope",
-      "relatedSection": null,
+      "relatedSection": "scope-1-applicability-of-the-code",
       "category": "scope",
       "description": "Determine if an interaction, event, or activity is governed by the MedTech Europe Code based on geography and affiliations.",
       "nodes": [
@@ -594,7 +594,7 @@
       "id": "dt-annex1-cvs-scope",
       "title": "When are CVS assessments required?",
       "relatedChapter": "annex1",
-      "relatedSection": null,
+      "relatedSection": "ch2-1-third-party-organised-educational-conferences",
       "category": "events",
       "description": "Determine if a Third Party Organised Educational Event requires prior submission to the Conference Vetting System (CVS).",
       "nodes": [
