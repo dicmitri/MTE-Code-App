@@ -2,10 +2,13 @@ name = "mtecodeapp"
 main = "server.js"
 compatibility_date = "2024-09-02"
 
-routes = [
-  { pattern = "medtecheurope-code.org", custom_domain = true }
-  { pattern = "www.medtecheurope-code.org", custom_domain = true }
-]
+[[routes]]
+pattern = "medtecheurope-code.org"
+custom_domain = true
+
+[[routes]]
+pattern = "www.medtecheurope-code.org"
+custom_domain = true
 
 [assets]
 directory = "dist"
