@@ -5,8 +5,459 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
   <title>Content Manager — MTE Code App</title>
+
+  <!-- Match the app's typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ================================================================
+       MTE Code App — Decap CMS Admin Theme Override
+       ================================================================
+       Targets Decap CMS v3.x styled-components using [class*=""] 
+       substring selectors. These may need maintenance on major 
+       Decap version upgrades.
+       ================================================================ */
+
+    /* ── Design Tokens ─────────────────────────────────────────────── */
+    :root {
+      --mte-purple: #7654A1;
+      --mte-purple-light: #f3effb;
+      --mte-purple-hover: #5e3f87;
+      --mte-teal: #0099A7;
+      --mte-teal-light: #e6f7f8;
+      --mte-amber: #e67e22;
+      --mte-bg: #f8f9fa;
+      --mte-surface: #ffffff;
+      --mte-text: #1e293b;
+      --mte-text-secondary: #64748b;
+      --mte-border: #e2e8f0;
+      --mte-radius: 10px;
+      --mte-radius-lg: 16px;
+      --mte-font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --mte-transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ── Global Reset ──────────────────────────────────────────────── */
+    body {
+      font-family: var(--mte-font) !important;
+      background-color: var(--mte-bg) !important;
+      color: var(--mte-text) !important;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    *, *::before, *::after {
+      font-family: var(--mte-font) !important;
+    }
+
+    /* ── Login Page ────────────────────────────────────────────────── */
+    /* Background */
+    [class*="AuthenticationPage"] {
+      background: linear-gradient(135deg, #f8f9fa 0%, #ede9f6 50%, #e6f7f8 100%) !important;
+    }
+
+    /* Hide the entire Decap logo + text area */
+    [class*="AuthenticationPage"] [class*="CustomIcon"],
+    [class*="AuthenticationPage"] [class*="LoginLogo"],
+    [class*="AuthenticationPage"] svg,
+    [class*="AuthenticationPage"] [class*="NetlifyLogo"],
+    [class*="AuthenticationPage"] img,
+    [class*="AuthenticationPage"] > div > div > span,
+    [class*="AuthenticationPage"] > div > div > a {
+      display: none !important;
+    }
+
+    /* Login button */
+    button[class*="LoginButton"],
+    [class*="AuthenticationPage"] button {
+      position: relative;
+      background: var(--mte-purple) !important;
+      color: white !important;
+      border: none !important;
+      border-radius: var(--mte-radius) !important;
+      padding: 14px 32px !important;
+      font-size: 0.9rem !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.01em !important;
+      cursor: pointer !important;
+      transition: all var(--mte-transition) !important;
+      box-shadow: 0 2px 8px rgba(118, 84, 161, 0.25) !important;
+    }
+
+    button[class*="LoginButton"]:hover,
+    [class*="AuthenticationPage"] button:hover {
+      background: var(--mte-purple-hover) !important;
+      box-shadow: 0 4px 16px rgba(118, 84, 161, 0.35) !important;
+      transform: translateY(-1px) !important;
+    }
+
+    /* ── Top Header Bar ────────────────────────────────────────────── */
+    [class*="AppHeader"] {
+      background: var(--mte-surface) !important;
+      border-bottom: 1px solid var(--mte-border) !important;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04) !important;
+    }
+
+    [class*="AppHeaderContent"] {
+      background: transparent !important;
+    }
+
+    /* Header nav links */
+    [class*="AppHeader"] a,
+    [class*="AppHeader"] [class*="NavLink"] {
+      color: var(--mte-text-secondary) !important;
+      font-weight: 500 !important;
+      font-size: 0.85rem !important;
+      text-decoration: none !important;
+      transition: color var(--mte-transition) !important;
+    }
+
+    [class*="AppHeader"] a:hover,
+    [class*="AppHeader"] [class*="NavLink"]:hover {
+      color: var(--mte-purple) !important;
+    }
+
+    /* Active nav link */
+    [class*="AppHeader"] [class*="NavLink"][href*="collections"] {
+      color: var(--mte-teal) !important;
+    }
+
+    /* ── Sidebar ───────────────────────────────────────────────────── */
+    [class*="SidebarContainer"],
+    [class*="Sidebar"] > div:first-child {
+      background: var(--mte-surface) !important;
+      border-right: 1px solid var(--mte-border) !important;
+    }
+
+    /* ── Collection List ───────────────────────────────────────────── */
+    [class*="ListCard"],
+    [class*="ListCardLink"] {
+      background: var(--mte-surface) !important;
+      border: 1px solid var(--mte-border) !important;
+      border-radius: var(--mte-radius) !important;
+      margin-bottom: 6px !important;
+      transition: all var(--mte-transition) !important;
+    }
+
+    [class*="ListCard"]:hover,
+    [class*="ListCardLink"]:hover {
+      border-color: var(--mte-purple) !important;
+      box-shadow: 0 2px 12px rgba(118, 84, 161, 0.1) !important;
+    }
+
+    /* ── Main Content Area ─────────────────────────────────────────── */
+    [class*="AppMainContainer"],
+    main, [role="main"] {
+      background: var(--mte-bg) !important;
+    }
+
+    /* ── Editor Container / Control Pane ────────────────────────────── */
+    [class*="ControlPaneContainer"],
+    [class*="EditorControlPane"],
+    [class*="ObjectWidgetTopBar"] {
+      background: var(--mte-surface) !important;
+    }
+
+    /* Editor card panels */
+    [class*="StyledWrapper"],
+    [class*="ExpandablePluginCardBody"] {
+      background: var(--mte-surface) !important;
+      border: 1px solid var(--mte-border) !important;
+      border-radius: var(--mte-radius) !important;
+    }
+
+    /* ── Field Labels ──────────────────────────────────────────────── */
+    [class*="FieldLabel"],
+    [class*="ObjectWidgetLabel"],
+    label {
+      color: var(--mte-text) !important;
+      font-weight: 600 !important;
+      font-size: 0.8rem !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.05em !important;
+    }
+
+    /* Field hints */
+    [class*="ControlHint"],
+    [class*="FieldHint"] {
+      color: var(--mte-text-secondary) !important;
+      font-size: 0.75rem !important;
+      font-style: normal !important;
+    }
+
+    /* ── Text Inputs & Textareas ────────────────────────────────────── */
+    input[type="text"],
+    input[type="search"],
+    textarea,
+    select {
+      font-family: var(--mte-font) !important;
+      font-size: 0.95rem !important;
+      color: var(--mte-text) !important;
+      background: var(--mte-surface) !important;
+      border: 1.5px solid var(--mte-border) !important;
+      border-radius: 8px !important;
+      padding: 10px 14px !important;
+      transition: all var(--mte-transition) !important;
+      outline: none !important;
+    }
+
+    input[type="text"]:focus,
+    input[type="search"]:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--mte-teal) !important;
+      box-shadow: 0 0 0 3px rgba(0, 153, 167, 0.12) !important;
+    }
+
+    /* ── Rich Text / Markdown Editor ───────────────────────────────── 
+       KEY: Match the live app's typography as closely as possible
+       so WYSIWYG editing feels like the real thing.
+       ────────────────────────────────────────────────────────────── */
+    [data-slate-editor],
+    [class*="RawEditor"] textarea,
+    [class*="MarkdownControl"] [class*="EditorContainer"],
+    [class*="visualEditor"],
+    [class*="raw-editor"] textarea {
+      font-family: var(--mte-font) !important;
+      font-size: 1.05rem !important;
+      line-height: 1.6 !important;
+      color: var(--mte-text) !important;
+      padding: 24px !important;
+      max-width: 65ch !important;
+      background: var(--mte-surface) !important;
+      border: 1.5px solid var(--mte-border) !important;
+      border-radius: var(--mte-radius) !important;
+    }
+
+    /* Paragraphs inside the editor */
+    [data-slate-editor] p,
+    [data-slate-editor] div {
+      font-size: 1.05rem !important;
+      line-height: 1.6 !important;
+      margin-bottom: 0.9rem !important;
+      margin-top: 0 !important;
+    }
+
+    /* Lists inside the editor */
+    [data-slate-editor] ul {
+      list-style-type: disc !important;
+      padding-left: 1.25rem !important;
+    }
+
+    [data-slate-editor] ol {
+      list-style-type: decimal !important;
+      padding-left: 1.25rem !important;
+    }
+
+    [data-slate-editor] li {
+      margin-bottom: 0.25rem !important;
+      font-size: 1.05rem !important;
+      line-height: 1.6 !important;
+    }
+
+    /* Bold and italic in editor */
+    [data-slate-editor] strong {
+      font-weight: 700 !important;
+    }
+
+    [data-slate-editor] em {
+      font-style: italic !important;
+    }
+
+    /* Headings in editor */
+    [data-slate-editor] h1,
+    [data-slate-editor] h2,
+    [data-slate-editor] h3 {
+      font-weight: 700 !important;
+      color: var(--mte-text) !important;
+      margin-top: 1.5rem !important;
+      margin-bottom: 0.75rem !important;
+    }
+
+    /* ── Markdown Toolbar ──────────────────────────────────────────── */
+    [class*="ToolbarContainer"],
+    [class*="Toolbar"] {
+      background: #f8f9fb !important;
+      border-bottom: 1px solid var(--mte-border) !important;
+      border-radius: var(--mte-radius) var(--mte-radius) 0 0 !important;
+      padding: 6px 12px !important;
+    }
+
+    [class*="ToolbarButton"],
+    [class*="Toolbar"] button {
+      color: var(--mte-text-secondary) !important;
+      border: none !important;
+      border-radius: 6px !important;
+      padding: 6px 8px !important;
+      transition: all var(--mte-transition) !important;
+    }
+
+    [class*="ToolbarButton"]:hover,
+    [class*="Toolbar"] button:hover {
+      background: var(--mte-purple-light) !important;
+      color: var(--mte-purple) !important;
+    }
+
+    /* ── Buttons (Global) ──────────────────────────────────────────── */
+    /* Primary / Publish button */
+    [class*="PublishButton"],
+    [class*="ToolbarButton"][class*="publish"],
+    button[class*="DropdownButton"] {
+      background: var(--mte-purple) !important;
+      color: white !important;
+      border: none !important;
+      border-radius: var(--mte-radius) !important;
+      font-weight: 600 !important;
+      font-size: 0.85rem !important;
+      padding: 8px 20px !important;
+      transition: all var(--mte-transition) !important;
+      box-shadow: 0 2px 6px rgba(118, 84, 161, 0.2) !important;
+    }
+
+    [class*="PublishButton"]:hover,
+    button[class*="DropdownButton"]:hover {
+      background: var(--mte-purple-hover) !important;
+      box-shadow: 0 4px 12px rgba(118, 84, 161, 0.3) !important;
+    }
+
+    /* Secondary / back / cancel buttons */
+    [class*="BackButton"],
+    [class*="DeleteButton"],
+    [class*="BackArrow"] {
+      color: var(--mte-text-secondary) !important;
+      transition: color var(--mte-transition) !important;
+    }
+
+    [class*="BackButton"]:hover,
+    [class*="BackArrow"]:hover {
+      color: var(--mte-purple) !important;
+    }
+
+    /* ── Collapsible List Items (Chapters, Nodes, etc.) ─────────────── */
+    [class*="ListItem"],
+    [class*="NestedObjectLabel"],
+    [class*="ObjectWidgetTopBar"] {
+      border-radius: 8px !important;
+      transition: background var(--mte-transition) !important;
+    }
+
+    [class*="ListItem"]:hover,
+    [class*="NestedObjectLabel"]:hover {
+      background: var(--mte-purple-light) !important;
+    }
+
+    /* Item summary text */
+    [class*="ListItemSummary"],
+    [class*="ObjectWidgetLabel"] {
+      font-weight: 500 !important;
+      color: var(--mte-text) !important;
+    }
+
+    /* ── Toggle / Switch Controls ──────────────────────────────────── */
+    [class*="Toggle"] [class*="Background"] {
+      border-radius: 20px !important;
+    }
+
+    /* ── Breadcrumbs ───────────────────────────────────────────────── */
+    [class*="Breadcrumbs"] a,
+    [class*="Breadcrumb"] {
+      color: var(--mte-teal) !important;
+      font-size: 0.8rem !important;
+      font-weight: 600 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.04em !important;
+    }
+
+    /* ── Scrollbar ─────────────────────────────────────────────────── */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* ── Focus Outlines ────────────────────────────────────────────── */
+    *:focus-visible {
+      outline: 2px solid var(--mte-teal) !important;
+      outline-offset: 2px !important;
+    }
+
+    /* ── Select Dropdowns ──────────────────────────────────────────── */
+    [class*="SelectDropdown"],
+    [class*="DropdownList"] {
+      border: 1px solid var(--mte-border) !important;
+      border-radius: var(--mte-radius) !important;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08) !important;
+      overflow: hidden !important;
+    }
+
+    [class*="DropdownItem"],
+    [class*="Option"] {
+      font-size: 0.9rem !important;
+      padding: 10px 16px !important;
+      transition: background var(--mte-transition) !important;
+    }
+
+    [class*="DropdownItem"]:hover,
+    [class*="Option"]:hover {
+      background: var(--mte-purple-light) !important;
+    }
+
+    /* ── Loading / Spinner ─────────────────────────────────────────── */
+    [class*="Loader"] {
+      color: var(--mte-purple) !important;
+    }
+
+    /* ── Notification toasts ───────────────────────────────────────── */
+    [class*="Toast"],
+    [class*="Notification"] {
+      border-radius: var(--mte-radius) !important;
+      font-size: 0.875rem !important;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+    }
+  </style>
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script>
+    // Inject branding into the login page after Decap CMS mounts
+    (function waitForLogin() {
+      const check = setInterval(() => {
+        // Find the Decap logo container and replace it
+        const logoEl = document.querySelector('[class*="LoginLogo"], [class*="AppHeaderLogo"], [class*="CustomIcon"]');
+        const authPage = document.querySelector('[class*="AuthenticationPage"]');
+        if (authPage) {
+          // Check if we already injected
+          if (!document.getElementById('mte-brand')) {
+            const brand = document.createElement('div');
+            brand.id = 'mte-brand';
+            brand.style.cssText = 'text-align:center;margin-bottom:24px;';
+            brand.innerHTML = '<h1 style="font-size:1.6rem;font-weight:800;color:#1e293b;letter-spacing:-0.02em;margin:0 0 4px 0;font-family:Inter,sans-serif;">MedTech Europe</h1><p style="font-size:0.85rem;color:#64748b;margin:0;font-family:Inter,sans-serif;">Content Manager</p>';
+            // Insert before the button
+            const btn = authPage.querySelector('button');
+            if (btn && btn.parentNode) {
+              btn.parentNode.insertBefore(brand, btn);
+            }
+          }
+          clearInterval(check);
+        }
+      }, 200);
+      // Stop checking after 10 seconds
+      setTimeout(() => clearInterval(check), 10000);
+    })();
+  </script>
 </body>
 </html>
