@@ -12,6 +12,12 @@ export const useHashRouting = (setActiveId, setActiveSection, setShowSummary, se
       return;
     }
 
+    if (hash.startsWith('tppt')) {
+      setActiveSection('tppt');
+      setActiveId('tppt-home');
+      return;
+    }
+
     // Decision tree hashes use dt- prefix
     if (hash.startsWith('dt-')) {
       setActiveSection('trees');

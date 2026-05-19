@@ -30,6 +30,15 @@ export const SECTIONS = [
     color: '#ec4899', // A nice pink/rose color that stands out
     available: true,
   },
+  {
+    id: 'tppt',
+    title: 'TPPT Checker',
+    subtitle: 'Support tool to help companies determine if an event qualifies as a Third Party Procedural Training meeting',
+    description: 'Ingest or paste agendas to calculate practical session weights, verify compliance thresholds, and export official reports.',
+    icon: 'Calculator',
+    color: '#634488', // Standard Brand Purple
+    available: true,
+  },
   // Future sections:
   // {
   //   id: 'materials',

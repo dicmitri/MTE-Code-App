@@ -15,6 +15,7 @@ import { InstallPrompt } from './components/InstallPrompt';
 import { HubPage } from './components/HubPage';
 import { TreeContent } from './components/TreeContent';
 import { QuizContent } from './components/quiz/QuizContent';
+import { TPPTContent } from './components/TPPTContent';
 
 if (typeof FULL_CODE_DATA !== 'undefined') {
   FULL_CODE_DATA.forEach(chapter => {
@@ -206,6 +207,11 @@ const App = () => {
           />
         ) : activeSection === 'quiz' ? (
           <QuizContent
+            setActiveSection={setActiveSection}
+            setActiveId={setActiveId}
+          />
+        ) : activeSection === 'tppt' ? (
+          <TPPTContent
             setActiveSection={setActiveSection}
             setActiveId={setActiveId}
           />

@@ -22,7 +22,13 @@ import {
   Printer,
   GitBranch,
   RotateCcw,
-  Clock
+  Clock,
+  Calculator,
+  Trash2,
+  Plus,
+  AlertCircle,
+  Upload,
+  Loader2
 } from 'lucide-react';
 
 export {
@@ -48,7 +54,13 @@ export {
   Printer,
   GitBranch,
   RotateCcw,
-  Clock
+  Clock,
+  Calculator,
+  Trash2,
+  Plus,
+  AlertCircle,
+  Upload,
+  Loader2
 };
 
 const CustomSvgWrapper = ({ size = 18, className = "", children }) => (
@@ -169,7 +181,8 @@ const customIconMap = {
 const lucideIconMap = {
   Home, Info, ShieldCheck, Globe, FileText, Menu, X, HelpCircle, 
   ChevronRight, ChevronDown, ChevronUp, ChevronLeft, List, Eye, EyeOff,
-  Search, Download, Star, Bookmark, Printer, GitBranch, RotateCcw, Clock
+  Search, Download, Star, Bookmark, Printer, GitBranch, RotateCcw, Clock,
+  Calculator, Trash2, Plus, AlertCircle, Upload, Loader2
 };
 
 export const AppIcon = ({ name, size = 18, className = "" }) => {

@@ -40,9 +40,15 @@ export const HubPage = ({ onSelectSection }) => (
             <AppIcon name={section.icon} size={36} />
           </div>
 
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 className="text-2xl font-bold text-gray-900 mb-1">
             {section.title}
           </h2>
+
+          {section.subtitle && (
+            <p className="text-xs font-semibold text-gray-400 mb-4 leading-normal uppercase tracking-wider">
+              {section.subtitle}
+            </p>
+          )}
 
           <p className="text-sm text-gray-500 font-light leading-relaxed mb-6 flex-1">
             {section.description}

@@ -14,6 +14,7 @@ export default defineConfig(() => {
         includeAssets: ['logo.png', 'icon-192.png', 'icon-512.png', 'maskable-icon-512x512.png'],
         workbox: {
           navigateFallbackDenylist: [/^\/admin/],
+          maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         },
         manifest: {
           name: 'MedTech Europe: The Code App',
