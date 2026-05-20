@@ -376,9 +376,7 @@ function isSectionHeader(trimmedText) {
     "lecture",
     "practical",
     "foundation",
-    "complex",
-    "debate",
-    "insufficiency"
+    "debate"
   ];
 
   return isAllCaps && sectionKeywords.some((keyword) => lower.includes(keyword));
