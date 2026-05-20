@@ -27,7 +27,15 @@ interface PdfExportRuntime {
   pdfMake: any;
 }
 
-const PDF_EXPORT_FILE_NAME = 'MedTech_TPPT_Report.pdf';
+function generatePdfFileName(eventName: string) {
+  const sanitizedName = (eventName || 'MedTech_Event')
+    .replace(/[^a-zA-Z0-9\s]/g, '')
+    .trim()
+    .split(/\s+/)
+    .slice(0, 4)
+    .join('_');
+  return `${sanitizedName}_TPPT_report.pdf`;
+}
 
 let pdfExportRuntimePromise: Promise<PdfExportRuntime> | null = null;
 
@@ -447,7 +455,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
       const downloadUrl = window.URL.createObjectURL(blob);
       const downloadLink = document.createElement('a');
       downloadLink.href = downloadUrl;
-      downloadLink.download = PDF_EXPORT_FILE_NAME;
+      downloadLink.download = generatePdfFileName(eventName);
       downloadLink.rel = 'noopener';
       downloadLink.style.display = 'none';
       document.body.appendChild(downloadLink);
@@ -1009,7 +1017,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
                 </div>
                 <a
                   href={exportDownloadUrl}
-                  download={PDF_EXPORT_FILE_NAME}
+                  download={generatePdfFileName(eventNameInput)}
                   className="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-[#0099A7] text-white font-bold hover:bg-[#00818d] transition-colors"
                 >
                   <AppIcon name="Download" size={14} />
