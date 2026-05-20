@@ -168,9 +168,53 @@ function calculateDuration(start: string, end: string) {
   return dur;
 }
 
-// Regex patterns to identify time blocks like 08:30 - 09:00
-const timePatternBoth = /(?:^|\b)(\d{1,2})[:.](\d{2})\s*(?:-|–|to)\s*(\d{1,2})[:.](\d{2})\b/i;
-const timePatternSingle = /(?:^|\b)(\d{1,2})[:.](\d{2})\b/i;
+// Regex patterns to identify time blocks like 08:30 - 09:00 (supporting optional am/pm)
+const timePatternBoth = /(?:^|\b)(\d{1,2})[:.](\d{2})\s*(am|pm|a\.m\.|p\.m\.)?\s*(?:-|–|to)\s*(\d{1,2})[:.](\d{2})\s*(am|pm|a\.m\.|p\.m\.)?\b/i;
+const timePatternSingle = /(?:^|\b)(\d{1,2})[:.](\d{2})\s*(am|pm|a\.m\.|p\.m\.)?\b/i;
+
+function convertTo24Hour(hStr: string, mStr: string, amPm?: string): string {
+  let h = parseInt(hStr, 10);
+  const m = mStr;
+  const ap = amPm ? amPm.toLowerCase().replace(/\./g, '') : null;
+  if (ap === 'pm' && h < 12) {
+    h += 12;
+  } else if (ap === 'am' && h === 12) {
+    h = 0;
+  }
+  return `${String(h).padStart(2, '0')}:${m}`;
+}
+
+function isDayChangeLine(trimmedText: string): boolean {
+  if (trimmedText.length > 60) return false;
+  const lower = trimmedText.toLowerCase();
+  const hasDayWord = /\bday\s*\d+\b|\bday\s*(?:one|two|three|four|five)\b/i.test(lower);
+  const hasDayName = /\b(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/i.test(lower);
+  return hasDayWord || hasDayName;
+}
+
+function isSectionHeader(trimmedText: string): boolean {
+  if (trimmedText.length > 60) return false;
+  const lower = trimmedText.toLowerCase();
+  const stopKeywords = [
+    "sponsor", "venue", "registration", "faculty", "committee", "organizer",
+    "welcome", "general information", "objective", "aims", "participant",
+    "acknowledgement", "disclaimer", "patronage", "rational", "razionale",
+    "target audience", "speakers", "moderators", "chairpersons", "course director",
+    "dissecting room", "workshop faculty", "scientific confirmed", "industry confirmed",
+    "official language", "printed program", "recording", "intellectual property", "security"
+  ];
+  
+  const isStopWord = stopKeywords.some(kw => lower.includes(kw));
+  const isAllCaps = trimmedText.length > 3 && trimmedText === trimmedText.toUpperCase() && /[A-Z]/.test(trimmedText);
+  
+  return isStopWord || isAllCaps;
+}
+
+function isHighLevelHeader(title: string, duration: number): boolean {
+  const lower = title.toLowerCase();
+  const hasHighLevelWord = /\bcourse\b|\bprogramme\b|\bprogram\b|\bsymposium\b|\bconference\b|\bmeeting\b/i.test(lower);
+  return duration >= 180 && hasHighLevelWord;
+}
 
 function getSuggestedEventName(inputText: string): string {
   if (!inputText) return "My MedTech Event";
@@ -255,50 +299,108 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
     const lines = inputText.split('\n');
     const sessionChunks: any[] = [];
     let currentSession: any = null;
+    let currentSectionTitle = "";
+    let isNewDayPending = false;
 
     for (const line of lines) {
       const trimmed = line.trim();
       if (!trimmed) continue;
 
-      const matchBoth = trimmed.match(timePatternBoth);
-      if (matchBoth) {
-        if (currentSession) sessionChunks.push(currentSession);
-        const startH = matchBoth[1].padStart(2, '0');
-        const startM = matchBoth[2];
-        const endH = matchBoth[3].padStart(2, '0');
-        const endM = matchBoth[4];
-        
-        currentSession = {
-          title: trimmed.replace(matchBoth[0], '').trim(),
-          startTime: `${startH}:${startM}`,
-          endTime: `${endH}:${endM}`,
-        };
+      // Detect explicit day boundary line
+      if (isDayChangeLine(trimmed)) {
+        isNewDayPending = true;
+        // Do not append day boundary line as regular text to the previous session!
+        if (currentSession) {
+          sessionChunks.push(currentSession);
+          currentSession = null;
+        }
         continue;
       }
 
+      const matchBoth = trimmed.match(timePatternBoth);
       const matchSingle = trimmed.match(timePatternSingle);
+      const hasTime = matchBoth || matchSingle;
+
+      // If it's a section header and has no time, handle it as a separator stop
+      if (!hasTime && isSectionHeader(trimmed)) {
+        currentSectionTitle = trimmed;
+        if (currentSession) {
+          sessionChunks.push(currentSession);
+          currentSession = null;
+        }
+        continue;
+      }
+
+      if (matchBoth) {
+        const startH = matchBoth[1];
+        const startM = matchBoth[2];
+        const startAmPm = matchBoth[3] || matchBoth[6] || "";
+        const endH = matchBoth[4];
+        const endM = matchBoth[5];
+        const endAmPm = matchBoth[6] || matchBoth[3] || "";
+        
+        const startTimeNorm = convertTo24Hour(startH, startM, startAmPm);
+        const endTimeNorm = convertTo24Hour(endH, endM, endAmPm);
+        
+        const sessionTitle = trimmed.replace(matchBoth[0], '').trim();
+        const dur = calculateDuration(startTimeNorm, endTimeNorm);
+        
+        // Filter out high-level program/timetable outline banners (e.g. "One-Day Course (9:00-18:00)")
+        if (isHighLevelHeader(sessionTitle, dur)) {
+          continue;
+        }
+
+        if (currentSession) {
+          sessionChunks.push(currentSession);
+        }
+        
+        currentSession = {
+          title: sessionTitle,
+          startTime: startTimeNorm,
+          endTime: endTimeNorm,
+          sectionTitle: currentSectionTitle
+        };
+        isNewDayPending = false;
+        continue;
+      }
+
       if (matchSingle) {
-         if (currentSession) {
-           if (!currentSession.endTime) {
-             const endH = matchSingle[1].padStart(2, '0');
-             const endM = matchSingle[2];
-             currentSession.endTime = `${endH}:${endM}`;
-           }
-           sessionChunks.push(currentSession);
-         }
-         const startH = matchSingle[1].padStart(2, '0');
+         const startH = matchSingle[1];
          const startM = matchSingle[2];
+         const startAmPm = matchSingle[3] || "";
+         const startTimeNorm = convertTo24Hour(startH, startM, startAmPm);
+
+         if (currentSession) {
+           const prevStartMin = timeToMinutes(currentSession.startTime);
+           const nextStartMin = timeToMinutes(startTimeNorm);
+           
+           const isImplicitDayChange = nextStartMin < prevStartMin;
+           
+           if (isNewDayPending || isImplicitDayChange) {
+             // Boundary crossed: push previous session as-is (no automatic endTime population)
+             sessionChunks.push(currentSession);
+           } else {
+             // Normal chronological flow on same day: set previous session's end time to current start time
+             if (!currentSession.endTime) {
+               currentSession.endTime = startTimeNorm;
+             }
+             sessionChunks.push(currentSession);
+           }
+         }
+         
          currentSession = {
            title: trimmed.replace(matchSingle[0], '').trim(),
-           startTime: `${startH}:${startM}`,
+           startTime: startTimeNorm,
            endTime: "",
+           sectionTitle: currentSectionTitle
          };
+         isNewDayPending = false;
          continue;
       }
 
       if (currentSession) {
         const prevTitle = currentSession.title;
-        // Check if the new line starts with a bullet point (•, -, *, or a list prefix like 1., a))
+        // If the line starts with a bullet point or standard prefix, join it as a sub-session newline
         const isBullet = /^[•\-*–—◦▪▫◆◇▶►➔→\.\·]|^[a-zA-Z0-9]+[\.\)]|^\([a-zA-Z0-9]+\)/.test(trimmed);
         
         if (isBullet) {
@@ -312,21 +414,38 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
     }
     if (currentSession) sessionChunks.push(currentSession);
     
-    const parsedSessions = sessionChunks.map((s) => {
-      // Normalize horizontal spaces (spaces and tabs) but preserve newlines
+    const parsedSessions: Session[] = sessionChunks.map((s) => {
       let cleanTitle = s.title.replace(/[ \t]+/g, ' ').trim();
-      
-      // Clean leading am/pm (case insensitive, f.ex., "am EVALUATION..." -> "EVALUATION...")
       cleanTitle = cleanTitle.replace(/^(?:am|pm|a\.m\.|p\.m\.)\b\s*/i, '').trim();
       
-      // Normalize ALL CAPS to polished Title Case
+      // Strip leading "|" if any from formatting
+      if (cleanTitle.startsWith('|')) {
+        cleanTitle = cleanTitle.substring(1).trim();
+      }
+      
       cleanTitle = normalizeCapitalization(cleanTitle);
 
       let type: SessionType = "General Educational";
       const lowerTitle = cleanTitle.toLowerCase();
       
-      // Broader heuristics to determine session type
-      if (
+      // Extract first line for break/social/other events to prevent bullets from turning lectures into "Other"
+      const firstLine = cleanTitle.split('\n')[0].toLowerCase();
+      
+      const isMainOther = 
+        firstLine.includes("break") || 
+        firstLine.includes("lunch") || 
+        firstLine.includes("dinner") || 
+        firstLine.includes("registration") || 
+        firstLine.includes("welcome") || 
+        firstLine.includes("closing") || 
+        firstLine.includes("reception") ||
+        firstLine.includes("coffee") ||
+        firstLine.includes("farewell") ||
+        firstLine.includes("buffet") ||
+        firstLine.includes("tea") ||
+        firstLine.includes("opening");
+
+      const isHandsOn = 
         lowerTitle.includes("hands on") || 
         lowerTitle.includes("hands-on") || 
         lowerTitle.includes("practical exercise") || 
@@ -335,41 +454,66 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
         lowerTitle.includes("simulation") ||
         lowerTitle.includes("workshop") ||
         lowerTitle.includes("dry lab") ||
-        lowerTitle.includes("wet lab")
-      ) {
-        type = "Hands-on";
-      } else if (
+        lowerTitle.includes("wet lab") ||
+        lowerTitle.includes("dissection") ||
+        lowerTitle.includes("dissect") ||
+        lowerTitle.includes("cadaveric") ||
+        lowerTitle.includes("wet-lab") ||
+        lowerTitle.includes("dry-lab") ||
+        lowerTitle.includes("anatomical lab") ||
+        lowerTitle.includes("bone model") ||
+        lowerTitle.includes("implants");
+
+      const isStreaming = 
         lowerTitle.includes("streaming") || 
         lowerTitle.includes("live surgery") || 
         lowerTitle.includes("live surgeries") || 
         lowerTitle.includes("demonstration") || 
         lowerTitle.includes("live demo") ||
-        lowerTitle.includes("transmission")
-      ) {
-        type = "Streaming";
-      } else if (
+        lowerTitle.includes("transmission") ||
+        lowerTitle.includes("live broadcast") ||
+        lowerTitle.includes("live transmission") ||
+        lowerTitle.includes("operative demonstration") ||
+        lowerTitle.includes("live case");
+
+      const isCase = 
         lowerTitle.includes("case") || 
         lowerTitle.includes("case study") || 
         lowerTitle.includes("case studies") ||
         lowerTitle.includes("case-based") ||
         lowerTitle.includes("clinical case") ||
-        lowerTitle.includes("case presentation")
-      ) {
-        type = "Case Study";
-      } else if (
-        lowerTitle.includes("break") || 
-        lowerTitle.includes("lunch") || 
-        lowerTitle.includes("dinner") || 
-        lowerTitle.includes("registration") || 
-        lowerTitle.includes("welcome") || 
-        lowerTitle.includes("closing") || 
-        lowerTitle.includes("discussion") ||
-        lowerTitle.includes("q&a") ||
-        lowerTitle.includes("q & a") ||
-        lowerTitle.includes("reception") ||
-        lowerTitle.includes("coffee")
-      ) {
+        lowerTitle.includes("case presentation") ||
+        lowerTitle.includes("discussion cases") ||
+        lowerTitle.includes("cases discussion") ||
+        lowerTitle.includes("roundtable") ||
+        lowerTitle.includes("panel discussion");
+
+      const isShortQA = 
+        firstLine.includes("discussion") || 
+        firstLine.includes("q&a") || 
+        firstLine.includes("q & a") || 
+        firstLine.includes("questions");
+
+      if (isMainOther) {
         type = "Other";
+      } else if (isHandsOn) {
+        type = "Hands-on";
+      } else if (isStreaming) {
+        type = "Streaming";
+      } else if (isCase) {
+        type = "Case Study";
+      } else if (isShortQA) {
+        type = "Other";
+      } else if (s.sectionTitle) {
+        // Fallback to section header context
+        const secLower = s.sectionTitle.toLowerCase();
+        if (secLower.includes("practical") || secLower.includes("hands-on") || secLower.includes("cadaver") || secLower.includes("dissect")) {
+          type = "Hands-on";
+        } else if (secLower.includes("live") || secLower.includes("streaming") || secLower.includes("demonstration")) {
+          type = "Streaming";
+        } else if (secLower.includes("case") || secLower.includes("discussion") || secLower.includes("roundtable")) {
+          type = "Case Study";
+        }
       }
 
       let durationMinutes = 0;
