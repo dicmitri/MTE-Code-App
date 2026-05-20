@@ -1,6 +1,6 @@
 # Agent Instructions
 
-<!-- Version: v1.3 – 2026-05-20 -->
+<!-- Version: v1.4 – 2026-05-20 -->
 
 ## Table of Contents
 - [Project Map](#project-map)
@@ -16,7 +16,7 @@
 
 The project is structured around a centralized state architecture in `App.jsx`, which manages top-level navigation and shared utilities.
 
-- **`src/App.jsx`**: The core orchestrator. It manages the `activeSection` (Home Hub, Code, Decision Trees, Quiz) and uses custom hooks to synchronize state with the URL hash and `localStorage`.
+- **`src/App.jsx`**: The core orchestrator. It manages the `activeSection` (Home Hub, Code, Decision Trees, Quiz, TPPT) and uses custom hooks to synchronize state with the URL hash and `localStorage`. `TPPTContent` is loaded via `React.lazy()` so its heavy dependencies (pdfmake, pdfjs-dist, mammoth) are not included in the main bundle.
 - **`src/components/`**: UI building blocks.
   - **Layout Components**: `Header.jsx` and `Sidebar.jsx` are persistent across sections. `Header` dynamically changes its toolbar based on the `activeSection`.
   - **Section Controllers**: `MainContent.jsx` (Code), `TreeContent.jsx` (Trees), `QuizContent.jsx` (Quiz), and `TPPTContent.tsx` (TPPT Checker) act as sub-routers and layout managers for their respective features.
@@ -31,7 +31,9 @@ The project is structured around a centralized state architecture in `App.jsx`, 
   - `quizData.json`: Question bank for the knowledge quiz.
 - **`src/config/`**: Shared registries like `sections.js`, which defines the modules available in the Home Hub.
 - **`src/utils/`**: Deterministic helpers for text processing, search highlighting, and ID generation.
-- **`scratch/analyze_agendas.js`**: CLI verification script that runs the TPPT parser against real PDF agendas using `pdfjs-dist`. Must remain in sync with the parser logic in `TPPTContent.tsx`. Run with `node scratch/analyze_agendas.js` to validate session parsing, type classification, and duration totals across sample agendas.
+  - `tpptParser.js`: The TPPT agenda parsing engine. Contains `parseTpptSessions()` (the main parser), `classifySessionTitle()` (type classification), `calculateTpptEligibility()` (threshold checker), `normalizeCapitalization()`, `getSuggestedEventName()`, and all time/duration utilities. This is the single source of truth for parsing logic — both `TPPTContent.tsx` and `scratch/analyze_agendas.js` import from it.
+  - `tpptExtraction.js`: PDF text extraction using `pdfjs-dist`. Contains `extractPdfPageText()` and `extractPdfTextFromPdf()`. Imported by both `TPPTContent.tsx` and `scratch/analyze_agendas.js`.
+- **`scratch/analyze_agendas.js`**: CLI verification script that runs the TPPT parser against real PDF agendas. Imports from `src/utils/tpptParser.js` and `src/utils/tpptExtraction.js` (single source of truth). Run with `node scratch/analyze_agendas.js [pdf-paths...]` to validate session parsing. If no paths are given, reads from `TPPT agendas/` folder.
 
 ## Standards
 

@@ -49,10 +49,18 @@ The app is built using **React**, **Vite**, and **Cloudflare Workers**. All the 
 | `QuizSession.jsx` | The interactive gameplay screen for answering questions |
 | `Sidebar.jsx` | Collapsible navigation sidebar with search, bookmarks, and history |
 | `TableOfContents.jsx` | Sticky "On This Page" minimap |
-| `TPPTContent.tsx` | Full TPPT Checker feature: agenda ingestion (PDF/Word/text), deterministic session parser, session type classification, compliance threshold calculator, session card editor, and PDF report export |
+| `TPPTContent.tsx` | TPPT Checker UI: agenda ingestion (PDF/Word/text), session card editor, compliance threshold visualization, and PDF report export. Lazy-loaded via `React.lazy()`. Parser logic lives in `src/utils/tpptParser.js` |
 | `TreeContent.jsx` | Router for the Decision Trees section (landing / interactive / visualization) |
 | `TreeLandingPage.jsx` | Grid of decision tree cards grouped by category |
 | `TreeVisualization.jsx` | Full flowchart visualization of a decision tree |
+
+### Utility Modules Reference
+
+| File | Role |
+|---|---|
+| `utils/textUtils.js` | Text processing, search highlighting, glossary extraction, ID generation |
+| `utils/tpptParser.js` | TPPT agenda parsing engine — session detection, type classification, capitalization normalization, eligibility calculation. Single source of truth used by both `TPPTContent.tsx` and `scratch/analyze_agendas.js` |
+| `utils/tpptExtraction.js` | PDF text extraction using `pdfjs-dist` coordinate-based line detection |
 
 ---
 
