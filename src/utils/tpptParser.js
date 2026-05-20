@@ -445,7 +445,7 @@ export function classifySessionTitle(title, sectionTitle = "") {
     }
 
     if (/\bpractical sessions?\b|\bpractical\b/i.test(normalizedSection)) {
-      return "Hands-on";
+      return "Case Study";
     }
 
     if (/\bcase\b|\bdiscussion\b|\broundtable\b/i.test(normalizedSection)) {
