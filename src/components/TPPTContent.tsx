@@ -196,18 +196,29 @@ function isSectionHeader(trimmedText: string): boolean {
   if (trimmedText.length > 60) return false;
   const lower = trimmedText.toLowerCase();
   const stopKeywords = [
-    "sponsor", "venue", "registration", "faculty", "committee", "organizer",
-    "welcome", "general information", "objective", "aims", "participant",
+    "sponsor", "venue", "faculty", "committee", "organizer",
+    "general information", "participant",
     "acknowledgement", "disclaimer", "patronage", "rational", "razionale",
-    "target audience", "speakers", "moderators", "chairpersons", "course director",
+    "target audience", "course director",
     "dissecting room", "workshop faculty", "scientific confirmed", "industry confirmed",
-    "official language", "printed program", "recording", "intellectual property", "security"
+    "official language", "printed program", "intellectual property", "security",
+    "organizing committee", "sapphire sponsorship", "bronze sponsorship",
+    "gold sponsorship", "silver sponsorship", "platinum sponsorship"
   ];
   
   const isStopWord = stopKeywords.some(kw => lower.includes(kw));
-  const isAllCaps = trimmedText.length > 3 && trimmedText === trimmedText.toUpperCase() && /[A-Z]/.test(trimmedText);
   
-  return isStopWord || isAllCaps;
+  // ALL CAPS heuristic: only trigger on short lines that look like structural headers,
+  // not generic session content like "OPERATIVE" or "DEMONSTRATION"
+  const isAllCaps = trimmedText.length > 3 && trimmedText.length < 50
+    && trimmedText === trimmedText.toUpperCase() && /[A-Z]/.test(trimmedText);
+  const sectionKeywords = ["program", "programme", "schedule", "agenda", "timetable",
+    "faculty", "speaker", "moderator", "committee", "director", "sponsor",
+    "registration", "venue", "objective", "disclaimer", "confirmed",
+    "session", "workshop", "lecture", "practical"];
+  const hasStructuralWord = isAllCaps && sectionKeywords.some(kw => lower.includes(kw));
+  
+  return isStopWord || hasStructuralWord;
 }
 
 function isHighLevelHeader(title: string, duration: number): boolean {
@@ -260,6 +271,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
   } | null>(null);
 
   const [showExportModal, setShowExportModal] = useState(false);
+  const [showParseWarning, setShowParseWarning] = useState(false);
   const [eventNameInput, setEventNameInput] = useState("");
 
   type Answer = "Yes" | "No" | "I am not sure" | null;
@@ -306,29 +318,32 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
       const trimmed = line.trim();
       if (!trimmed) continue;
 
-      // Detect explicit day boundary line
-      if (isDayChangeLine(trimmed)) {
-        isNewDayPending = true;
-        // Do not append day boundary line as regular text to the previous session!
-        if (currentSession) {
-          sessionChunks.push(currentSession);
-          currentSession = null;
-        }
-        continue;
-      }
-
       const matchBoth = trimmed.match(timePatternBoth);
       const matchSingle = trimmed.match(timePatternSingle);
       const hasTime = matchBoth || matchSingle;
 
-      // If it's a section header and has no time, handle it as a separator stop
-      if (!hasTime && isSectionHeader(trimmed)) {
-        currentSectionTitle = trimmed;
-        if (currentSession) {
-          sessionChunks.push(currentSession);
-          currentSession = null;
+      // Only check day boundaries and section headers on lines WITHOUT a time
+      if (!hasTime) {
+        // Detect explicit day boundary line
+        if (isDayChangeLine(trimmed)) {
+          isNewDayPending = true;
+          if (currentSession) {
+            sessionChunks.push(currentSession);
+            currentSession = null;
+          }
+          continue;
         }
-        continue;
+
+        // If it's a section header, update context but do NOT destroy current session
+        if (isSectionHeader(trimmed)) {
+          currentSectionTitle = trimmed;
+          // Push current session if one exists, but keep the flow going
+          if (currentSession) {
+            sessionChunks.push(currentSession);
+            currentSession = null;
+          }
+          continue;
+        }
       }
 
       if (matchBoth) {
@@ -351,6 +366,10 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
         }
 
         if (currentSession) {
+          // Link previous session's end time if it was missing
+          if (!currentSession.endTime) {
+            currentSession.endTime = startTimeNorm;
+          }
           sessionChunks.push(currentSession);
         }
         
@@ -507,11 +526,11 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
       } else if (s.sectionTitle) {
         // Fallback to section header context
         const secLower = s.sectionTitle.toLowerCase();
-        if (secLower.includes("practical") || secLower.includes("hands-on") || secLower.includes("cadaver") || secLower.includes("dissect")) {
+        if (secLower.includes("hands-on") || secLower.includes("cadaver") || secLower.includes("dissect")) {
           type = "Hands-on";
         } else if (secLower.includes("live") || secLower.includes("streaming") || secLower.includes("demonstration")) {
           type = "Streaming";
-        } else if (secLower.includes("case") || secLower.includes("discussion") || secLower.includes("roundtable")) {
+        } else if (secLower.includes("practical") || secLower.includes("case") || secLower.includes("discussion") || secLower.includes("roundtable")) {
           type = "Case Study";
         }
       }
@@ -521,6 +540,12 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
         durationMinutes = calculateDuration(s.startTime, s.endTime);
       }
       
+      // Prepend section context to title for visibility
+      if (s.sectionTitle && s.sectionTitle.trim()) {
+        const normalizedSection = normalizeCapitalization(s.sectionTitle);
+        cleanTitle = '[' + normalizedSection + ']\n' + cleanTitle;
+      }
+
       return {
         id: generateId(),
         title: cleanTitle || 'Untitled Session',
@@ -889,7 +914,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
               </div>
             )}
             <textarea
-              className="w-full h-72 p-4 rounded-xl border border-gray-200 outline-none focus:border-[#634488] focus:ring-1 focus:ring-[#634488] text-xs font-mono resize-y bg-gray-50 leading-relaxed shadow-inner"
+              className="w-full h-[450px] p-4 rounded-xl border border-gray-200 outline-none focus:border-[#634488] focus:ring-1 focus:ring-[#634488] text-xs font-mono resize-y bg-gray-50 leading-relaxed shadow-inner"
               placeholder="08:00 - 08:30 Registration & Welcome&#10;08:30 - 10:00 Hands-on Cadaver Lab..."
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
@@ -899,6 +924,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
           <button
             onClick={() => {
               handleParseText();
+              setShowParseWarning(true);
               setTimeout(() => {
                 const element = document.getElementById('review-sessions-header');
                 if (element) {
@@ -1274,6 +1300,35 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
           </div>
         )}
       </div>
+
+      {/* Parse Warning Modal */}
+      {showParseWarning && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4 animate-fade-in">
+          <div className="bg-white border border-slate-100 shadow-2xl rounded-3xl max-w-md w-full p-6 sm:p-8 relative overflow-hidden flex flex-col gap-5 animate-scale-in">
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-amber-500" />
+            
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-600 shrink-0">
+                <AppIcon name="AlertTriangle" size={20} />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900">Important Notice</h3>
+            </div>
+
+            <p className="text-sm text-gray-600 leading-relaxed">
+              The TPPT Checker pre-assigns types of sessions based on keywords. The user must verify every single one of them, miss-asignations happen, and you will rely on an assessment that has used pre-assigned session types at your own risk.
+            </p>
+
+            <div className="flex justify-end mt-1">
+              <button
+                onClick={() => setShowParseWarning(false)}
+                className="px-6 py-2.5 rounded-xl font-bold text-sm text-white bg-[#634488] hover:bg-[#533873] transition-all cursor-pointer shadow-md hover:shadow-lg"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Event Name Suggestions Modal */}
       {showExportModal && (

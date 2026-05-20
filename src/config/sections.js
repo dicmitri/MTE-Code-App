@@ -33,8 +33,8 @@ export const SECTIONS = [
   {
     id: 'tppt',
     title: 'TPPT Checker',
-    subtitle: 'Support tool to help companies determine if an event qualifies as a Third Party Procedural Training meeting',
-    description: 'Ingest or paste agendas to calculate practical session weights, verify compliance thresholds, and export official reports.',
+    subtitle: 'Check TPPT Meeting Agendas',
+    description: 'Support tool to help companies determine if an event qualifies as a Third Party Procedural Training meeting.',
     icon: 'Calculator',
     color: '#634488', // Standard Brand Purple
     available: true,

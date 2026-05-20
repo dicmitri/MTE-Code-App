@@ -1,6 +1,6 @@
 # Agent Instructions
 
-<!-- Version: v1.2 – 2026-04-25 -->
+<!-- Version: v1.3 – 2026-05-20 -->
 
 ## Table of Contents
 - [Project Map](#project-map)
@@ -19,7 +19,7 @@ The project is structured around a centralized state architecture in `App.jsx`, 
 - **`src/App.jsx`**: The core orchestrator. It manages the `activeSection` (Home Hub, Code, Decision Trees, Quiz) and uses custom hooks to synchronize state with the URL hash and `localStorage`.
 - **`src/components/`**: UI building blocks.
   - **Layout Components**: `Header.jsx` and `Sidebar.jsx` are persistent across sections. `Header` dynamically changes its toolbar based on the `activeSection`.
-  - **Section Controllers**: `MainContent.jsx` (Code), `TreeContent.jsx` (Trees), and `QuizContent.jsx` (Quiz) act as sub-routers and layout managers for their respective features.
+  - **Section Controllers**: `MainContent.jsx` (Code), `TreeContent.jsx` (Trees), `QuizContent.jsx` (Quiz), and `TPPTContent.tsx` (TPPT Checker) act as sub-routers and layout managers for their respective features.
   - **Feature Components**: Specialized UI like `DecisionTree.jsx` (interactive logic), `DefinitionPopup.jsx` (glossary), and `TableOfContents.jsx` (navigation).
 - **`src/hooks/`**: Business logic and side effects.
   - `useHashRouting.js`: Intercepts URL changes to drive `App.jsx` state without a routing library.
@@ -31,6 +31,7 @@ The project is structured around a centralized state architecture in `App.jsx`, 
   - `quizData.json`: Question bank for the knowledge quiz.
 - **`src/config/`**: Shared registries like `sections.js`, which defines the modules available in the Home Hub.
 - **`src/utils/`**: Deterministic helpers for text processing, search highlighting, and ID generation.
+- **`scratch/analyze_agendas.js`**: CLI verification script that runs the TPPT parser against real PDF agendas using `pdfjs-dist`. Must remain in sync with the parser logic in `TPPTContent.tsx`. Run with `node scratch/analyze_agendas.js` to validate session parsing, type classification, and duration totals across sample agendas.
 
 ## Standards
 

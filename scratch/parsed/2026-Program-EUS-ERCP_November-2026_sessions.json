@@ -1,0 +1,107 @@
+[
+  {
+    "title": "Evaluation of the Previous Day'S",
+    "startTime": "07:50",
+    "endTime": "",
+    "durationMinutes": 0,
+    "type": "General Educational"
+  },
+  {
+    "title": "Theoretical Session\n•Biliary stone extraction, biliary and pancreatic stenting\n•EUS guided pancreatic collection drainage\n•EUS guided biliopancreatic duct drainage\n•ERCP & biliary radiofrequency ablation\n•EUS guided pancreatic tissue ablation",
+    "startTime": "08:00",
+    "endTime": "11:00",
+    "durationMinutes": 180,
+    "type": "General Educational"
+  },
+  {
+    "title": "Live OR Pre-Recorded Operative Demonstration\n•Biliary stone extraction, biliary and pancreatic stenting, EUS guided procedures",
+    "startTime": "11:00",
+    "endTime": "12:30",
+    "durationMinutes": 90,
+    "type": "Streaming"
+  },
+  {
+    "title": "Lunch at the Institute",
+    "startTime": "12:30",
+    "endTime": "13:30",
+    "durationMinutes": 60,
+    "type": "Other"
+  },
+  {
+    "title": "Hands-On Session on Live Tissue (Mini-Pigs), Ex Vivo Tissue and Mechanical Simulators\n•Cannulation\n•Endoscopic sphincterotomy\n•Stone extraction and stenting\n•EUS guided procedures (Lams insertion, stenting)",
+    "startTime": "13:30",
+    "endTime": "16:30",
+    "durationMinutes": 180,
+    "type": "Hands-on"
+  },
+  {
+    "title": "End of the Course Delivery of Certificates of Attendance",
+    "startTime": "16:30",
+    "endTime": "",
+    "durationMinutes": 0,
+    "type": "General Educational"
+  },
+  {
+    "title": "Registration and Welcoming of",
+    "startTime": "07:45",
+    "endTime": "",
+    "durationMinutes": 0,
+    "type": "Other"
+  },
+  {
+    "title": "Theoretical Session\n•Normal biliopancreatic EUS anatomy\n•EUS tissue characterization\n•EUS guided Fna/Fnb\n- Technique, accuracy and management of complications of Eus-Fna/Fnb\n- Preparation and handling of the core specimen",
+    "startTime": "08:00",
+    "endTime": "09:30",
+    "durationMinutes": 90,
+    "type": "General Educational"
+  },
+  {
+    "title": "Live OR Pre-Recorded Operative Demonstration\n•EUS Fna & EUS Fnb\n•Shear wave elastography\n•Dfi & contrast enhanced EUS",
+    "startTime": "09:30",
+    "endTime": "10:30",
+    "durationMinutes": 60,
+    "type": "Streaming"
+  },
+  {
+    "title": "Theoretical Session\n•Anatomy and cannulation of the biliary and pancreatic ducts\n•Endoscopic sphincterotomy of the major and minor papilla\n•Cholangioscopy:material, technique and results",
+    "startTime": "10:30",
+    "endTime": "12:00",
+    "durationMinutes": 90,
+    "type": "General Educational"
+  },
+  {
+    "title": "Live OR Pre-Recorded Operative Demonstration",
+    "startTime": "12:00",
+    "endTime": "13:00",
+    "durationMinutes": 60,
+    "type": "Streaming"
+  },
+  {
+    "title": "Lunch at the Institute",
+    "startTime": "13:00",
+    "endTime": "14:00",
+    "durationMinutes": 60,
+    "type": "Other"
+  },
+  {
+    "title": "Hands-On Session on Live Tissue (Mini-Pigs) , Ex Vivo Tissue and Mechanical Simulators\n•Normal anatomy imaging of the GI wall & pancreas\n•EUS Fna & EUS Fnb\n•Ex vivo and mechanical simulators for ERCP",
+    "startTime": "14:00",
+    "endTime": "17:30",
+    "durationMinutes": 210,
+    "type": "Hands-on"
+  },
+  {
+    "title": "End of Session",
+    "startTime": "17:30",
+    "endTime": "20:00",
+    "durationMinutes": 150,
+    "type": "General Educational"
+  },
+  {
+    "title": "Dinner in Honor",
+    "startTime": "20:00",
+    "endTime": "",
+    "durationMinutes": 0,
+    "type": "Other"
+  }
+]

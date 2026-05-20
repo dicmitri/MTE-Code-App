@@ -49,6 +49,7 @@ The app is built using **React**, **Vite**, and **Cloudflare Workers**. All the 
 | `QuizSession.jsx` | The interactive gameplay screen for answering questions |
 | `Sidebar.jsx` | Collapsible navigation sidebar with search, bookmarks, and history |
 | `TableOfContents.jsx` | Sticky "On This Page" minimap |
+| `TPPTContent.tsx` | Full TPPT Checker feature: agenda ingestion (PDF/Word/text), deterministic session parser, session type classification, compliance threshold calculator, session card editor, and PDF report export |
 | `TreeContent.jsx` | Router for the Decision Trees section (landing / interactive / visualization) |
 | `TreeLandingPage.jsx` | Grid of decision tree cards grouped by category |
 | `TreeVisualization.jsx` | Full flowchart visualization of a decision tree |
@@ -67,6 +68,7 @@ The app is organized into independently navigable **sections**, all accessible f
 - **The Code** — The full MedTech Europe Code of Ethical Business Practice reader.
 - **Decision Trees** — Interactive compliance decision guides based on the Code.
 - **Knowledge Quiz** — A testing module that challenges users with randomized multiple-choice questions on selected chapters.
+- **TPPT Checker** — A compliance tool for evaluating whether a medical event qualifies as a Third Party Procedural Training meeting. Parses PDF/Word/text agendas, classifies sessions by type (Hands-on, Streaming, Case Study, etc.), checks the Code's practical-session thresholds, and exports a formatted PDF report.
 
 The currently active section is tracked via `activeSection` state in `App.jsx` (`null` = Home, `'code'`, `'trees'`). Adding a new section (e.g. "Materials") requires only:
 1. Adding an entry to `src/config/sections.js`.
