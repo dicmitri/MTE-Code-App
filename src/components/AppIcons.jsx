@@ -28,7 +28,16 @@ import {
   Plus,
   AlertCircle,
   Upload,
-  Loader2
+  Loader2,
+  AlertTriangle,
+  ArrowRight,
+  BookOpen,
+  Check,
+  CheckCircle,
+  Maximize2,
+  Minimize2,
+  Share2,
+  XCircle
 } from 'lucide-react';
 
 export {
@@ -60,7 +69,16 @@ export {
   Plus,
   AlertCircle,
   Upload,
-  Loader2
+  Loader2,
+  AlertTriangle,
+  ArrowRight,
+  BookOpen,
+  Check,
+  CheckCircle,
+  Maximize2,
+  Minimize2,
+  Share2,
+  XCircle
 };
 
 const CustomSvgWrapper = ({ size = 18, className = "", children }) => (
@@ -182,7 +200,9 @@ const lucideIconMap = {
   Home, Info, ShieldCheck, Globe, FileText, Menu, X, HelpCircle, 
   ChevronRight, ChevronDown, ChevronUp, ChevronLeft, List, Eye, EyeOff,
   Search, Download, Star, Bookmark, Printer, GitBranch, RotateCcw, Clock,
-  Calculator, Trash2, Plus, AlertCircle, Upload, Loader2
+  Calculator, Trash2, Plus, AlertCircle, Upload, Loader2, AlertTriangle,
+  ArrowRight, BookOpen, Check, CheckCircle, Maximize2, Minimize2, Share2,
+  XCircle
 };
 
 export const AppIcon = ({ name, size = 18, className = "" }) => {

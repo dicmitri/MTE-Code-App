@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { Suspense, lazy, useState, useEffect, useRef } from 'react';
 import { FULL_CODE_DATA } from './data/codeData';
 import { DefinitionPopup } from './components/DefinitionPopup';
 import { extractGlossaryMap, generateSectionId } from './utils/textUtils';
@@ -15,7 +15,12 @@ import { InstallPrompt } from './components/InstallPrompt';
 import { HubPage } from './components/HubPage';
 import { TreeContent } from './components/TreeContent';
 import { QuizContent } from './components/quiz/QuizContent';
-import { TPPTContent } from './components/TPPTContent';
+
+const TPPTContent = lazy(() =>
+  import('./components/TPPTContent').then((module) => ({
+    default: module.TPPTContent,
+  }))
+);
 
 if (typeof FULL_CODE_DATA !== 'undefined') {
   FULL_CODE_DATA.forEach(chapter => {
@@ -211,10 +216,20 @@ const App = () => {
             setActiveId={setActiveId}
           />
         ) : activeSection === 'tppt' ? (
-          <TPPTContent
-            setActiveSection={setActiveSection}
-            setActiveId={setActiveId}
-          />
+          <Suspense
+            fallback={
+              <main className="flex-1 h-full overflow-y-auto bg-gray-50/50 custom-scrollbar p-8">
+                <div className="max-w-4xl mx-auto bg-white border border-slate-100 rounded-2xl shadow-sm p-6 text-sm font-semibold text-gray-500">
+                  Loading TPPT Checker...
+                </div>
+              </main>
+            }
+          >
+            <TPPTContent
+              setActiveSection={setActiveSection}
+              setActiveId={setActiveId}
+            />
+          </Suspense>
         ) : (
           <TreeContent
             activeId={activeId}

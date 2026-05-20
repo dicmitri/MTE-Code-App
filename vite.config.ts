@@ -15,6 +15,11 @@ export default defineConfig(() => {
         workbox: {
           navigateFallbackDenylist: [/^\/admin/],
           maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+          globIgnores: [
+            '**/TPPTContent-*.js',
+            '**/tppt-*.js',
+            '**/pdf.worker*.mjs',
+          ],
         },
         manifest: {
           name: 'MedTech Europe: The Code App',
@@ -57,6 +62,27 @@ export default defineConfig(() => {
           rewrite: () => '/admin/index.html'
         }
       }
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (!id.includes('node_modules')) return undefined;
+            if (id.includes('pdfmake')) return 'tppt-pdfmake';
+            if (id.includes('pdfjs-dist')) return 'tppt-pdfjs';
+            if (
+              id.includes('mammoth') ||
+              id.includes('jszip') ||
+              id.includes('pako') ||
+              id.includes('sax') ||
+              id.includes('underscore')
+            ) {
+              return 'tppt-docx';
+            }
+            return undefined;
+          },
+        },
+      },
     },
   };
 });
