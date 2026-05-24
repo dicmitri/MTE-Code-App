@@ -1,0 +1,67 @@
+import json
+import os
+import sys
+
+sys.stdout.reconfigure(encoding='utf-8')
+
+# Load JSON
+json_path = os.path.join('src', 'data', 'codeData.json')
+with open(json_path, 'r', encoding='utf-8') as f:
+    data = json.load(f)
+
+# Find scope chapter
+for chapter in data['chapters']:
+    if chapter.get('id') == 'scope':
+        # Section 1 text
+        chapter['sections'][0]['legalText'] = (
+            "<strong>1.1.</strong> This Code only applies to the Member Companies of MedTech Europe, who are manufacturers of Medical Technology.<br/><br/>\n"
+            "                        As provided by the Statutes of MedTech Europe, Member Companies must comply with the Code (as amended from time to time), as a minimum standard when: \n"
+            "                        <br/><br/><ul class=\"list-disc pl-5 space-y-2\">\n"
+            "                        <li>Member Companies interact with Healthcare Professionals and Healthcare Organisations registered and practising in MedTech Europe Geographic Area irrespective of where the activity takes place; and/or</li>\n"
+            "                        <li>Activities take place in MedTech Europe Geographic Area, irrespective of where Healthcare Professionals and Healthcare Organisations are registered and practising.</li>\n"
+            "                        </ul><br/>\n"
+            "                        The MedTech Europe Geographic Area includes the countries in the European Economic Area as well as those countries where Member Associations are located.<br/><br/>\n"
+            "                        <strong>1.2.</strong> The Code shall be directly applicable to all activities of Member Companies and their affiliated companies that carry on activities in the Medical Technology sector in the MedTech Europe Geographic Area within the scope applicability defined in Section 1.1. above. If such affiliated company of a Member Company is also in its own name a member of a Member Association, the respective code of such Member Association shall apply to activities of such affiliated company in addition to the Code, which sets out the minimum standards appropriate to the various types of activities carried out by the Members.<br/><br/>\n"
+            "                        Any activity or interaction described in Section 1.1. above and conducted by an affiliated company of a Member Company located outside the MedTech Europe Geographic Area will be deemed attributable to said Member Company."
+        )
+
+        chapter['sections'][0]['qas'][0]['q'] = "Q&A 1: Is the Code applicable to activities of an affiliate of a Member Company located outside the MedTech Europe Geographic Area?"
+        chapter['sections'][0]['qas'][0]['a'] = (
+            "With regards to activities of an affiliate of a Member Company located outside of the MedTech Europe Geographic Area the Code is not applicable whenever they:\n"
+            "        <ul class=\"list-disc pl-5 my-2 space-y-1\">\n"
+            "            <li>support an Event taking place outside the MedTech Europe Geographic Area except if they are supporting participation of Healthcare Professionals registered or practising inside the MedTech Europe Geographic Area to attend the Event, or</li>\n"
+            "            <li>interact with Healthcare Organisations located, or Healthcare Professionals registered or practising outside the MedTech Europe Geographic Area.</li>\n"
+            "        </ul>\n"
+            "        However, in the interest of increased transparency, it would always be preferable for the affiliate of the Member Company based in the MedTech Europe Geographic Area to handle support for Healthcare Professionals attending Events held in the MedTech Europe Geographic Area"
+        ) # Removed period at the end as per PDF
+
+        chapter['sections'][0]['qas'][1]['q'] = "Q&A 2: How does the Code apply to members with company platforms that include different business units e.g., medical devices, pharmaceuticals, research only products? How can educational grants be applied in such organizational structures?"
+        chapter['sections'][0]['qas'][1]['a'] = (
+            "The Code applies to all Member Companies’ interactions linked to Medical Technologies. Ensuring compliance with the Code may be more challenging for companies with platforms combining different business units, however Member Companies are required to comply with the Code as a minimum standard for all interactions linked to Medical Technologies independent of their organizational set up.<br/><br/>\n"
+            "        For example, if a Member were to have Medical Technology marketed under or linked to their pharmaceutical business unit, the interactions with Healthcare Professionals and Healthcare Organisations in relation to this Medical Technology would be governed by the Code irrespective of the business unit that pays for or manages the interaction. In this respect, the Member Company cannot circumvent the Code’s requirements by using its pharmaceutical business/affiliate to directly support a Healthcare Professional to attend a Medical Technology-related Third Party Organised Educational Conference as this would amount to a violation of the Code.<br/><br/>\n"
+            "        For the avoidance of doubt, the Code will not apply to Member Companies’ interactions linked exclusively to non-Medical Technology products or services such as medicinal products or research only products, without any link to Medical Technology products. However, this does not mean that different business units can be used to circumvent Code requirements as explained above.<br/><br/>\n"
+            "        In case an interaction or activity is linked in part to Medical Technology products or services, the Code shall apply."
+        )
+
+        chapter['sections'][1]['legalText'] = (
+            "<strong>2.1 New Member Companies</strong><br/><br/>At the time an applicant becomes a Member, it must begin to take all the necessary steps required to meet all membership obligations, including the obligation to comply with the Code.<br/><br/>"
+            "MedTech Europe recognizes the complexities involved in this process and the time needed to make changes associated with these new obligations. As a result, Corporate Members have one year from the date of membership ratification by the MedTech Europe Board of Directors to fully comply with the Code. This one-year membership transition period does not include an exemption from the Code’s ban on direct sponsorship. From the date of membership ratification by the MedTech Board of Directors direct sponsorship of Healthcare Professionals is prohibited (please see Chapter 2 for more information).<br/><br/>"
+            "As soon as a Member Company transposes the Code internally it shall notify the MedTech Europe Secretariat, specifying the date on which such transposition became effective. The MedTech Europe Secretariat shall appropriately document and maintain records of all such notifications for statistical purposes.<br/><br/>"
+            "For the avoidance of doubt, this section 2.1 shall also be applicable to membership transition following mergers and acquisitions.<br/><br/>"
+            "As soon as a Member Company has full control of an acquired company (or part of it) that is not a member of Medtech Europe or any Member Association, or as soon as a Member Company merges with such a company, it shall ensure that no new commitments of direct sponsorship for Healthcare Professionals to attend Third Party Organised Conferences are entered into, and that pre-existing direct sponsorship arrangements are not renewed.<br/><br/>"
+            "If there are pre-existing commitments all direct sponsorship of Healthcare Professionals the Member Company shall terminate all such agreements when contractually viable. No direct sponsorship of Healthcare Professionals may take place after one year of the formal date of acquisition or merger, including when the commitment pre-dates the acquisition or merger.<br/><br/>"
+            "<strong>2.2 New Association Members</strong><br/><br/>Association Members have one year from the date of membership ratification by the MedTech Europe General Assembly to transpose the Code.<br/><br/>"
+            "For avoidance of doubt, where an Association membership modifies the MedTech Europe Geographic Scope, as provided by the Code, either by changing its own geographic scope or when a new Association becomes a member of MedTech Europe, MedTech Europe Corporate Members have one year to comply with the Code in these new territories from the date of the change of the geographical scope of an existing Association or the relevant ratification of membership by the MedTech Europe General Assembly.<br/><br/>"
+            "After the passage of one year from the date of the relevant General Assembly ratification, all Members must fully comply with all obligations under the Code."
+        )
+        # Typo fixes applied:
+        # sponsorhip -> sponsorship
+        # Professionalsthe -> Professionals the
+        # the date of the date of -> the date of
+        # General Assembly.. -> General Assembly.
+
+# Write back
+with open(json_path, 'w', encoding='utf-8') as f:
+    json.dump(data, f, indent=2, ensure_ascii=False)
+
+print("Scope successfully updated with verbatim text.")
