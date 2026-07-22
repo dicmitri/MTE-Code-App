@@ -5,7 +5,7 @@ import { extractGlossaryMap, generateSectionId } from './utils/textUtils';
 import { useDebounce } from './hooks/useDebounce';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { usePWAInstall } from './hooks/usePWAInstall';
-import { useHashRouting } from './hooks/useHashRouting';
+import { useAppRouting } from './hooks/useAppRouting';
 import { useBookmarks } from './hooks/useBookmarks';
 import { useRecentHistory } from './hooks/useRecentHistory';
 import { Header } from './components/Header';
@@ -31,7 +31,7 @@ if (typeof FULL_CODE_DATA !== 'undefined') {
 }
 
 const App = () => {
-  const [activeSection, setActiveSection] = useState(null); // null = Home, 'code', 'trees'
+  const [activeSection, setActiveSection] = useState(null); // null = Home, 'code', 'trees', 'quiz', 'tppt'
   const [activeId, setActiveId] = useState('home');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showSummary, setShowSummary] = useState(true);
@@ -45,11 +45,27 @@ const App = () => {
   const [readerSpace, setReaderSpace] = useState('0.75rem');
   const [glossaryMap, setGlossaryMap] = useState({});
   const [activeDefinition, setActiveDefinition] = useState(null);
+  const scrollRef = useRef(null);
 
   // Custom Hooks
   useKeyboardShortcuts(setSearchTerm);
   const { installPromptEvent, isIos, showIosPrompt, setShowIosPrompt, handleInstallClick } = usePWAInstall();
-  useHashRouting(setActiveId, setActiveSection, setShowSummary, setShowFullText);
+  const {
+    navigateHome,
+    navigateCodeHome,
+    navigateChapter,
+    navigateCodeSection,
+    navigateTreesHome,
+    navigateTree,
+    navigateQuiz,
+    navigateTppt,
+  } = useAppRouting({
+    setActiveId,
+    setActiveSection,
+    setShowSummary,
+    setShowFullText,
+    scrollRef,
+  });
   const { bookmarks, toggleBookmark, isBookmarked } = useBookmarks();
   const { history, addHistory } = useRecentHistory();
 
@@ -58,8 +74,6 @@ const App = () => {
     text: true,
     qa: true
   });
-
-  const scrollRef = useRef(null);
 
   useEffect(() => {
     const map = extractGlossaryMap(FULL_CODE_DATA);
@@ -90,39 +104,37 @@ const App = () => {
   const activeContent = FULL_CODE_DATA.find((c) => c.id === activeId);
 
   const handleSectionSelect = (sectionId) => {
-    setActiveSection(sectionId);
-    setActiveId('home');
     setSidebarOpen(false);
-    if (scrollRef.current) {
-      scrollRef.current.scrollTo({ top: 0, behavior: 'instant' });
-    }
+    if (sectionId === 'code') navigateCodeHome();
+    if (sectionId === 'trees') navigateTreesHome();
+    if (sectionId === 'quiz') navigateQuiz();
+    if (sectionId === 'tppt') navigateTppt();
   };
 
   const handleGoHome = () => {
-    setActiveSection(null);
-    setActiveId('home');
     setSidebarOpen(false);
+    navigateHome();
   };
 
   const handleChapterChange = (id) => {
-    setActiveId(id);
     setSidebarOpen(false);
     if (searchTerm && searchTerm.trim() !== '') {
       setShowSummary(true);
       setShowFullText(true);
     }
-
-    if (scrollRef.current) {
-      scrollRef.current.scrollTo({ top: 0, behavior: 'instant' });
-    }
+    navigateChapter(id);
   };
 
   const handleNavigateTree = (treeId) => {
-    setActiveSection('trees');
-    setActiveId(treeId);
-    if (scrollRef.current) {
-      scrollRef.current.scrollTo({ top: 0, behavior: 'instant' });
+    navigateTree(treeId);
+  };
+
+  const handleTreeChange = (treeId) => {
+    if (!treeId || treeId === 'home' || treeId === 'trees-home') {
+      navigateTreesHome();
+      return;
     }
+    navigateTree(treeId);
   };
 
   return (
@@ -137,7 +149,6 @@ const App = () => {
       <Header
         activeId={activeId}
         activeSection={activeSection}
-        setActiveId={setActiveId}
         setSidebarOpen={setSidebarOpen}
         onGoHome={handleGoHome}
         showSummary={showSummary}
@@ -165,8 +176,9 @@ const App = () => {
           debouncedSearch={debouncedSearch}
           activeId={activeId}
           activeSection={activeSection}
-          setActiveId={setActiveId}
-          setActiveSection={setActiveSection}
+          onNavigateChapter={navigateChapter}
+          onNavigateCodeSection={navigateCodeSection}
+          onNavigateTrees={navigateTreesHome}
           setShowSummary={setShowSummary}
           setShowFullText={setShowFullText}
           onGoHome={handleGoHome}
@@ -196,7 +208,7 @@ const App = () => {
             activeId={activeId}
             activeContent={activeContent}
             handleChapterChange={handleChapterChange}
-            setActiveId={setActiveId}
+            onNavigateCodeHome={navigateCodeHome}
             showSummary={showSummary}
             showFullText={showFullText}
             showQA={showQA}
@@ -212,8 +224,7 @@ const App = () => {
           />
         ) : activeSection === 'quiz' ? (
           <QuizContent
-            setActiveSection={setActiveSection}
-            setActiveId={setActiveId}
+            onExit={handleGoHome}
           />
         ) : activeSection === 'tppt' ? (
           <Suspense
@@ -226,14 +237,13 @@ const App = () => {
             }
           >
             <TPPTContent
-              setActiveSection={setActiveSection}
-              setActiveId={setActiveId}
+              onGoHome={handleGoHome}
             />
           </Suspense>
         ) : (
           <TreeContent
             activeId={activeId}
-            setActiveId={setActiveId}
+            setActiveId={handleTreeChange}
             scrollRef={scrollRef}
           />
         )}

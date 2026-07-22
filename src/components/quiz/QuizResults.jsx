@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { AppIcon } from '../AppIcons';
 import { FULL_CODE_DATA } from '../../data/codeData';
+import { buildQuizPath } from '../../utils/routeUtils';
 
 export const QuizResults = ({ results, onRestart, onExit, config }) => {
   const [copied, setCopied] = useState(false);
@@ -44,7 +45,7 @@ export const QuizResults = ({ results, onRestart, onExit, config }) => {
     
     // Determine the precise shared URL based on the exact sequence of questions played
     const questionIds = results.questions ? results.questions.map(q => q.id).join(',') : (config.sharedIds ? config.sharedIds.join(',') : '');
-    const quizUrl = `${window.location.origin}${window.location.pathname}#quiz?q=${questionIds}`;
+    const quizUrl = new URL(buildQuizPath(`#quiz?q=${questionIds}`), window.location.origin).href;
 
     const shareText = `I scored ${score}/${total} (${percentage}%) on the MedTech Code Quiz!\nScope: ${scopeText}\n\nCan you beat my score?\nTake the challenge: ${quizUrl}`;
     

@@ -24,6 +24,8 @@ The app is built using **React**, **Vite**, and **Cloudflare Workers**. All the 
  │   └── index.css    # Global styles, fonts, and print rules
  ├── server.js       # Cloudflare Worker script (serves app and handles OAuth)
  ├── oauth-proxy.js  # Standalone OAuth proxy for Decap CMS
+ ├── PROJECT_CHECKS.md # Plain-language validation and testing guide
+ ├── ROUTING.md      # URL formats, compatibility rules, and route checks
  ├── AGENTS.md       # AI Agent instructions and global Project Map
  └── wrangler.toml   # Cloudflare Worker configuration
 ```
@@ -66,7 +68,7 @@ The app is built using **React**, **Vite**, and **Cloudflare Workers**. All the 
 
 ## ⚙️ 1. Technical Architecture & Key Features
 
-TheCodeApp is a multi-section platform with a custom-built architecture optimized for performance and offline reading.
+The Code App is a multi-section platform with a custom-built architecture optimized for performance and offline reading.
 
 ### 🏠 Multi-Section Architecture
 
@@ -78,13 +80,22 @@ The app is organized into independently navigable **sections**, all accessible f
 - **Knowledge Quiz** — A testing module that challenges users with randomized multiple-choice questions on selected chapters.
 - **TPPT Checker** — A compliance tool for evaluating whether a medical event qualifies as a Third Party Procedural Training meeting. Parses PDF/Word/text agendas, classifies sessions by type (Hands-on, Streaming, Case Study, etc.), checks the Code's practical-session thresholds, and exports a formatted PDF report.
 
-The currently active section is tracked via `activeSection` state in `App.jsx` (`null` = Home, `'code'`, `'trees'`). Adding a new section (e.g. "Materials") requires only:
+The currently active section is tracked via `activeSection` state in `App.jsx` (`null` = Home, `'code'`, `'trees'`, `'quiz'`, or `'tppt'`). Adding a new section (e.g. "Materials") requires:
 1. Adding an entry to `src/config/sections.js`.
 2. Creating the content component.
 3. Adding a conditional branch in `App.jsx`.
 
-### 🧩 Hash-Routing & State (No React Router)
-Instead of a heavy routing library, the app uses URL hash fragments (`#ch1-2-event-location-and-venue`) to track the exact section a user is viewing. The custom hook `useHashRouting.js` listens to these hashes, auto-detects which section the hash belongs to (e.g. hashes prefixed with `dt-` are routed to Decision Trees), and seamlessly scrolls the user directly to the content without reloading the page.
+### 🧩 URL Routing & State (No React Router)
+The app uses readable browser-history routes without adding a routing dependency:
+
+- `/code` opens the Code chapter index.
+- `/code/ch1` opens a chapter.
+- `/code/ch1#ch1-2-event-location-and-venue` opens an exact Code section using its existing generated section ID.
+- `/trees/dt-ch1-event-location`, `/quiz`, and `/tppt` open the other tools.
+
+`useAppRouting.js` keeps `App.jsx` state synchronized with these URLs and responds to browser Back/Forward navigation. Pure parsing and URL construction live in `utils/routeUtils.js`, configured with current content in `config/routes.js`. Previously shared root-hash links such as `/#ch1` and `/#ch1-2-event-location-and-venue` remain supported and are replaced with their canonical URL after loading. This compatibility behavior and every current chapter, section, and decision-tree route are covered by `tests/routeUtils.test.mjs`.
+
+See [`ROUTING.md`](ROUTING.md) before changing chapter IDs, tree IDs, section titles, navigation behavior, or deployment routing.
 
 ### 🔍 Dynamic Search Engine
 The search bar lives in the `Sidebar`. It splits the user's query and counts matches across **titles, summaries, full legal texts, and Q&As**.
@@ -99,9 +110,7 @@ This app caches all assets (via `vite-plugin-pwa`) so that traveling users can o
 - The installation logic relies on the `usePWAInstall.js` hook, which intercepts the browser's `beforeinstallprompt` and shows a custom install button. iOS requires manual installation via Safari's "Add to Home Screen" share action, which the UI explicitly handles.
 
 ### ⭐ Bookmarks & History
-Users can save specific sections to a personalized **Bookmarks** group in the sidebar (via `useBookmarks.js`). Additionally, the app automatically tracks your last 5 visited chapters under the **Recently Viewed** group (via `useRecentHistory.js`). Both systems:
-- Save data silently to `window.localStorage` so they persist without user accounts.
-- Are **section-aware** — each bookmark and history entry stores which section it belongs to (`'code'`, `'trees'`, etc.) so cross-section navigation works correctly.
+Users can save specific Code sections to a personalized **Bookmarks** group in the sidebar (via `useBookmarks.js`). The app also tracks the last 5 visited Code chapters under the **Recently Viewed** group (via `useRecentHistory.js`). Both are saved silently to `window.localStorage` so they persist without user accounts.
 
 ### 🗂️ Collapsible Sidebar Navigation
 The sidebar uses a hierarchical, fully collapsible group structure:
@@ -212,6 +221,11 @@ Each tree is an object with these fields:
 | `non-compliant` | Red | ❌ | Fails the compliance check |
 | `conditional` | Amber | ⚠️ | Depends on further context |
 | `consult-legal` | Blue | ⚖️ | Seek legal counsel |
+| `not-required` | Teal | ℹ️ | Assessment not required |
+| `out-of-scope` | Purple | ➖ | Outside the Code's scope |
+| `not-applicable` | Purple | ➖ | Not applicable |
+| `prior-review` | Purple | 📋 | Prior review required |
+| `in-scope` | Indigo | 🎯 | Within the Code's scope |
 
 ### How to add a new tree:
 1. Open `treeData.json` (or use Decap CMS).
@@ -276,7 +290,7 @@ The app is designed to be scalable. Adding an entirely new top-level section (li
      ) : (
      ```
 
-4. **Update hash routing** in `useHashRouting.js` if your section uses hash-based navigation (add a prefix check like `mat-`).
+4. **Add the section's URL rules** to `utils/routeUtils.js`, expose its navigation action from `hooks/useAppRouting.js`, and add focused cases to `tests/routeUtils.test.mjs`.
 
 That's it — the Home Hub and Sidebar will automatically pick up the new section from the registry.
 
@@ -357,7 +371,9 @@ This file uses a library called `lucide-react`. If you want to change an icon, y
 | `dompurify` | ^3.3.3 | HTML sanitizer (prevents XSS in legal text) |
 | `motion` | ^12.23.24 | Animation library |
 | `vite-plugin-pwa` | ^1.2.0 | Service worker generation for offline support |
-| `@google/genai` | ^1.29.0 | Integration with Google Generative AI |
+| `mammoth` | ^1.12.0 | Word document text extraction for the TPPT Checker |
+| `pdfjs-dist` | ^5.7.284 | PDF text extraction for the TPPT Checker |
+| `pdfmake` | ^0.3.8 | TPPT assessment PDF generation |
 
 ---
 
@@ -398,6 +414,11 @@ Alternatively, you can manually deploy using `npx wrangler deploy`.
 | `npm run preview` | Preview the production build locally |
 | `npm run clean` | Delete the `dist/` folder |
 | `npm run lint` | Run TypeScript checks without emitting files |
+| `npm run validate:data` | Check Code, tree, and quiz data integrity |
+| `npm test` | Run focused tests for stable project logic |
+| `npm run check` | Run validation, tests, TypeScript checks, and the production build |
+
+For step-by-step instructions written for non-technical maintainers, see [`PROJECT_CHECKS.md`](PROJECT_CHECKS.md).
 
 ---
 
@@ -429,6 +450,13 @@ User opens app
             ├── QuizConfig (Select chapters, count)
             ├── QuizSession (Answer questions)
             └── QuizResults (Score, Share, Review)
+     │
+     └── Click "TPPT Checker" ──► TPPT Section
+            │
+            ├── Import agenda text or document
+            ├── Review parsed sessions and session types
+            ├── Calculate eligibility
+            └── Export assessment PDF
 ```
 
 ---

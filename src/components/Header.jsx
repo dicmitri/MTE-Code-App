@@ -5,7 +5,6 @@ import { Logo } from './Logo';
 export const Header = ({
   activeId,
   activeSection,
-  setActiveId,
   setSidebarOpen,
   onGoHome,
   showSummary,

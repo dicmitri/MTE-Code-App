@@ -4,8 +4,9 @@ import { highlightSearchTerm, processTextWithTerms } from '../utils/textUtils';
 import { Highlight } from './Highlight';
 import { AppIcon } from './AppIcons';
 import { getTreesBySection } from '../data/treeData';
+import { buildCodeSectionPath } from '../utils/routeUtils';
 
-export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTermClick, bookmarksControls, chapterPrefix, searchFilters, onNavigateTree }) => {
+export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTermClick, bookmarksControls, chapterId, chapterPrefix, searchFilters, onNavigateTree }) => {
     const processedHtml = useMemo(() => {
         let html = section.legalText;
         if (query && searchFilters?.text) return highlightSearchTerm(html, query);
@@ -17,8 +18,12 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
 
     const [copyMsg, setCopyMsg] = useState(null);
 
+    const getSectionUrl = (sectionId) => (
+        new URL(buildCodeSectionPath(chapterId, sectionId), window.location.origin).href
+    );
+
     const copyLink = (sectionId) => {
-        const url = `${window.location.origin}${window.location.pathname}#${sectionId}`;
+        const url = getSectionUrl(sectionId);
         navigator.clipboard.writeText(url).then(() => {
             setCopyMsg("Link copied to clipboard!");
             setTimeout(() => setCopyMsg(null), 2000);
@@ -26,7 +31,7 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
     };
 
     const copyCitation = (sectionId, sectionTitle) => {
-        const url = `${window.location.origin}${window.location.pathname}#${sectionId}`;
+        const url = getSectionUrl(sectionId);
         const prefix = chapterPrefix ? chapterPrefix : '';
         const citation = `MedTech Europe Code of Ethical Business Practice, ${prefix}${sectionTitle}. Accessed via: ${url}`;
         navigator.clipboard.writeText(citation).then(() => {
@@ -61,7 +66,7 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
                     <div className="flex gap-2 shrink-0 ml-4 print:hidden">
                         {bookmarksControls && (
                             <button
-                                onClick={(e) => { e.stopPropagation(); bookmarksControls.toggleBookmark(id, (chapterPrefix || '') + section.title, id.split('-')[0]); }}
+                                onClick={(e) => { e.stopPropagation(); bookmarksControls.toggleBookmark(id, (chapterPrefix || '') + section.title, chapterId); }}
                                 className={`text-sm border rounded px-2 py-1 transition-colors ${isBookmarked ? 'bg-purple-100 text-purple-700 border-purple-200' : 'text-gray-500 hover:text-purple-600 border-transparent hover:border-purple-100'}`}
                                 title={isBookmarked ? 'Remove bookmark' : 'Bookmark this section'}
                             >

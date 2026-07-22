@@ -46,8 +46,9 @@ export const Sidebar = ({
   debouncedSearch,
   activeId,
   activeSection,
-  setActiveId,
-  setActiveSection,
+  onNavigateChapter,
+  onNavigateCodeSection,
+  onNavigateTrees,
   setShowSummary,
   setShowFullText,
   onGoHome,
@@ -200,8 +201,10 @@ export const Sidebar = ({
       {/* Top section: close button + home + search */}
       <div className="p-8 pr-12 pt-10 pb-4 relative">
         <button
+          type="button"
           onClick={() => setSidebarOpen(false)}
           className="md:hidden absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 bg-gray-50 rounded-lg"
+          aria-label="Close navigation"
         >
           <AppIcon name="X" size={20} />
         </button>
@@ -303,13 +306,7 @@ export const Sidebar = ({
                 <button
                   key={`bm-${b.id}`}
                   onClick={() => {
-                    const section = b.section || 'code';
-                    setActiveSection(section);
-                    setActiveId(b.chapterId);
-                    setTimeout(() => {
-                      const el = document.getElementById(b.id);
-                      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }, 100);
+                    onNavigateCodeSection(b.chapterId, b.id);
                     setSidebarOpen(false);
                   }}
                   className="w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 text-purple-700 hover:bg-purple-50 hover:text-purple-900 border border-transparent hover:border-purple-200"
@@ -358,8 +355,7 @@ export const Sidebar = ({
                     <button
                       key={item.id}
                       onClick={() => {
-                        setActiveSection('code');
-                        setActiveId(item.id);
+                        onNavigateChapter(item.id);
                         if (debouncedSearch && debouncedSearch.trim() !== '') {
                           setShowSummary(true);
                           setShowFullText(true);
@@ -417,8 +413,7 @@ export const Sidebar = ({
           >
             <button
               onClick={() => {
-                setActiveSection('trees');
-                setActiveId('trees-home');
+                onNavigateTrees();
                 setSidebarOpen(false);
               }}
               className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ml-2 ${
@@ -449,9 +444,7 @@ export const Sidebar = ({
                 <button
                   key={`history-${h.timestamp}`}
                   onClick={() => {
-                    const section = h.section || 'code';
-                    setActiveSection(section);
-                    setActiveId(h.id);
+                    onNavigateChapter(h.id);
                     setSidebarOpen(false);
                     window.scrollTo(0, 0);
                   }}

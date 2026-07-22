@@ -11,7 +11,7 @@ export const LandingPage = ({ onSelectChapter }) => (
             </div>
             <h1 className="text-4xl font-bold text-gray-900 mb-4 tracking-tight">The MedTech Europe Code of Ethical Business Practice</h1>
             <p className="text-xl text-gray-500 max-w-2xl mx-auto font-light leading-relaxed">
-                Digital version 1.0. Code text: September 2024. 
+                Code text: September 2024.
             </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

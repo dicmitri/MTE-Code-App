@@ -1,6 +1,6 @@
 /**
- * Centralized section registry.
- * Adding a new section to the app is as simple as adding an entry here.
+ * Home Hub metadata registry.
+ * Navigable sections also require App and route-controller wiring.
  */
 export const SECTIONS = [
   {

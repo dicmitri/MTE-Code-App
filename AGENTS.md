@@ -1,6 +1,6 @@
 # Agent Instructions
 
-<!-- Version: v1.4 – 2026-05-20 -->
+<!-- Version: v1.5 - 2026-07-22 -->
 
 ## Table of Contents
 - [Project Map](#project-map)
@@ -16,30 +16,34 @@
 
 The project is structured around a centralized state architecture in `App.jsx`, which manages top-level navigation and shared utilities.
 
-- **`src/App.jsx`**: The core orchestrator. It manages the `activeSection` (Home Hub, Code, Decision Trees, Quiz, TPPT) and uses custom hooks to synchronize state with the URL hash and `localStorage`. `TPPTContent` is loaded via `React.lazy()` so its heavy dependencies (pdfmake, pdfjs-dist, mammoth) are not included in the main bundle.
+- **`src/App.jsx`**: The core orchestrator. It manages the `activeSection` (Home Hub, Code, Decision Trees, Quiz, TPPT) and uses custom hooks to synchronize state with the browser URL and `localStorage`. `TPPTContent` is loaded via `React.lazy()` so its heavy dependencies (pdfmake, pdfjs-dist, mammoth) are not included in the main bundle.
 - **`src/components/`**: UI building blocks.
   - **Layout Components**: `Header.jsx` and `Sidebar.jsx` are persistent across sections. `Header` dynamically changes its toolbar based on the `activeSection`.
   - **Section Controllers**: `MainContent.jsx` (Code), `TreeContent.jsx` (Trees), `QuizContent.jsx` (Quiz), and `TPPTContent.tsx` (TPPT Checker) act as sub-routers and layout managers for their respective features.
   - **Feature Components**: Specialized UI like `DecisionTree.jsx` (interactive logic), `DefinitionPopup.jsx` (glossary), and `TableOfContents.jsx` (navigation).
 - **`src/hooks/`**: Business logic and side effects.
-  - `useHashRouting.js`: Intercepts URL changes to drive `App.jsx` state without a routing library.
+  - `useAppRouting.js`: Drives `App.jsx` state from readable paths, section anchors, and browser Back/Forward events without a routing library. It also upgrades supported legacy hash URLs with `replaceState`.
   - `useBookmarks.js` / `useRecentHistory.js`: Persist user interactions to `localStorage`.
   - `usePWAInstall.js`: Manages the PWA lifecycle and install prompts.
 - **`src/data/`**: The "Source of Truth" for content.
   - `codeData.json`: Hierarchical structure of the MedTech Code (Chapters -> Sections -> Q&As).
   - `treeData.json`: Graph-based logic for compliance decision trees.
   - `quizData.json`: Question bank for the knowledge quiz.
-- **`src/config/`**: Shared registries like `sections.js`, which defines the modules available in the Home Hub.
+- **`src/config/`**: Shared registries like `sections.js`, which defines the modules available in the Home Hub, and `routes.js`, which configures the route parser from live Code and decision-tree data.
 - **`src/utils/`**: Deterministic helpers for text processing, search highlighting, and ID generation.
+  - `routeUtils.js`: Pure URL builders and parsing rules for canonical paths and supported legacy hash URLs.
   - `tpptParser.js`: The TPPT agenda parsing engine. Contains `parseTpptSessions()` (the main parser), `classifySessionTitle()` (type classification), `calculateTpptEligibility()` (threshold checker), `normalizeCapitalization()`, `getSuggestedEventName()`, and all time/duration utilities. This is the single source of truth for parsing logic — both `TPPTContent.tsx` and `scratch/analyze_agendas.js` import from it.
   - `tpptExtraction.js`: PDF text extraction using `pdfjs-dist`. Contains `extractPdfPageText()` and `extractPdfTextFromPdf()`. Imported by both `TPPTContent.tsx` and `scratch/analyze_agendas.js`.
 - **`scratch/analyze_agendas.js`**: CLI verification script that runs the TPPT parser against real PDF agendas. Imports from `src/utils/tpptParser.js` and `src/utils/tpptExtraction.js` (single source of truth). Run with `node scratch/analyze_agendas.js [pdf-paths...]` to validate session parsing. If no paths are given, reads from `TPPT agendas/` folder.
+- **`scripts/validate-data.mjs`**: Dependency-free structural validation for Code, decision-tree, and quiz data. Run with `npm run validate:data` after content edits.
+- **`tests/`**: Focused Node tests for stable project logic. Run with `npm test`. The plain-language operating guide is `PROJECT_CHECKS.md`.
+- **`ROUTING.md`**: Canonical URL formats, legacy compatibility guarantees, identifier stability rules, hosting requirements, and manual release checks.
 
 ## Standards
 
 ### 1. Architecture & State
 - **Functional Components**: Use React functional components and hooks exclusively.
-- **Custom Routing**: Adhere to the hash-based routing system (`#prefix-id`). New sections must be registered in `useHashRouting.js`.
+- **Custom Routing**: Keep routing centralized in `routeUtils.js`, `config/routes.js`, and `useAppRouting.js`. Canonical routes use `/code/:chapterId`, `/trees/:treeId`, `/quiz`, and `/tppt`; Code section links retain their generated ID as `/code/:chapterId#section-id`. Preserve legacy root-hash links and add route tests whenever routing changes.
 - **State Management**: Prefer passing state/props from `App.jsx` for global concerns (active section, reader settings) and using local state for component-specific logic.
 
 ### 2. Styling & Branding
@@ -58,6 +62,7 @@ The project is structured around a centralized state architecture in `App.jsx`, 
 - **JSON First**: All content updates must happen in the `src/data/*.json` files.
 - **Sanitization**: When rendering HTML from JSON (e.g., `legalText`), always wrap it in a sanitizer if not already handled by a central component.
 - **Computed IDs**: Section IDs are generated dynamically via `utils/textUtils.js`. Maintain this consistency to avoid breaking bookmarks and deep links.
+- **Validation**: Run `npm run validate:data` after changing `src/data/*.json`. Do not weaken a rule or alter content merely to silence a validation error; first determine whether the content or the rule is wrong.
 
 ### 5. Naming Conventions
 - **Files**: `PascalCase.jsx` for components, `camelCase.js` for hooks/utilities/data.
@@ -95,14 +100,18 @@ The project is structured around a centralized state architecture in `App.jsx`, 
 ### Adding a New Section in `src/config/sections.js`
 ```javascript
 // src/config/sections.js
-export const sections = [
+export const SECTIONS = [
   // existing entries …
   {
     id: "materials",
-    label: "Materials",
+    title: "Materials",
+    subtitle: "Supplementary compliance resources",
+    description: "Download templates, checklists, and reference guides.",
     icon: "Package",
-    route: "#materials", // follows the hash‑routing convention
-    color: "bg-teal-600", // Tailwind utility using brand teal
+    color: "#8b5cf6",
+    available: true,
   },
 ];
 ```
+
+Registering Home Hub metadata does not create a route by itself. Follow the routing steps in `README.md` and `ROUTING.md` when making the section navigable.

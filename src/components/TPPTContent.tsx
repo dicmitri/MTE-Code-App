@@ -105,11 +105,10 @@ function renderHighlightedTitle(title: string, type: SessionType) {
 }
 
 interface TPPTContentProps {
-  setActiveSection: (section: string | null) => void;
-  setActiveId: (id: string) => void;
+  onGoHome: () => void;
 }
 
-export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setActiveId }) => {
+export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
   const [inputText, setInputText] = useState("");
   const [isExtracting, setIsExtracting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -129,12 +128,45 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
   const [exportError, setExportError] = useState<string | null>(null);
   const [exportDownloadUrl, setExportDownloadUrl] = useState<string | null>(null);
   const [eventNameInput, setEventNameInput] = useState("");
+  const parseWarningTriggerRef = useRef<HTMLButtonElement>(null);
+  const parseWarningCloseRef = useRef<HTMLButtonElement>(null);
+  const exportTriggerRef = useRef<HTMLButtonElement>(null);
+  const eventNameInputRef = useRef<HTMLInputElement>(null);
 
   type Answer = "Yes" | "No" | "I am not sure" | null;
   const [qVenue, setQVenue] = useState<Answer>(null);
   const [qStandalone, setQStandalone] = useState<Answer>(null);
   const [qSize, setQSize] = useState<Answer>(null);
   const [editingSessionId, setEditingSessionId] = useState<string | null>(null);
+
+  const closeParseWarning = () => {
+    setShowParseWarning(false);
+    window.requestAnimationFrame(() => parseWarningTriggerRef.current?.focus());
+  };
+
+  const closeExportModal = () => {
+    setShowExportModal(false);
+    window.requestAnimationFrame(() => exportTriggerRef.current?.focus());
+  };
+
+  useEffect(() => {
+    if (!showParseWarning && !showExportModal) return;
+
+    if (showParseWarning) {
+      parseWarningCloseRef.current?.focus();
+    } else {
+      eventNameInputRef.current?.focus();
+    }
+
+    const handleDialogKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      if (showParseWarning) closeParseWarning();
+      if (showExportModal) closeExportModal();
+    };
+
+    document.addEventListener('keydown', handleDialogKeyDown);
+    return () => document.removeEventListener('keydown', handleDialogKeyDown);
+  }, [showParseWarning, showExportModal]);
 
   // Restore state on mount
   useEffect(() => {
@@ -478,10 +510,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
       {/* Top Banner and Navigation */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-6 pb-2">
         <button
-          onClick={() => {
-            setActiveSection(null);
-            setActiveId('home');
-          }}
+          onClick={onGoHome}
           className="flex items-center gap-1.5 text-xs font-bold text-gray-400 hover:text-[#634488] transition-colors mb-6 cursor-pointer"
         >
           ← Back to Home Hub
@@ -551,7 +580,9 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
                 <span className="text-sm font-bold text-gray-700">Extracting text...</span>
               </div>
             )}
+            <label htmlFor="tppt-agenda-text" className="sr-only">Agenda text</label>
             <textarea
+              id="tppt-agenda-text"
               className="w-full h-[450px] p-4 rounded-xl border border-gray-200 outline-none focus:border-[#634488] focus:ring-1 focus:ring-[#634488] text-xs font-mono resize-y bg-gray-50 leading-relaxed shadow-inner"
               placeholder="08:00 - 08:30 Registration & Welcome&#10;08:30 - 10:00 Hands-on Cadaver Lab..."
               value={inputText}
@@ -560,6 +591,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
           </div>
 
           <button
+            ref={parseWarningTriggerRef}
             onClick={() => {
               handleParseText();
               setShowParseWarning(true);
@@ -624,9 +656,11 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
                   }`}
                 >
                   <button
+                    type="button"
                     onClick={() => removeSession(session.id)}
                     className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100 md:opacity-100 cursor-pointer"
                     title="Remove Session"
+                    aria-label={`Remove session: ${session.title}`}
                   >
                     <AppIcon name="Trash2" size={16} />
                   </button>
@@ -646,16 +680,19 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
                         onChange={(e) => updateSession(session.id, 'title', e.target.value)}
                         onBlur={() => setEditingSessionId(null)}
                         autoFocus
+                        aria-label="Session title"
                         className="w-full text-sm font-semibold text-gray-800 border border-slate-200 bg-slate-50 p-3 rounded-xl outline-none focus:border-[#634488] focus:ring-1 focus:ring-[#634488] transition-all resize-y leading-relaxed shadow-inner"
                         rows={Math.max(3, session.title.split('\n').length)}
                       />
                     ) : (
-                      <div 
+                      <button
+                        type="button"
                         onClick={() => setEditingSessionId(session.id)}
-                        className="w-full text-sm font-semibold text-gray-800 border border-transparent hover:border-slate-100 hover:bg-slate-50/20 p-1.5 -ml-1.5 rounded-lg outline-none transition-all leading-relaxed cursor-text min-h-[36px] whitespace-pre-line"
+                        className="w-full text-left text-sm font-semibold text-gray-800 border border-transparent hover:border-slate-100 hover:bg-slate-50/20 p-1.5 -ml-1.5 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-[#634488] transition-all leading-relaxed cursor-text min-h-[36px] whitespace-pre-line"
+                        aria-label={`Edit session title: ${session.title}`}
                       >
                         {renderHighlightedTitle(session.title, session.type)}
-                      </div>
+                      </button>
                     )}
                   </div>
 
@@ -666,6 +703,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
                            type="time"
                            value={session.startTime}
                            onChange={(e) => updateSession(session.id, 'startTime', e.target.value)}
+                           aria-label={`Start time for ${session.title}`}
                            className="w-24 text-xs font-semibold text-gray-700 rounded-lg border border-gray-200 px-2 py-1.5 outline-none focus:border-[#634488] bg-white shadow-inner"
                          />
                          <span className="text-gray-300 text-xs">-</span>
@@ -673,6 +711,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
                            type="time"
                            value={session.endTime}
                            onChange={(e) => updateSession(session.id, 'endTime', e.target.value)}
+                           aria-label={`End time for ${session.title}`}
                            className="w-24 text-xs font-semibold text-gray-700 rounded-lg border border-gray-200 px-2 py-1.5 outline-none focus:border-[#634488] bg-white shadow-inner"
                          />
                        </div>
@@ -682,6 +721,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
                       <select
                         value={session.type}
                         onChange={(e) => updateSession(session.id, 'type', e.target.value as SessionType)}
+                        aria-label={`Session type for ${session.title}`}
                         className={`w-full text-xs font-bold rounded-lg border px-3 py-1.5 outline-none transition-all appearance-none ${typeStyles[session.type]}`}
                         style={{ cursor: "pointer" }}
                       >
@@ -704,6 +744,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
                             min="0"
                             value={session.durationMinutes}
                             onChange={(e) => updateSession(session.id, 'durationMinutes', parseInt(e.target.value) || 0)}
+                            aria-label={`Duration in minutes for ${session.title}`}
                             className={`w-16 text-xs text-right font-bold rounded-lg border px-2 py-1.5 outline-none focus:ring-1 shadow-inner transition-all ${
                               session.durationMinutes > 99
                                 ? "border-orange-400 bg-orange-50 text-orange-700 focus:border-orange-500 focus:ring-orange-500 font-extrabold"
@@ -925,6 +966,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
         {finalOutcome && (
           <div className="mt-10 flex justify-center pb-12 animate-fade-in">
              <button
+               ref={exportTriggerRef}
                onClick={() => {
                  const suggestion = getSuggestedEventName(inputText);
                  setEventNameInput(suggestion);
@@ -945,23 +987,31 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
       {/* Parse Warning Modal */}
       {showParseWarning && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4 animate-fade-in">
-          <div className="bg-white border border-slate-100 shadow-2xl rounded-3xl max-w-md w-full p-6 sm:p-8 relative overflow-hidden flex flex-col gap-5 animate-scale-in">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="tppt-parse-warning-title"
+            aria-describedby="tppt-parse-warning-description"
+            className="bg-white border border-slate-100 shadow-2xl rounded-3xl max-w-md w-full p-6 sm:p-8 relative overflow-hidden flex flex-col gap-5 animate-scale-in"
+          >
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-amber-500" />
             
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-600 shrink-0">
                 <AppIcon name="AlertTriangle" size={20} />
               </div>
-              <h3 className="text-lg font-bold text-gray-900">Important Notice</h3>
+              <h3 id="tppt-parse-warning-title" className="text-lg font-bold text-gray-900">Important Notice</h3>
             </div>
 
-            <p className="text-sm text-gray-600 leading-relaxed">
+            <p id="tppt-parse-warning-description" className="text-sm text-gray-600 leading-relaxed">
               The TPPT Checker pre-assigns types of sessions based on keywords. The user must verify every single one of them, miss-asignations happen, and you will rely on an assessment that has used pre-assigned session types at your own risk.
             </p>
 
             <div className="flex justify-end mt-1">
               <button
-                onClick={() => setShowParseWarning(false)}
+                ref={parseWarningCloseRef}
+                type="button"
+                onClick={closeParseWarning}
                 className="px-6 py-2.5 rounded-xl font-bold text-sm text-white bg-[#634488] hover:bg-[#533873] transition-all cursor-pointer shadow-md hover:shadow-lg"
               >
                 Close
@@ -974,7 +1024,13 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
       {/* Event Name Suggestions Modal */}
       {showExportModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4 animate-fade-in">
-          <div className="bg-white border border-slate-100 shadow-2xl rounded-3xl max-w-md w-full p-6 sm:p-8 relative overflow-hidden flex flex-col gap-6 animate-scale-in">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="tppt-export-title"
+            aria-describedby="tppt-export-description"
+            className="bg-white border border-slate-100 shadow-2xl rounded-3xl max-w-md w-full p-6 sm:p-8 relative overflow-hidden flex flex-col gap-6 animate-scale-in"
+          >
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#634488]" />
             
             <div className="flex items-center gap-3">
@@ -982,20 +1038,21 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
                 <AppIcon name="Download" size={20} />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-gray-900">Confirm Event Name</h3>
-                <p className="text-xs text-gray-400 mt-0.5">Please confirm the name of your event for the PDF report</p>
+                <h3 id="tppt-export-title" className="text-lg font-bold text-gray-900">Confirm Event Name</h3>
+                <p id="tppt-export-description" className="text-xs text-gray-400 mt-0.5">Please confirm the name of your event for the PDF report</p>
               </div>
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Event Name</label>
+              <label htmlFor="tppt-event-name" className="text-xs font-bold text-gray-500 uppercase tracking-wider">Event Name</label>
               <input
+                id="tppt-event-name"
+                ref={eventNameInputRef}
                 type="text"
                 value={eventNameInput}
                 onChange={(e) => setEventNameInput(e.target.value)}
                 placeholder="e.g. 3rd Annual Endoscopy Workshop"
                 className="w-full text-sm font-semibold text-gray-800 border border-gray-200 bg-gray-50 px-4 py-3 rounded-xl outline-none focus:border-[#634488] focus:bg-white focus:ring-2 focus:ring-[#634488]/15 transition-all shadow-inner"
-                autoFocus
               />
               <p className="text-[11px] text-[#0099A7] font-light leading-relaxed">
                 💡 We extracted this suggestion from the top of your parsed agenda. Please correct it if needed to ensure the report is accurate.
@@ -1028,7 +1085,8 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ setActiveSection, setA
 
             <div className="flex items-center justify-end gap-3 mt-2">
               <button
-                onClick={() => setShowExportModal(false)}
+                type="button"
+                onClick={closeExportModal}
                 className="px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-gray-500 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 transition-all cursor-pointer"
               >
                 Cancel
