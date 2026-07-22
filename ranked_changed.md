@@ -7,7 +7,7 @@ This file records the current maintenance position of The Code App. It replaces 
 ## Current Baseline
 
 - React 19 and Vite 6 application with four active sections: The Code, Decision Trees, Knowledge Quiz, and TPPT Checker.
-- Content source of truth: `src/data/codeData.json`, `src/data/treeData.json`, and `src/data/quizData.json`.
+- Content source of truth: `src/data/code/*.json`, `src/data/treeData.json`, and `src/data/quizData.json`.
 - Current content: 23 chapters, 67 sections, 43 Q&As, 8 decision trees with 116 nodes, and 60 quiz questions.
 - Recent History intentionally stores the last five visited Code chapters in browser `localStorage`.
 - Bookmarks currently apply to Code sections and are stored in browser `localStorage`.

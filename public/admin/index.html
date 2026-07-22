@@ -33,8 +33,8 @@
       --mte-text: #1e293b;
       --mte-text-secondary: #64748b;
       --mte-border: #e2e8f0;
-      --mte-radius: 10px;
-      --mte-radius-lg: 16px;
+      --mte-radius: 6px;
+      --mte-radius-lg: 8px;
       --mte-font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       --mte-transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -55,7 +55,7 @@
     /* ── Login Page ────────────────────────────────────────────────── */
     /* Background */
     [class*="AuthenticationPage"] {
-      background: linear-gradient(135deg, #f8f9fa 0%, #ede9f6 50%, #e6f7f8 100%) !important;
+      background: var(--mte-bg) !important;
     }
 
     /* Hide the entire Decap logo + text area */
@@ -132,8 +132,7 @@
     }
 
     /* ── Collection List ───────────────────────────────────────────── */
-    [class*="ListCard"],
-    [class*="ListCardLink"] {
+    li[class*="ListCard"] {
       background: var(--mte-surface) !important;
       border: 1px solid var(--mte-border) !important;
       border-radius: var(--mte-radius) !important;
@@ -141,8 +140,7 @@
       transition: all var(--mte-transition) !important;
     }
 
-    [class*="ListCard"]:hover,
-    [class*="ListCardLink"]:hover {
+    li[class*="ListCard"]:hover {
       border-color: var(--mte-purple) !important;
       box-shadow: 0 2px 12px rgba(118, 84, 161, 0.1) !important;
     }
@@ -428,11 +426,279 @@
       font-size: 0.875rem !important;
       box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
     }
+
+    /* ── Content editing layout ──────────────────────────────────────
+       Keep the editor quiet and work-focused. Entry previews are disabled in
+       config.yml, so the control pane can use the available width. */
+    [class*="ControlPaneContainer"],
+    [class*="EditorControlPane"] {
+      width: 100% !important;
+      max-width: 1180px !important;
+      margin-inline: auto !important;
+    }
+
+    [class*="FieldLabel"],
+    [class*="ObjectWidgetLabel"],
+    label {
+      text-transform: none !important;
+      letter-spacing: 0 !important;
+      font-size: 0.875rem !important;
+    }
+
+    [class*="ObjectWidgetTopBar"],
+    [class*="ListItemTopBar"] {
+      background: #f8fafc !important;
+      border-color: var(--mte-border) !important;
+      min-height: 48px !important;
+    }
+
+    .CodeMirror {
+      height: auto !important;
+      min-height: 280px !important;
+      border: 1px solid var(--mte-border) !important;
+      border-radius: 6px !important;
+      font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace !important;
+      font-size: 0.9rem !important;
+      line-height: 1.55 !important;
+    }
+
+    .CodeMirror-scroll {
+      min-height: 280px !important;
+      max-height: 65vh !important;
+    }
+
+    /* One visual container per chapter entry. */
+    li[class*="ListCard"] {
+      background: var(--mte-surface) !important;
+      border: 1px solid var(--mte-border) !important;
+      border-radius: 6px !important;
+      margin-bottom: 8px !important;
+      box-shadow: none !important;
+    }
+
+    li[class*="ListCard"]:hover {
+      border-color: var(--mte-teal) !important;
+      box-shadow: 0 2px 8px rgba(0, 153, 167, 0.1) !important;
+    }
+
+    a[class*="ListCardLink"] {
+      background: transparent !important;
+      border: 0 !important;
+      border-radius: inherit !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+    }
+
+    ul[class*="CardsGrid"] {
+      grid-template-columns: minmax(0, 1fr) !important;
+      gap: 8px !important;
+    }
+
+    /* Decap renders a collapsed list item as separate control and label rows.
+       Overlay the single expand control so each section reads as one row. */
+    div[class*="ListItem-listControlItem"] {
+      position: relative !important;
+      overflow: hidden !important;
+      background: var(--mte-surface) !important;
+      border: 1px solid var(--mte-border) !important;
+      border-radius: 6px !important;
+      margin-bottom: 8px !important;
+    }
+
+    div[class*="ListItem-listControlItem"] > div[class*="StyledListItemTopBar"] {
+      position: absolute !important;
+      inset: 0 0 auto 0 !important;
+      z-index: 2 !important;
+      width: 100% !important;
+      min-height: 48px !important;
+      background: transparent !important;
+      border: 0 !important;
+      pointer-events: none !important;
+    }
+
+    div[class*="StyledListItemTopBar"] > * {
+      position: absolute !important;
+      top: 0 !important;
+      width: 48px !important;
+      min-height: 48px !important;
+      pointer-events: auto !important;
+    }
+
+    div[class*="StyledListItemTopBar"] > button:first-child {
+      left: 0 !important;
+    }
+
+    div[class*="StyledListItemTopBar"] > [role="button"] {
+      right: 48px !important;
+    }
+
+    div[class*="StyledListItemTopBar"] > button:last-child:not(:first-child) {
+      right: 0 !important;
+    }
+
+    div[class*="ListItem-listControlItem"] > div[class*="NestedObjectLabel"] {
+      display: flex !important;
+      align-items: center !important;
+      min-height: 48px !important;
+      padding: 10px 96px 10px 56px !important;
+      background: var(--mte-surface) !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      font-weight: 600 !important;
+    }
+
+    div[class*="ListItem-listControlItem"]:has(
+      > div[class*="StyledListItemTopBar"] > button:only-of-type
+    ) > div[class*="NestedObjectLabel"] {
+      padding-right: 14px !important;
+    }
+
+    label[class*="FieldLabel"] {
+      display: block !important;
+      width: auto !important;
+      margin: 0 0 6px !important;
+      padding: 0 !important;
+      background: transparent !important;
+      border: 0 !important;
+    }
+
+    .mte-html-editor {
+      width: 100%;
+    }
+
+    .mte-html-editor__modes {
+      display: inline-flex;
+      margin-bottom: 8px;
+      padding: 2px;
+      background: #eef2f6;
+      border: 1px solid var(--mte-border);
+      border-radius: 6px;
+    }
+
+    .mte-html-editor__mode {
+      min-width: 84px;
+      min-height: 34px;
+      padding: 6px 12px;
+      color: var(--mte-text-secondary);
+      background: transparent;
+      border: 0;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .mte-html-editor__mode[aria-selected="true"] {
+      color: #ffffff;
+      background: var(--mte-teal);
+    }
+
+    .mte-html-editor__source {
+      display: block;
+      width: 100%;
+      min-height: 320px;
+      padding: 16px !important;
+      resize: vertical;
+      color: var(--mte-text) !important;
+      background: var(--mte-surface) !important;
+      border: 1px solid var(--mte-border) !important;
+      border-radius: 6px !important;
+      font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace !important;
+      font-size: 0.9rem !important;
+      line-height: 1.55 !important;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .mte-html-editor__preview {
+      display: block;
+      width: 100%;
+      height: 440px;
+      background: #ffffff;
+      border: 1px solid var(--mte-border);
+      border-radius: 6px;
+    }
+
+    @media (max-width: 760px) {
+      [class*="ControlPaneContainer"],
+      [class*="EditorControlPane"] {
+        padding-inline: 12px !important;
+      }
+
+      .CodeMirror,
+      .CodeMirror-scroll {
+        min-height: 220px !important;
+      }
+    }
   </style>
 </head>
 <body>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script src="https://unpkg.com/decap-cms@3.14.1/dist/decap-cms.js"></script>
   <script>
+    const ExactHtmlControl = createClass({
+      getInitialState: function () {
+        return { mode: 'edit' };
+      },
+
+      setMode: function (mode) {
+        this.setState({ mode: mode });
+      },
+
+      handleChange: function (event) {
+        this.props.onChange(event.target.value);
+      },
+
+      render: function () {
+        const value = this.props.value || '';
+        const previewDocument = [
+          '<!doctype html><html><head><meta charset="utf-8">',
+          '<style>body{margin:0;padding:24px;color:#1e293b;background:#fff;font:16px/1.65 Inter,Arial,sans-serif}p,ul,ol{margin:0 0 1rem}ul,ol{padding-left:1.5rem}table{width:100%;border-collapse:collapse}th,td{padding:8px;border:1px solid #cbd5e1;text-align:left}img{max-width:100%;height:auto}</style>',
+          '</head><body>',
+          value,
+          '</body></html>'
+        ].join('');
+
+        return h('div', { className: this.props.classNameWrapper + ' mte-html-editor' }, [
+          h('div', { className: 'mte-html-editor__modes', role: 'tablist', key: 'modes' }, [
+            h('button', {
+              type: 'button',
+              className: 'mte-html-editor__mode',
+              role: 'tab',
+              'aria-selected': this.state.mode === 'edit',
+              onClick: () => this.setMode('edit'),
+              key: 'edit'
+            }, 'Edit'),
+            h('button', {
+              type: 'button',
+              className: 'mte-html-editor__mode',
+              role: 'tab',
+              'aria-selected': this.state.mode === 'preview',
+              onClick: () => this.setMode('preview'),
+              key: 'preview'
+            }, 'Preview')
+          ]),
+          this.state.mode === 'edit'
+            ? h('textarea', {
+                id: this.props.forID,
+                className: 'mte-html-editor__source',
+                value: value,
+                onChange: this.handleChange,
+                spellCheck: true,
+                key: 'source'
+              })
+            : h('iframe', {
+                className: 'mte-html-editor__preview',
+                title: 'Rendered content preview',
+                sandbox: '',
+                srcDoc: previewDocument,
+                key: 'preview-frame'
+              })
+        ]);
+      }
+    });
+
+    CMS.registerWidget('exact-html', ExactHtmlControl);
+
     // Inject branding into the login page after Decap CMS mounts
     (function waitForLogin() {
       const check = setInterval(() => {

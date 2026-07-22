@@ -1,8 +1,8 @@
 @import "tailwindcss";
-@source "./data/codeData.json";
+@source "./data/code/*.json";
 
 :root {
-  /* UI FONT: "Business Standard" 
+  /* UI FONT: "Business Standard"
            Clean, neutral, professional. Used by banks and enterprise software. */
   --font-ui: "Inter", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 
@@ -17,7 +17,7 @@
   --color-bg: #f8f9fa;
 
   /* READER SETTINGS */
-  /* Bumped up slightly (1.05rem) because Arial/Georgia are 
+  /* Bumped up slightly (1.05rem) because Arial/Georgia are
            visually smaller than the old Merriweather font. */
   --reader-font-size: 1.05rem;
   --reader-line-height: 1.6;
@@ -79,6 +79,13 @@
 }
 
 @media print {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
   body {
     background-color: white !important;
     color: black !important;
@@ -180,4 +187,4 @@ body {
 .hub-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-}
+}

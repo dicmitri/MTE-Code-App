@@ -34,7 +34,7 @@ export const MainContent = ({
   return (
     <main
       ref={scrollRef}
-      className="flex-1 overflow-y-auto bg-white custom-scrollbar h-full"
+      className="flex-1 overflow-y-auto bg-white custom-scrollbar h-full print:h-auto print:overflow-visible"
     >
       {activeId === 'home' ? (
         <LandingPage onSelectChapter={handleChapterChange} />

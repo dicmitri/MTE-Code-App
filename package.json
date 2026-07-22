@@ -5,10 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
+    "cms": "concurrently --kill-others-on-fail --names app,cms \"npm run dev\" \"npm run cms:proxy\"",
+    "cms:proxy": "decap-server",
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
+    "verify:code-migration": "node scripts/verify-code-migration.mjs",
     "validate:data": "node scripts/validate-data.mjs",
     "test": "node --test",
     "check": "npm run validate:data && npm test && npm run lint && npm run build"
@@ -31,6 +34,8 @@
     "@types/node": "^22.14.0",
     "@types/pdfmake": "^0.3.3",
     "autoprefixer": "^10.4.21",
+    "concurrently": "^10.0.3",
+    "decap-server": "^3.9.1",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",

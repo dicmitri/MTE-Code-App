@@ -1,6 +1,59 @@
-import codeDataJson from './codeData.json';
+import scope from './code/scope.json';
+import admin from './code/admin.json';
+import intro from './code/intro.json';
+import chapter1 from './code/ch1.json';
+import chapter2 from './code/ch2.json';
+import chapter3 from './code/ch3.json';
+import chapter4 from './code/ch4.json';
+import chapter5 from './code/ch5.json';
+import chapter6 from './code/ch6.json';
+import chapter7 from './code/ch7.json';
+import chapter8 from './code/ch8.json';
+import chapter9 from './code/ch9.json';
+import chapter10 from './code/ch10.json';
+import part2 from './code/part2.json';
+import glossary from './code/glossary.json';
+import annex1 from './code/annex1.json';
+import annex2 from './code/annex2.json';
+import annex3 from './code/annex3.json';
+import annex4 from './code/annex4.json';
+import annex5 from './code/annex5.json';
+import annex6 from './code/annex6.json';
+import annex7 from './code/annex7.json';
+import changelog from './code/changelog.json';
+import { CODE_CHAPTER_IDS } from './codeOrder';
 
-export const FULL_CODE_DATA = codeDataJson.chapters;
+const CHAPTERS_BY_ID = {
+  scope,
+  admin,
+  intro,
+  ch1: chapter1,
+  ch2: chapter2,
+  ch3: chapter3,
+  ch4: chapter4,
+  ch5: chapter5,
+  ch6: chapter6,
+  ch7: chapter7,
+  ch8: chapter8,
+  ch9: chapter9,
+  ch10: chapter10,
+  part2,
+  glossary,
+  annex1,
+  annex2,
+  annex3,
+  annex4,
+  annex5,
+  annex6,
+  annex7,
+  changelog,
+};
+
+export const FULL_CODE_DATA = CODE_CHAPTER_IDS.map((id) => {
+  const chapter = CHAPTERS_BY_ID[id];
+  if (chapter?.id !== id) throw new Error(`Code chapter adapter mismatch for "${id}".`);
+  return chapter;
+});
 
 export const updateSearchStatus = (message) => {
   const statusEl = document.getElementById('search-status');

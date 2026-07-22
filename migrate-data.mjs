@@ -1,4 +1,10 @@
 /**
+ * ARCHIVED ONE-TIME MIGRATION
+ *
+ * This script targets the former codeData.json/codeApp data shape and must not
+ * be run against the current chapter-per-file content. It remains only as
+ * historical context for the original application refactor.
+ *
  * One-time migration script for Decap CMS preparation:
  * 1. Converts VDOM summary objects to HTML strings in codeData.json
  * 2. Wraps codeData.json root array in { "chapters": [...] }
@@ -7,6 +13,8 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+
+throw new Error('This archived one-time migration must not be run against split chapter data.');
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = path.join(__dirname, 'src', 'data');

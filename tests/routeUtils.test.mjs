@@ -5,6 +5,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { generateSectionId } from '../src/utils/textUtils.js';
+import { loadSplitCodeData } from '../scripts/lib/code-content.mjs';
 import {
   buildChapterPath,
   buildCodeSectionPath,
@@ -15,7 +16,7 @@ import {
 
 const testDirectory = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(testDirectory, '..');
-const codeData = JSON.parse(readFileSync(resolve(projectRoot, 'src/data/codeData.json'), 'utf8'));
+const codeData = loadSplitCodeData(projectRoot);
 const treeData = JSON.parse(readFileSync(resolve(projectRoot, 'src/data/treeData.json'), 'utf8'));
 const FULL_CODE_DATA = codeData.chapters;
 const TREE_DATA = treeData.trees;

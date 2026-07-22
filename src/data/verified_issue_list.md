@@ -1,5 +1,7 @@
 # Verified Issue List: Manual Audit Findings
 
+> Historical note: this May 2026 audit is superseded by the July 2026 local-PDF audit. The newer audit found substantive differences that this document did not identify. Do not rely on the "no further discrepancies" conclusion below. See [Code Content Split](../../docs/content-migration/README.md) and its generated `code-pdf-audit.json` evidence.
+
 This document supplements previous automated checks with findings from a rigorous manual and script-assisted audit comparing `codeData.json` against the verbatim text of the September 2024 PDF.
 
 ## 1. Glossary Rewritten (Fixed)

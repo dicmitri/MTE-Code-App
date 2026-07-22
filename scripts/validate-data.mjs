@@ -3,6 +3,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 import { generateSectionId } from '../src/utils/textUtils.js';
+import { loadSplitCodeData } from './lib/code-content.mjs';
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = resolve(SCRIPT_DIR, '..');
@@ -64,7 +65,7 @@ export function validateProjectData({ codeData, treeData, quizData, iconSource =
   const registeredIconNames = extractRegisteredIconNames(iconSource);
 
   if (!Array.isArray(codeData?.chapters)) {
-    errors.push('codeData.json: expected a top-level "chapters" array.');
+    errors.push('Code data: expected a chapters array.');
   }
   if (!Array.isArray(treeData?.trees)) {
     errors.push('treeData.json: expected a top-level "trees" array.');
@@ -75,7 +76,7 @@ export function validateProjectData({ codeData, treeData, quizData, iconSource =
 
   const chapterIds = chapters.map((chapter) => chapter?.id).filter(isNonEmptyString);
   for (const duplicate of findDuplicates(chapterIds)) {
-    errors.push(`codeData.json: duplicate chapter ID "${duplicate}".`);
+    errors.push(`Code data: duplicate chapter ID "${duplicate}".`);
   }
 
   const chapterIdSet = new Set(chapterIds);
@@ -85,7 +86,7 @@ export function validateProjectData({ codeData, treeData, quizData, iconSource =
   let qaCount = 0;
 
   chapters.forEach((chapter, chapterIndex) => {
-    const chapterPath = `codeData.json chapters[${chapterIndex}]`;
+    const chapterPath = `Code data chapters[${chapterIndex}]`;
 
     if (!isNonEmptyString(chapter?.id)) errors.push(`${chapterPath}: missing chapter ID.`);
     if (!isNonEmptyString(chapter?.title)) errors.push(`${chapterPath}: missing title.`);
@@ -126,7 +127,7 @@ export function validateProjectData({ codeData, treeData, quizData, iconSource =
   });
 
   for (const duplicate of findDuplicates(generatedSectionIds)) {
-    errors.push(`codeData.json: duplicate generated section ID "${duplicate}".`);
+    errors.push(`Code data: duplicate generated section ID "${duplicate}".`);
   }
 
   const treeIds = trees.map((tree) => tree?.id).filter(isNonEmptyString);
@@ -253,7 +254,7 @@ function readJson(relativePath) {
 
 export function validateCurrentProject() {
   return validateProjectData({
-    codeData: readJson('src/data/codeData.json'),
+    codeData: loadSplitCodeData(PROJECT_ROOT),
     treeData: readJson('src/data/treeData.json'),
     quizData: readJson('src/data/quizData.json'),
     iconSource: readFileSync(resolve(PROJECT_ROOT, 'src/components/AppIcons.jsx'), 'utf8'),

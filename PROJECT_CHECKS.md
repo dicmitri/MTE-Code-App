@@ -39,6 +39,11 @@ Data validation passed.
 
 The totals may increase when content is intentionally added. The important line is `Data validation passed.`
 
+The Code is stored as one chapter per file in `src/data/code/`. This command
+checks that every file listed in `src/data/codeOrder.js` exists, that its chapter
+ID matches its filename, and that chapter, section, tree, and quiz references
+remain valid.
+
 If validation fails, the output identifies the file and item involved. For example:
 
 ```text
@@ -69,6 +74,25 @@ The number of tests may grow. The important value is `fail 0`.
 The URL tests use the current project data. They confirm that every current chapter, generated Code section anchor, and decision tree has a working unique route, that representative section-ID generation rules remain stable, and that supported legacy link formats still resolve. If one fails after a content edit, do not rename IDs simply to make the test pass; keep the output and have the reported route reviewed.
 
 Automated checks cannot decide whether changing a public identifier was intentional. Read [`ROUTING.md`](ROUTING.md) before changing chapter IDs, tree IDs, section titles, navigation behavior, or hosting rules.
+
+## Historical Split Proof
+
+The 2026 migration from one large Code JSON file to chapter files has a separate
+preservation proof:
+
+```powershell
+npm run verify:code-migration
+```
+
+This reconstructs the deleted monolith from the chapter files and checks its
+original SHA-256 hash, every raw chapter slice, every string value, chapter
+order, counts, and generated section routes. It is evidence for that migration,
+not the normal check after editing content.
+
+An approved content correction will make this historical command fail because
+the content is no longer identical to the 2026 baseline. That is expected. Do
+not regenerate `src/data/code-manifest.json` just to make it pass. Continue to
+use `npm run validate:data` for everyday edits.
 
 If a test fails, keep the complete output from the first failing test through the final summary. Do not change the expected result unless the intended business rule has been confirmed.
 

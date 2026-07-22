@@ -26,7 +26,10 @@ The project is structured around a centralized state architecture in `App.jsx`, 
   - `useBookmarks.js` / `useRecentHistory.js`: Persist user interactions to `localStorage`.
   - `usePWAInstall.js`: Manages the PWA lifecycle and install prompts.
 - **`src/data/`**: The "Source of Truth" for content.
-  - `codeData.json`: Hierarchical structure of the MedTech Code (Chapters -> Sections -> Q&As).
+  - `code/*.json`: One canonical MedTech Code chapter per file (Sections -> Q&As).
+  - `codeOrder.js`: Explicit chapter order shared by the app and validation tools.
+  - `codeData.js`: Compatibility adapter that assembles `FULL_CODE_DATA` without changing component APIs.
+  - `code-manifest.json`: Frozen raw-byte evidence for the 2026 monolith-to-chapters migration; it is not an everyday content baseline.
   - `treeData.json`: Graph-based logic for compliance decision trees.
   - `quizData.json`: Question bank for the knowledge quiz.
 - **`src/config/`**: Shared registries like `sections.js`, which defines the modules available in the Home Hub, and `routes.js`, which configures the route parser from live Code and decision-tree data.
@@ -59,17 +62,19 @@ The project is structured around a centralized state architecture in `App.jsx`, 
 - **Reusability**: Encapsulate complex UI logic (like the glossary tooltip) into standalone components that can be driven by props.
 
 ### 4. Data Handling
-- **JSON First**: All content updates must happen in the `src/data/*.json` files.
+- **JSON First**: All content updates must happen in the relevant JSON source, including chapter files under `src/data/code/`.
+- **Canonical Text Preservation**: Never regenerate, summarize, or bulk reserialize normative Code text. Keep content edits narrowly scoped and verify them against the authoritative source.
+- **Migration Evidence**: `code-manifest.json` proves the 2026 content-neutral split. Do not regenerate it after ordinary approved content edits.
 - **Sanitization**: When rendering HTML from JSON (e.g., `legalText`), always wrap it in a sanitizer if not already handled by a central component.
 - **Computed IDs**: Section IDs are generated dynamically via `utils/textUtils.js`. Maintain this consistency to avoid breaking bookmarks and deep links.
-- **Validation**: Run `npm run validate:data` after changing `src/data/*.json`. Do not weaken a rule or alter content merely to silence a validation error; first determine whether the content or the rule is wrong.
+- **Validation**: Run `npm run validate:data` after changing JSON under `src/data/`. Do not weaken a rule or alter content merely to silence a validation error; first determine whether the content or the rule is wrong.
 
 ### 5. Naming Conventions
 - **Files**: `PascalCase.jsx` for components, `camelCase.js` for hooks/utilities/data.
 - **Variables**: Use `camelCase` for local variables and `UPPER_SNAKE_CASE` for exported constants or data imports.
 
 ## Example Snippets
-### Full Chapter Example (from `src/data/codeData.json`)
+### Full Chapter Example (from a file in `src/data/code/`)
 ```json
 {
   "id": "scope",

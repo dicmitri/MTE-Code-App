@@ -5,6 +5,10 @@ backend:
   base_url: https://mte-oauth-proxy.medtecheurope.workers.dev
   auth_endpoint: /auth
 
+# On localhost, use the optional Decap proxy started by `npm run cms` so the
+# editor reads this working copy instead of the remote main branch.
+local_backend: true
+
 media_folder: public
 public_folder: /
 
@@ -12,66 +16,75 @@ collections:
   # ─── The Code — Chapters ────────────────────────────────────────
   - name: "code"
     label: "The Code — Chapters"
-    files:
-      - name: "codeData"
-        label: "All Chapters"
-        file: "src/data/codeData.json"
+    label_singular: "Code chapter"
+    folder: "src/data/code"
+    create: false
+    delete: false
+    extension: "json"
+    format: "json"
+    identifier_field: "id"
+    summary: "{{title}} ({{id}})"
+    sortable_fields: ["title", "part", "id"]
+    editor:
+      preview: false
+    fields:
+      - label: "Chapter ID"
+        name: "id"
+        widget: "hidden"
+      - label: "Navigation part"
+        name: "part"
+        widget: "hidden"
+      - label: "Title"
+        name: "title"
+        widget: "string"
+        hint: "This is the public chapter title. Changing it does not change the chapter URL."
+      - label: "Navigation icon"
+        name: "icon"
+        widget: "hidden"
+      - label: "Chapter summary"
+        name: "summary"
+        widget: "exact-html"
+        hint: "Short introduction shown near the top of the chapter. Edit the wording inside the HTML tags."
+      - label: "Sections"
+        name: "sections"
+        widget: "list"
+        allow_add: false
+        allow_remove: false
+        allow_reorder: false
+        collapsed: true
+        summary: "{{fields.title}}"
         fields:
-          - label: "Chapters"
-            name: "chapters"
+          - label: "Section Title"
+            name: "title"
+            widget: "string"
+            hint: "Changing this can change the public section URL. Only do so as part of an approved heading change."
+          - label: "Section text"
+            name: "legalText"
+            widget: "exact-html"
+            hint: "Edit the wording inside the HTML tags. This editor preserves the stored HTML instead of converting it to Markdown."
+          - label: "Q&As"
+            name: "qas"
             widget: "list"
+            allow_add: false
+            allow_remove: false
+            allow_reorder: false
             collapsed: true
-            summary: "{{fields.title}} ({{fields.id}})"
+            minimize_collapsed: true
+            summary: "{{fields.q}}"
             fields:
-              - label: "ID (URL slug — do not change)"
-                name: "id"
+              - label: "Question"
+                name: "q"
                 widget: "string"
-                hint: "Changing this breaks all links to this chapter."
-              - label: "Part"
-                name: "part"
-                widget: "select"
-                options: ["intro", "part1", "part2", "part3", "website"]
-                hint: "Which sidebar group this chapter appears in."
-              - label: "Title"
-                name: "title"
-                widget: "string"
-              - label: "Icon"
-                name: "icon"
-                widget: "string"
-                hint: "Must match an icon name in AppIcons.jsx (e.g., Globe, 1, 2, etc.)"
-              - label: "Summary (HTML)"
-                name: "summary"
-                widget: "text"
-              - label: "Sections"
-                name: "sections"
-                widget: "list"
-                collapsed: true
-                summary: "{{fields.title}}"
-                fields:
-                  - label: "Section Title"
-                    name: "title"
-                    widget: "string"
-                  - label: "Legal Text"
-                    name: "legalText"
-                    widget: "markdown"
-                    modes: ["raw", "rich_text"]
-                  - label: "Q&As"
-                    name: "qas"
-                    widget: "list"
-                    collapsed: true
-                    summary: "{{fields.q}}"
-                    fields:
-                      - label: "Question"
-                        name: "q"
-                        widget: "string"
-                      - label: "Answer"
-                        name: "a"
-                        widget: "markdown"
-                        modes: ["raw", "rich_text"]
+              - label: "Answer"
+                name: "a"
+                widget: "exact-html"
+                hint: "Edit the wording inside the HTML tags."
 
   # ─── Decision Trees ─────────────────────────────────────────────
   - name: "trees"
     label: "Decision Trees"
+    editor:
+      preview: false
     files:
       - name: "treeData"
         label: "All Decision Trees"

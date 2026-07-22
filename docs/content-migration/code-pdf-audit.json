@@ -1,0 +1,3217 @@
+{
+  "auditVersion": 1,
+  "sources": {
+    "code": {
+      "format": "split-chapters",
+      "path": "src/data/code",
+      "splitFilesSha256": "7CDB58249FAF41A7A7BDBFE6FE7E7089BE496914F2DFDA942AC5B9CEF1C7CB1D",
+      "frozenMonolithSha256": "CAA166803AC1EE0CD2B19E0BB1998C6688C53DA8B3FA66F5F3CF75CBA2283EAC",
+      "files": [
+        {
+          "id": "scope",
+          "file": "src/data/code/scope.json",
+          "sha256": "F96B77B1A7B78A2602C4E4B4C23A9BAA26499719DA1F39B886FA303F1F44A5E7",
+          "bytes": 8205
+        },
+        {
+          "id": "admin",
+          "file": "src/data/code/admin.json",
+          "sha256": "5D27B544092231D4B15E4AAA33AB365E6787C5F71BD85833F75ED22302DCEA27",
+          "bytes": 9111
+        },
+        {
+          "id": "intro",
+          "file": "src/data/code/intro.json",
+          "sha256": "0BAAEA2AF184A9FBFC190AD98DAA49AD90A2E58629AB929ABD39A5ABC83F25C3",
+          "bytes": 7714
+        },
+        {
+          "id": "ch1",
+          "file": "src/data/code/ch1.json",
+          "sha256": "C59836C0961DF6DD68B06547CFA4A5DA2D98287020DB9BD36E459AEF2E07AECF",
+          "bytes": 18490
+        },
+        {
+          "id": "ch2",
+          "file": "src/data/code/ch2.json",
+          "sha256": "9DCF2CB4D3B915713F3D1D3E631F6184C42A5C1F5B3598B44988F59326BE0BEF",
+          "bytes": 14117
+        },
+        {
+          "id": "ch3",
+          "file": "src/data/code/ch3.json",
+          "sha256": "62E552E945848E1A6F088F042B00E3EC2362F9454AD0F7FE39D7E3784C797C96",
+          "bytes": 13519
+        },
+        {
+          "id": "ch4",
+          "file": "src/data/code/ch4.json",
+          "sha256": "B9D004A4E4ABF9EFB75581334DDE486FF88CECC41A8D57844C66AD636C0BFFAE",
+          "bytes": 32591
+        },
+        {
+          "id": "ch5",
+          "file": "src/data/code/ch5.json",
+          "sha256": "4614AC269C7B13037F525358DB65CBCA751F8CADF2F6D495D00ACB7C098D8B82",
+          "bytes": 8866
+        },
+        {
+          "id": "ch6",
+          "file": "src/data/code/ch6.json",
+          "sha256": "F90C995323307ECEAE07CE1AC35B260F598249D4BE1E438983287C9327C9BA1A",
+          "bytes": 15812
+        },
+        {
+          "id": "ch7",
+          "file": "src/data/code/ch7.json",
+          "sha256": "2838E76CBAD3300DC9AE6324F29E1F305718AC0A55D3B86D68BB3D960A0864BA",
+          "bytes": 2723
+        },
+        {
+          "id": "ch8",
+          "file": "src/data/code/ch8.json",
+          "sha256": "C472EFD9B996CFEB850D752718D8C3F973D01A30200E0FAC960AF04194AEF334",
+          "bytes": 6157
+        },
+        {
+          "id": "ch9",
+          "file": "src/data/code/ch9.json",
+          "sha256": "FB8B7C045808439EEC943DC5045FE816BDFD10FB846B3D2CC3E16756375FB295",
+          "bytes": 6628
+        },
+        {
+          "id": "ch10",
+          "file": "src/data/code/ch10.json",
+          "sha256": "5E75438E88200FDDF51036834227236C2F494E2E9F435BAED34D696D2B321C51",
+          "bytes": 5046
+        },
+        {
+          "id": "part2",
+          "file": "src/data/code/part2.json",
+          "sha256": "FAC957DA2317DD67748CADAC8B35D0E135D3CD0176B0574420BFB6188357382C",
+          "bytes": 13109
+        },
+        {
+          "id": "glossary",
+          "file": "src/data/code/glossary.json",
+          "sha256": "09CC1DC0A842B74DFF75FF077E16BDA452DBF27E0F7C010DF270169F56196923",
+          "bytes": 18181
+        },
+        {
+          "id": "annex1",
+          "file": "src/data/code/annex1.json",
+          "sha256": "B90D7F058319957B54349FAA731C3672D1176B6DA09B9626C6D765E9B103DA0C",
+          "bytes": 11066
+        },
+        {
+          "id": "annex2",
+          "file": "src/data/code/annex2.json",
+          "sha256": "017951CCD15F5F726E2EE278AB185C3486382A2FD11FD8DF3314CEE83F38A1CF",
+          "bytes": 8049
+        },
+        {
+          "id": "annex3",
+          "file": "src/data/code/annex3.json",
+          "sha256": "3E5DC8B12815DC46A3F813694C31FC431798E5A617DCDEF3FB2E10CF7EC87239",
+          "bytes": 4657
+        },
+        {
+          "id": "annex4",
+          "file": "src/data/code/annex4.json",
+          "sha256": "D5827230DB360E1567206FEEE32A37AF231FA1E1535F7D8F68523C6B70113776",
+          "bytes": 5892
+        },
+        {
+          "id": "annex5",
+          "file": "src/data/code/annex5.json",
+          "sha256": "FB88B6C55154D8B31CD4ADFDF654D3DF4F1D7FD1BADB66F65A6C77BA1A446F6D",
+          "bytes": 3117
+        },
+        {
+          "id": "annex6",
+          "file": "src/data/code/annex6.json",
+          "sha256": "A67D96C50DD1AB43912964D09339E7ECBF082348D44ABF74F379E8C86266C4E6",
+          "bytes": 6952
+        },
+        {
+          "id": "annex7",
+          "file": "src/data/code/annex7.json",
+          "sha256": "81A4C97A85D4F35E7A22AE9F0FC2F7949108697157843148855653F679CF81F1",
+          "bytes": 7660
+        },
+        {
+          "id": "changelog",
+          "file": "src/data/code/changelog.json",
+          "sha256": "37B1302FA26F298D22AC6DCFAB1C4A04B1B32A35B05DCDEFA148A91310C9A03B",
+          "bytes": 4722
+        }
+      ]
+    },
+    "pdf": {
+      "path": "src/data/code-september-2024 (1).pdf",
+      "sha256": "9ED658D0C9F858E35576C3905CC4423DF934DB894786F4C12D9A130E0602A148",
+      "bytes": 7511729,
+      "pages": 80
+    }
+  },
+  "method": {
+    "scope": "Visible source-backed text fields, compared within explicit chapter page ranges.",
+    "layoutNormalization": [
+      "HTML tags and styling are removed with Python's HTMLParser.",
+      "PDF running headers, page numbers, whitespace, and bullet glyphs are ignored.",
+      "Punctuation, capitalization, numbers, apostrophes, and wording remain significant.",
+      "A second pass rejoins words visibly split with a line-end hyphen."
+    ],
+    "excluded": [
+      "chapters[0](scope).id (app metadata)",
+      "chapters[0](scope).part (app metadata)",
+      "chapters[0](scope).icon (app metadata)",
+      "chapters[0](scope).summary (app-authored navigation summary)",
+      "chapters[1](admin).id (app metadata)",
+      "chapters[1](admin).part (app metadata)",
+      "chapters[1](admin).icon (app metadata)",
+      "chapters[1](admin).summary (app-authored navigation summary)",
+      "chapters[2](intro).id (app metadata)",
+      "chapters[2](intro).part (app metadata)",
+      "chapters[2](intro).icon (app metadata)",
+      "chapters[2](intro).summary (app-authored navigation summary)",
+      "chapters[3](ch1).id (app metadata)",
+      "chapters[3](ch1).part (app metadata)",
+      "chapters[3](ch1).icon (app metadata)",
+      "chapters[3](ch1).summary (app-authored navigation summary)",
+      "chapters[4](ch2).id (app metadata)",
+      "chapters[4](ch2).part (app metadata)",
+      "chapters[4](ch2).icon (app metadata)",
+      "chapters[4](ch2).summary (app-authored navigation summary)",
+      "chapters[5](ch3).id (app metadata)",
+      "chapters[5](ch3).part (app metadata)",
+      "chapters[5](ch3).icon (app metadata)",
+      "chapters[5](ch3).summary (app-authored navigation summary)",
+      "chapters[6](ch4).id (app metadata)",
+      "chapters[6](ch4).part (app metadata)",
+      "chapters[6](ch4).icon (app metadata)",
+      "chapters[6](ch4).summary (app-authored navigation summary)",
+      "chapters[7](ch5).id (app metadata)",
+      "chapters[7](ch5).part (app metadata)",
+      "chapters[7](ch5).icon (app metadata)",
+      "chapters[7](ch5).summary (app-authored navigation summary)",
+      "chapters[8](ch6).id (app metadata)",
+      "chapters[8](ch6).part (app metadata)",
+      "chapters[8](ch6).icon (app metadata)",
+      "chapters[8](ch6).summary (app-authored navigation summary)",
+      "chapters[9](ch7).id (app metadata)",
+      "chapters[9](ch7).part (app metadata)",
+      "chapters[9](ch7).icon (app metadata)",
+      "chapters[9](ch7).summary (app-authored navigation summary)",
+      "chapters[10](ch8).id (app metadata)",
+      "chapters[10](ch8).part (app metadata)",
+      "chapters[10](ch8).icon (app metadata)",
+      "chapters[10](ch8).summary (app-authored navigation summary)",
+      "chapters[11](ch9).id (app metadata)",
+      "chapters[11](ch9).part (app metadata)",
+      "chapters[11](ch9).icon (app metadata)",
+      "chapters[11](ch9).summary (app-authored navigation summary)",
+      "chapters[12](ch10).id (app metadata)",
+      "chapters[12](ch10).part (app metadata)",
+      "chapters[12](ch10).icon (app metadata)",
+      "chapters[12](ch10).summary (app-authored navigation summary)",
+      "chapters[13](part2).id (app metadata)",
+      "chapters[13](part2).part (app metadata)",
+      "chapters[13](part2).icon (app metadata)",
+      "chapters[13](part2).summary (app-authored navigation summary)",
+      "chapters[14](glossary).id (app metadata)",
+      "chapters[14](glossary).part (app metadata)",
+      "chapters[14](glossary).icon (app metadata)",
+      "chapters[14](glossary).summary (app-authored navigation summary)",
+      "chapters[15](annex1).id (app metadata)",
+      "chapters[15](annex1).part (app metadata)",
+      "chapters[15](annex1).icon (app metadata)",
+      "chapters[15](annex1).summary (app-authored navigation summary)",
+      "chapters[16](annex2).id (app metadata)",
+      "chapters[16](annex2).part (app metadata)",
+      "chapters[16](annex2).icon (app metadata)",
+      "chapters[16](annex2).summary (app-authored navigation summary)",
+      "chapters[17](annex3).id (app metadata)",
+      "chapters[17](annex3).part (app metadata)",
+      "chapters[17](annex3).icon (app metadata)",
+      "chapters[17](annex3).summary (app-authored navigation summary)",
+      "chapters[18](annex4).id (app metadata)",
+      "chapters[18](annex4).part (app metadata)",
+      "chapters[18](annex4).icon (app metadata)",
+      "chapters[18](annex4).summary (app-authored navigation summary)",
+      "chapters[19](annex5).id (app metadata)",
+      "chapters[19](annex5).part (app metadata)",
+      "chapters[19](annex5).icon (app metadata)",
+      "chapters[19](annex5).summary (app-authored navigation summary)",
+      "chapters[20](annex6).id (app metadata)",
+      "chapters[20](annex6).part (app metadata)",
+      "chapters[20](annex6).icon (app metadata)",
+      "chapters[20](annex6).summary (app-authored navigation summary)",
+      "chapters[21](annex7).id (app metadata)",
+      "chapters[21](annex7).part (app metadata)",
+      "chapters[21](annex7).icon (app metadata)",
+      "chapters[21](annex7).summary (app-authored navigation summary)",
+      "chapters[22](changelog).id (app metadata)",
+      "chapters[22](changelog).part (app metadata)",
+      "chapters[22](changelog).icon (app metadata)",
+      "chapters[22](changelog).summary (app-authored navigation summary)",
+      "chapters[22](changelog) (app-only Version History chapter)"
+    ]
+  },
+  "summary": {
+    "fieldsCompared": 241,
+    "statusCounts": {
+      "case_or_punctuation_difference": 7,
+      "exact_after_layout_normalization": 179,
+      "punctuation_difference": 14,
+      "substantive_review_required": 41
+    },
+    "fieldsRequiringReview": 62
+  },
+  "results": [
+    {
+      "path": "chapters[0](scope).title",
+      "chapterId": "scope",
+      "kind": "chapter_title",
+      "visibleTextSha256": "B073F6C68EF8721107FD9815B19B2C35EC111D526B75C2123D1111BA64424000",
+      "visibleCharacters": 5,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[0](scope).sections[0].title",
+      "chapterId": "scope",
+      "kind": "section_title",
+      "visibleTextSha256": "6691E21D416E8946E5B331386F00603535831F79C367B717FA250CEE242D015E",
+      "visibleCharacters": 28,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[0](scope).sections[0].legalText.body",
+      "chapterId": "scope",
+      "kind": "legal_text",
+      "visibleTextSha256": "841BE1006176D443A05E889632A628A185C79228A86CC54954BE9E3994B701D9",
+      "visibleCharacters": 1617,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[0](scope).sections[0].qas[0].q",
+      "chapterId": "scope",
+      "kind": "question",
+      "visibleTextSha256": "0F3E50B1BDA5C168CA043D024E6A4C865ACCCBB6A4E991B14C839E69B74F5C60",
+      "visibleCharacters": 124,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[0](scope).sections[0].qas[0].a",
+      "chapterId": "scope",
+      "kind": "answer",
+      "visibleTextSha256": "0BAEE8C1D18426E46CFB71A5F6BED14330B6EC09725E600A7F29A970A247F9FC",
+      "visibleCharacters": 812,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[0](scope).sections[0].qas[1].q",
+      "chapterId": "scope",
+      "kind": "question",
+      "visibleTextSha256": "67A437173BDBC10C7B4AE40E36BF2E89E8276B02F29DAB02B6EB3ECBFE360477",
+      "visibleCharacters": 232,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[0](scope).sections[0].qas[1].a",
+      "chapterId": "scope",
+      "kind": "answer",
+      "visibleTextSha256": "16D460868063090598E8480C8B992DB24AD5FF432114D10B0326FC8490FC4A86",
+      "visibleCharacters": 1531,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[0](scope).sections[1].title",
+      "chapterId": "scope",
+      "kind": "section_title",
+      "visibleTextSha256": "F611C39238CF04F9422BB76B404763CE50E5B4674C90810FE0466EC0F13093C7",
+      "visibleCharacters": 28,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[0](scope).sections[1].legalText.body",
+      "chapterId": "scope",
+      "kind": "legal_text",
+      "visibleTextSha256": "8935C737282A0CFB16D9881F75444CF9EF12080314381FC7890E93CB0E802BA5",
+      "visibleCharacters": 2855,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.990788,
+        "expected_excerpt": "2 . 1 New Member Companies At the time an applicant becomes a Member , it must begin to take all the necessary steps required to meet all membership obligations , including the obligation to comply with the Code .",
+        "pdf_excerpt": "2 . 1 New Member Companies At the time an applicant becomes a Member , it must begin to take all the necessary steps required to meet all membership obligations , including the obligation to comply with the Code .",
+        "operationCount": 4,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "sponsorship",
+            "pdf": "sponsorhip"
+          },
+          {
+            "operation": "replace",
+            "expected": "Professionals the",
+            "pdf": "Professionalsthe"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "date of the"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "."
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[1](admin).title",
+      "chapterId": "admin",
+      "kind": "chapter_title",
+      "visibleTextSha256": "74A5617029336936488C6BA754107CDF784420805D6209A1B4BB0C055811B5B3",
+      "visibleCharacters": 22,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[1](admin).sections[0].title",
+      "chapterId": "admin",
+      "kind": "section_title",
+      "visibleTextSha256": "99258B5DE72EE0BCE310DB879D0467BDDCC9658AD5CC2FA565FA3BF3E15AC0BD",
+      "visibleCharacters": 17,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.0,
+        "expected_excerpt": "Introductory Text",
+        "pdf_excerpt": "Ethical Industry",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "Introductory Text",
+            "pdf": "Ethical Industry"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[1](admin).sections[0].legalText.body",
+      "chapterId": "admin",
+      "kind": "legal_text",
+      "visibleTextSha256": "C567525F0DD96026359F7D07A7A892E526793B04D868CE96CD98D24FCC400B22",
+      "visibleCharacters": 1111,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[1](admin).sections[1].title",
+      "chapterId": "admin",
+      "kind": "section_title",
+      "visibleTextSha256": "57EE53BD80093005F87066D6F321CB431A401B45416D7909CA8BFEEF65E64CD4",
+      "visibleCharacters": 32,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[1](admin).sections[1].legalText.body",
+      "chapterId": "admin",
+      "kind": "legal_text",
+      "visibleTextSha256": "A426C5DBAD535C5C4769727639575BABB755A033821DFB4E15A3B76F58EA3850",
+      "visibleCharacters": 878,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[1](admin).sections[2].title",
+      "chapterId": "admin",
+      "kind": "section_title",
+      "visibleTextSha256": "6516811C677090E0919BDC00EFC45FE9A6303775CEB848600796FF0FF560FB37",
+      "visibleCharacters": 32,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[1](admin).sections[2].legalText.body",
+      "chapterId": "admin",
+      "kind": "legal_text",
+      "visibleTextSha256": "FB55978BB53946140EEFE7861A94F5165248D133C84C6D7C89614DB15AFBC958",
+      "visibleCharacters": 2130,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[1](admin).sections[3].title",
+      "chapterId": "admin",
+      "kind": "section_title",
+      "visibleTextSha256": "B07DAA69C07DE0808F606E5E0FAA767A17003B20097DF03CBAAD92AE7329498C",
+      "visibleCharacters": 34,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[1](admin).sections[3].legalText.body",
+      "chapterId": "admin",
+      "kind": "legal_text",
+      "visibleTextSha256": "7FAC712A3BEF9B7F0AD6F7F52A05B580BB34CA3928DFD57E36ECB4FE39BA9EB4",
+      "visibleCharacters": 3353,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[1](admin).sections[4].title",
+      "chapterId": "admin",
+      "kind": "section_title",
+      "visibleTextSha256": "072DE695DD675A07CA222E6B46D4C45CFC77E80D755BC25DDA85355BFC15C3C7",
+      "visibleCharacters": 24,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[1](admin).sections[4].legalText.body",
+      "chapterId": "admin",
+      "kind": "legal_text",
+      "visibleTextSha256": "9C0084ACE5ACB53727B2483A9B828C733442C894E719A86183EAC1B9CC60E701",
+      "visibleCharacters": 330,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[2](intro).title",
+      "chapterId": "intro",
+      "kind": "chapter_title",
+      "visibleTextSha256": "B605350BC00209520B7CD8F546322663356BA630708F71BBF30AEAD6B3DD608E",
+      "visibleCharacters": 12,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[2](intro).sections[0].title",
+      "chapterId": "intro",
+      "kind": "section_title",
+      "visibleTextSha256": "30E4031FA5138ED2753D9A4CECE9D3C0043DFC44B727BF34E231AF459AFD62A5",
+      "visibleCharacters": 29,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[2](intro).sections[0].legalText.body",
+      "chapterId": "intro",
+      "kind": "legal_text",
+      "visibleTextSha256": "3707F5E172C0A8A56D4513CBD32EDF81F6B5FCCD7F5E73C3AB0EB7149A095349",
+      "visibleCharacters": 1155,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[2](intro).sections[1].title",
+      "chapterId": "intro",
+      "kind": "section_title",
+      "visibleTextSha256": "384A990432F54B426C8B3BA21A426D89D7AC5B8B0F7E51589FB6CDC8159E349E",
+      "visibleCharacters": 15,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[2](intro).sections[1].legalText.body",
+      "chapterId": "intro",
+      "kind": "legal_text",
+      "visibleTextSha256": "35E283737BE23DEB03348A42D56FD50D92BBF2B5AEE74261B45866075695DD64",
+      "visibleCharacters": 1040,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[2](intro).sections[2].title",
+      "chapterId": "intro",
+      "kind": "section_title",
+      "visibleTextSha256": "FC8FBA100C970CE98627D489FBEBA9085C7BBEC4A6F0AEE04FB50F3B9DB36493",
+      "visibleCharacters": 31,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[2](intro).sections[2].legalText.body",
+      "chapterId": "intro",
+      "kind": "legal_text",
+      "visibleTextSha256": "77C2A3A78A49CAA5832B984F5CEA3820B9E8297B0010DAB3987015BC852FD7E7",
+      "visibleCharacters": 3948,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.997535,
+        "expected_excerpt": "The interaction between Members and Healthcare Professionals and Healthcare Organisations is an important feature in achieving MedTech Europe’s mission to make safe , innovative and reliable technology and related services available to more people . For example : Advancement of",
+        "pdf_excerpt": "The interaction between Members and Healthcare Professionals and Healthcare Organisations is an important feature in achieving MedTech Europe’s mission to make safe , innovative and reliable technology and related services available to more people . For example : Advancement of",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "Medical Technologies",
+            "pdf": "MedicalTechnologies"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[2](intro).sections[2].qas[0].q",
+      "chapterId": "intro",
+      "kind": "question",
+      "visibleTextSha256": "52FEEADDDDA5307805C6ED7CF674CF3453B6A79DC6D00637F5E86817C2022E4A",
+      "visibleCharacters": 111,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[2](intro).sections[2].qas[0].a",
+      "chapterId": "intro",
+      "kind": "answer",
+      "visibleTextSha256": "E1AB540ADEF4E9815B00D758573F2C1085093DDECF128F398FBA68F4B93C9900",
+      "visibleCharacters": 298,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).title",
+      "chapterId": "ch1",
+      "kind": "chapter_title",
+      "visibleTextSha256": "D20B5F4FA3794A7642FA8265BB536B5EED33861BD53CE8C3F03094C1697CD51C",
+      "visibleCharacters": 26,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[0].title",
+      "chapterId": "ch1",
+      "kind": "section_title",
+      "visibleTextSha256": "99258B5DE72EE0BCE310DB879D0467BDDCC9658AD5CC2FA565FA3BF3E15AC0BD",
+      "visibleCharacters": 17,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.0,
+        "expected_excerpt": "Introductory Text",
+        "pdf_excerpt": "expense .",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "Introductory Text",
+            "pdf": "expense ."
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[3](ch1).sections[0].legalText.body",
+      "chapterId": "ch1",
+      "kind": "legal_text",
+      "visibleTextSha256": "F26A3BD95AE329CA9F26930E14A2CE65B255EE4B20B4720538CC7851F83AF4FB",
+      "visibleCharacters": 1252,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[1].title",
+      "chapterId": "ch1",
+      "kind": "section_title",
+      "visibleTextSha256": "B552FF10BD21747F837F85D31E19FFC63ACFC5071C0D041D3CC64AD2F921949A",
+      "visibleCharacters": 18,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[1].legalText.body",
+      "chapterId": "ch1",
+      "kind": "legal_text",
+      "visibleTextSha256": "4D2C6F15A4E96126310AFB3910508A29370CFD24E0A8AC8D485CE22F3FE2A2F8",
+      "visibleCharacters": 1615,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[1].qas[0].q",
+      "chapterId": "ch1",
+      "kind": "question",
+      "visibleTextSha256": "13823D600A5ADBF657E80155507EDFA347A80601A2F83DC312DD579CDD93D5A0",
+      "visibleCharacters": 87,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[1].qas[0].a",
+      "chapterId": "ch1",
+      "kind": "answer",
+      "visibleTextSha256": "8E9978CAE1E77FF4227C3877006EDFAB6A2F32258EAF6772D59143D0253751F1",
+      "visibleCharacters": 101,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[1].qas[1].q",
+      "chapterId": "ch1",
+      "kind": "question",
+      "visibleTextSha256": "BBB0F0017A89B8C31832D8D7F43FE4D49DFA8528EA49768C4C8E177B0F9D1A3A",
+      "visibleCharacters": 156,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[1].qas[1].a",
+      "chapterId": "ch1",
+      "kind": "answer",
+      "visibleTextSha256": "303E59CFFBCA81A7E52E169C1AD0CDEFAFC14D5D487C04C1D48F7CD328AA06D7",
+      "visibleCharacters": 1394,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[2].title",
+      "chapterId": "ch1",
+      "kind": "section_title",
+      "visibleTextSha256": "AB1087AE3C06E2BE7BD8809CB9149A787E2FECE8B939E650357764AB3C6BA327",
+      "visibleCharacters": 27,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[2].legalText.body",
+      "chapterId": "ch1",
+      "kind": "legal_text",
+      "visibleTextSha256": "C66955BC7D8452F33123D561668EC24AB2383BD8C1FF5820E1AADCFEB6E34131",
+      "visibleCharacters": 1012,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.545723,
+        "expected_excerpt": "The Event location and venue should not become the main attraction of the Event . For the location and the venue , Member Companies must take into account at all times the following considerations : Potential adverse public perceptions of",
+        "pdf_excerpt": "The Event location and venue should not become the main attraction of the Event . For the location and the venue , Member Companies must take into account at all times the following considerations : Potential adverse public perceptions of",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": ". Q4 Do the minimum duration requirements of Section 1 of Chapter 1 apply to Virtual Events ? A4 No , Virtual Events are not affected by the duration requirements of Section 1 , Chapter 1 of the Code . Q5 Can a Member Company organise or support an Event at a hotel or resort that offers significant leisure facilities such as golf , casino or ski / water sports ? A5 In principle no . It is not appropriate for a Member Company to organise or support Events at hotels or resorts renowned for their e"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[3](ch1).sections[2].qas[0].q",
+      "chapterId": "ch1",
+      "kind": "question",
+      "visibleTextSha256": "142732F8B34B5CAA45583C8CBF85D800ADCE1F2B3C7AE00494B11DF76002E17E",
+      "visibleCharacters": 90,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[2].qas[0].a",
+      "chapterId": "ch1",
+      "kind": "answer",
+      "visibleTextSha256": "6BBE9D8C602AAB8EFAF80665C49D56227C3EDB6F169259082B2129CCFAA008AB",
+      "visibleCharacters": 285,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[2].qas[1].q",
+      "chapterId": "ch1",
+      "kind": "question",
+      "visibleTextSha256": "824A2522CFDF1846B497A94B91B5D2C85B350D42294988316B7F4F72311F00A1",
+      "visibleCharacters": 74,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[2].qas[1].a",
+      "chapterId": "ch1",
+      "kind": "answer",
+      "visibleTextSha256": "30784CD01C7F1D01EA2455FEEC6581E57CEF7EF16B00D5FDFD7C7FB19A9FC8E6",
+      "visibleCharacters": 642,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[3].title",
+      "chapterId": "ch1",
+      "kind": "section_title",
+      "visibleTextSha256": "9F8D99A02C15D5BA91ECC4C5E9D0621F939E5E7DF59245C36FEBAC4F071E00C9",
+      "visibleCharacters": 9,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[3].legalText.body",
+      "chapterId": "ch1",
+      "kind": "legal_text",
+      "visibleTextSha256": "3C2E72602E960633FA0FDFAD2FE1966878A5591FC7C5E729C6956D8C96242323",
+      "visibleCharacters": 268,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[3].qas[0].q",
+      "chapterId": "ch1",
+      "kind": "question",
+      "visibleTextSha256": "AD173601160C4330DD2832434C399F761E59E80E84A40FD17E350E3DE8BD245C",
+      "visibleCharacters": 82,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[3].qas[0].a",
+      "chapterId": "ch1",
+      "kind": "answer",
+      "visibleTextSha256": "24DECB90A978BB5B451CB432BD71FFFBEBDB9DA66EE7A474BC12E785C629EDBA",
+      "visibleCharacters": 669,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[3].qas[1].q",
+      "chapterId": "ch1",
+      "kind": "question",
+      "visibleTextSha256": "EB04C0EAEBF770A3E80BD53B1396B32871E4371F6D571453471322848D03B6C0",
+      "visibleCharacters": 177,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[3].qas[1].a",
+      "chapterId": "ch1",
+      "kind": "answer",
+      "visibleTextSha256": "CFADB94A949AFBB079F248F68121467BBDAC9D8656065353B8B7034A2A19727A",
+      "visibleCharacters": 1044,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.481532,
+        "expected_excerpt": "It is not appropriate for a Guest of a Healthcare Professional to attend either Company Events ( including satellite symposia ) or Third Party Organised Educational Events ( unless the individual qualifies as a participant in their own right )",
+        "pdf_excerpt": "It is not appropriate for a Guest of a Healthcare Professional to attend either Company Events ( including satellite symposia ) or Third Party Organised Educational Events ( unless the individual qualifies as a participant in their own right )",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": ". 4 . Reasonable Hospitality Member Companies may provide reasonable hospitality to Healthcare Professionals in the context of Company Events and Third Party Organised Educational Events when they are attending the Event in person , but any hospitality offered must be subordinate in time and focus to the Event purpose ( no home delivery is permitted , for example through catering or food delivery services to the HCPs ’ home ) . Member Companies must in any event meet the requirements governing h"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[3](ch1).sections[4].title",
+      "chapterId": "ch1",
+      "kind": "section_title",
+      "visibleTextSha256": "97FE7FE78B1B2E894CBE3B0FA51172B48699245C0CFCE1CE85CD6D2D95B015EB",
+      "visibleCharacters": 25,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[4].legalText.body",
+      "chapterId": "ch1",
+      "kind": "legal_text",
+      "visibleTextSha256": "73B519EF56619C2BA707E3FA5B55A9AE3952D7779464E1D705ADEF0C79FE63E6",
+      "visibleCharacters": 2253,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[5].title",
+      "chapterId": "ch1",
+      "kind": "section_title",
+      "visibleTextSha256": "677DEA50E9B774B1A82D0934D17F6321B9DC9034BA9D80D0C2BEC1F1690EF805",
+      "visibleCharacters": 9,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[5].legalText.body",
+      "chapterId": "ch1",
+      "kind": "legal_text",
+      "visibleTextSha256": "0362259B2242F7715A4094C87F7C315CBB442C6C9E3474138F7DC4FF7501754C",
+      "visibleCharacters": 659,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[5].qas[0].q",
+      "chapterId": "ch1",
+      "kind": "question",
+      "visibleTextSha256": "C69C179458C6D60F77FDB15F9E98B3E07CBEB1F9883632C97BD731EC70F8337F",
+      "visibleCharacters": 251,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[5].qas[0].a",
+      "chapterId": "ch1",
+      "kind": "answer",
+      "visibleTextSha256": "768525FC92923F32B0E97D56CF0027B10B56A45D06880897F521D9E95C2699EB",
+      "visibleCharacters": 333,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[6].title",
+      "chapterId": "ch1",
+      "kind": "section_title",
+      "visibleTextSha256": "EF79DB60E0A1E0342D993DCD589574DE2BC680D42EA68F86A7495938F81CB9EC",
+      "visibleCharacters": 15,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[6].legalText.body",
+      "chapterId": "ch1",
+      "kind": "legal_text",
+      "visibleTextSha256": "C715EC68AC2FC2C5AA433AC933F28AF97C7729AADFCD8E3B4E069B17508BCD98",
+      "visibleCharacters": 818,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[6].qas[0].q",
+      "chapterId": "ch1",
+      "kind": "question",
+      "visibleTextSha256": "4FDE9BEB76726C606B1F02D1738CBA205F6AB0CB233D468B60C8D74B0F85F299",
+      "visibleCharacters": 340,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[6].qas[0].a",
+      "chapterId": "ch1",
+      "kind": "answer",
+      "visibleTextSha256": "C691800092CD4DE74633B5242CA1376D5FE707DA2EFB995A85EC461AB7344D9A",
+      "visibleCharacters": 450,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[6].qas[1].q",
+      "chapterId": "ch1",
+      "kind": "question",
+      "visibleTextSha256": "589DB87F07B24DE6460098D06B71CAFC8911BB9F4B0895A96CBFD3A61351E4AB",
+      "visibleCharacters": 219,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[6].qas[1].a",
+      "chapterId": "ch1",
+      "kind": "answer",
+      "visibleTextSha256": "522A2F2AEB073B5E88E33046DB206C685E2AF30E9B42571CE23FF72AD44D579A",
+      "visibleCharacters": 687,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[6].qas[2].q",
+      "chapterId": "ch1",
+      "kind": "question",
+      "visibleTextSha256": "5A431FECF0C11F3FB3321EE052D326B60019861CF07467A803A5DB389CCD90EA",
+      "visibleCharacters": 68,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[6].qas[2].a",
+      "chapterId": "ch1",
+      "kind": "answer",
+      "visibleTextSha256": "429AC09F80E860392A4CC0C0FC4496C72EA588CDCB12D392D52F6DE8D551D06C",
+      "visibleCharacters": 347,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[3](ch1).sections[7].title",
+      "chapterId": "ch1",
+      "kind": "section_title",
+      "visibleTextSha256": "F85E7585CEFA7550714587A9164825CD9BF036D89B39266876CD503CAEECAE1E",
+      "visibleCharacters": 17,
+      "status": "punctuation_difference",
+      "difference": {
+        "similarity": 1.0,
+        "expected_excerpt": "7 . Virtual Events",
+        "pdf_excerpt": "7 . Virtual Events",
+        "operationCount": 0,
+        "operations": []
+      }
+    },
+    {
+      "path": "chapters[3](ch1).sections[7].legalText.body",
+      "chapterId": "ch1",
+      "kind": "legal_text",
+      "visibleTextSha256": "C3056DCE7D93491B625E039DC213DD9C712E7277CEFC205D71C2EFB97AA8FE3E",
+      "visibleCharacters": 294,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.976,
+        "expected_excerpt": "Virtual Events must comply with any part of the Code that is by its nature applicable to them . Therefore , Member Companies may provide financial and / or In Kind support ( e . g . Member Company Medical",
+        "pdf_excerpt": "Virtual Events must comply with any part of the Code that is by its nature applicable to them . Therefore , Member Companies may provide financial and / or In Kind support ( e . g . Member CompanyMedical Technology",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "Company Medical",
+            "pdf": "CompanyMedical"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[4](ch2).title",
+      "chapterId": "ch2",
+      "kind": "chapter_title",
+      "visibleTextSha256": "BB2CBF751BDBB321292A0D40FDAF383512B72D72CB3322D12FEB20D8B37A3CC5",
+      "visibleCharacters": 40,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[4](ch2).sections[0].title",
+      "chapterId": "ch2",
+      "kind": "section_title",
+      "visibleTextSha256": "99258B5DE72EE0BCE310DB879D0467BDDCC9658AD5CC2FA565FA3BF3E15AC0BD",
+      "visibleCharacters": 17,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.0,
+        "expected_excerpt": "Introductory Text",
+        "pdf_excerpt": "Events .",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "Introductory Text",
+            "pdf": "Events ."
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[4](ch2).sections[0].legalText.body",
+      "chapterId": "ch2",
+      "kind": "legal_text",
+      "visibleTextSha256": "98914FC99372D0965BA4BDC732134710905EFEC16257182DE2EBB4FF783A9F2A",
+      "visibleCharacters": 302,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[4](ch2).sections[1].title",
+      "chapterId": "ch2",
+      "kind": "section_title",
+      "visibleTextSha256": "72628859EC24C16DBF4D98BCA45F9E3781D3E7DA95552D04623C2C4305178671",
+      "visibleCharacters": 48,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[4](ch2).sections[1].legalText.body",
+      "chapterId": "ch2",
+      "kind": "legal_text",
+      "visibleTextSha256": "05FB057DE511555512482B28F1C607B9974F9F3CD74160B7C15E04ABAA58EF9C",
+      "visibleCharacters": 1629,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[4](ch2).sections[1].legalText.footnote[0]",
+      "chapterId": "ch2",
+      "kind": "footnote",
+      "visibleTextSha256": "655F30323F61FACACD8BACF3A26D06FF496712F72CEE306825F40946C6DEC742",
+      "visibleCharacters": 80,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[4](ch2).sections[1].qas[0].q",
+      "chapterId": "ch2",
+      "kind": "question",
+      "visibleTextSha256": "5E23876FDEF8E729F7FEF80F90D4177422F24F5DB167CB20EA00844EBF97C303",
+      "visibleCharacters": 146,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[4](ch2).sections[1].qas[0].a",
+      "chapterId": "ch2",
+      "kind": "answer",
+      "visibleTextSha256": "709F00EAE06D6E6BA1AF61560E3018FFB0A7CE50E5A3CF8FE15317FED914C005",
+      "visibleCharacters": 754,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[4](ch2).sections[1].qas[1].q",
+      "chapterId": "ch2",
+      "kind": "question",
+      "visibleTextSha256": "0F5ECAD6369B3C517EB6299DF6F21FF45FFD59F2565059203F43BFA2AA01F1FD",
+      "visibleCharacters": 96,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[4](ch2).sections[1].qas[1].a",
+      "chapterId": "ch2",
+      "kind": "answer",
+      "visibleTextSha256": "155721F7CF4120E238DAAB9AEF1E6B243CA67A29D23D4B6F030B9A9E87476F2B",
+      "visibleCharacters": 310,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[4](ch2).sections[1].qas[2].q",
+      "chapterId": "ch2",
+      "kind": "question",
+      "visibleTextSha256": "BEAD707FF6BB0C49FFAE02E2E29942FC9E2D67FF5F737608767C61BF00CE5F8C",
+      "visibleCharacters": 373,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[4](ch2).sections[1].qas[2].a",
+      "chapterId": "ch2",
+      "kind": "answer",
+      "visibleTextSha256": "60E827EFEBA91737317021EB8DB8A925221131CA80EE625DB80D39524B34471F",
+      "visibleCharacters": 1051,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[4](ch2).sections[1].qas[3].q",
+      "chapterId": "ch2",
+      "kind": "question",
+      "visibleTextSha256": "93A8F5C34FEF9E033D06E04CDD2A6152AAE81FE11D5CA9510A7BEE78210EED59",
+      "visibleCharacters": 222,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[4](ch2).sections[1].qas[3].a",
+      "chapterId": "ch2",
+      "kind": "answer",
+      "visibleTextSha256": "8D0E22895E979BE144166BC47108204229D278732B9AE1D0F7EBCD42D98B58BD",
+      "visibleCharacters": 510,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[4](ch2).sections[2].title",
+      "chapterId": "ch2",
+      "kind": "section_title",
+      "visibleTextSha256": "7641E9AB18CDA050406D11A0736B98988A4F7FD814B58DCCE8AFD506D26B10DA",
+      "visibleCharacters": 43,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[4](ch2).sections[2].legalText.body",
+      "chapterId": "ch2",
+      "kind": "legal_text",
+      "visibleTextSha256": "14B4D36ACE66F745FFDD1ED7C4E211C47163CCFF3B99C55AFAB9DF990E393C89",
+      "visibleCharacters": 1466,
+      "status": "punctuation_difference",
+      "difference": {
+        "similarity": 0.997895,
+        "expected_excerpt": "Member Companies may support Third Party Organised Procedure Training either via Educational Grants ( in accordance with Chapter 4 : Charitable Donations and Grants ) or by providing financial support directly to individual Healthcare Professionals to cover the cost of",
+        "pdf_excerpt": "Member Companies may support Third Party Organised Procedure Training either via Educational Grants ( in accordance with Chapter 4 : Charitable Donations and Grants ) or by providing financial support directly to individual Healthcare Professionals to cover the cost of",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "delete",
+            "expected": ".",
+            "pdf": ""
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[4](ch2).sections[2].legalText.footnote[0]",
+      "chapterId": "ch2",
+      "kind": "footnote",
+      "visibleTextSha256": "0A92A2125E51367505CEDAE03DF34C693AE750F1C8BA105F47A7B10572BF064E",
+      "visibleCharacters": 80,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[4](ch2).sections[2].qas[0].q",
+      "chapterId": "ch2",
+      "kind": "question",
+      "visibleTextSha256": "069736240EA8E3CA1DCD5634896B59DB981F47767107389F25992D5FE1931EF2",
+      "visibleCharacters": 108,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[4](ch2).sections[2].qas[0].a",
+      "chapterId": "ch2",
+      "kind": "answer",
+      "visibleTextSha256": "05D72AC4D69DB3651E9BC3BF57DAF7007B60D1F3836E4C4FD8E4545F58DFCBFA",
+      "visibleCharacters": 2680,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.997863,
+        "expected_excerpt": "Both Third - Party Organised Educational Conferences ( see the Glossary ) and Procedure Trainings ( see the Glossary ) are a type of Third Party Organised Educational Event . Therefore , they must comply with Chapter 1 . General",
+        "pdf_excerpt": "Both Third - Party Organised Educational Conferences ( see the Glossary ) and Procedure Trainings ( see the Glossary ) are a type of Third Party Organised Educational Event . Therefore , they must comply with Chapter 1 . General",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "Conference",
+            "pdf": "Conferences"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[4](ch2).sections[2].qas[1].q",
+      "chapterId": "ch2",
+      "kind": "question",
+      "visibleTextSha256": "9F1693E71AAEF6F9E8D977AEC68AFBB28E09E5E097E2E28E2E19B265417F109E",
+      "visibleCharacters": 122,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[4](ch2).sections[2].qas[1].a",
+      "chapterId": "ch2",
+      "kind": "answer",
+      "visibleTextSha256": "FF59AFB0BF45CA565BA15EB29B76C0199FB4A1261FB893B3F09C6B7C594D7453",
+      "visibleCharacters": 230,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[4](ch2).sections[2].qas[2].q",
+      "chapterId": "ch2",
+      "kind": "question",
+      "visibleTextSha256": "3361F45F2DF42180F7E47A71372B9AA2DF6518F62503757065F884D333B51866",
+      "visibleCharacters": 260,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[4](ch2).sections[2].qas[2].a",
+      "chapterId": "ch2",
+      "kind": "answer",
+      "visibleTextSha256": "54326F40035318AD1B7D208C5A3E65694E2DA5163E02FED99C71CBF845A74F57",
+      "visibleCharacters": 852,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.990164,
+        "expected_excerpt": "In no event can financial support be transferred directly to the bank account of an individual HCP . In - Kind support may be provided to this kind of Event provided it complies with all the requirements of the Code",
+        "pdf_excerpt": "In no event can financial support be transferred directly to the bank account of an individual HCP . In - Kind support may be provided to this kind of Event provided it complies with all the requirements of the Code",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "- Kind",
+            "pdf": "Kkind"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[5](ch3).title",
+      "chapterId": "ch3",
+      "kind": "chapter_title",
+      "visibleTextSha256": "9171893736E1466C8C161C07991BA08307526EEA1F22CB9D8995F0F07FF742E0",
+      "visibleCharacters": 14,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[5](ch3).sections[0].title",
+      "chapterId": "ch3",
+      "kind": "section_title",
+      "visibleTextSha256": "436198FD453FB6D814504A6A165C33603CA786BD6B454E32072C0786CD0DCB22",
+      "visibleCharacters": 21,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[5](ch3).sections[0].legalText.body",
+      "chapterId": "ch3",
+      "kind": "legal_text",
+      "visibleTextSha256": "A606472463BD0578DD379FB92B5A011FE7EB7130CB09180D280A980298733C33",
+      "visibleCharacters": 762,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[5](ch3).sections[1].title",
+      "chapterId": "ch3",
+      "kind": "section_title",
+      "visibleTextSha256": "B98FA2F11F0894DDA720581618BF5F7F803CC3C5A2F46190DE043A89A91D5823",
+      "visibleCharacters": 56,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[5](ch3).sections[1].legalText.body",
+      "chapterId": "ch3",
+      "kind": "legal_text",
+      "visibleTextSha256": "62FFD684FAE927AAEBE2BD3E6419D9B8407582A6BEE0E4A7E0C2D399042E78E5",
+      "visibleCharacters": 3086,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.848921,
+        "expected_excerpt": "Where appropriate , in order to facilitate the safe and effective use of Medical Technologies , therapies and / or services , Member Companies should make product and procedure training and education available to relevant Healthcare Professionals . This may",
+        "pdf_excerpt": "Where appropriate , in order to facilitate the safe and effective use of Medical Technologies , therapies and / or services , Member Companies should make product and procedure training and education available to relevant Healthcare Professionals . This may",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "Q21 Are cruise ships or golf clubs appropriate venues for Product and Procedure Training and Educational Events ? A21 No . Cruise ships , golf clubs or health spas and venues renowned for their Entertainment facilities are not appropriate venues and should not be used . Appropriate examples include hospital , clinic or surgical centre laboratory , educational , conference , or other appropriate settings , including Member Companies ’ own premises or commercially available meeting facilities , th"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[5](ch3).sections[1].qas[0].q",
+      "chapterId": "ch3",
+      "kind": "question",
+      "visibleTextSha256": "E6F6CCBDC9B295A5B5793D414EAA2B8E4B8E99034B58D9D4F3339E4360B5399F",
+      "visibleCharacters": 108,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[5](ch3).sections[1].qas[0].a",
+      "chapterId": "ch3",
+      "kind": "answer",
+      "visibleTextSha256": "B9F636BB381718897CBBDAE5062926C21B937498A70DD58106649E1325094056",
+      "visibleCharacters": 465,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[5](ch3).sections[1].qas[1].q",
+      "chapterId": "ch3",
+      "kind": "question",
+      "visibleTextSha256": "2E66B4E959DEBF78EE9E83057F0CD6FE023ED5BB029E78B7E0A45933D9D09FDA",
+      "visibleCharacters": 139,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[5](ch3).sections[1].qas[1].a",
+      "chapterId": "ch3",
+      "kind": "answer",
+      "visibleTextSha256": "FE9C7142E34008E8F4C3E871DFDF731B5639757F1118B1EC377171839E0B5564",
+      "visibleCharacters": 405,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[5](ch3).sections[1].qas[2].q",
+      "chapterId": "ch3",
+      "kind": "question",
+      "visibleTextSha256": "F9E6E964887371A931275DAC36E8B4BC74C7EE3761629EE0A8F4B5EEC7EB70EC",
+      "visibleCharacters": 56,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[5](ch3).sections[1].qas[2].a",
+      "chapterId": "ch3",
+      "kind": "answer",
+      "visibleTextSha256": "A79FBC3BA551EC4C827A6EC11B6F4FF61ECD75F7F41D4C5AB5394DB3354AB987",
+      "visibleCharacters": 375,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[5](ch3).sections[2].title",
+      "chapterId": "ch3",
+      "kind": "section_title",
+      "visibleTextSha256": "36C031E42F418A9F3A8411B59A98E2DE59450222616CD4CB2B2FC45C53A611B9",
+      "visibleCharacters": 89,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[5](ch3).sections[2].legalText.body",
+      "chapterId": "ch3",
+      "kind": "legal_text",
+      "visibleTextSha256": "7640C611BE86F9C9374EC76860271449996030482A7FCEE8D353DAFA1305FC35",
+      "visibleCharacters": 4556,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.945929,
+        "expected_excerpt": "Member Companies cannot directly support travel and / or accommodation or other expenses of individual Healthcare Professionals participating in Company Events which take place during , around , or at the same time and in the same approximate location as",
+        "pdf_excerpt": "Member Companies cannot directly support travel and / or accommodation or other expenses of individual Healthcare Professionals participating in Company Events which take place during , around , or at the same time and in the same approximate location as",
+        "operationCount": 3,
+        "operations": [
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "Q23 Can a Member Company use a meeting venue outside Europe ? A23 Yes , provided the participants are from multiple countries outside Europe . If the participants are primarily from within Europe , the venue should be in Europe . It is expected that the country selected ( and the state , if the location is in the United States ) will be the residence of at least some of the participants of the Product and Procedure Training and Education Event ."
+          },
+          {
+            "operation": "replace",
+            "expected": "The",
+            "pdf": "the"
+          },
+          {
+            "operation": "replace",
+            "expected": "The",
+            "pdf": "the"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[5](ch3).sections[3].title",
+      "chapterId": "ch3",
+      "kind": "section_title",
+      "visibleTextSha256": "A3D91848F98EB6B8EB56DFE782C5D4777D3087E3393236402453184A49546863",
+      "visibleCharacters": 49,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[5](ch3).sections[3].legalText.body",
+      "chapterId": "ch3",
+      "kind": "legal_text",
+      "visibleTextSha256": "D2A5992AB3BC8062415BED7046FEEA3EF5F1EDE3FDEF27C02176EB1BDA44CCB3",
+      "visibleCharacters": 733,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[5](ch3).sections[3].qas[0].q",
+      "chapterId": "ch3",
+      "kind": "question",
+      "visibleTextSha256": "C4938DF7C5F9AA0BB179D91F427EBEF0AA1B54284723A0AD5129CA26192C77F3",
+      "visibleCharacters": 228,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[5](ch3).sections[3].qas[0].a",
+      "chapterId": "ch3",
+      "kind": "answer",
+      "visibleTextSha256": "DBEC6B61C98197C43C43BE115FDF4EDF8E001FA7BC385A95BBFF584FE6B54411",
+      "visibleCharacters": 295,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.970874,
+        "expected_excerpt": "Member Companies can pay for travel and / or accommodation of individual Healthcare Professionals to attend Company Events which include product launches provided that such Events fall within the scope of Chapter 3 , Section 2 , of the Code",
+        "pdf_excerpt": "Member Companies can pay for travel and / or accommodation of individual Healthcare Professionals to attend Company Events which include product launches provided that such Events fall within the scope of Chapter 3 , Section2 , of the Code (",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "Section 2",
+            "pdf": "Section2"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[6](ch4).title",
+      "chapterId": "ch4",
+      "kind": "chapter_title",
+      "visibleTextSha256": "5674625E73813065F84D9573340829A94CAEFFA5660F6AF5E4D0E460F60952C7",
+      "visibleCharacters": 31,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[0].title",
+      "chapterId": "ch4",
+      "kind": "section_title",
+      "visibleTextSha256": "436198FD453FB6D814504A6A165C33603CA786BD6B454E32072C0786CD0DCB22",
+      "visibleCharacters": 21,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[0].legalText.body",
+      "chapterId": "ch4",
+      "kind": "legal_text",
+      "visibleTextSha256": "95690985E7B1564A409CA23F381DF85508EFF903BC5CE92F766683D1FAD3F6CB",
+      "visibleCharacters": 5247,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.96,
+        "expected_excerpt": "a . While the Code does not cover Grants or Charitable Donations provided to patient organisations , MedTech Europe has published Patient Organisation Guidelines to support Member Companies when interacting with patient organisations . Research Grants are covered in the",
+        "pdf_excerpt": "a . While the Code does not cover Grants or Charitable Donations provided to patient organisations , MedTech Europe has published Patient Organisation Guidelines to support Member Companies when interacting with patient organisations . Research Grants are covered in the",
+        "operationCount": 3,
+        "operations": [
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "."
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": ". Q25 Under the General Principles in Chapter 4 . Grants and Charitable Donations , could you provide an example of an “ independent decision - making / review process ” ? A25 Such a process could be led by a Member Company’s legal , finance or compliance functions , operating within a robust governance framework and according to clear , consistent and transparent criteria for review and decision - making"
+          },
+          {
+            "operation": "replace",
+            "expected": "Technology",
+            "pdf": "Technoloy"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[6](ch4).sections[0].qas[0].q",
+      "chapterId": "ch4",
+      "kind": "question",
+      "visibleTextSha256": "6167E8B3D7739613D90D669E4CD854E49219423561C5A1B8CE1865EAC69B5DF0",
+      "visibleCharacters": 156,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[0].qas[0].a",
+      "chapterId": "ch4",
+      "kind": "answer",
+      "visibleTextSha256": "89C2EA9F4591606061F87C0CD5FAF2E86FFB87736D6B5F44F59877D7DF214B78",
+      "visibleCharacters": 228,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[1].title",
+      "chapterId": "ch4",
+      "kind": "section_title",
+      "visibleTextSha256": "97DF15E2BE90BAA98F1109472D952A4EBEF8E1043F29FD9F684031F790C3EF30",
+      "visibleCharacters": 23,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[1].legalText.body",
+      "chapterId": "ch4",
+      "kind": "legal_text",
+      "visibleTextSha256": "96B329F1CEE000DD7A2EDE6EB269D7AD6614821F48327C0D5C62601D5CEE912D",
+      "visibleCharacters": 2648,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.864222,
+        "expected_excerpt": "Member Companies may make Charitable Donations for charitable or other philanthropic purposes . Member Companies shall have no control over the final use of funds ( or other support ) they provide as Charitable Donations beyond general restrictions to ensure",
+        "pdf_excerpt": "Member Companies may make Charitable Donations for charitable or other philanthropic purposes . Member Companies shall have no control over the final use of funds ( or other support ) they provide as Charitable Donations beyond general restrictions to ensure",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": ". Q26 Under the Code , can a Member Company make a Charitable Donation to support the general running of hospital or other Healthcare Organisation ? A26 No , a Member Company cannot make a Charitable Donation to support the general running of a hospital or other Healthcare Organisation . A Charitable Donation shall only be given to a legal entity or body which has charitable and / or philanthropic purposes as its main objects . For the purpose of the Code and irrespective of their legal status ,"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[6](ch4).sections[1].qas[0].q",
+      "chapterId": "ch4",
+      "kind": "question",
+      "visibleTextSha256": "EC235B51BCA440F921EE3FE3B220ED8FEF3EA268E12BEE073C0C80EB3EB84957",
+      "visibleCharacters": 140,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[1].qas[0].a",
+      "chapterId": "ch4",
+      "kind": "answer",
+      "visibleTextSha256": "C58002C880DB241CC87A22581046ABC8A5F45062C677A8ADDC80872B1905CCDE",
+      "visibleCharacters": 670,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[1].qas[1].q",
+      "chapterId": "ch4",
+      "kind": "question",
+      "visibleTextSha256": "A2CAC0FBF18CE720ADA8D3D88120CAEFE15BEB72733B6801700AAB2AC1C7EFD4",
+      "visibleCharacters": 343,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[1].qas[1].a",
+      "chapterId": "ch4",
+      "kind": "answer",
+      "visibleTextSha256": "0498CA409033DB6D61AA5A5B2331DCAF632F7E2B211F09126A8E460194D8A404",
+      "visibleCharacters": 495,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[1].qas[2].q",
+      "chapterId": "ch4",
+      "kind": "question",
+      "visibleTextSha256": "C0008433BEFB2A1A349C37F91FD4216C7B3A7C5D88587F22214E8B171081EDBC",
+      "visibleCharacters": 324,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[1].qas[2].a",
+      "chapterId": "ch4",
+      "kind": "answer",
+      "visibleTextSha256": "56FBA8E4974FB41A03EFA9891D62ED66CB04B924E1FD9B22FCBB944F08C4B7D9",
+      "visibleCharacters": 339,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[2].title",
+      "chapterId": "ch4",
+      "kind": "section_title",
+      "visibleTextSha256": "6D84C8244AC6B6DCB3CD88662613CB9C620625F463122E43F0D19E1C76D76077",
+      "visibleCharacters": 21,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[2].legalText.body",
+      "chapterId": "ch4",
+      "kind": "legal_text",
+      "visibleTextSha256": "7B218EB19E26EF5FDF0D719C086DE8C12A8EEE8C5A75C37FFD89D0B3670233CF",
+      "visibleCharacters": 9733,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.640418,
+        "expected_excerpt": "Member Companies may provide Educational Grants ( see the Glossary ) for the advancement of medical education . Member Companies shall specify the intended purpose of the Educational Grant in the Grant agreement . A Member Company shall also ensure",
+        "pdf_excerpt": "Member Companies may provide Educational Grants ( see the Glossary ) for the advancement of medical education . Member Companies shall specify the intended purpose of the Educational Grant in the Grant agreement . A Member Company shall also ensure",
+        "operationCount": 5,
+        "operations": [
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": ". Q27 Is it permissible for a Member Company to specify restrictions in relation to the final use of a Charitable Donation where a Member Company wishes its Charitable Donation to be applied as part of a specific aid programme or as part of the relief effort following a specific natural disaster , such as a major earthquake in a particular country ? A27 Member Companies may specify the broad , general purpose for which a Charitable Donation shall be applied , such as the relief of a specific dis"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "3 ) For scope of application of CVS please refer to : http : / / www . ethicalmedtech . eu Q30 Can a small Healthcare Organisation receive Educational Grants to support Healthcare Professionals participation at Third Party Organised Educational Events ? A30 Yes , in principle . There are no size limits for HCOs to receive Educational Grants ; however , Member Companies must ensure that the final beneficiaries of the Educational Grant cannot be identified beforehand . For example , HCOs composed "
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": ". Q33 Can Member Companies give criteria for HCOs and / or PCOs to allocate their Educational funds ? A33 Yes , objective criteria for HCOs and / or PCOs to select HCPs to benefit from Educational funds may be provided as long as such selection criteria are relevant to the HCPs ’ educational needs and are not so specific that it would effectively select individual HCPs . Examples of criteria for selecting Educational Grant recipients are Healthcare Professionals ’ specialty , years of practice ,"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "Q36 Is it appropriate for a Member Company to provide an Educational Grant to a Healthcare Organisation for the limited purpose of covering , in whole or in part , the cost of some form of peer - to - peer , general public or patient education or training ? If so , under what circumstance can such Grants be provided and which criteria would need to be applied ? A36 As a matter of principle , Member Companies should not cover an HCO’s normal overhead or routine costs of operation ( “ overheads ” "
+          },
+          {
+            "operation": "replace",
+            "expected": "Company",
+            "pdf": "Ccompany"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[6](ch4).sections[2].legalText.footnote[0]",
+      "chapterId": "ch4",
+      "kind": "footnote",
+      "visibleTextSha256": "62A6105720A4BF5D3A574A215A72BBF7F7912CCAC126762575E6388C489415CA",
+      "visibleCharacters": 80,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[2].qas[0].q",
+      "chapterId": "ch4",
+      "kind": "question",
+      "visibleTextSha256": "E5360B12B214EDA79E119C6FFFEAA06274CE5A8F9572B9460D6715C6575ABB54",
+      "visibleCharacters": 83,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[2].qas[0].a",
+      "chapterId": "ch4",
+      "kind": "answer",
+      "visibleTextSha256": "9714018BDAF7049F7481D1D737CF8E6AA0D541CA97272E035483E2D308A4EDA1",
+      "visibleCharacters": 561,
+      "status": "punctuation_difference",
+      "difference": {
+        "similarity": 1.0,
+        "expected_excerpt": "Commercial sponsorships in the context of Third Party Organised Educational Events would involve objective consideration , such as access to the participants for marketing purposes , advertising opportunities or booth space . On the other hand , an Educational Grant",
+        "pdf_excerpt": "Commercial sponsorships in the context of Third Party Organised Educational Events would involve objective consideration , such as access to the participants for marketing purposes , advertising opportunities or booth space . On the other hand , an Educational Grant",
+        "operationCount": 0,
+        "operations": []
+      }
+    },
+    {
+      "path": "chapters[6](ch4).sections[2].qas[1].q",
+      "chapterId": "ch4",
+      "kind": "question",
+      "visibleTextSha256": "99413E7B06C34DFBDB9E2B29AE605F55CE007419342A4120D0078243DA925BD0",
+      "visibleCharacters": 157,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[2].qas[1].a",
+      "chapterId": "ch4",
+      "kind": "answer",
+      "visibleTextSha256": "1888FBB3E5A31999538DAF6D32B4B5B65CC2760F7C5A11EF8DDA9D366103BC16",
+      "visibleCharacters": 470,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[2].qas[2].q",
+      "chapterId": "ch4",
+      "kind": "question",
+      "visibleTextSha256": "55B503D0CDC353DA0F2EA0C60B062074740665C4AC2C09BACB41B6C19718BF55",
+      "visibleCharacters": 185,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[2].qas[2].a",
+      "chapterId": "ch4",
+      "kind": "answer",
+      "visibleTextSha256": "B23DF551553FC5C572A8FEF12872363C7DE8D16F4022964D46FB0268D5B5064E",
+      "visibleCharacters": 695,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.983051,
+        "expected_excerpt": "One of the guiding principles in the Code is that Member Companies should not receive or be able to determine the names of the ultimate HCP beneficiaries . The inclusion of a criterion specifying an individual hospital or hospital department",
+        "pdf_excerpt": "One of the guiding principles in the Code is that Member Companies should not receive or be able to determine the names of the ultimate HCP beneficiaries . The inclusion of a criterion specifying an individual hospital or hospital department",
+        "operationCount": 2,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "Companies",
+            "pdf": "Ccompanies"
+          },
+          {
+            "operation": "replace",
+            "expected": "criteria",
+            "pdf": "critera"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[6](ch4).sections[2].qas[3].q",
+      "chapterId": "ch4",
+      "kind": "question",
+      "visibleTextSha256": "EA2BA7D0CE9B53A6F3584832CC3D4991473A7EA6A1A7385F23527B640AF85D64",
+      "visibleCharacters": 218,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[2].qas[3].a",
+      "chapterId": "ch4",
+      "kind": "answer",
+      "visibleTextSha256": "97F1B1ADF3FAF9E8C9FE97C0A055EF11B72699ADAF207F7E6C3CD1BF1260191E",
+      "visibleCharacters": 519,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[2].qas[4].q",
+      "chapterId": "ch4",
+      "kind": "question",
+      "visibleTextSha256": "AE765D7918878578172C31E445C3052C117F801E8D2E4BDF4561F18360DD95B4",
+      "visibleCharacters": 92,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[2].qas[4].a",
+      "chapterId": "ch4",
+      "kind": "answer",
+      "visibleTextSha256": "CB6023CFE6ACBCD2383005E897C05DF46CE898EBFFDB0CE66BAF9EFB0B4F3AC6",
+      "visibleCharacters": 627,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[2].qas[5].q",
+      "chapterId": "ch4",
+      "kind": "question",
+      "visibleTextSha256": "5C8B7DB42AFB74C48965D20E1618179FA34325EF4EBB8176E941B9AFB37C6434",
+      "visibleCharacters": 285,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[2].qas[5].a",
+      "chapterId": "ch4",
+      "kind": "answer",
+      "visibleTextSha256": "A809A44EE11C042513E68DCEB2D049B74A6C6F516B761CAEF40C284701EA0DF9",
+      "visibleCharacters": 334,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[2].qas[6].q",
+      "chapterId": "ch4",
+      "kind": "question",
+      "visibleTextSha256": "50D41BB6244DDA13709E25EA8A844D3B55C00CBABB1B4DB0DD7E2A405D04C743",
+      "visibleCharacters": 276,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[2].qas[6].a",
+      "chapterId": "ch4",
+      "kind": "answer",
+      "visibleTextSha256": "13BFCBAF68CE500E8AB60425F7B1231DBEF97639708838DEE2D8BF6B192116B1",
+      "visibleCharacters": 1285,
+      "status": "punctuation_difference",
+      "difference": {
+        "similarity": 0.997375,
+        "expected_excerpt": "Member Companies may enter into a commercial sponsorship arrangement with a Professional Conference Organiser that is organising a Third Party Organised Educational Event and acting independently of any Healthcare Organisation . However , such arrangements do not fall within the",
+        "pdf_excerpt": "Member Companies may enter into a commercial sponsorship arrangement with a Professional Conference Organiser that is organising a Third Party Organised Educational Event and acting independently of any Healthcare Organisation . However , such arrangements do not fall within the",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": ","
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[6](ch4).sections[2].qas[7].q",
+      "chapterId": "ch4",
+      "kind": "question",
+      "visibleTextSha256": "5E7DEEDF46FE9E2782FF3B5F75131E3EFA64F7EF90AEB36240052D822BB0B99D",
+      "visibleCharacters": 349,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[6](ch4).sections[2].qas[7].a",
+      "chapterId": "ch4",
+      "kind": "answer",
+      "visibleTextSha256": "0E32DCEA88A72910EF861A299AA9C9E91876E5A1E97DFBC2D2816CEC0CA95A46",
+      "visibleCharacters": 2653,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.989648,
+        "expected_excerpt": "As a matter of principle , Member Companies should not cover an HCO’s normal overhead or routine costs of operation ( “ overheads ” ) . These routine costs are to be understood as those costs that would fall under",
+        "pdf_excerpt": "As a matter of principle , Member Companies should not cover an HCO’s normal overhead or routine costs of operation ( “ overheads ” ) . These routine costs are to be understood as those costs that would fall under",
+        "operationCount": 5,
+        "operations": [
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "1 ."
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "2 ."
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "3 ."
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "”"
+          },
+          {
+            "operation": "replace",
+            "expected": "Company Medical",
+            "pdf": "CompanyMedical"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[7](ch5).title",
+      "chapterId": "ch5",
+      "kind": "chapter_title",
+      "visibleTextSha256": "9BA555495400A2A80EC8397E5F85A8F17FD2E3D4B22E49AF93A17C74A72AE774",
+      "visibleCharacters": 23,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[7](ch5).sections[0].title",
+      "chapterId": "ch5",
+      "kind": "section_title",
+      "visibleTextSha256": "436198FD453FB6D814504A6A165C33603CA786BD6B454E32072C0786CD0DCB22",
+      "visibleCharacters": 21,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[7](ch5).sections[0].legalText.body",
+      "chapterId": "ch5",
+      "kind": "legal_text",
+      "visibleTextSha256": "1E082BB8EF52F57F196A777542ACC6C7CA51338F2B1D7571C25C0D4B27DE2399",
+      "visibleCharacters": 2101,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[7](ch5).sections[1].title",
+      "chapterId": "ch5",
+      "kind": "section_title",
+      "visibleTextSha256": "E1F6B1B6015A2AD7A58A83167018BA530513D5ADCFB2E5CB97C0C9F50A81336B",
+      "visibleCharacters": 106,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[7](ch5).sections[1].legalText.body",
+      "chapterId": "ch5",
+      "kind": "legal_text",
+      "visibleTextSha256": "17A06E1C4325EBAF2037B43B8987E2734D95A1CB9819B619DED0905263CAF5C3",
+      "visibleCharacters": 2622,
+      "status": "punctuation_difference",
+      "difference": {
+        "similarity": 0.998888,
+        "expected_excerpt": "In addition to the general principles above , the arrangements which cover genuine consultancy or other services must , to the extent relevant to the particular arrangement , fulfil all the following criteria : a . Consulting Arrangements must be",
+        "pdf_excerpt": "In addition to the general principles above , the arrangements which cover genuine consultancy or other services must , to the extent relevant to the particular arrangement , fulfil all the following criteria : a . Consulting Arrangements must be",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": ","
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[7](ch5).sections[2].title",
+      "chapterId": "ch5",
+      "kind": "section_title",
+      "visibleTextSha256": "C504BC41B80F8598BB154BB3EEAB45ADAD1EE312863A208339B5FD289FDCA7B6",
+      "visibleCharacters": 37,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[7](ch5).sections[2].legalText.body",
+      "chapterId": "ch5",
+      "kind": "legal_text",
+      "visibleTextSha256": "BDC5B69FAE5F5510F65129CBD7B42C39F431614D4EBE8219125B550706070D09",
+      "visibleCharacters": 1365,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[7](ch5).sections[3].title",
+      "chapterId": "ch5",
+      "kind": "section_title",
+      "visibleTextSha256": "F8030E4FEE338CA58679429393857E5DA1B3655E155787BB2B2111173162648B",
+      "visibleCharacters": 30,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[7](ch5).sections[3].legalText.body",
+      "chapterId": "ch5",
+      "kind": "legal_text",
+      "visibleTextSha256": "6D29EDB3AD419730979F15D1CD92CBEAE1DC6F0F90A76DE680F81465415D1088",
+      "visibleCharacters": 1094,
+      "status": "punctuation_difference",
+      "difference": {
+        "similarity": 0.996942,
+        "expected_excerpt": "Member Companies shall ensure they fully comply with all applicable national laws , regulations and professional codes of conduct requiring any publication , disclosure or approval in connection with the use by Member Companies of Healthcare Professionals as consultants .",
+        "pdf_excerpt": "Member Companies shall ensure they fully comply with all applicable national laws , regulations and professional codes of conduct requiring any publication , disclosure or approval in connection with the use by Member Companies of Healthcare Professionals as consultants .",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "delete",
+            "expected": ".",
+            "pdf": ""
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[8](ch6).title",
+      "chapterId": "ch6",
+      "kind": "chapter_title",
+      "visibleTextSha256": "979D6300FD9884FF8D8E03391D524FED8E88CD5560788F065BA2444DB3B7B20C",
+      "visibleCharacters": 8,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[8](ch6).sections[0].title",
+      "chapterId": "ch6",
+      "kind": "section_title",
+      "visibleTextSha256": "B605350BC00209520B7CD8F546322663356BA630708F71BBF30AEAD6B3DD608E",
+      "visibleCharacters": 12,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[8](ch6).sections[0].legalText.body",
+      "chapterId": "ch6",
+      "kind": "legal_text",
+      "visibleTextSha256": "1F34E2C2AFEAAFA61827D2B6D0AC4A684BD02FF94AAB19E16500DCF53FFDBB7E",
+      "visibleCharacters": 390,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[8](ch6).sections[1].title",
+      "chapterId": "ch6",
+      "kind": "section_title",
+      "visibleTextSha256": "081D91561A071932D07001B12F27DB95D73B10819505AA13C7FF641C690533F0",
+      "visibleCharacters": 36,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[8](ch6).sections[1].legalText.body",
+      "chapterId": "ch6",
+      "kind": "legal_text",
+      "visibleTextSha256": "BD77608DEDF4CB3F42DA617917351A2D663852FC2B8733B22D09C2CB4A9C05D3",
+      "visibleCharacters": 2614,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.958785,
+        "expected_excerpt": "Where there is a Legitimate Business Need to do so , Member Companies may initiate , conduct , manage and finance scientifically valid research to generate data , whether pre - or post - market . In this context ,",
+        "pdf_excerpt": "Where there is a Legitimate Business Need to do so , Member Companies may initiate , conduct , manage and finance scientifically valid research to generate data , whether pre - or post - market . In this context ,",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "Q37 What is an example of an external public register for clinical trial transparency ? A37 Examples of an external public register for clinical trial transparency are www . clinicaltrials . gov or www . who . org"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[8](ch6).sections[1].qas[0].q",
+      "chapterId": "ch6",
+      "kind": "question",
+      "visibleTextSha256": "8974B47BD7880741EAAFCE2D8D79F8E50AF5FD354C8A6484A219A477141BA295",
+      "visibleCharacters": 82,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[8](ch6).sections[1].qas[0].a",
+      "chapterId": "ch6",
+      "kind": "answer",
+      "visibleTextSha256": "6B152BAE59715C9418AF3EAF86A9C77008C9E2BE189FD2BDD38ED19A0B1A7C45",
+      "visibleCharacters": 114,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.913043,
+        "expected_excerpt": "Examples of an external public register for clinical trial transparency are www . clinicaltrials . gov or www . who . int .",
+        "pdf_excerpt": "Examples of an external public register for clinical trial transparency are www . clinicaltrials . gov or www . who . org about",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "int .",
+            "pdf": "org about"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[8](ch6).sections[2].title",
+      "chapterId": "ch6",
+      "kind": "section_title",
+      "visibleTextSha256": "9449DE34714F76F8AF72BBD77E2977F9C8841064BBF955114063C50D4F07ECC6",
+      "visibleCharacters": 48,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[8](ch6).sections[2].legalText.body",
+      "chapterId": "ch6",
+      "kind": "legal_text",
+      "visibleTextSha256": "F4E15F0066D7E14CD820878ADA2294B3213FA153EDAF7F9AE6DB8EDF1597965D",
+      "visibleCharacters": 1869,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.993506,
+        "expected_excerpt": "Where there is a legitimate business need to do so , Member Companies may initiate , post - market third party evaluation of their Medical Technology , therapies and / or related services and may therefore provide Evaluation Products under",
+        "pdf_excerpt": "Where there is a legitimate business need to do so , Member Companies may initiate , post - market third party evaluation of their Medical Technology , therapies and / or related services and may therefore provide Evaluation Products under",
+        "operationCount": 2,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "ethical requirements",
+            "pdf": "ethicalrequirements"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "3"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[8](ch6).sections[3].title",
+      "chapterId": "ch6",
+      "kind": "section_title",
+      "visibleTextSha256": "9F3FBA33285061D3F66F2AD61C96C9B2351F494FE0AED6B35ACB66071EAC3954",
+      "visibleCharacters": 50,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[8](ch6).sections[3].legalText.body",
+      "chapterId": "ch6",
+      "kind": "legal_text",
+      "visibleTextSha256": "03E275BB910201D299008D7B17B1AA969EA6DD26599CEB0D3882775EA1DC48DF",
+      "visibleCharacters": 2222,
+      "status": "punctuation_difference",
+      "difference": {
+        "similarity": 1.0,
+        "expected_excerpt": "Where permitted by national laws , regulations , national guidelines and professional codes of conduct , Member Companies may provide Research Grants ( see the Glossary ) to support clearly defined third party - initiated research studies for Clinical or",
+        "pdf_excerpt": "Where permitted by national laws , regulations , national guidelines and professional codes of conduct , Member Companies may provide Research Grants ( see the Glossary ) to support clearly defined third party - initiated research studies for Clinical or",
+        "operationCount": 0,
+        "operations": []
+      }
+    },
+    {
+      "path": "chapters[8](ch6).sections[3].qas[0].q",
+      "chapterId": "ch6",
+      "kind": "question",
+      "visibleTextSha256": "8E86C6759F859DF204F7371E70C8FBF1D6CB531557B64CA3A6B605142A816340",
+      "visibleCharacters": 129,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[8](ch6).sections[3].qas[0].a",
+      "chapterId": "ch6",
+      "kind": "answer",
+      "visibleTextSha256": "D2CC35A01FDAB0642C2E27524685DF2BE40454DAE103D8DA9731C8E5F5D4CE9D",
+      "visibleCharacters": 1625,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.990724,
+        "expected_excerpt": "Poster or Abstract Presenters at Third Party Organised Educational Conferences are not to be considered as Faculty , as defined in the Code ( “ Glossary ” ) . As such , if Member Companies want to support their participation",
+        "pdf_excerpt": "Poster or Abstract Presenters at Third Party Organised Educational Conferences are not to be considered asFaculty , as defined in the Code ( “ Glossary ’ ) . As such , if Member Companies want to support their participation in",
+        "operationCount": 2,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "as Faculty",
+            "pdf": "asFaculty"
+          },
+          {
+            "operation": "replace",
+            "expected": "”",
+            "pdf": "’"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[8](ch6).sections[4].title",
+      "chapterId": "ch6",
+      "kind": "section_title",
+      "visibleTextSha256": "73B6E8301F5597E7CE7CBC1B692212CC22D8BB5954EEB322DC861486F542808D",
+      "visibleCharacters": 25,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[8](ch6).sections[4].legalText.body",
+      "chapterId": "ch6",
+      "kind": "legal_text",
+      "visibleTextSha256": "0EC8E6D9FF8958DC3F9E733BCFB3FF11B23105C28349BE52B384475C1E746C1A",
+      "visibleCharacters": 2246,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.581641,
+        "expected_excerpt": "Where there is a need to do so , and provided it is allowed by local laws and regulations , Member Companies and non - industry partners may collaborate to develop and / or conduct scientific research , provided this",
+        "pdf_excerpt": "Where there is a need to do so , and provided it is allowed by local laws and regulations , Member Companies and non - industry partners may collaborate to develop and / or conduct scientific research , provided this",
+        "operationCount": 3,
+        "operations": [
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": ". Q38 Can Member Companies support the participation of Poster or Abstract Presenters in Third Party Organised Educational Conferences ? A38 Poster or Abstract Presenters at Third Party Organised Educational Conferences are not to be considered asFaculty , as defined in the Code ( “ Glossary ’ ) . As such , if Member Companies want to support their participation in the Third Party Organised Educational Conference , such support may be provided through an Educational Grant ( if it complies with t"
+          },
+          {
+            "operation": "replace",
+            "expected": "Company",
+            "pdf": "company"
+          },
+          {
+            "operation": "replace",
+            "expected": "clearly",
+            "pdf": "clear"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[8](ch6).sections[4].qas[0].q",
+      "chapterId": "ch6",
+      "kind": "question",
+      "visibleTextSha256": "CE309845BDD6B8818D217252994BB6B4C8019235E0FC2467FB3690D6744C2CC6",
+      "visibleCharacters": 141,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.958333,
+        "expected_excerpt": "What is the difference between Member Company - initiated research , third party - initiated research ( Research Grant ) and collaborative research ?",
+        "pdf_excerpt": "What is the difference between Member Company - initiated research , yhird party - initiated research ( Research Grant ) and collaborative research ?",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "third",
+            "pdf": "yhird"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[8](ch6).sections[4].qas[0].a",
+      "chapterId": "ch6",
+      "kind": "answer",
+      "visibleTextSha256": "FB765040EDDD1916F860377642C319F07A09EC4E17861B15583A20265428BAF6",
+      "visibleCharacters": 1040,
+      "status": "case_or_punctuation_difference",
+      "difference": {
+        "similarity": 0.992366,
+        "expected_excerpt": "Member Company - initiated research is sponsored by the Member Company , it is the Member Company who is responsible for all aspects of the research and who owns the data ( e . g . used for regulatory purposes",
+        "pdf_excerpt": "Member Company - initiated research is sponsored by the Member Company , it is the Member Company who is responsible for all aspects of the research and who owns the data ( e . g . used for regulatory purposes",
+        "operationCount": 2,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "Companies",
+            "pdf": "companies"
+          },
+          {
+            "operation": "delete",
+            "expected": ".",
+            "pdf": ""
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[8](ch6).sections[4].qas[1].q",
+      "chapterId": "ch6",
+      "kind": "question",
+      "visibleTextSha256": "2F969C9A8A6CD428445B9B9E65FBEAE5EF0DE0437CE28836C10B8EDDB458F90E",
+      "visibleCharacters": 79,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[8](ch6).sections[4].qas[1].a",
+      "chapterId": "ch6",
+      "kind": "answer",
+      "visibleTextSha256": "3DBC407B419CAEB62010E2FCE3A0B82F7F9AAC08DE5742F5DC9F93A76AA93AE0",
+      "visibleCharacters": 985,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[9](ch7).title",
+      "chapterId": "ch7",
+      "kind": "chapter_title",
+      "visibleTextSha256": "A48F757EDEC6649D3B8587C45B0AF136CE417EE2E7521616E0E0DD9FE5648CC7",
+      "visibleCharacters": 9,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[9](ch7).sections[0].title",
+      "chapterId": "ch7",
+      "kind": "section_title",
+      "visibleTextSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "visibleCharacters": 0,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.0,
+        "expected_excerpt": "",
+        "pdf_excerpt": "Chapter 7: Royalties Chapter 7: Royalties Healthcare Professionals, acting individually or as part of a group in which they are an active participant, often make valuable contributions that improve products or Medical Technologies. They may",
+        "operations": []
+      }
+    },
+    {
+      "path": "chapters[9](ch7).sections[0].legalText.body",
+      "chapterId": "ch7",
+      "kind": "legal_text",
+      "visibleTextSha256": "D7493AC093678D27F54A0D98D0ACE67BE53B58D716AF6CA7849CA5916EFB630C",
+      "visibleCharacters": 1970,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[10](ch8).title",
+      "chapterId": "ch8",
+      "kind": "chapter_title",
+      "visibleTextSha256": "D10285FAFB471283671E71DEDE44CBFED7ACD5B2B7D9C5328CCFE3B0E6541C2A",
+      "visibleCharacters": 39,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[10](ch8).sections[0].title",
+      "chapterId": "ch8",
+      "kind": "section_title",
+      "visibleTextSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "visibleCharacters": 0,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.0,
+        "expected_excerpt": "",
+        "pdf_excerpt": "Chapter 8: Educational Items and Promotional Items Chapter 8: Educational Items and Promotional Items It is generally prohibited to provide gifts to Healthcare Professionals and Healthcare Organisations. Member Companies may exceptionally p",
+        "operations": []
+      }
+    },
+    {
+      "path": "chapters[10](ch8).sections[0].legalText.body",
+      "chapterId": "ch8",
+      "kind": "legal_text",
+      "visibleTextSha256": "534625FF4C580B2BFEA923744FB4AC47F00F0FB5519486E49B6ADC356AC341F7",
+      "visibleCharacters": 3036,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.765926,
+        "expected_excerpt": "It is generally prohibited to provide gifts to Healthcare Professionals and Healthcare Organisations . Member Companies may exceptionally provide inexpensive educational items and / or promotional items , in accordance with national laws , regulations and industry and professional codes",
+        "pdf_excerpt": "It is generally prohibited to provide gifts to Healthcare Professionals and Healthcare Organisations . Member Companies may exceptionally provide inexpensive educational items and / or promotional items , in accordance with national laws , regulations and industry and professional codes",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "Q41 Under Chapter 8 , what are examples of items of modest value that are “ related to the Healthcare Professional’s practice or for the benefit of patients ” . A41 Stationery items , calendars , diaries , computer accessories for business use and clinical items such as wipes , nail brushes , surgical gloves and tourniquets are examples of modest value items that could be appropriately provided as promotional items to Healthcare Professionals provided their value falls within the maximum value p"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[10](ch8).sections[0].qas[0].q",
+      "chapterId": "ch8",
+      "kind": "question",
+      "visibleTextSha256": "7C4DD965B6F7587F64CBE4AB1774EC82A0DDBD33491C09A1C5135EA818855088",
+      "visibleCharacters": 152,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[10](ch8).sections[0].qas[0].a",
+      "chapterId": "ch8",
+      "kind": "answer",
+      "visibleTextSha256": "CCBEAD5D6252ECCBB2586EC36D42DE02354E60315D90FF520C2D87287F33F94A",
+      "visibleCharacters": 619,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[10](ch8).sections[0].qas[1].q",
+      "chapterId": "ch8",
+      "kind": "question",
+      "visibleTextSha256": "EAC5A3452838F5E37222FAE2102164957FF5CCA2826774628E2EFF617A6F2B7D",
+      "visibleCharacters": 305,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[10](ch8).sections[0].qas[1].a",
+      "chapterId": "ch8",
+      "kind": "answer",
+      "visibleTextSha256": "13AC1EA1FF40DFEEE7E70A0CB4E7431E14CDBF551E014EEF72FFEEDA41B7C8AE",
+      "visibleCharacters": 385,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.985294,
+        "expected_excerpt": "No , it would not be acceptable for the Member Company to make such a gift because to do so could be open to misinterpretation and would be likely to breach the Principle of Image and Perception . Moreover such",
+        "pdf_excerpt": "No , it would not be acceptable for the Member Company to make such a gift because to do so could be open to misinterpretation and would be likely to breach the Principle of Image and Perception . Moreover such",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "Promotional",
+            "pdf": "Promotionl"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[10](ch8).sections[0].qas[2].q",
+      "chapterId": "ch8",
+      "kind": "question",
+      "visibleTextSha256": "2144EDF7A9E2D852B58CD65D832A4D0AC21AF63F25104C483F941EA89FE0A886",
+      "visibleCharacters": 126,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[10](ch8).sections[0].qas[2].a",
+      "chapterId": "ch8",
+      "kind": "answer",
+      "visibleTextSha256": "2C8B963749FCE95CDE9372672F255573CC26912905F7525240331B87664D7772",
+      "visibleCharacters": 228,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[11](ch9).title",
+      "chapterId": "ch9",
+      "kind": "chapter_title",
+      "visibleTextSha256": "C3CFDA502CDC2DB001BFC285B4CEFCFC4441F12DF6E463351ED545584352C7C7",
+      "visibleCharacters": 34,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[11](ch9).sections[0].title",
+      "chapterId": "ch9",
+      "kind": "section_title",
+      "visibleTextSha256": "436198FD453FB6D814504A6A165C33603CA786BD6B454E32072C0786CD0DCB22",
+      "visibleCharacters": 21,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[11](ch9).sections[0].legalText.body",
+      "chapterId": "ch9",
+      "kind": "legal_text",
+      "visibleTextSha256": "51E95B4FB25FB87F7FB247C0F2FA04581C08EA1D7EC126C2B7E8D500D6F8378A",
+      "visibleCharacters": 2744,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.995754,
+        "expected_excerpt": "Member Companies may provide their own Medical Technologies as Demonstration Products and / or Samples ( see the Glossary ) at no charge in order to enable Healthcare Professionals and / or Healthcare Organisations ( as applicable ) to evaluate",
+        "pdf_excerpt": "Member Companies may provide their own Medical Technologies as Demonstration Products and / or Samples ( see the Glossary ) at no charge in order to enable Healthcare Professionals and / or Healthcare Organisations ( as applicable ) to evaluate",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "Medical",
+            "pdf": "Medica ; l"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[11](ch9).sections[0].legalText.footnote[0]",
+      "chapterId": "ch9",
+      "kind": "footnote",
+      "visibleTextSha256": "F0EEB579A12C51F4556D6CF72E1B1F73A6EFC1AF0EF1DECB566A25343213474E",
+      "visibleCharacters": 205,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[11](ch9).sections[1].title",
+      "chapterId": "ch9",
+      "kind": "section_title",
+      "visibleTextSha256": "826B5C4BB8CAA9E6A9940A45A19AAE3323EBF7D74611B6231253CE18865FCB77",
+      "visibleCharacters": 33,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[11](ch9).sections[1].legalText.body",
+      "chapterId": "ch9",
+      "kind": "legal_text",
+      "visibleTextSha256": "354D816704E6D9CBCED9B9D852C4A0A1A81867C9F78F78C22179368BF553B4BF",
+      "visibleCharacters": 1044,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[11](ch9).sections[2].title",
+      "chapterId": "ch9",
+      "kind": "section_title",
+      "visibleTextSha256": "7506933308EAD7E87087F926E09CAED959CD7597E17BA2A065647C486B475B1A",
+      "visibleCharacters": 10,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[11](ch9).sections[2].legalText.body",
+      "chapterId": "ch9",
+      "kind": "legal_text",
+      "visibleTextSha256": "06BD017657AE189BDE19119B334CA99D20B411C0DB76157D7BD209A43940739C",
+      "visibleCharacters": 1317,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[12](ch10).title",
+      "chapterId": "ch10",
+      "kind": "chapter_title",
+      "visibleTextSha256": "C9876985B0DE80EA28BAD7E822E4A209D020FB3EEDF2D8696D34373CC5104FE1",
+      "visibleCharacters": 26,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[12](ch10).sections[0].title",
+      "chapterId": "ch10",
+      "kind": "section_title",
+      "visibleTextSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "visibleCharacters": 0,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.0,
+        "expected_excerpt": "",
+        "pdf_excerpt": "Chapter 10: Third Party Intermediaries Chapter 10: Third Party Intermediaries Member Companies must be mindful of the fact that they may be liable for the activities of Third Party Intermediaries who interact with Healthcare Professionals o",
+        "operations": []
+      }
+    },
+    {
+      "path": "chapters[12](ch10).sections[0].legalText.body",
+      "chapterId": "ch10",
+      "kind": "legal_text",
+      "visibleTextSha256": "F8E6FED9D061A8A3352E9F7C3C3CFA3E3BDBFE01AEDF9CC1837ECC716CF07BEA",
+      "visibleCharacters": 4351,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.997783,
+        "expected_excerpt": "Member Companies must be mindful of the fact that they may be liable for the activities of Third Party Intermediaries who interact with Healthcare Professionals or Healthcare Organisations in connection with the sale , promotion or other activity involving Member",
+        "pdf_excerpt": "Member Companies must be mindful of the fact that they may be liable for the activities of Third Party Intermediaries who interact with Healthcare Professionals or Healthcare Organisations in connection with the sale , promotion or other activity involving Member",
+        "operationCount": 2,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "Companies",
+            "pdf": "companies"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "applicable"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[13](part2).title",
+      "chapterId": "part2",
+      "kind": "chapter_title",
+      "visibleTextSha256": "A1CB496C02AA130357B243EE694C0A7B8DE69F2B58C18D87D6120BE401C80940",
+      "visibleCharacters": 41,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[13](part2).sections[0].title",
+      "chapterId": "part2",
+      "kind": "section_title",
+      "visibleTextSha256": "436198FD453FB6D814504A6A165C33603CA786BD6B454E32072C0786CD0DCB22",
+      "visibleCharacters": 21,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[13](part2).sections[0].legalText.body",
+      "chapterId": "part2",
+      "kind": "legal_text",
+      "visibleTextSha256": "65D44985625E1B536F92A03B987F1D03B48D67ACD013457D9B8B77EDD97AC44F",
+      "visibleCharacters": 643,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[13](part2).sections[1].title",
+      "chapterId": "part2",
+      "kind": "section_title",
+      "visibleTextSha256": "178E259FA2EF4C39FF002A286284D15A2BF164DE8A57CF14ECC23FFDDC285DA4",
+      "visibleCharacters": 31,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[13](part2).sections[1].legalText.body",
+      "chapterId": "part2",
+      "kind": "legal_text",
+      "visibleTextSha256": "79E9594DA985FC960BCB848EA531A5693D6A4428599E73541FAD1915BA088EA7",
+      "visibleCharacters": 4218,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.982804,
+        "expected_excerpt": "2 . 1 Who can complain ? A complaint concerning an alleged breach by a MedTech Europe Member Company ( together “ Member Companies ” or individually “ Member Company ” ) of the Code , can be lodged by",
+        "pdf_excerpt": "2 . 1 Who can complain ? A complaint concerning an alleged breach by a MedTech Europe Member Company ( together “ Member Companies ” or individually “ Member Company ” ) of the Code , can be lodged by",
+        "operationCount": 14,
+        "operations": [
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "i"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "ii"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "iii"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "5 ) Please refer to the Code’s “ Administering the Code ” Chapter"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "iv"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "in"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "v"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "i"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "ii"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "iii"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "iv"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "v"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[13](part2).sections[1].legalText.footnote[0]",
+      "chapterId": "part2",
+      "kind": "footnote",
+      "visibleTextSha256": "D6EE06D3BB85460D3D6523A7141C0B528D6EF4D5ADB79581EC892BEB16AEDEC7",
+      "visibleCharacters": 62,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[13](part2).sections[2].title",
+      "chapterId": "part2",
+      "kind": "section_title",
+      "visibleTextSha256": "0F379D147DDB69743C995FB3FE4C61E0EAB6E6370842A1D0AA4CF658D080C4B0",
+      "visibleCharacters": 47,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[13](part2).sections[2].legalText.body",
+      "chapterId": "part2",
+      "kind": "legal_text",
+      "visibleTextSha256": "EB9C4BCC91CEE2C1492EFC734BA889709767F34FACBC16B00D9B47F3317E479C",
+      "visibleCharacters": 3890,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.992537,
+        "expected_excerpt": "3 . 1 Principles for complaint handling and sanctions Processing of complaints and sanctions by Member Associations as well as the MedTech Europe Compliance Panel shall follow the principles set out below : Member Associations and the MedTech Europe Compliance",
+        "pdf_excerpt": "3 . 1 Principles for complaint handling and sanctions Processing of complaints and sanctions by Member Associations as well as the MedTech Europe Compliance Panel shall follow the principles set out below : i Member Associations and the MedTech Europe",
+        "operationCount": 10,
+        "operations": [
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "i"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "ii"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "iii"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "iv"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "v"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "i"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "ii"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "iii"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "iv"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "v"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[13](part2).sections[3].title",
+      "chapterId": "part2",
+      "kind": "section_title",
+      "visibleTextSha256": "DD0DD671601D475678DB6017C1064659640E5D9B3AFAE3069BF7D4EAFF7FA756",
+      "visibleCharacters": 12,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[13](part2).sections[3].legalText.body",
+      "chapterId": "part2",
+      "kind": "legal_text",
+      "visibleTextSha256": "D004D9D1168B08FE25846C6A66900B69A763588A5280934361BF24170F389AC3",
+      "visibleCharacters": 2303,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[14](glossary).title",
+      "chapterId": "glossary",
+      "kind": "chapter_title",
+      "visibleTextSha256": "4C4E436F9A453C776DBF011F98D932D615988BB08BDDEC6051625340E88D012F",
+      "visibleCharacters": 8,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[14](glossary).sections[0].title",
+      "chapterId": "glossary",
+      "kind": "section_title",
+      "visibleTextSha256": "8775BBB39CB0805E30A731B00808AE5B246FCDE24B445F1734656BF34AC5E2AF",
+      "visibleCharacters": 11,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[14](glossary).sections[0].legalText.body",
+      "chapterId": "glossary",
+      "kind": "legal_text",
+      "visibleTextSha256": "755B800C265072E62BEAC085B5C6E0F0A5680DDB86BC0929593847211A42F384",
+      "visibleCharacters": 16719,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.999475,
+        "expected_excerpt": "Charitable Donations : means provision of cash , equipment , Member Company product or relevant third party product , for exclusive use for charitable or philanthropic purposes and / or to benefit a charitable or philanthropic cause . Charitable Donations",
+        "pdf_excerpt": "Charitable Donations : means provision of cash , equipment , Member Company product or relevant third party product , for exclusive use for charitable or philanthropic purposes and / or to benefit a charitable or philanthropic cause . Charitable Donations",
+        "operationCount": 2,
+        "operations": [
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "."
+          },
+          {
+            "operation": "replace",
+            "expected": "Member",
+            "pdf": "Members"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[15](annex1).title",
+      "chapterId": "annex1",
+      "kind": "chapter_title",
+      "visibleTextSha256": "18F3DCEABD79B6A50B05E503A6CA568525BB5EC5808B11F02B37A75D580ECF33",
+      "visibleCharacters": 18,
+      "status": "case_or_punctuation_difference",
+      "difference": {
+        "similarity": 0.4,
+        "expected_excerpt": "Annex I : CVS Scope",
+        "pdf_excerpt": "ANNEX I CVS scope :",
+        "operationCount": 3,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "Annex",
+            "pdf": "ANNEX"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "CVS scope"
+          },
+          {
+            "operation": "delete",
+            "expected": "CVS Scope",
+            "pdf": ""
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[15](annex1).sections[0].title",
+      "chapterId": "annex1",
+      "kind": "section_title",
+      "visibleTextSha256": "10362B379C34D5963F707A3D9DB94801C5592E3F46BA2494DDCEA77BE500488F",
+      "visibleCharacters": 45,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[15](annex1).sections[0].legalText.body",
+      "chapterId": "annex1",
+      "kind": "legal_text",
+      "visibleTextSha256": "311D1092B34B6331728D19CD5B4D61AD3123C5EBCE872491000748A2D8D84F67",
+      "visibleCharacters": 2653,
+      "status": "punctuation_difference",
+      "difference": {
+        "similarity": 0.998794,
+        "expected_excerpt": "PRIOR CVS SUBMISSION IN MEDTECH EUROPE GEOGRAPHIC AREA OUTSIDE MEDTECH EUROPE GEOGRAPHIC AREA WHICH TYPE OF SUPPORT CAN MEMBER COMPANIES PROVIDE TO WHICH THIRD PARTY ORGANISED EDUCATIONAL EVENTS ? NATIONAL Third Party Organised Educational Events attended by delegates which are",
+        "pdf_excerpt": "PRIOR CVS SUBMISSION IN MEDTECH EUROPE GEOGRAPHIC AREA OUTSIDE MEDTECH EUROPE GEOGRAPHIC AREA WHICH TYPE OF SUPPORT CAN MEMBER COMPANIES PROVIDE TO WHICH THIRD PARTY ORGANISED EDUCATIONAL EVENTS ? NATIONAL Third Party Organised Educational Events attended by delegates which are",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": ")"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[15](annex1).sections[1].title",
+      "chapterId": "annex1",
+      "kind": "section_title",
+      "visibleTextSha256": "AD6FB546C8B88CA54685D9D84088589F6541B808F25027C422C1BFAC467C5616",
+      "visibleCharacters": 9,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.0,
+        "expected_excerpt": "Footnotes",
+        "pdf_excerpt": ".",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "Footnotes",
+            "pdf": "."
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[15](annex1).sections[1].legalText.body",
+      "chapterId": "annex1",
+      "kind": "legal_text",
+      "visibleTextSha256": "EE0FB06056A08EA353D69F02142A13EF7C52AEEE9A1D8171C4DF65108ECD61DC",
+      "visibleCharacters": 1399,
+      "status": "punctuation_difference",
+      "difference": {
+        "similarity": 0.997972,
+        "expected_excerpt": "1 ) MedTech Europe Geographic Area includes the countries in the European Economic Area ( EEA ) , as well as those other countries where Member Associations are located . 2 ) Formerly referred to as “ Cross - border",
+        "pdf_excerpt": "1 ) MedTech Europe Geographic Area includes the countries in the European Economic Area ( EEA ) , as well as those other countries where Member Associations are located . 2 ) Formerly referred to as “ Cross - border",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "delete",
+            "expected": ".",
+            "pdf": ""
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[16](annex2).title",
+      "chapterId": "annex2",
+      "kind": "chapter_title",
+      "visibleTextSha256": "D10C7E25267E578FC6BD6E22584E3BF2951C9BD7D00E69712A8204E47E2C0FA0",
+      "visibleCharacters": 61,
+      "status": "case_or_punctuation_difference",
+      "difference": {
+        "similarity": 0.857143,
+        "expected_excerpt": "Annex II : Calculating the value of In Kind Educational Grants",
+        "pdf_excerpt": "ANNEX II Calculating the value of In Kind Educational Grants",
+        "operationCount": 2,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "Annex",
+            "pdf": "ANNEX"
+          },
+          {
+            "operation": "delete",
+            "expected": ":",
+            "pdf": ""
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[16](annex2).sections[0].title",
+      "chapterId": "annex2",
+      "kind": "section_title",
+      "visibleTextSha256": "BBA82041C421C735CE5D24D96A0585C2E1A7B641C9DBCE26D21B5805F929A3A3",
+      "visibleCharacters": 37,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[16](annex2).sections[0].legalText.body",
+      "chapterId": "annex2",
+      "kind": "legal_text",
+      "visibleTextSha256": "921837ABD811CD6DA3E1316438A1A94232E2C749E3C42E525446A82C48D4C00B",
+      "visibleCharacters": 700,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[16](annex2).sections[1].title",
+      "chapterId": "annex2",
+      "kind": "section_title",
+      "visibleTextSha256": "01A34B284C087337A0CADB6BBD4E4D63E216D1B4BED68F3FBFEB4B9CF51947AA",
+      "visibleCharacters": 34,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[16](annex2).sections[1].legalText.body",
+      "chapterId": "annex2",
+      "kind": "legal_text",
+      "visibleTextSha256": "8E0747EED2069F0C5C08013426DC8302B4AB8F94C4986C734E3924DB9B6D746E",
+      "visibleCharacters": 1207,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.993228,
+        "expected_excerpt": "An In Kind Educational Grant includes goods or services other than cash transfers , including where the In Kind support is provided by a third party and the payment is made directly by the Member Company to the third party",
+        "pdf_excerpt": "An In Kind Educational Grant includes goods or services other than cash transfers , including where the In Kind support is provided by a third party and the payment is made directlyby the Member Company to the third party (",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "directly by",
+            "pdf": "directlyby"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[16](annex2).sections[2].title",
+      "chapterId": "annex2",
+      "kind": "section_title",
+      "visibleTextSha256": "78092FB0B316759DD56C5123E437283083CB147BFE6135FF6C431CA1962EA4E4",
+      "visibleCharacters": 30,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[16](annex2).sections[2].legalText.body",
+      "chapterId": "annex2",
+      "kind": "legal_text",
+      "visibleTextSha256": "1F3AF4DE9EF826515A255A1E3DCE6C9D01940610E08C6A54E5919B2C2BA7F3E6",
+      "visibleCharacters": 1796,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[16](annex2).sections[3].title",
+      "chapterId": "annex2",
+      "kind": "section_title",
+      "visibleTextSha256": "FCC9F1F9297854407289126195F4D4EFF25AD6EF66244CD3C8A90F927CAB0D51",
+      "visibleCharacters": 10,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.0,
+        "expected_excerpt": "Exclusions",
+        "pdf_excerpt": ".",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "Exclusions",
+            "pdf": "."
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[16](annex2).sections[3].legalText.body",
+      "chapterId": "annex2",
+      "kind": "legal_text",
+      "visibleTextSha256": "110B4FCD7ECB0F8B6F36B303253C430736806D964D570B44806D2799D2FD3C63",
+      "visibleCharacters": 395,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[17](annex3).title",
+      "chapterId": "annex3",
+      "kind": "chapter_title",
+      "visibleTextSha256": "43AC168B3CD6E606C0C95795D27661DC1BB929C18A744C48719FCCEE5734A1CC",
+      "visibleCharacters": 79,
+      "status": "punctuation_difference",
+      "difference": {
+        "similarity": 0.962963,
+        "expected_excerpt": "Annex III : The Geographical Area where the Code applies as the minimum standard",
+        "pdf_excerpt": "Annex III The Geographical Area where the Code applies as the minimum standard",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "delete",
+            "expected": ":",
+            "pdf": ""
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[17](annex3).sections[0].title",
+      "chapterId": "annex3",
+      "kind": "section_title",
+      "visibleTextSha256": "AB57FB2A6FE0F5D504692879FB3394E0D225858E39A471633B18EF0552E59456",
+      "visibleCharacters": 30,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[17](annex3).sections[0].legalText.body",
+      "chapterId": "annex3",
+      "kind": "legal_text",
+      "visibleTextSha256": "362AC0CA9E92F64EA2D291D23C1EE2D5F2F0F92CDD1D763CA92754A8F202DB1C",
+      "visibleCharacters": 717,
+      "status": "punctuation_difference",
+      "difference": {
+        "similarity": 1.0,
+        "expected_excerpt": "The MedTech Europe Geographic Area currently includes Countries with National Associations : ■ Austria ■ Latvia ■ Belgium ■ Lithuania ■ Bulgaria ■ The Netherlands ■ Croatia ■ Norway ■ Cyprus ■ Poland ■ Czech Republic ■ Portugal ■ Denmark",
+        "pdf_excerpt": "The MedTech Europe Geographic Area currently includes Countries with National Associations : ■ Austria ■ Latvia ■ Belgium ■ Lithuania ■ Bulgaria ■ The Netherlands ■ Croatia ■ Norway ■ Cyprus ■ Poland ■ Czech Republic ■ Portugal ■ Denmark",
+        "operationCount": 0,
+        "operations": []
+      }
+    },
+    {
+      "path": "chapters[18](annex4).title",
+      "chapterId": "annex4",
+      "kind": "chapter_title",
+      "visibleTextSha256": "B5DAB87CEE7374AB7966CACDF8785BD474F7CAEEBE696DE47838F0734FF4A009",
+      "visibleCharacters": 42,
+      "status": "punctuation_difference",
+      "difference": {
+        "similarity": 0.941176,
+        "expected_excerpt": "Annex IV : Verification Of The Use Of Funds",
+        "pdf_excerpt": "Annex IV Verification Of The Use Of Funds",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "delete",
+            "expected": ":",
+            "pdf": ""
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[18](annex4).sections[0].title",
+      "chapterId": "annex4",
+      "kind": "section_title",
+      "visibleTextSha256": "022D6B7FC6FF64FA7AF453CDADC8B11D6B6145EAE9278A45732FB79247340825",
+      "visibleCharacters": 20,
+      "status": "case_or_punctuation_difference",
+      "difference": {
+        "similarity": 0.5,
+        "expected_excerpt": "Verification Process",
+        "pdf_excerpt": "Verification Of",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "Process",
+            "pdf": "Of"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[18](annex4).sections[0].legalText.body",
+      "chapterId": "annex4",
+      "kind": "legal_text",
+      "visibleTextSha256": "042624995DAF3A9F28074F66A9F0F3E30116058C4CF58119795C53DC2DCF6250",
+      "visibleCharacters": 720,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[18](annex4).sections[1].title",
+      "chapterId": "annex4",
+      "kind": "section_title",
+      "visibleTextSha256": "7D7042CDB66ABAEE6D2412CE5B10CF5EA6ABDC1782E05DA7A6F7E8442A434B29",
+      "visibleCharacters": 22,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.5,
+        "expected_excerpt": "Verification Documents",
+        "pdf_excerpt": "Verification Of",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "Documents",
+            "pdf": "Of"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[18](annex4).sections[1].legalText.body",
+      "chapterId": "annex4",
+      "kind": "legal_text",
+      "visibleTextSha256": "1E4742FF88D2BD9C42DB538AEA9787C5D836A377651EC0648776A6FAE6BC7387",
+      "visibleCharacters": 986,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[18](annex4).sections[2].title",
+      "chapterId": "annex4",
+      "kind": "section_title",
+      "visibleTextSha256": "A3FBC84B12223AB9F4CA36095041D4AE6BBDDE47B73C476E6390C8AA13357170",
+      "visibleCharacters": 17,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.333333,
+        "expected_excerpt": "Failure to Comply",
+        "pdf_excerpt": "limited to ,",
+        "operationCount": 2,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "Failure",
+            "pdf": "limited"
+          },
+          {
+            "operation": "replace",
+            "expected": "Comply",
+            "pdf": ","
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[18](annex4).sections[2].legalText.body",
+      "chapterId": "annex4",
+      "kind": "legal_text",
+      "visibleTextSha256": "FBF26A3A3DB14A9BC3AAFA4C118DD03F8A00DA8486540C04CDB2CF9F265A27F9",
+      "visibleCharacters": 466,
+      "status": "punctuation_difference",
+      "difference": {
+        "similarity": 0.976744,
+        "expected_excerpt": "If a Grant recipient fails to provide the requesting Member Company with the documents or if a Member Company determines that the Grant funds were not used as provided in the Grant agreement , the Member Company : Should take",
+        "pdf_excerpt": "If a Grant recipient fails to provide the requesting Member Company with the documents or if a Member Company determines that the Grant funds were not used as provided in the Grant agreement , the Member Company . - Should",
+        "operationCount": 2,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": ":",
+            "pdf": ". -"
+          },
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "-"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[19](annex5).title",
+      "chapterId": "annex5",
+      "kind": "chapter_title",
+      "visibleTextSha256": "E75E38A50DA18BE9AD42C8B1ADAB31420FC077DA9836112EFB2D929C85B84205",
+      "visibleCharacters": 33,
+      "status": "punctuation_difference",
+      "difference": {
+        "similarity": 0.909091,
+        "expected_excerpt": "Annex V : Methodology Note Example",
+        "pdf_excerpt": "Annex V Methodology Note Example",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "delete",
+            "expected": ":",
+            "pdf": ""
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[19](annex5).sections[0].title",
+      "chapterId": "annex5",
+      "kind": "section_title",
+      "visibleTextSha256": "025CAE6E042A74F224FC8802FC8B15A9B6C24624CA976CC63C6C42D27385A1F5",
+      "visibleCharacters": 24,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[19](annex5).sections[0].legalText.body",
+      "chapterId": "annex5",
+      "kind": "legal_text",
+      "visibleTextSha256": "3173E5E98E8F91979DEE89C5772EA6DD3939B9D9CB947748B54C3E51A10FB1F8",
+      "visibleCharacters": 1084,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[20](annex6).title",
+      "chapterId": "annex6",
+      "kind": "chapter_title",
+      "visibleTextSha256": "5E10959636366F5A4FD8547996C829B4EC615F7ECD8BA28FC5D4A87F76F2C156",
+      "visibleCharacters": 55,
+      "status": "case_or_punctuation_difference",
+      "difference": {
+        "similarity": 0.842105,
+        "expected_excerpt": "Annex VI : Direct support to HCP participation in Events",
+        "pdf_excerpt": "ANNEX VI Direct support to HCP participation in Events",
+        "operationCount": 2,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "Annex",
+            "pdf": "ANNEX"
+          },
+          {
+            "operation": "delete",
+            "expected": ":",
+            "pdf": ""
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[20](annex6).sections[0].title",
+      "chapterId": "annex6",
+      "kind": "section_title",
+      "visibleTextSha256": "BAF79F09ADE2559DFABB23D8A7CFA5B0BA3C4F84D74DD29B4DD8086331EFD204",
+      "visibleCharacters": 45,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[20](annex6).sections[0].legalText.body",
+      "chapterId": "annex6",
+      "kind": "legal_text",
+      "visibleTextSha256": "E3E755B4AA68143997B7B9587BB6FDDE0931B7D82E4F93651B2E4AEB6F681F47",
+      "visibleCharacters": 1092,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.997183,
+        "expected_excerpt": "Direct Support for HCP attendance Event Setting Faculty / Speaker Delegates Third Party Organised Educational Conference Main Event / Independent Scientific Program Not allowed Not allowed Satellite Symposium Allowed ( consulting agreement required ) Not allowed Booth Allowed ( consulting",
+        "pdf_excerpt": "Direct Support for HCP attendance Event Setting Faculty / Speaker Delegates Third Party Organised Educational Conference Main Event / Independent Scientific Program Not allowed Not allowed Satellite Symposium Allowed ( consulting agreement required ) Not allowed Booth Allowed ( consulting",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "insert",
+            "expected": "",
+            "pdf": "Third"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[20](annex6).sections[1].title",
+      "chapterId": "annex6",
+      "kind": "section_title",
+      "visibleTextSha256": "526E0087CC3F254D9F86F6C7D8E23D954C4DFDA2B312EFC29194AE8A860106BA",
+      "visibleCharacters": 11,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[20](annex6).sections[1].legalText.body",
+      "chapterId": "annex6",
+      "kind": "legal_text",
+      "visibleTextSha256": "EC7B8E8CE977C8EFC9E200CF785AA5717D5B495E1DF1FB4E2773B9B89ADFA8B3",
+      "visibleCharacters": 986,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[20](annex6).sections[2].title",
+      "chapterId": "annex6",
+      "kind": "section_title",
+      "visibleTextSha256": "10AF9928BA801E7D223B816E783EDF7C6D77D3BF5390AE16616EB6A5A1A195A8",
+      "visibleCharacters": 8,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[20](annex6).sections[2].legalText.body",
+      "chapterId": "annex6",
+      "kind": "legal_text",
+      "visibleTextSha256": "9DB53B622DD16B96C3771A3D71AA4D011D1508A930AFA367FC6820BE313C2B49",
+      "visibleCharacters": 580,
+      "status": "substantive_review_required",
+      "difference": {
+        "similarity": 0.978903,
+        "expected_excerpt": "In order to determine whether an event is a TPOE or a Company Event , the following aspects should be taken into account : Open events ( not only Company’s customers ) are typical of a TPOE , and in",
+        "pdf_excerpt": "In order to determine whether an event is a TPOE or a Company Event , the following aspects should be taken into account : Open events ( not only Company’s customers ) are typical of a TPOE , and in",
+        "operationCount": 2,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "third party",
+            "pdf": "thirdpParty"
+          },
+          {
+            "operation": "replace",
+            "expected": "party",
+            "pdf": "pParty"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[21](annex7).title",
+      "chapterId": "annex7",
+      "kind": "chapter_title",
+      "visibleTextSha256": "784A1AD66878F092D613ADDB5F41E0F061EDF5944C96D0E8AE7268DDB5CD867C",
+      "visibleCharacters": 79,
+      "status": "case_or_punctuation_difference",
+      "difference": {
+        "similarity": 0.869565,
+        "expected_excerpt": "Annex VII : The Criteria Applicable to Third Party Organised Procedure Trainings",
+        "pdf_excerpt": "ANNEX VII The Criteria Applicable to Third Party Organised Procedure Trainings",
+        "operationCount": 2,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "Annex",
+            "pdf": "ANNEX"
+          },
+          {
+            "operation": "delete",
+            "expected": ":",
+            "pdf": ""
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[21](annex7).sections[0].title",
+      "chapterId": "annex7",
+      "kind": "section_title",
+      "visibleTextSha256": "5C23EE4C32B22BB417CAFDA7BB57A10942C8838FE821F23F6478CAFFAFB329A9",
+      "visibleCharacters": 105,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[21](annex7).sections[0].legalText.body",
+      "chapterId": "annex7",
+      "kind": "legal_text",
+      "visibleTextSha256": "51422C1B74F5A8B182AFC2F5580EC0C794A5DE62287AABA5F771613573D0FA75",
+      "visibleCharacters": 1141,
+      "status": "exact_after_layout_normalization"
+    },
+    {
+      "path": "chapters[21](annex7).sections[1].title",
+      "chapterId": "annex7",
+      "kind": "section_title",
+      "visibleTextSha256": "6A10815E446D940068B92534F8E8D460F34826C9248FB02F1C4BFCBE7C0F340D",
+      "visibleCharacters": 31,
+      "status": "case_or_punctuation_difference",
+      "difference": {
+        "similarity": 0.25,
+        "expected_excerpt": "Criteria for TPPT Determination",
+        "pdf_excerpt": "Criteria Applicable to Third",
+        "operationCount": 1,
+        "operations": [
+          {
+            "operation": "replace",
+            "expected": "for TPPT Determination",
+            "pdf": "Applicable to Third"
+          }
+        ]
+      }
+    },
+    {
+      "path": "chapters[21](annex7).sections[1].legalText.body",
+      "chapterId": "annex7",
+      "kind": "legal_text",
+      "visibleTextSha256": "5E74E4096EC38B0512CC8F73DB68ADF2D5F760673729C42625F059D031B975B4",
+      "visibleCharacters": 3305,
+      "status": "exact_after_layout_normalization"
+    }
+  ]
+}

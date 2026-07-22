@@ -138,7 +138,7 @@ const App = () => {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] overflow-hidden">
+    <div className="flex flex-col h-[100dvh] overflow-hidden print:h-auto print:overflow-visible">
       <DefinitionPopup
         term={activeDefinition?.term}
         definition={activeDefinition?.definition}
@@ -167,7 +167,7 @@ const App = () => {
         setReaderSpace={setReaderSpace}
       />
 
-      <div className="flex flex-1 overflow-hidden relative">
+      <div className="flex flex-1 overflow-hidden relative print:block print:overflow-visible">
         <Sidebar
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}

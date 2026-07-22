@@ -11,7 +11,13 @@ export default defineConfig(() => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['logo.png', 'icon-192.png', 'icon-512.png', 'maskable-icon-512x512.png'],
+        includeAssets: [
+          'logo.png',
+          'icon-192.png',
+          'icon-512.png',
+          'maskable-icon-512x512.png',
+          'code-assets/annex-iii-map-september-2024.png',
+        ],
         workbox: {
           navigateFallbackDenylist: [/^\/admin/],
           maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,

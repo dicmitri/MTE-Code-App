@@ -16,7 +16,8 @@ The app is built using **React**, **Vite**, and **Cloudflare Workers**. All the 
  ├── /src/
  │   ├── /components/ # The building blocks of the UI (Header, Decision Trees, Quiz, etc.)
  │   ├── /config/     # Centralized registries (section definitions)
- │   ├── /data/       # The actual text/content (legal code, decision trees, quiz data)
+ │   ├── /data/       # Legal chapters, decision trees, quiz data, and content manifests
+ │   │   └── /code/   # One canonical JSON file per Code chapter
  │   ├── /hooks/      # Custom React hooks (PWA, bookmarks, routing, keyboard, history)
  │   ├── /utils/      # Helper functions (search highlighting, glossary processing)
  │   ├── App.jsx      # The main "brain" that connects everything together
@@ -144,6 +145,11 @@ The application uses **Decap CMS** for content management, accessible at `/admin
 - The CMS uses GitHub as its backend.
 - A custom Cloudflare Worker (`server.js`) securely handles the GitHub OAuth flow required by Decap CMS to authenticate users. It implements HMAC-signed state tokens for CSRF protection.
 - The `server.js` script also serves the static React application.
+- For local, uncommitted content, run `npm run cms` from the app root. This
+  starts both Vite and the local Decap proxy. The hosted CMS continues to read
+  only the GitHub `main` branch.
+- See [`docs/cms-guide.md`](docs/cms-guide.md) for the non-technical editing,
+  validation, troubleshooting, and release workflow.
 
 ---
 
@@ -151,13 +157,18 @@ The application uses **Decap CMS** for content management, accessible at `/admin
 
 You can edit content directly in the JSON files or via the **Decap CMS** at `/admin/`.
 
-All the text, chapters, annexes, and Q&As are stored in a single file:
-👉 **`src/data/codeData.json`**
+For local CMS editing, use `npm run cms`, not only `npm run dev`. The local
+proxy is what allows the CMS to read files that have not yet been committed to
+GitHub.
 
-This file uses a format called JSON. It is essentially a massive list of chapters.
+The text, annexes, and Q&As are stored as one JSON file per chapter in:
+👉 **`src/data/code/`**
+
+The filename matches the chapter ID and URL. For example, `ch1.json` supplies
+`/code/ch1`, while `annex4.json` supplies `/code/annex4`.
 
 ### Understanding the Structure
-If you open `codeData.json`, you will see a list of objects that look like this:
+Each chapter file contains one object that looks like this:
 
 ```json
 {
@@ -182,7 +193,7 @@ If you open `codeData.json`, you will see a list of objects that look like this:
 ```
 
 ### How to make changes:
-1. **Fixing Typos:** Simply use `Ctrl+F` (or `Cmd+F`) in `codeData.json` to find the typo and change the text. Alternatively, use the CMS.
+1. **Fixing Typos:** Open the relevant file in `src/data/code/`, use `Ctrl+F` (or `Cmd+F`) to find the text, and change only the intended value. Alternatively, use the CMS.
 2. **Formatting Text:** The `legalText` and `a` (answer) fields use standard HTML.
    - Use `<strong>text</strong>` for bold.
    - Use `<em>text</em>` for italics.
@@ -190,7 +201,16 @@ If you open `codeData.json`, you will see a list of objects that look like this:
    - *Note: You can also use Tailwind CSS classes directly inside these HTML tags (e.g., `<p class="text-red-500">`).*
 3. **Adding a new Q&A:** Find the correct `sections` block, go to its `"qas"` array, and add a new `{"q": "...", "a": "..."}` block. Make sure to separate it from the previous one with a comma!
 
-*(Note: The file `src/data/codeData.js` simply imports this JSON file so the rest of the app can read it. You rarely need to touch the `.js` file).*
+After any content edit, run `npm run validate:data` from the app root. Do not
+change chapter `id` values or section titles without reading `ROUTING.md`, since
+they are part of public URLs.
+
+`src/data/codeOrder.js` defines chapter order. `src/data/codeData.js` imports the
+chapter files and preserves the existing `FULL_CODE_DATA` interface for the app.
+Neither file normally needs editing for a text correction.
+
+See [`docs/content-migration/README.md`](docs/content-migration/README.md) for
+the preservation proof, PDF-audit findings, and a plain-language editing guide.
 
 ---
 
