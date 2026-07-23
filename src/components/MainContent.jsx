@@ -31,11 +31,33 @@ export const MainContent = ({
   const prevChapter = currentIndex > 0 ? FULL_CODE_DATA[currentIndex - 1] : null;
   const nextChapter = currentIndex !== -1 && currentIndex < FULL_CODE_DATA.length - 1 ? FULL_CODE_DATA[currentIndex + 1] : null;
 
+  const [scrollProgress, setScrollProgress] = React.useState(0);
+
+  const handleScroll = (e) => {
+    const el = e.target;
+    const total = el.scrollHeight - el.clientHeight;
+    if (total > 0) {
+      const pct = (el.scrollTop / total) * 100;
+      setScrollProgress(Math.min(100, Math.max(0, pct)));
+    } else {
+      setScrollProgress(0);
+    }
+  };
+
   return (
     <main
       ref={scrollRef}
-      className="flex-1 overflow-y-auto bg-white custom-scrollbar h-full print:h-auto print:overflow-visible"
+      onScroll={handleScroll}
+      className="flex-1 overflow-y-auto bg-white custom-scrollbar h-full print:h-auto print:overflow-visible relative"
     >
+      {activeId !== 'home' && (
+        <div className="sticky top-0 left-0 right-0 h-1 bg-gray-100/60 z-20 no-print">
+          <div
+            className="h-full bg-gradient-to-r from-[#0099A7] to-[#7654A1] transition-all duration-75"
+            style={{ width: `${scrollProgress}%` }}
+          />
+        </div>
+      )}
       {activeId === 'home' ? (
         <LandingPage onSelectChapter={handleChapterChange} />
       ) : (

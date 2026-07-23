@@ -75,6 +75,32 @@ export const Sidebar = ({
   // Track pre-search expansion state for restoration
   const [preSearchExpanded, setPreSearchExpanded] = useState(null);
 
+  // Recent searches state & localStorage sync
+  const [recentSearches, setRecentSearches] = useState(() => {
+    try {
+      const saved = localStorage.getItem('MTE_RECENT_SEARCHES');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    const term = debouncedSearch.trim();
+    if (term && term.length >= 2) {
+      setRecentSearches(prev => {
+        const filtered = prev.filter(t => t.toLowerCase() !== term.toLowerCase());
+        const next = [term, ...filtered].slice(0, 4);
+        try {
+          localStorage.setItem('MTE_RECENT_SEARCHES', JSON.stringify(next));
+        } catch (e) {
+          console.error(e);
+        }
+        return next;
+      });
+    }
+  }, [debouncedSearch]);
+
   // When activeSection changes, update default expansion
   useEffect(() => {
     setExpandedGroups(prev => {
@@ -130,17 +156,25 @@ export const Sidebar = ({
     CODE_PARTS.forEach(part => {
       const items = FULL_CODE_DATA.filter(ch => ch.part === part.id).map(ch => {
         const count = (txt) => (txt || '').toString().toLowerCase().split(term).length - 1;
-        let matches = 0;
-        if (searchFilters.titles) matches += count(ch.title);
-        if (searchFilters.text) matches += count(ch.summary);
+        let titleMatches = 0;
+        let textMatches = 0;
+        let qaMatches = 0;
+
+        if (searchFilters.titles) titleMatches += count(ch.title);
+        if (searchFilters.text) textMatches += count(ch.summary);
         (ch.sections || []).forEach(s => {
-          if (searchFilters.titles) matches += count(s.title);
-          if (searchFilters.text) matches += count(s.legalText);
+          if (searchFilters.titles) titleMatches += count(s.title);
+          if (searchFilters.text) textMatches += count(s.legalText);
           if (searchFilters.qa) {
-            (s.qas || []).forEach(q => (matches += count(q.q) + count(q.a)));
+            (s.qas || []).forEach(q => (qaMatches += count(q.q) + count(q.a)));
           }
         });
-        return { ...ch, matchCount: matches };
+        const total = titleMatches + textMatches + qaMatches;
+        return {
+          ...ch,
+          matchCount: total,
+          matchBreakdown: { title: titleMatches, text: textMatches, qa: qaMatches }
+        };
       }).filter(ch => ch.matchCount > 0);
 
       const sectionTotal = items.reduce((acc, curr) => acc + curr.matchCount, 0);
@@ -245,6 +279,41 @@ export const Sidebar = ({
             </button>
           )}
         </div>
+
+        {/* Recent search chips */}
+        {!searchTerm && recentSearches.length > 0 && (
+          <div className="mb-6 px-2 no-print animate-fade-in">
+            <div className="flex items-center justify-between mb-2 px-0.5">
+              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
+                <AppIcon name="Clock" size={10} /> Recent Searches
+              </span>
+              <button
+                onClick={() => {
+                  setRecentSearches([]);
+                  localStorage.removeItem('MTE_RECENT_SEARCHES');
+                }}
+                className="text-[10px] text-gray-400 hover:text-red-500 font-medium transition-colors"
+                title="Clear recent searches"
+                type="button"
+              >
+                Clear
+              </button>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {recentSearches.map(term => (
+                <button
+                  key={term}
+                  onClick={() => setSearchTerm(term)}
+                  className="text-xs bg-slate-100 hover:bg-purple-50 text-slate-700 hover:text-[#7654A1] border border-slate-200 hover:border-purple-200 rounded-lg px-2.5 py-1 font-medium transition-all flex items-center gap-1.5 group"
+                  title={`Search for "${term}"`}
+                  type="button"
+                >
+                  <span>{term}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Search filter chips */}
         {searchTerm && (
@@ -384,15 +453,32 @@ export const Sidebar = ({
                       </span>
 
                       {item.matchCount > 0 && (
-                        <span
-                          className={`shrink-0 text-[9px] font-bold px-1.5 py-0.5 rounded-md ${
-                            activeSection === 'code' && activeId === item.id
-                              ? 'bg-white/20 text-white'
-                              : 'bg-purple-100 text-purple-700'
-                          }`}
-                        >
-                          {item.matchCount}
-                        </span>
+                        <div className="flex items-center gap-1 shrink-0">
+                          {debouncedSearch && item.matchBreakdown?.title > 0 && (
+                            <span className={`text-[8px] font-semibold px-1 py-0.5 rounded ${activeSection === 'code' && activeId === item.id ? 'bg-amber-400/30 text-white' : 'bg-amber-100 text-amber-800'}`} title={`${item.matchBreakdown.title} title match(es)`}>
+                              Title
+                            </span>
+                          )}
+                          {debouncedSearch && item.matchBreakdown?.qa > 0 && (
+                            <span className={`text-[8px] font-semibold px-1 py-0.5 rounded ${activeSection === 'code' && activeId === item.id ? 'bg-cyan-400/30 text-white' : 'bg-cyan-100 text-cyan-800'}`} title={`${item.matchBreakdown.qa} Q&A match(es)`}>
+                              Q&A
+                            </span>
+                          )}
+                          {debouncedSearch && item.matchBreakdown?.text > 0 && (
+                            <span className={`text-[8px] font-semibold px-1 py-0.5 rounded ${activeSection === 'code' && activeId === item.id ? 'bg-white/20 text-white' : 'bg-purple-100 text-purple-800'}`} title={`${item.matchBreakdown.text} text match(es)`}>
+                              Text
+                            </span>
+                          )}
+                          <span
+                            className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md ${
+                              activeSection === 'code' && activeId === item.id
+                                ? 'bg-white/20 text-white'
+                                : 'bg-purple-100 text-purple-700'
+                            }`}
+                          >
+                            {item.matchCount}
+                          </span>
+                        </div>
                       )}
                     </button>
                   ))}

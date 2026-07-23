@@ -13,8 +13,20 @@ const CATEGORY_CONFIG = {
 };
 
 export const TreeLandingPage = ({ onSelectTree }) => {
-  // Group trees by category
-  const grouped = TREE_DATA.reduce((acc, tree) => {
+  const [filterText, setFilterText] = React.useState('');
+
+  const filteredTrees = React.useMemo(() => {
+    if (!filterText.trim()) return TREE_DATA;
+    const term = filterText.toLowerCase().trim();
+    return TREE_DATA.filter(
+      (t) =>
+        t.title.toLowerCase().includes(term) ||
+        (t.description && t.description.toLowerCase().includes(term))
+    );
+  }, [filterText]);
+
+  // Group filtered trees by category
+  const grouped = filteredTrees.reduce((acc, tree) => {
     const cat = tree.category || 'default';
     if (!acc[cat]) acc[cat] = [];
     acc[cat].push(tree);
@@ -23,15 +35,38 @@ export const TreeLandingPage = ({ onSelectTree }) => {
 
   return (
     <div className="animate-fade-in py-10 px-4 max-w-5xl mx-auto overflow-y-auto h-full custom-scrollbar pb-24">
-      <div className="text-center mb-12">
+      <div className="text-center mb-8">
         <div className="inline-flex p-4 rounded-2xl bg-amber-50 mb-6">
           <AppIcon name="GitBranch" size={48} className="text-amber-600" />
         </div>
         <h1 className="text-3xl font-bold text-gray-900 mb-3">Decision Trees</h1>
-        <p className="text-lg text-gray-500 max-w-xl mx-auto font-light leading-relaxed">
+        <p className="text-lg text-gray-500 max-w-xl mx-auto font-light leading-relaxed mb-6">
           Interactive compliance decision guides based on the MedTech Europe Code.
           Step through scenarios to assess compliance.
         </p>
+
+        {/* Filter input */}
+        <div className="relative max-w-md mx-auto">
+          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+            <AppIcon name="Search" size={16} />
+          </div>
+          <input
+            type="text"
+            placeholder="Search decision trees (e.g. Grants, Hospitality, Events)..."
+            value={filterText}
+            onChange={(e) => setFilterText(e.target.value)}
+            className="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-10 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-200 focus:border-amber-500 shadow-sm transition-all"
+          />
+          {filterText && (
+            <button
+              onClick={() => setFilterText('')}
+              className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-amber-600 transition-colors"
+              title="Clear search"
+            >
+              <AppIcon name="X" size={16} />
+            </button>
+          )}
+        </div>
       </div>
 
       {Object.keys(CATEGORY_CONFIG).map((category) => {

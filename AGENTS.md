@@ -1,6 +1,6 @@
 # Agent Instructions
 
-<!-- Version: v1.5 - 2026-07-22 -->
+<!-- Version: v1.6 - 2026-07-23 -->
 
 ## Table of Contents
 - [Project Map](#project-map)
@@ -18,15 +18,16 @@ The project is structured around a centralized state architecture in `App.jsx`, 
 
 - **`src/App.jsx`**: The core orchestrator. It manages the `activeSection` (Home Hub, Code, Decision Trees, Quiz, TPPT) and uses custom hooks to synchronize state with the browser URL and `localStorage`. `TPPTContent` is loaded via `React.lazy()` so its heavy dependencies (pdfmake, pdfjs-dist, mammoth) are not included in the main bundle.
 - **`src/components/`**: UI building blocks.
-  - **Layout Components**: `Header.jsx` and `Sidebar.jsx` are persistent across sections. `Header` dynamically changes its toolbar based on the `activeSection`.
-  - **Section Controllers**: `MainContent.jsx` (Code), `TreeContent.jsx` (Trees), `QuizContent.jsx` (Quiz), and `TPPTContent.tsx` (TPPT Checker) act as sub-routers and layout managers for their respective features.
-  - **Feature Components**: Specialized UI like `DecisionTree.jsx` (interactive logic), `DefinitionPopup.jsx` (glossary), and `TableOfContents.jsx` (navigation).
+  - **Layout Components**: `Header.jsx` and `Sidebar.jsx` are persistent across sections. `Header` dynamically changes its toolbar based on the `activeSection`. `Sidebar.jsx` includes search category breakdown badges (`Title`, `Q&A`, `Text`).
+  - **Section Controllers**: `MainContent.jsx` (Code with top sticky scroll progress line), `TreeContent.jsx` (Trees with `TreeLandingPage.jsx` filter search), `QuizContent.jsx` (Quiz), and `TPPTContent.tsx` (TPPT Checker) act as sub-routers and layout managers for their respective features.
+  - **Feature Components**: Specialized UI like `DecisionTree.jsx` (interactive logic), `DefinitionPopup.jsx` (glossary), `FullTextSection.jsx` (renders section text with Q&A fast-jump buttons and multi-format citation popover with access date), and `TableOfContents.jsx` (navigation).
 - **`src/hooks/`**: Business logic and side effects.
   - `useAppRouting.js`: Drives `App.jsx` state from readable paths, section anchors, and browser Back/Forward events without a routing library. It also upgrades supported legacy hash URLs with `replaceState`.
   - `useBookmarks.js` / `useRecentHistory.js`: Persist user interactions to `localStorage`.
   - `usePWAInstall.js`: Manages the PWA lifecycle and install prompts.
 - **`src/data/`**: The "Source of Truth" for content.
   - `code/*.json`: One canonical MedTech Code chapter per file (Sections -> Q&As).
+  - `code-september-2024.docx`: Formatted Word document generated from canonical JSON content for offline team editing.
   - `codeOrder.js`: Explicit chapter order shared by the app and validation tools.
   - `codeData.js`: Compatibility adapter that assembles `FULL_CODE_DATA` without changing component APIs.
   - `code-manifest.json`: Frozen raw-byte evidence for the 2026 monolith-to-chapters migration; it is not an everyday content baseline.

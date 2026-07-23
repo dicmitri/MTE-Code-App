@@ -123,6 +123,17 @@ The sidebar uses a hierarchical, fully collapsible group structure:
 ### 🌳 Decision Trees
 Interactive compliance decision guides that let users step through real-world compliance scenarios:
 - **Interactive Mode:** Question-by-question flow with contextual help text, path breadcrumb trail, go-back/reset controls, and color-coded outcomes (✅ Compliant, ❌ Non-Compliant, ⚠️ Conditional, ⚖️ Consult Legal).
+
+### 🗂️ Collapsible Sidebar Navigation
+The sidebar uses a hierarchical, fully collapsible group structure:
+- **Home Hub:** Bookmarks and Recently Viewed are expanded by default.
+- **Code section:** "The Code" parent group expands automatically, revealing sub-groups (Introductory Chapters, Part 1: The Code, Part 2: Complaint Handling, Part 3: Annexes & Glossary, Website).
+- **Decision Trees section:** The "Decision Trees" group expands, showing a "Browse Decision Trees" link.
+- **Search mode:** When a search query is active, groups with matching chapters auto-expand. The prior expansion state is saved and restored when the search is cleared.
+
+### 🌳 Decision Trees
+Interactive compliance decision guides that let users step through real-world compliance scenarios:
+- **Interactive Mode:** Question-by-question flow with contextual help text, path breadcrumb trail, go-back/reset controls, and color-coded outcomes (✅ Compliant, ❌ Non-Compliant, ⚠️ Conditional, ⚖️ Consult Legal).
 - **Full Tree Visualization:** A flowchart rendering of the entire decision tree, with a legend and highlighted-path support.
 - **Cross-linking:** Code chapters that have related decision trees show an inline amber callout with a direct link. Clicking it switches the user from the Code section to the relevant tree.
 
@@ -132,7 +143,9 @@ The app automatically detects glossary terms within the legal text and renders t
 ### 📑 Reading Utilities
 To facilitate heavy professional reference usage, the app includes several quality-of-life tools:
 - **Table of Contents (On This Page):** A sticky, scroll-tracking minimap located on the right side of the screen on desktop displays.
-- **Copy Citation:** Alongside standard URL linking, a dedicated `[Cite]` button instantly copies a professionally formatted citation block to the clipboard.
+- **Reading Progress Line:** A sticky top progress bar that smoothly tracks scrolling completion down long legal chapters.
+- **Q&A Fast-Jump Badges:** Section titles with associated Q&As feature a `💬 Q&A` badge that smooth-scrolls directly to the guidance notes for that provision.
+- **Multi-Format Citation Dropdown:** A `[Cite]` popover offering Formal Citations (including section title and current access date), Markdown links, and Direct URL links with confirmation toast notifications.
 - **Copy Link:** A `[Link]` button copies the direct URL to the section.
 - **Next/Prev Navigation:** Large footer buttons at the bottom of every document allow for linear reading of the entire legal code without returning to the sidebar.
 - **Reader Settings:** An `Aa` button in the header opens a panel to customize font size, line spacing, and paragraph spacing.

@@ -37,7 +37,10 @@ import {
   Maximize2,
   Minimize2,
   Share2,
-  XCircle
+  XCircle,
+  Lightbulb,
+  Send,
+  Copy
 } from 'lucide-react';
 
 export {
@@ -202,7 +205,7 @@ const lucideIconMap = {
   Search, Download, Star, Bookmark, Printer, GitBranch, RotateCcw, Clock,
   Calculator, Trash2, Plus, AlertCircle, Upload, Loader2, AlertTriangle,
   ArrowRight, BookOpen, Check, CheckCircle, Maximize2, Minimize2, Share2,
-  XCircle
+  XCircle, Lightbulb, Send, Copy
 };
 
 export const AppIcon = ({ name, size = 18, className = "" }) => {
