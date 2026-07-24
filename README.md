@@ -166,22 +166,19 @@ The application uses **Decap CMS** for content management, accessible at `/admin
 
 ---
 
-## 📝 2. How to Edit the Legal Content (`FULL_CODE_DATA`)
+## 📝 2. How to Edit & Add Legal Content (`FULL_CODE_DATA`)
 
 You can edit content directly in the JSON files or via the **Decap CMS** at `/admin/`.
 
-For local CMS editing, use `npm run cms`, not only `npm run dev`. The local
-proxy is what allows the CMS to read files that have not yet been committed to
-GitHub.
+For local CMS editing, use `npm run cms`, not only `npm run dev`. The local proxy is what allows the CMS to read files that have not yet been committed to GitHub.
 
-The text, annexes, and Q&As are stored as one JSON file per chapter in:
+The text, annexes, and Q&As are stored as **one canonical JSON file per chapter** in:
 👉 **`src/data/code/`**
 
-The filename matches the chapter ID and URL. For example, `ch1.json` supplies
-`/code/ch1`, while `annex4.json` supplies `/code/annex4`.
+The filename matches the chapter ID and URL. For example, `ch1.json` supplies `/code/ch1`, while `annex4.json` supplies `/code/annex4`.
 
-### Understanding the Structure
-Each chapter file contains one object that looks like this:
+### Understanding the Chapter Schema
+Each chapter file in `src/data/code/` contains a single JSON object structured as follows:
 
 ```json
 {
@@ -205,25 +202,127 @@ Each chapter file contains one object that looks like this:
 }
 ```
 
-### How to make changes:
-1. **Fixing Typos:** Open the relevant file in `src/data/code/`, use `Ctrl+F` (or `Cmd+F`) to find the text, and change only the intended value. Alternatively, use the CMS.
-2. **Formatting Text:** The `legalText` and `a` (answer) fields use standard HTML.
-   - Use `<strong>text</strong>` for bold.
+#### Field Reference:
+* `id`: Unique string identifier (e.g. `"ch1"`, `"annex1"`). Forms the public URL path `/code/<id>`.
+* `part`: Categorizes where the chapter appears in the sidebar hierarchy:
+  * `"intro"` — Introductory Chapters (Scope, Admin, Intro)
+  * `"part1"` — Part 1: MedTech Europe Code of Ethical Business Practice
+  * `"part2"` — Part 2: Dispute Resolution Code / Complaint Handling
+  * `"part3"` — Part 3: Procedural Standards & Annexes
+  * `"website"` — Website Information & Version History
+* `title`: Full title string displayed in headers and sidebar navigation.
+* `icon`: Icon name from `AppIcons.jsx` or a chapter number string (e.g. `"1"`).
+* `summary`: Short summary string or HTML rendered on chapter cards and summary views.
+* `sections`: Array of section objects, each containing:
+  * `title`: Section heading (e.g. `"1.1 The Core Objective"`).
+  * `legalText`: Normative legal body text (supports HTML tags like `<strong>`, `<em>`, `<ul>`, `<li>`, `<table>`).
+  * `qas`: Array of Q&A objects `[{ "q": "...", "a": "..." }]`.
+
+---
+
+### How to Edit Existing Content
+1. **Fixing Typos:** Open the relevant file in `src/data/code/`, use `Ctrl+F` (or `Cmd+F`) to find the text, and change only the intended value. Alternatively, edit via Decap CMS.
+2. **Formatting Text:** The `legalText` and `a` (answer) fields support standard HTML:
+   - Use `<strong>text</strong>` for bold text.
    - Use `<em>text</em>` for italics.
    - Use `<ul><li>Item</li></ul>` for bulleted lists.
-   - *Note: You can also use Tailwind CSS classes directly inside these HTML tags (e.g., `<p class="text-red-500">`).*
-3. **Adding a new Q&A:** Find the correct `sections` block, go to its `"qas"` array, and add a new `{"q": "...", "a": "..."}` block. Make sure to separate it from the previous one with a comma!
+   - Use `<table>...</table>` for tabular data.
+3. **Adding a Q&A to a Section:** Navigate to the target section in its chapter JSON file, locate its `"qas"` array, and append a new entry:
+   ```json
+   {
+     "q": "Q&A 3: Can a Member Company...?",
+     "a": "<p>Yes, provided that...</p>"
+   }
+   ```
 
-After any content edit, run `npm run validate:data` from the app root. Do not
-change chapter `id` values or section titles without reading `ROUTING.md`, since
-they are part of public URLs.
+---
 
-`src/data/codeOrder.js` defines chapter order. `src/data/codeData.js` imports the
-chapter files and preserves the existing `FULL_CODE_DATA` interface for the app.
-Neither file normally needs editing for a text correction.
+### How to Add a New Section to an Existing Chapter
+1. Open the relevant chapter file in `src/data/code/` (e.g. `src/data/code/ch1.json`).
+2. Add a new section object to the `"sections"` array:
+   ```json
+   {
+     "title": "1.3 Virtual & Hybrid Event Guidelines",
+     "legalText": "<p>When organizing virtual events, Member Companies must...</p>",
+     "qas": []
+   }
+   ```
+3. *Note on Section Deep Links:* Section IDs are automatically computed from the `title` string via `utils/textUtils.js` (e.g. `"1.3 Virtual & Hybrid Event Guidelines"` generates anchor ID `ch1-1-3-virtual-hybrid-event-guidelines`).
 
-See [`docs/content-migration/README.md`](docs/content-migration/README.md) for
-the preservation proof, PDF-audit findings, and a plain-language editing guide.
+---
+
+### How to Add a Brand New Chapter (Step-by-Step)
+
+When introducing a new chapter (e.g. `ch11.json` or `annex8.json`), follow these 4 steps:
+
+#### Step 1: Create the JSON file in `src/data/code/`
+Create a new file `src/data/code/ch11.json` with the complete chapter schema:
+```json
+{
+  "id": "ch11",
+  "part": "part1",
+  "title": "Digital & Software Compliance",
+  "icon": "11",
+  "summary": "Guidelines governing standalone software, digital tools, and AI solutions.",
+  "sections": [
+    {
+      "title": "11.1 Scope of Digital Tools",
+      "legalText": "<p>This chapter applies to all digital applications...</p>",
+      "qas": []
+    }
+  ]
+}
+```
+
+#### Step 2: Register the Chapter Order in `src/data/codeOrder.js`
+Open `src/data/codeOrder.js` and add the new chapter ID to the `CODE_CHAPTER_IDS` array in the exact position you want it to appear in linear reading order:
+
+```javascript
+// src/data/codeOrder.js
+export const CODE_CHAPTER_IDS = Object.freeze([
+  'scope',
+  'admin',
+  'intro',
+  'ch1',
+  // ...
+  'ch10',
+  'ch11', // <--- Insert new chapter ID here
+  'part2',
+  'glossary',
+  // ...
+]);
+```
+
+#### Step 3: Register the Import in `src/data/codeData.js`
+Open `src/data/codeData.js`, import your new JSON file, and add it to the `CHAPTERS_BY_ID` dictionary:
+
+```javascript
+// src/data/codeData.js
+// 1. Add import statement at top:
+import chapter11 from './code/ch11.json';
+
+// 2. Add to CHAPTERS_BY_ID mapping:
+const CHAPTERS_BY_ID = {
+  // ...
+  ch10: chapter10,
+  ch11: chapter11, // <--- Map ID to imported object
+  part2,
+  // ...
+};
+```
+
+#### Step 4: Validate & Verify
+Run the validation and test suite from your terminal:
+```bash
+npm run validate:data
+```
+Or run the complete verification check:
+```bash
+npm run check
+```
+This ensures your new chapter passes JSON structural validation, icon registration, section ID stability, and URL routing tests.
+
+See [`docs/content-migration/README.md`](docs/content-migration/README.md) for PDF audit history and migration details.
 
 ---
 
