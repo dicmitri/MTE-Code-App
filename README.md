@@ -25,6 +25,7 @@ The app is built using **React**, **Vite**, and **Cloudflare Workers**. All the 
  │   └── index.css    # Global styles, fonts, and print rules
  ├── server.js       # Cloudflare Worker script (serves app and handles OAuth)
  ├── oauth-proxy.js  # Standalone OAuth proxy for Decap CMS
+ ├── CHANGELOG.md    # Developer technical version changelog
  ├── PROJECT_CHECKS.md # Plain-language validation and testing guide
  ├── ROUTING.md      # URL formats, compatibility rules, and route checks
  ├── AGENTS.md       # AI Agent instructions and global Project Map
