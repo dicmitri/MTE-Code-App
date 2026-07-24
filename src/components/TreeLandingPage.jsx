@@ -1,6 +1,7 @@
 import React from 'react';
 import { AppIcon } from './AppIcons';
 import { TREE_DATA } from '../data/treeData';
+import { filterDecisionTrees } from '../utils/treeSearchUtils';
 
 const CATEGORY_CONFIG = {
   scope:      { label: 'Scope & Applicability', color: '#e11d48', icon: 'Compass' },
@@ -15,15 +16,10 @@ const CATEGORY_CONFIG = {
 export const TreeLandingPage = ({ onSelectTree }) => {
   const [filterText, setFilterText] = React.useState('');
 
-  const filteredTrees = React.useMemo(() => {
-    if (!filterText.trim()) return TREE_DATA;
-    const term = filterText.toLowerCase().trim();
-    return TREE_DATA.filter(
-      (t) =>
-        t.title.toLowerCase().includes(term) ||
-        (t.description && t.description.toLowerCase().includes(term))
-    );
-  }, [filterText]);
+  const filteredTrees = React.useMemo(
+    () => filterDecisionTrees(TREE_DATA, filterText),
+    [filterText],
+  );
 
   // Group filtered trees by category
   const grouped = filteredTrees.reduce((acc, tree) => {
@@ -51,17 +47,20 @@ export const TreeLandingPage = ({ onSelectTree }) => {
             <AppIcon name="Search" size={16} />
           </div>
           <input
-            type="text"
+            type="search"
             placeholder="Search decision trees (e.g. Grants, Hospitality, Events)..."
             value={filterText}
             onChange={(e) => setFilterText(e.target.value)}
             className="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-10 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-200 focus:border-amber-500 shadow-sm transition-all"
+            aria-label="Search decision trees"
           />
           {filterText && (
             <button
+              type="button"
               onClick={() => setFilterText('')}
               className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-amber-600 transition-colors"
               title="Clear search"
+              aria-label="Clear decision tree search"
             >
               <AppIcon name="X" size={16} />
             </button>
@@ -128,11 +127,32 @@ export const TreeLandingPage = ({ onSelectTree }) => {
         );
       })}
 
-      {TREE_DATA.length === 0 && (
+      {filteredTrees.length === 0 && (
         <div className="text-center py-16 text-gray-400">
-          <AppIcon name="GitBranch" size={48} className="mx-auto mb-4 opacity-30" />
-          <p className="text-lg">No decision trees available yet.</p>
-          <p className="text-sm mt-1">Decision trees will be added in a future update.</p>
+          <AppIcon
+            name={TREE_DATA.length === 0 ? 'GitBranch' : 'Search'}
+            size={48}
+            className="mx-auto mb-4 opacity-30"
+          />
+          <p className="text-lg">
+            {TREE_DATA.length === 0
+              ? 'No decision trees available yet.'
+              : `No decision trees match "${filterText.trim()}".`}
+          </p>
+          <p className="text-sm mt-1">
+            {TREE_DATA.length === 0
+              ? 'Decision trees will be added in a future update.'
+              : 'Try a broader search term or clear the filter.'}
+          </p>
+          {TREE_DATA.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setFilterText('')}
+              className="mt-4 text-sm font-semibold text-amber-700 hover:text-amber-900 underline underline-offset-2"
+            >
+              Clear search
+            </button>
+          )}
         </div>
       )}
     </div>

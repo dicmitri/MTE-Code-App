@@ -6,6 +6,7 @@ import { LandingPage } from './LandingPage';
 import { FullTextSection } from './FullTextSection';
 import { TableOfContents } from './TableOfContents';
 import { highlightSearchTerm } from '../utils/textUtils';
+import { calculateScrollProgress } from '../utils/scrollProgressUtils';
 import { FULL_CODE_DATA } from '../data/codeData';
 import { getTreesByChapter } from '../data/treeData';
 
@@ -31,18 +32,37 @@ export const MainContent = ({
   const prevChapter = currentIndex > 0 ? FULL_CODE_DATA[currentIndex - 1] : null;
   const nextChapter = currentIndex !== -1 && currentIndex < FULL_CODE_DATA.length - 1 ? FULL_CODE_DATA[currentIndex + 1] : null;
 
-  const [scrollProgress, setScrollProgress] = React.useState(0);
+  const progressBarRef = React.useRef(null);
+  const scrollFrameRef = React.useRef(null);
 
   const handleScroll = (e) => {
-    const el = e.target;
-    const total = el.scrollHeight - el.clientHeight;
-    if (total > 0) {
-      const pct = (el.scrollTop / total) * 100;
-      setScrollProgress(Math.min(100, Math.max(0, pct)));
-    } else {
-      setScrollProgress(0);
-    }
+    const scrollContainer = e.currentTarget;
+    if (scrollFrameRef.current !== null) return;
+
+    scrollFrameRef.current = window.requestAnimationFrame(() => {
+      const progress = calculateScrollProgress(scrollContainer);
+      if (progressBarRef.current) {
+        progressBarRef.current.style.transform = `scaleX(${progress / 100})`;
+      }
+      scrollFrameRef.current = null;
+    });
   };
+
+  React.useEffect(() => () => {
+    if (scrollFrameRef.current !== null) {
+      window.cancelAnimationFrame(scrollFrameRef.current);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (scrollFrameRef.current !== null) {
+      window.cancelAnimationFrame(scrollFrameRef.current);
+      scrollFrameRef.current = null;
+    }
+    if (progressBarRef.current) {
+      progressBarRef.current.style.transform = 'scaleX(0)';
+    }
+  }, [activeId]);
 
   return (
     <main
@@ -51,10 +71,11 @@ export const MainContent = ({
       className="flex-1 overflow-y-auto bg-white custom-scrollbar h-full print:h-auto print:overflow-visible relative"
     >
       {activeId !== 'home' && (
-        <div className="sticky top-0 left-0 right-0 h-1 bg-gray-100/60 z-20 no-print">
+        <div className="sticky top-0 left-0 right-0 h-1 bg-gray-100/60 z-20 no-print pointer-events-none" aria-hidden="true">
           <div
-            className="h-full bg-gradient-to-r from-[#0099A7] to-[#7654A1] transition-all duration-75"
-            style={{ width: `${scrollProgress}%` }}
+            ref={progressBarRef}
+            className="h-full origin-left bg-gradient-to-r from-[#0099A7] to-[#7654A1] transition-transform duration-75"
+            style={{ transform: 'scaleX(0)' }}
           />
         </div>
       )}

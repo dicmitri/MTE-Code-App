@@ -40,7 +40,13 @@ import {
   XCircle,
   Lightbulb,
   Send,
-  Copy
+  Copy,
+  Link,
+  ExternalLink,
+  Compass,
+  Gift,
+  Award,
+  ThumbsUp
 } from 'lucide-react';
 
 export {
@@ -81,7 +87,13 @@ export {
   Maximize2,
   Minimize2,
   Share2,
-  XCircle
+  XCircle,
+  Link,
+  ExternalLink,
+  Compass,
+  Gift,
+  Award,
+  ThumbsUp
 };
 
 const CustomSvgWrapper = ({ size = 18, className = "", children }) => (
@@ -205,7 +217,8 @@ const lucideIconMap = {
   Search, Download, Star, Bookmark, Printer, GitBranch, RotateCcw, Clock,
   Calculator, Trash2, Plus, AlertCircle, Upload, Loader2, AlertTriangle,
   ArrowRight, BookOpen, Check, CheckCircle, Maximize2, Minimize2, Share2,
-  XCircle, Lightbulb, Send, Copy
+  XCircle, Lightbulb, Send, Copy, Link, ExternalLink, Compass, Gift, Award,
+  ThumbsUp
 };
 
 export const AppIcon = ({ name, size = 18, className = "" }) => {

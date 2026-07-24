@@ -1,6 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import DOMPurify from 'dompurify';
 import { highlightSearchTerm, processTextWithTerms } from '../utils/textUtils';
+import { copyTextToClipboard } from '../utils/clipboardUtils';
 import { Highlight } from './Highlight';
 import { AppIcon } from './AppIcons';
 import { getTreesBySection } from '../data/treeData';
@@ -16,22 +17,97 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
 
     const sanitizedHtml = useMemo(() => DOMPurify.sanitize(processedHtml), [processedHtml]);
 
-    const [copyMsg, setCopyMsg] = useState(null);
+    const [copyFeedback, setCopyFeedback] = useState(null);
     const [citeMenuOpen, setCiteMenuOpen] = useState(false);
+    const citeContainerRef = useRef(null);
+    const citeTriggerRef = useRef(null);
+    const copyFeedbackTimerRef = useRef(null);
+    const copyRequestRef = useRef(0);
+    const isMountedRef = useRef(false);
+    const citeMenuId = `citation-menu-${id}`;
+
+    useEffect(() => {
+        isMountedRef.current = true;
+        return () => {
+            isMountedRef.current = false;
+            copyRequestRef.current += 1;
+            if (copyFeedbackTimerRef.current) {
+                window.clearTimeout(copyFeedbackTimerRef.current);
+            }
+        };
+    }, []);
+
+    useEffect(() => {
+        if (!citeMenuOpen) return undefined;
+
+        const closeCiteMenu = (restoreFocus = false) => {
+            setCiteMenuOpen(false);
+            if (restoreFocus) {
+                window.requestAnimationFrame(() => citeTriggerRef.current?.focus());
+            }
+        };
+
+        const handlePointerDown = (event) => {
+            if (!citeContainerRef.current?.contains(event.target)) {
+                closeCiteMenu();
+            }
+        };
+
+        const handleKeyDown = (event) => {
+            if (event.key !== 'Escape') return;
+            event.preventDefault();
+            closeCiteMenu(true);
+        };
+
+        document.addEventListener('pointerdown', handlePointerDown);
+        document.addEventListener('keydown', handleKeyDown);
+        return () => {
+            document.removeEventListener('pointerdown', handlePointerDown);
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [citeMenuOpen]);
+
+    const showCopyFeedback = (message, kind = 'success') => {
+        if (copyFeedbackTimerRef.current) {
+            window.clearTimeout(copyFeedbackTimerRef.current);
+        }
+
+        setCopyFeedback({ message, kind });
+        copyFeedbackTimerRef.current = window.setTimeout(() => {
+            setCopyFeedback(null);
+            copyFeedbackTimerRef.current = null;
+        }, 2500);
+    };
+
+    const copyWithFeedback = async (text, successMessage) => {
+        const requestId = ++copyRequestRef.current;
+
+        try {
+            await copyTextToClipboard(text);
+            if (!isMountedRef.current || requestId !== copyRequestRef.current) {
+                return false;
+            }
+            showCopyFeedback(successMessage);
+            return true;
+        } catch {
+            if (!isMountedRef.current || requestId !== copyRequestRef.current) {
+                return false;
+            }
+            showCopyFeedback('Could not access the clipboard. Please copy manually.', 'error');
+            return false;
+        }
+    };
 
     const getSectionUrl = (sectionId) => (
         new URL(buildCodeSectionPath(chapterId, sectionId), window.location.origin).href
     );
 
-    const copyLink = (sectionId) => {
+    const copyLink = async (sectionId) => {
         const url = getSectionUrl(sectionId);
-        navigator.clipboard.writeText(url).then(() => {
-            setCopyMsg("Link copied to clipboard!");
-            setTimeout(() => setCopyMsg(null), 2000);
-        });
+        await copyWithFeedback(url, 'Link copied to clipboard!');
     };
 
-    const copyCitationFormat = (format) => {
+    const copyCitationFormat = async (format) => {
         const url = getSectionUrl(id);
         const prefix = chapterPrefix ? chapterPrefix : '';
         const fullTitle = `${prefix}${section.title}`;
@@ -46,17 +122,18 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
             textToCopy = url;
         }
 
-        navigator.clipboard.writeText(textToCopy).then(() => {
-            setCopyMsg(
-                format === 'formal' ? 'Formal citation copied!' :
-                format === 'markdown' ? 'Markdown link copied!' : 'Direct link copied!'
-            );
+        const successMessage = (
+            format === 'formal' ? 'Formal citation copied!' :
+            format === 'markdown' ? 'Markdown link copied!' : 'Direct link copied!'
+        );
+
+        if (await copyWithFeedback(textToCopy, successMessage)) {
             setCiteMenuOpen(false);
-            setTimeout(() => setCopyMsg(null), 2500);
-        });
+            window.requestAnimationFrame(() => citeTriggerRef.current?.focus());
+        }
     };
 
-    const copyPlainText = () => {
+    const copyPlainText = async () => {
         const prefix = chapterPrefix ? chapterPrefix : '';
         const fullTitle = `${prefix}${section.title}`;
         
@@ -77,10 +154,7 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
             });
         }
 
-        navigator.clipboard.writeText(textToCopy).then(() => {
-            setCopyMsg("Plain text copied to clipboard!");
-            setTimeout(() => setCopyMsg(null), 2500);
-        });
+        await copyWithFeedback(textToCopy, 'Plain text copied to clipboard!');
     };
 
     const handleClick = (e) => {
@@ -102,11 +176,12 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
     return (
         <div id={id} className="mb-8 scroll-mt-24" onClick={handleClick}>
             {section.title && (
-                <div className="group flex justify-between items-baseline mb-3 mt-6 print:hidden">
-                    <h3 className="text-xl font-bold text-gray-800 flex items-center flex-wrap gap-2">
+                <div className="group flex flex-col gap-2 mb-3 mt-6 print:hidden sm:flex-row sm:items-baseline sm:justify-between">
+                    <h3 className="min-w-0 text-xl font-bold text-gray-800 flex items-center flex-wrap gap-2">
                         <Highlight text={section.title} query={searchFilters?.titles ? query : ''} />
-                        {section.qas && section.qas.length > 0 && (
+                        {showQA && section.qas && section.qas.length > 0 && (
                             <button
+                                type="button"
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     const qaEl = document.getElementById(`qa-block-${id}`);
@@ -120,9 +195,10 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
                             </button>
                         )}
                     </h3>
-                    <div className="flex gap-2 shrink-0 ml-4 print:hidden">
+                    <div className="flex flex-wrap gap-x-2 gap-y-1 shrink-0 sm:ml-4 sm:justify-end">
                         {bookmarksControls && (
                             <button
+                                type="button"
                                 onClick={(e) => { e.stopPropagation(); bookmarksControls.toggleBookmark(id, (chapterPrefix || '') + section.title, chapterId); }}
                                 className={`text-sm border rounded px-2 py-1 transition-colors ${isBookmarked ? 'bg-purple-100 text-purple-700 border-purple-200' : 'text-gray-500 hover:text-purple-600 border-transparent hover:border-purple-100'}`}
                                 title={isBookmarked ? 'Remove bookmark' : 'Bookmark this section'}
@@ -130,22 +206,30 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
                                 {isBookmarked ? '★ Bookmarked' : '☆ Bookmark'}
                             </button>
                         )}
-                        <div className="relative">
+                        <div ref={citeContainerRef} className="relative">
                             <button
+                                ref={citeTriggerRef}
+                                type="button"
                                 onClick={(e) => { e.stopPropagation(); setCiteMenuOpen(!citeMenuOpen); }}
                                 className="text-sm text-[#0099A7] hover:text-[#007A86] border border-transparent hover:border-cyan-100 rounded px-2 py-1 flex items-center gap-1 font-medium transition-colors"
                                 title="Copy citation or reference link for this section"
+                                aria-expanded={citeMenuOpen}
+                                aria-controls={citeMenuOpen ? citeMenuId : undefined}
                             >
                                 <span>Cite</span>
                                 <AppIcon name={citeMenuOpen ? "ChevronUp" : "ChevronDown"} size={12} />
                             </button>
                             {citeMenuOpen && (
-                                <div 
+                                <div
+                                    id={citeMenuId}
+                                    role="group"
+                                    aria-label="Copy reference"
                                     onClick={(e) => e.stopPropagation()}
                                     className="absolute right-0 mt-1 w-64 bg-white border border-gray-200 rounded-xl shadow-xl p-2 z-50 animate-fade-in text-left"
                                 >
                                     <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-2 py-1">Copy Reference</div>
                                     <button
+                                        type="button"
                                         onClick={() => copyCitationFormat('formal')}
                                         className="w-full text-left px-2.5 py-1.5 text-xs text-gray-700 hover:bg-cyan-50 hover:text-[#0099A7] rounded-lg transition-colors flex items-center justify-between group"
                                     >
@@ -156,6 +240,7 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
                                         <AppIcon name="Copy" size={14} className="text-gray-400 group-hover:text-[#0099A7]" />
                                     </button>
                                     <button
+                                        type="button"
                                         onClick={() => copyCitationFormat('markdown')}
                                         className="w-full text-left px-2.5 py-1.5 text-xs text-gray-700 hover:bg-purple-50 hover:text-purple-700 rounded-lg transition-colors flex items-center justify-between group"
                                     >
@@ -166,6 +251,7 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
                                         <AppIcon name="Link" size={14} className="text-gray-400 group-hover:text-purple-600" />
                                     </button>
                                     <button
+                                        type="button"
                                         onClick={() => copyCitationFormat('url')}
                                         className="w-full text-left px-2.5 py-1.5 text-xs text-gray-700 hover:bg-slate-50 hover:text-slate-900 rounded-lg transition-colors flex items-center justify-between group"
                                     >
@@ -179,6 +265,7 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
                             )}
                         </div>
                         <button
+                            type="button"
                             onClick={(e) => { e.stopPropagation(); copyLink(id); }}
                             className="text-sm text-purple-600 hover:text-purple-800 border border-transparent hover:border-purple-100 rounded px-2 py-1"
                             title="Copy raw link to this section"
@@ -186,6 +273,7 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
                             Link
                         </button>
                         <button
+                            type="button"
                             onClick={(e) => { e.stopPropagation(); copyPlainText(); }}
                             className="text-sm text-slate-600 hover:text-slate-900 border border-transparent hover:border-slate-200 rounded px-2 py-1 font-medium transition-colors"
                             title="Copy clean plain text of this section"
@@ -218,10 +306,23 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
                     </div>
                 </div>
             )}
-            {copyMsg && (
-                <div className="fixed bottom-6 right-6 bg-slate-900 text-white text-xs font-medium px-4 py-2.5 rounded-xl shadow-2xl z-50 flex items-center gap-2 animate-fade-in border border-slate-700/50 print:hidden">
-                    <AppIcon name="Check" size={16} className="text-emerald-400 shrink-0" />
-                    <span>{copyMsg}</span>
+            {copyFeedback && (
+                <div
+                    role={copyFeedback.kind === 'error' ? 'alert' : 'status'}
+                    aria-live={copyFeedback.kind === 'error' ? 'assertive' : 'polite'}
+                    aria-atomic="true"
+                    className={`fixed bottom-6 right-6 text-white text-xs font-medium px-4 py-2.5 rounded-xl shadow-2xl z-50 flex items-center gap-2 animate-fade-in border print:hidden ${
+                        copyFeedback.kind === 'error'
+                            ? 'bg-red-700 border-red-600'
+                            : 'bg-slate-900 border-slate-700/50'
+                    }`}
+                >
+                    <AppIcon
+                        name={copyFeedback.kind === 'error' ? 'AlertCircle' : 'Check'}
+                        size={16}
+                        className={copyFeedback.kind === 'error' ? 'text-red-100 shrink-0' : 'text-emerald-400 shrink-0'}
+                    />
+                    <span>{copyFeedback.message}</span>
                 </div>
             )}
             {showQA && section.qas && (

@@ -49,9 +49,12 @@ export const Header = ({
           <div className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex bg-slate-100 p-0.5 md:p-1.5 text-[10px] md:text-xs rounded-lg border border-slate-200 gap-0.5 md:gap-1.5 shrink-0 items-center h-8 md:h-auto animate-slide-in-right z-10 no-print">
             
             <button
+              type="button"
               onClick={() => setSuggestionModalOpen(true)}
               className="px-2 py-1 md:px-3 md:py-1.5 text-xs font-bold rounded-md md:rounded-lg transition-all flex items-center gap-1 md:gap-2 h-full text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200/80 shadow-sm"
               title="Send a Suggestion"
+              aria-label="Send a suggestion"
+              aria-haspopup="dialog"
             >
               <AppIcon name="Lightbulb" size={16} className="text-amber-600 shrink-0" />
               <span className="hidden md:inline">Send a Suggestion</span>
@@ -207,9 +210,12 @@ export const Header = ({
         {activeSection !== 'code' && (
           <div className="flex items-center gap-2 z-10 no-print">
             <button
+              type="button"
               onClick={() => setSuggestionModalOpen(true)}
               className="px-2.5 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200/80 shadow-sm"
               title="Send a Suggestion"
+              aria-label="Send a suggestion"
+              aria-haspopup="dialog"
             >
               <AppIcon name="Lightbulb" size={16} className="text-amber-600 shrink-0" />
               <span className="hidden md:inline">Send a Suggestion</span>

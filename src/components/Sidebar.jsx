@@ -3,6 +3,7 @@ import { AppIcon } from './AppIcons';
 import { Highlight } from './Highlight';
 import { FULL_CODE_DATA, updateSearchStatus } from '../data/codeData';
 import { SECTIONS } from '../config/sections';
+import { addRecentSearch, normalizeRecentSearches } from '../utils/recentSearchUtils';
 
 /**
  * CollapsibleGroup — a generic collapsible section with a header and children.
@@ -74,32 +75,33 @@ export const Sidebar = ({
 
   // Track pre-search expansion state for restoration
   const [preSearchExpanded, setPreSearchExpanded] = useState(null);
+  const searchResultsAreCurrent = searchTerm.trim() === debouncedSearch.trim();
 
   // Recent searches state & localStorage sync
   const [recentSearches, setRecentSearches] = useState(() => {
     try {
       const saved = localStorage.getItem('MTE_RECENT_SEARCHES');
-      return saved ? JSON.parse(saved) : [];
+      return saved ? normalizeRecentSearches(JSON.parse(saved)) : [];
     } catch {
       return [];
     }
   });
 
   useEffect(() => {
-    const term = debouncedSearch.trim();
-    if (term && term.length >= 2) {
-      setRecentSearches(prev => {
-        const filtered = prev.filter(t => t.toLowerCase() !== term.toLowerCase());
-        const next = [term, ...filtered].slice(0, 4);
-        try {
-          localStorage.setItem('MTE_RECENT_SEARCHES', JSON.stringify(next));
-        } catch (e) {
-          console.error(e);
-        }
-        return next;
-      });
+    try {
+      if (recentSearches.length > 0) {
+        localStorage.setItem('MTE_RECENT_SEARCHES', JSON.stringify(recentSearches));
+      } else {
+        localStorage.removeItem('MTE_RECENT_SEARCHES');
+      }
+    } catch (error) {
+      console.error('Could not save recent searches', error);
     }
-  }, [debouncedSearch]);
+  }, [recentSearches]);
+
+  const rememberSearch = (term) => {
+    setRecentSearches((previous) => addRecentSearch(previous, term));
+  };
 
   // When activeSection changes, update default expansion
   useEffect(() => {
@@ -262,6 +264,9 @@ export const Sidebar = ({
             className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-10 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-[#7654A1] transition-all"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') rememberSearch(searchTerm);
+            }}
             aria-label="Search the Code"
           />
           {searchTerm && (
@@ -290,7 +295,6 @@ export const Sidebar = ({
               <button
                 onClick={() => {
                   setRecentSearches([]);
-                  localStorage.removeItem('MTE_RECENT_SEARCHES');
                 }}
                 className="text-[10px] text-gray-400 hover:text-red-500 font-medium transition-colors"
                 title="Clear recent searches"
@@ -423,16 +427,18 @@ export const Sidebar = ({
                   {items.map((item) => (
                     <button
                       key={item.id}
+                      disabled={Boolean(searchTerm.trim()) && !searchResultsAreCurrent}
                       onClick={() => {
                         onNavigateChapter(item.id);
                         if (debouncedSearch && debouncedSearch.trim() !== '') {
+                          rememberSearch(searchTerm);
                           setShowSummary(true);
                           setShowFullText(true);
                         }
                         setSidebarOpen(false);
                         window.scrollTo(0, 0);
                       }}
-                      className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ${
+                      className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 disabled:cursor-wait disabled:opacity-70 ${
                         activeSection === 'code' && activeId === item.id
                           ? 'bg-[#7654A1] text-white shadow-md'
                           : 'text-gray-600 hover:bg-gray-50'
