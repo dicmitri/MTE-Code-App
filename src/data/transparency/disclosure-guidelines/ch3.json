@@ -1,0 +1,109 @@
+{
+  "id": "dg-chapter-3",
+  "documentId": "disclosure-guidelines",
+  "type": "chapter",
+  "title": "Chapter 3: Form of Disclosure",
+  "icon": "3",
+  "sourcePages": [
+    7,
+    8,
+    9,
+    10
+  ],
+  "sections": [
+    {
+      "title": "1. Reporting Period",
+      "legalText": "Disclosures shall be made <em>public</em> on an annual basis and each Reporting Period shall cover a full calendar year.",
+      "sourcePages": [
+        7
+      ],
+      "qas": []
+    },
+    {
+      "title": "2. Time of Disclosure",
+      "legalText": "Member Companies shall make the Disclosure public before the 31<sup>st</sup> August of the year following the relevant reporting period.",
+      "sourcePages": [
+        7
+      ],
+      "qas": []
+    },
+    {
+      "title": "3. Template and Language of Disclosure",
+      "legalText": "For consistency purposes, disclosures made pursuant to these Disclosure Guidelines shall be made at a minimum in English using the template set forth in the Annex I or a format of the Member Companies’ choosing that, at a minimum, includes the same fields.",
+      "sourcePages": [
+        7
+      ],
+      "qas": [
+        {
+          "label": "Q&A 8",
+          "q": "Q: In what currency should the amounts paid be disclosed?",
+          "a": "Disclosed amounts should ideally be in the currency used in the payment. In the event the aggregate amount includes Educational Grants made in different currencies, the reporting company may choose in which currency they wish to disclose the aggregate amount, and keep appropriate record of the exchange rate used to convert the different currencies. This information will then be included in their Methodology Note.",
+          "sourcePages": [
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "title": "4. Platform of Disclosure",
+      "legalText": "Unless the Member Company is already bound by national laws, regulations or professional codes as regulated in <em>Section 1.2 Applicability of these Disclosure Guidelines</em>,<br/>Disclosures shall be made on a Member Company’s web page, that is:.<div class=\"pl-8 mt-2\">a) Publicly and easily accessible;</div><div class=\"pl-8 mt-2\">b) Clearly identifiable as a website belonging or linked to the Member Company;</div><div class=\"pl-8 mt-2\">c) In a location where the general public would likely expect it to be.</div><br/>Member Companies shall be responsible for the accuracy of the disclosed data.<br/>To maintain accessibility standards and facilitate user access, Member Company shall provide to MedTech Europe a valid link to the company’s disclosure page, that is published on a MedTech Europe page designated to centralise all related links. Any changes to the link shall be promptly communicated to the MedTech Europe Secretariat.",
+      "sourcePages": [
+        8,
+        9
+      ],
+      "qas": [
+        {
+          "label": "Q&A 9",
+          "q": "Q: What format, user interfaces etc. are considered as including all the above-mentioned requirements?",
+          "a": "Member Companies are free to decide what specific format the disclosure will be made on. For example, Member Companies may choose to use a dedicated online database or they may choose to make available the templates individually for download in a dedicated page or integrate the templates into a comprehensive report to be uploaded in the social responsibility area of their website. This list is not exhaustive, the main requirement is for the information to be easily accessible and understandable and that it contains, as a minimum, the elements identified in template of Section 4.",
+          "sourcePages": [
+            8
+          ]
+        },
+        {
+          "label": "Q&A 10",
+          "q": "Q: How will consistency among companies’ disclosures be ensured?",
+          "a": "For the first year of the Transition period, MedTech Europe shall perform an audit to verify the presence of the minimum elements in compliance with these Guidelines and the fulfilment of the obligation in line with the requirements. From that point onward, MedTech Europe might perform audits on the same elements on ad hoc and on a need basis.",
+          "sourcePages": [
+            8
+          ]
+        }
+      ]
+    },
+    {
+      "title": "6. Retention and Modification of the Disclosures",
+      "legalText": "Member Companies shall be able to modify, delete or in any way alter their disclosures at any time before or after the time of publication.<br/><br/>The information disclosed shall remain in the public domain for at least 3 years after the time such information is first published.",
+      "sourcePages": [
+        8,
+        9
+      ],
+      "qas": [
+        {
+          "label": "Q&A 11",
+          "q": "Q: What steps should Member Companies take if an amendment to the information is required after its publication on their website?",
+          "a": "If a change to the information becomes necessary after its publication on the website, Companies could:<div class=\"pl-5 mt-2\">- Upload a revised file that reflects the update, clearly indicating:<div class=\"pl-9\">o The date of the new upload, and</div><div class=\"pl-9\">o A version number (e.g., “Version 2 – [Date]”).</div></div><div class=\"pl-5 mt-2\">- Manage previous versions by either:<div class=\"pl-9\">o Keeping the earlier version accessible for transparency, or</div><div class=\"pl-9\">o Removing it from the website while maintaining internal documentation for audit and tracking purposes.</div></div><br/>Ensure proper version control so that all changes are traceable and can be provided upon request.",
+          "sourcePages": [
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "title": "5. Enquiries Regarding Reported Disclosures",
+      "legalText": "Member Companies shall make available to Healthcare Organizations upon request any data concerning their common contractual relations published in accordance with these Disclosure Guidelines at any time while the disclosed information remains in the public domain as stated in <em>Section 3.3 Time of Publication</em>.",
+      "sourcePages": [
+        9
+      ],
+      "qas": []
+    },
+    {
+      "title": "6. Enforcement of the Obligations",
+      "legalText": "For avoidance of doubt, the obligation to document and publicly disclose all Educational Grants in accordance with these Disclosure Guidelines is established by the Code (Chapter 5, Paragraph 4), therefore any potential violation of the aforementioned obligations may constitute a breach of the Code and therefore be subject to the enforcement measures and potential sanctions outlined in Part 2 of the Code <em>‘Complaint handling and dispute resolution’</em>.<br/><br/><strong>Transitionary measures</strong><br/><br/>These amended Guidelines shall come into effect on 1 January 2026. On that date, a transition period will begin, ending on 31 December 2026 by which time companies are expected to have implemented the new disclosure mechanism that will apply to declarations from 1 January 2027 onwards (i.e, Educational Grants under the scope of these Disclosure Guidelines provided in 2026 will need to be disclosed under the new amended Guidelines in 2027, while the Educational Grants provided in 2025 will still be disclosed on Transparent MedTech platform).",
+      "sourcePages": [
+        9,
+        10
+      ],
+      "qas": []
+    }
+  ]
+}

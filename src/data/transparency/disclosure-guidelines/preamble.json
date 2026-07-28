@@ -1,0 +1,20 @@
+{
+  "id": "dg-preamble",
+  "documentId": "disclosure-guidelines",
+  "type": "preamble",
+  "title": "Preamble",
+  "icon": "Info",
+  "sourcePages": [
+    2
+  ],
+  "sections": [
+    {
+      "title": "",
+      "legalText": "<p>Under the MedTech Europe Code of Ethical Business Practice (the “Code”), Member Companies are not permitted to pay registration fees, travel or hospitality expenses directly to individual Healthcare Professionals for their participation in educational conferences organised by third-parties.</p><p>Medical Education may be supported through the provision of Educational Grants to Healthcare Organisations in compliance with the rules set out in the Code. To make the system more robust, specific safeguards when providing Educational Grants have been put in place, including the obligation to disclose these Educational Grants.</p><p><em>Section 3 of Chapter 4</em> of the Code states that Member Companies shall document and publicly disclose all Educational Grants in accordance with these Disclosure Guidelines. These Disclosure Guidelines are therefore an integral part of the Code and need to be interpreted as such.</p><p>For the avoidance of doubt, all funds provided by a Member Company for the advancement of genuine educational purposes to a Professional Conference Organiser (“PCO”), acting independently of any Healthcare Organisation, fall under the scope of these Disclosure Guidelines and are subject to the same conditions as Educational Grants. Whenever these Disclosure Guidelines refer to Healthcare Organisations, these shall also include Professional Conference Organisers.</p><p>All capitalised concepts used in the Guidelines are concepts defined in the Code.</p>",
+      "sourcePages": [
+        2
+      ],
+      "qas": []
+    }
+  ]
+}

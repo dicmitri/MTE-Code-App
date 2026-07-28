@@ -6,10 +6,15 @@ import { fileURLToPath } from 'node:url';
 
 import { generateSectionId } from '../src/utils/textUtils.js';
 import { loadSplitCodeData } from '../scripts/lib/code-content.mjs';
+import { loadTransparencyData } from '../scripts/lib/transparency-content.mjs';
 import {
   buildChapterPath,
   buildCodeSectionPath,
   buildQuizPath,
+  buildTransparencyDocumentPath,
+  buildTransparencyHomePath,
+  buildTransparencySectionPath,
+  buildTransparencyUnitPath,
   buildTreePath,
   createRouteUtils,
 } from '../src/utils/routeUtils.js';
@@ -20,7 +25,12 @@ const codeData = loadSplitCodeData(projectRoot);
 const treeData = JSON.parse(readFileSync(resolve(projectRoot, 'src/data/treeData.json'), 'utf8'));
 const FULL_CODE_DATA = codeData.chapters;
 const TREE_DATA = treeData.trees;
-const { parseAppLocation } = createRouteUtils(FULL_CODE_DATA, TREE_DATA);
+const TRANSPARENCY_DOCUMENTS = loadTransparencyData(projectRoot);
+const { parseAppLocation } = createRouteUtils(
+  FULL_CODE_DATA,
+  TREE_DATA,
+  TRANSPARENCY_DOCUMENTS,
+);
 
 test('parses the canonical top-level routes', () => {
   assert.deepEqual(parseAppLocation('/', ''), {
@@ -33,6 +43,87 @@ test('parses the canonical top-level routes', () => {
   assert.equal(parseAppLocation('/trees', '').activeId, 'trees-home');
   assert.equal(parseAppLocation('/quiz', '').activeSection, 'quiz');
   assert.equal(parseAppLocation('/tppt', '').activeSection, 'tppt');
+  assert.deepEqual(parseAppLocation('/transparency', ''), {
+    activeSection: 'transparency',
+    activeId: 'transparency-home',
+    anchor: null,
+    canonicalUrl: '/transparency',
+  });
+});
+
+test('keeps Transparency document data optional for existing route consumers', () => {
+  const legacyParser = createRouteUtils(FULL_CODE_DATA, TREE_DATA).parseAppLocation;
+
+  assert.equal(legacyParser('/code/ch1', '').canonicalUrl, '/code/ch1');
+  assert.equal(legacyParser('/trees', '').canonicalUrl, '/trees');
+  assert.equal(legacyParser('/transparency/disclosure-guidelines', '').canonicalUrl, '/transparency');
+});
+
+test('round-trips every Transparency document and unit route', () => {
+  for (const document of TRANSPARENCY_DOCUMENTS) {
+    const documentPath = buildTransparencyDocumentPath(document.id);
+    const parsedDocument = parseAppLocation(documentPath, '');
+
+    assert.equal(buildTransparencyHomePath(), '/transparency');
+    assert.equal(parsedDocument.activeSection, 'transparency');
+    assert.equal(parsedDocument.activeDocumentId, document.id);
+    assert.equal(parsedDocument.activeId, 'home');
+    assert.equal(parsedDocument.canonicalUrl, documentPath);
+
+    for (const unit of document.units) {
+      const unitPath = buildTransparencyUnitPath(document.id, unit.id);
+      const parsedUnit = parseAppLocation(unitPath, '');
+
+      assert.equal(parsedUnit.activeSection, 'transparency');
+      assert.equal(parsedUnit.activeDocumentId, document.id);
+      assert.equal(parsedUnit.activeId, unit.id);
+      assert.equal(parsedUnit.canonicalUrl, unitPath);
+    }
+  }
+});
+
+test('round-trips every Transparency section without changing its anchor ID', () => {
+  const urls = new Set();
+
+  for (const document of TRANSPARENCY_DOCUMENTS) {
+    for (const unit of document.units) {
+      unit.sections.forEach((section, index) => {
+        const sectionId = generateSectionId(unit.id, section.title, index);
+        const url = buildTransparencySectionPath(document.id, unit.id, sectionId);
+        const parsed = parseAppLocation(
+          buildTransparencyUnitPath(document.id, unit.id),
+          `#${sectionId}`,
+        );
+
+        assert.equal(parsed.activeSection, 'transparency');
+        assert.equal(parsed.activeDocumentId, document.id);
+        assert.equal(parsed.activeId, unit.id);
+        assert.equal(parsed.anchor, sectionId);
+        assert.equal(parsed.canonicalUrl, url);
+        assert.equal(urls.has(url), false, `Duplicate Transparency section URL: ${url}`);
+        urls.add(url);
+      });
+    }
+  }
+});
+
+test('canonicalizes a Transparency section hash to its owning unit', () => {
+  const document = TRANSPARENCY_DOCUMENTS[0];
+  const owner = document.units[1];
+  const sectionId = generateSectionId(owner.id, owner.sections[0].title, 0);
+  const expected = buildTransparencySectionPath(document.id, owner.id, sectionId);
+
+  assert.equal(
+    parseAppLocation(buildTransparencyDocumentPath(document.id), `#${sectionId}`).canonicalUrl,
+    expected,
+  );
+  assert.equal(
+    parseAppLocation(
+      buildTransparencyUnitPath(document.id, document.units[0].id),
+      `#${sectionId}`,
+    ).canonicalUrl,
+    expected,
+  );
 });
 
 test('round-trips every live chapter route', () => {
@@ -94,4 +185,13 @@ test('keeps existing shared Quiz hashes on the Quiz path', () => {
 test('falls back safely for unknown paths and malformed URL encoding', () => {
   assert.equal(parseAppLocation('/not-a-route', '').canonicalUrl, '/');
   assert.equal(parseAppLocation('/code/%E0%A4%A', '').canonicalUrl, '/');
+  assert.equal(parseAppLocation('/transparency/not-a-document', '').canonicalUrl, '/transparency');
+  assert.equal(
+    parseAppLocation('/transparency/disclosure-guidelines/not-a-unit', '').canonicalUrl,
+    '/transparency/disclosure-guidelines',
+  );
+  assert.equal(
+    parseAppLocation('/transparency/%E0%A4%A', '').canonicalUrl,
+    '/transparency',
+  );
 });

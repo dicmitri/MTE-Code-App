@@ -39,7 +39,36 @@ function makeValidFixture() {
         { id: 'b', text: 'Incorrect', isCorrect: false },
       ],
     }],
-    iconSource: 'const lucideIconMap = { Info };',
+    transparencyData: [{
+      id: 'disclosure-guidelines',
+      title: 'Disclosure Guidelines',
+      icon: 'Eye',
+      unitIds: ['dg-preamble'],
+      resources: [{
+        id: 'declaration-csv-template',
+        filename: 'declaration-csv-template.csv',
+      }],
+      units: [{
+        id: 'dg-preamble',
+        documentId: 'disclosure-guidelines',
+        type: 'preamble',
+        title: 'Preamble',
+        icon: 'FileText',
+        sourcePages: [2],
+        sections: [{
+          title: '',
+          legalText: '<p>Download <a href="resource:declaration-csv-template">this link</a>.</p>',
+          sourcePages: [2],
+          qas: [{
+            label: 'Q&A 1',
+            q: 'Q: A disclosure question?',
+            a: 'A disclosure answer.',
+            sourcePages: [2],
+          }],
+        }],
+      }],
+    }],
+    iconSource: 'const lucideIconMap = { Eye, FileText, Info };',
   };
 }
 
@@ -53,6 +82,10 @@ test('accepts a structurally valid project fixture', () => {
     trees: 1,
     treeNodes: 2,
     quizQuestions: 1,
+    transparencyDocuments: 1,
+    transparencyUnits: 1,
+    transparencySections: 1,
+    transparencyQas: 1,
   });
 });
 
@@ -78,4 +111,43 @@ test('reports chapter icons that are not in the AppIcon registry maps', () => {
 
   const result = validateProjectData(fixture);
   assert.ok(result.errors.some((error) => error.includes('icon "UnknownIcon" is not registered')));
+});
+
+test('allows an untitled single-body Transparency section without duplicating its unit heading', () => {
+  const fixture = makeValidFixture();
+  fixture.transparencyData[0].units[0].sections[0].title = '';
+
+  assert.deepEqual(validateProjectData(fixture).errors, []);
+});
+
+test('reports invalid Disclosure namespaces, source pages, and Q&A prefixes', () => {
+  const fixture = makeValidFixture();
+  const unit = fixture.transparencyData[0].units[0];
+  unit.id = 'preamble';
+  fixture.transparencyData[0].unitIds = ['preamble'];
+  unit.sourcePages = [0, 2.5];
+  unit.sections[0].qas[0].q = 'A disclosure question?';
+  unit.sections[0].qas[0].a = 'A: A disclosure answer.';
+
+  const errors = validateProjectData(fixture).errors;
+  assert.ok(errors.some((error) => error.includes('must start with "dg-"')));
+  assert.ok(errors.some((error) => error.includes('sourcePages must contain positive page numbers')));
+  assert.ok(errors.some((error) => error.includes('retain its leading "Q:"')));
+  assert.ok(errors.some((error) => error.includes('must omit "A:"')));
+});
+
+test('reports duplicate section routes and unresolved local resources', () => {
+  const fixture = makeValidFixture();
+  const sections = fixture.transparencyData[0].units[0].sections;
+  sections[0].title = 'Repeated';
+  sections.push({
+    title: 'Repeated',
+    legalText: '<a href="resource:not-declared">download</a>',
+    sourcePages: [2],
+    qas: [],
+  });
+
+  const errors = validateProjectData(fixture).errors;
+  assert.ok(errors.some((error) => error.includes('duplicate generated section ID')));
+  assert.ok(errors.some((error) => error.includes('resource "not-declared" is not declared')));
 });

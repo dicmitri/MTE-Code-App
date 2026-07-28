@@ -1,0 +1,21 @@
+{
+  "id": "dg-annex-1",
+  "documentId": "disclosure-guidelines",
+  "type": "annex",
+  "title": "Annex I: Disclosure Template",
+  "icon": "Download",
+  "sourcePages": [
+    11
+  ],
+  "sections": [
+    {
+      "title": "",
+      "legalText": "<p>Please find the Declaration csv Template downloadable <a href=\"resource:declaration-csv-template\">at this link</a>.</p>",
+      "resourceId": "declaration-csv-template",
+      "sourcePages": [
+        11
+      ],
+      "qas": []
+    }
+  ]
+}

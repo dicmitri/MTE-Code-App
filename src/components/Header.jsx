@@ -21,7 +21,11 @@ export const Header = ({
   readerLine,
   setReaderLine,
   readerSpace,
-  setReaderSpace
+  setReaderSpace,
+  readerMode = activeSection === 'code' && activeId !== 'home',
+  showSummaryControl = true,
+  showFullTextControl = true,
+  showQAControl = true,
 }) => {
   const [suggestionModalOpen, setSuggestionModalOpen] = useState(false);
 
@@ -30,8 +34,10 @@ export const Header = ({
       <header className="h-20 flex-none border-b border-gray-200 flex items-center justify-between px-2 sm:px-4 md:px-8 bg-white/95 backdrop-blur-sm z-30 shadow-sm relative">
         <div className="flex items-center gap-1 sm:gap-3 z-10">
           <button
+            type="button"
             onClick={() => setSidebarOpen(true)}
             className="md:hidden p-1.5 sm:p-2 text-gray-500 hover:bg-gray-100 rounded-lg"
+            aria-label="Open navigation"
           >
             <AppIcon name="Menu" size={24} />
           </button>
@@ -44,8 +50,8 @@ export const Header = ({
           </button>
         </div>
 
-        {/* Code section toolbar */}
-        {activeSection === 'code' && activeId !== 'home' && (
+        {/* Document reader toolbar */}
+        {readerMode && (
           <div className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex bg-slate-100 p-0.5 md:p-1.5 text-[10px] md:text-xs rounded-lg border border-slate-200 gap-0.5 md:gap-1.5 shrink-0 items-center h-8 md:h-auto animate-slide-in-right z-10 no-print">
             
             <button
@@ -62,44 +68,56 @@ export const Header = ({
 
             <div className="w-px h-4 bg-gray-300 mx-0.5"></div>
 
-            <button
-              onClick={() => setShowSummary(!showSummary)}
-              className={`px-2 py-1 md:px-3 md:py-1.5 text-xs font-bold rounded-md md:rounded-lg transition-all flex items-center gap-1 md:gap-2 h-full ${
-                showSummary
-                  ? 'bg-white text-[#7654A1] shadow-sm'
-                  : 'text-gray-400 hover:text-gray-600'
-              }`}
-              title="Toggle Summary"
-            >
-              <AppIcon name="List" size={16} />
-              <span className="hidden md:inline">Summary</span>
-            </button>
+            {showSummaryControl && (
+              <button
+                type="button"
+                onClick={() => setShowSummary(!showSummary)}
+                className={`px-2 py-1 md:px-3 md:py-1.5 text-xs font-bold rounded-md md:rounded-lg transition-all flex items-center gap-1 md:gap-2 h-full ${
+                  showSummary
+                    ? 'bg-white text-[#7654A1] shadow-sm'
+                    : 'text-gray-400 hover:text-gray-600'
+                }`}
+                title="Toggle Summary"
+                aria-pressed={showSummary}
+              >
+                <AppIcon name="List" size={16} />
+                <span className="hidden md:inline">Summary</span>
+              </button>
+            )}
             
-            <button
-              onClick={() => setShowFullText(!showFullText)}
-              className={`px-2 py-1 md:px-3 md:py-1.5 text-xs font-bold rounded-md md:rounded-lg transition-all flex items-center gap-1 md:gap-2 h-full ${
-                showFullText
-                  ? 'bg-white text-[#7654A1] shadow-sm'
-                  : 'text-gray-400 hover:text-gray-600'
-              }`}
-              title="Toggle Full Text"
-            >
-              <AppIcon name="FileText" size={16} />
-              <span className="hidden md:inline">Full Text</span>
-            </button>
+            {showFullTextControl && (
+              <button
+                type="button"
+                onClick={() => setShowFullText(!showFullText)}
+                className={`px-2 py-1 md:px-3 md:py-1.5 text-xs font-bold rounded-md md:rounded-lg transition-all flex items-center gap-1 md:gap-2 h-full ${
+                  showFullText
+                    ? 'bg-white text-[#7654A1] shadow-sm'
+                    : 'text-gray-400 hover:text-gray-600'
+                }`}
+                title="Toggle Full Text"
+                aria-pressed={showFullText}
+              >
+                <AppIcon name="FileText" size={16} />
+                <span className="hidden md:inline">Full Text</span>
+              </button>
+            )}
             
-            <button
-              onClick={() => setShowQA(!showQA)}
-              className={`px-2 py-1 md:px-3 md:py-1.5 text-xs font-bold rounded-md md:rounded-lg transition-all flex items-center gap-1 md:gap-2 h-full ${
-                showQA
-                  ? 'bg-white text-[#7654A1] shadow-sm'
-                  : 'text-gray-400 hover:text-gray-600'
-              }`}
-              title="Toggle Q&A"
-            >
-              <AppIcon name="Eye" size={16} />
-              <span className="hidden md:inline">Q&A</span>
-            </button>
+            {showQAControl && (
+              <button
+                type="button"
+                onClick={() => setShowQA(!showQA)}
+                className={`px-2 py-1 md:px-3 md:py-1.5 text-xs font-bold rounded-md md:rounded-lg transition-all flex items-center gap-1 md:gap-2 h-full ${
+                  showQA
+                    ? 'bg-white text-[#7654A1] shadow-sm'
+                    : 'text-gray-400 hover:text-gray-600'
+                }`}
+                title="Toggle Q&A"
+                aria-pressed={showQA}
+              >
+                <AppIcon name="Eye" size={16} />
+                <span className="hidden md:inline">Q&A</span>
+              </button>
+            )}
 
             <div className="w-px h-4 bg-gray-300 mx-0.5"></div>
 
@@ -207,7 +225,7 @@ export const Header = ({
         )}
 
         {/* Other sections header button */}
-        {activeSection !== 'code' && (
+        {!readerMode && (
           <div className="flex items-center gap-2 z-10 no-print">
             <button
               type="button"

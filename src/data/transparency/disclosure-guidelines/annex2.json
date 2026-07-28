@@ -1,0 +1,40 @@
+{
+  "id": "dg-annex-2",
+  "documentId": "disclosure-guidelines",
+  "type": "annex",
+  "title": "Annex II: Calculating the value of in kind Educational Grants",
+  "icon": "Calculator",
+  "sourcePages": [
+    12,
+    13,
+    14
+  ],
+  "sections": [
+    {
+      "title": "What is an in-kind Educational Grant?",
+      "legalText": "<p>Please note that the Glossary includes a definition of Educational Grant, and Chapter 4 provides guidance as to how Member Companies can use them to support Third Party Organised Events or educational programs.</p><p>The definition outlines two types of Educational Grants:</p><ul><li><strong>Monetary grants</strong> which involve a transfer of funds to the organization</li><li><strong>In-kind grants</strong> which is a contribution that includes any other type of support</li></ul><p>An in-kind Educational Grant is a non-monetary (i.e non-cash) contribution to an HCO to support an Event or educational program. Both Member Company and HCO should understand and clearly document what constitutes in-kind contributions, as well as how to value them.</p>",
+      "sourcePages": [
+        12
+      ],
+      "qas": []
+    },
+    {
+      "title": "Types of in-kind Educational Grant",
+      "legalText": "<p>An in-kind Educational Grant includes goods or services other than cash transfers, including when the in-kind support is provided by a third party and the payment is directly done by the Member Company to the third party (i.e, no funds are transferred to the final Educational Grant beneficiary). Any in-kind Educational Grant must always strictly comply with general requirements for Educational Grants and be aimed at the advancement of genuine medical education.</p><p>For example:</p><ul><li><strong>Goods</strong> such as computers, furniture, electronic equipment, Xray protection clothing, masks, office equipment, etc.</li><li><strong>Services</strong> such as meeting space, transportation, copy services, administrative services, the supply of access to digital platforms (Zoom, Teams...) etc.</li><li><strong>Expertise:</strong> Members could also provide expertise to an HCO, such as providing technical support/analysis/work (hours of Members employee), all of which should be provided only for the purpose of supporting educational activities.</li><li><strong>Member Company’s products</strong> including commercially available / saleable products, re-usable training products and equipment, which may be returned to the Member Company after use</li></ul>",
+      "sourcePages": [
+        12
+      ],
+      "qas": []
+    },
+    {
+      "title": "Value of in-kind Contributions",
+      "legalText": "<p>The Member Company should, whenever possible and practical, determine the amount of the in-kind contribution and state the value under the Educational Grant agreement.</p><p>The basic principle for valuation of in-kind contributions should be the cost to the Member Company, which could, whenever possible and applicable include logistic, documentation and training costs.</p><p>For specific recommendations on how to value in kind Educational Grants please refer to the table below.</p><table><thead><tr><th>IN-KIND CATEGORY</th><th>EXAMPLES OF VALUES THAT CAN BE CONSIDERED, VAT EXCLUSIVE WHEN RELEVANT</th></tr></thead><tbody><tr><td>Third Party Services</td><td>Contractual value or Fair Market Value</td></tr><tr><td>Services provided by Member Company Staff</td><td>The salary (incl. social contributions), or a portion of the salary, for technical support provided by personnel employed by the Member Company (based on time spent and salary)</td></tr><tr><td></td><td></td></tr><tr><td>Goods (whether TP or company-produced)</td><td><ul><li>Provision of used goods<ul><li>Fair market value</li><li>Company book value</li></ul></li><li>Provision of new goods<ul><li>For third party goods, the listing price.</li><li>Contractual value or Fair market value<ul style=\"list-style-type: circle;\"><li>Internal costs, whether relating to cost of manufacture or transfer price</li></ul></li></ul></li><li>Loaned goods<ul style=\"list-style-type: circle;\"><li>Rental equivalent based on depreciation</li><li>Rental equivalent to highest-volume rate</li></ul><p>NOTE: Rent cannot exceed accepted values if the equipment was donated or sold</p><ul><li>Exception: if single used products are bundled, they should be separated and valued as donation of equipment</li></ul></li></ul></td></tr><tr><td>Materials, technological infrastructure, components</td><td><ul><li>Fair market value</li></ul></td></tr><tr><td>Licenses</td><td><ul><li>FMV for company-owned licenses</li><li>For licenses acquired from 3<sup>rd</sup>-Parties for HCO’s use in the educational project, the cost.</li></ul></td></tr><tr><td>Software</td><td><ul><li>Copying costs</li><li>Licensing costs</li><li>Software technical support costs</li></ul></td></tr><tr><td>Use of Facilities</td><td><ul><li>Internal costs for use facilities with specialized equipment</li></ul></td></tr></tbody></table><p>In-kind Educational Grant do not include the following:</p><ul><li>Samples and demonstration products</li><li>Products or services provided within a commercial deal (e.g. samples required under public procurement)</li><li>Products and Services that could be used for clinical activities outside educational purposes</li><li>Any Products or Services that are for research purposes (see Chapter 6: Research).</li></ul>",
+      "sourcePages": [
+        12,
+        13,
+        14
+      ],
+      "qas": []
+    }
+  ]
+}

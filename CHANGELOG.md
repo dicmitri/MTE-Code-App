@@ -7,6 +7,28 @@ Versions are internal application-release labels; they are independent of the pr
 
 ---
 
+## [1.6.0] - 2026-07-28
+
+### Added
+- Added the Transparency hub and a registry for standalone publications.
+- Integrated the October 2025 Disclosure Guidelines as seven verbatim reader units: Preamble, Chapters 1–3, and Annexes I–III.
+- Bundled the Annex I declaration CSV, retained the publication's exact linked words, and added a clearly labelled non-normative in-app preview.
+- Added source-fidelity verification for the PDF, CSV, reader JSON, visible text, lexical boundaries, Q&As, annex structures, runtime publication registry, and emitted offline assets.
+
+### Changed
+- Extracted the shared `DocumentReader` used by the Code and Transparency.
+- Extended routing, direct links, search, bookmarks, recent history, citations, print behavior, responsive navigation, and offline precaching to Transparency publications.
+- Documented the publication registry, source-replacement controls, offline resource limits, routing stability rules, and release checks.
+
+### Fixed
+- Scoped standalone-publication table defaults so they cannot override existing Tailwind-authored Code annex tables.
+- Added an accessible name to the mobile navigation control.
+- Cancelled stale delayed anchor scrolling/highlighting after rapid route or Back/Forward changes.
+- Made whitespace-only searches empty, restored expansion state per legal collection, and revealed Q&As when selecting a Q&A-only result.
+- Moved Chapter 1 Scope footnote 1 to the end of the continuous-reader section while preserving its source marker, wording, and fidelity proof.
+
+---
+
 ## [1.5.1] - 2026-07-24
 
 ### Changed

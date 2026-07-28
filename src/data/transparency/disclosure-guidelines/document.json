@@ -1,0 +1,43 @@
+{
+  "id": "disclosure-guidelines",
+  "title": "Disclosure Guidelines",
+  "eyebrow": "MedTech Europe Code of Ethical Business Practice",
+  "description": "Read the October 2025 Disclosure Guidelines.",
+  "icon": "Eye",
+  "publicationDate": "October 2025",
+  "citationSourceTitle": "MedTech Europe Code of Ethical Business Practice, Disclosure Guidelines (October 2025)",
+  "citationMarkdownLabel": "MedTech Europe Disclosure Guidelines",
+  "sourceFile": "mte-code_disclosure_guidelines.pdf",
+  "sourcePages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "unitIds": [
+    "dg-preamble",
+    "dg-chapter-1",
+    "dg-chapter-2",
+    "dg-chapter-3",
+    "dg-annex-1",
+    "dg-annex-2",
+    "dg-annex-3"
+  ],
+  "resources": [
+    {
+      "id": "declaration-csv-template",
+      "filename": "declaration-csv-template.csv"
+    }
+  ]
+}

@@ -1,5 +1,6 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { parseAppLocation } from '../config/routes';
+import { createRouteEffectScheduler } from '../utils/routeEffects';
 import {
   buildChapterPath,
   buildCodeHomePath,
@@ -7,6 +8,10 @@ import {
   buildHomePath,
   buildQuizPath,
   buildTpptPath,
+  buildTransparencyDocumentPath,
+  buildTransparencyHomePath,
+  buildTransparencySectionPath,
+  buildTransparencyUnitPath,
   buildTreePath,
   buildTreesHomePath,
 } from '../utils/routeUtils';
@@ -17,34 +22,42 @@ function currentRouteUrl() {
 
 export const useAppRouting = ({
   setActiveId,
+  setActiveDocumentId,
   setActiveSection,
   setShowSummary,
   setShowFullText,
   scrollRef,
 }) => {
+  const routeEffectsRef = useRef(null);
+  if (!routeEffectsRef.current) {
+    routeEffectsRef.current = createRouteEffectScheduler();
+  }
+
   const applyRoute = useCallback((route) => {
     setActiveSection(route.activeSection);
     setActiveId(route.activeId);
+    setActiveDocumentId?.(route.activeDocumentId ?? null);
 
     if (route.anchor) {
       setShowSummary(true);
       setShowFullText(true);
     }
 
-    window.setTimeout(() => {
-      if (route.anchor) {
-        const element = document.getElementById(route.anchor);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          element.classList.add('bg-yellow-50', 'transition-colors', 'duration-1000');
-          window.setTimeout(() => element.classList.remove('bg-yellow-50'), 2000);
-        }
-        return;
-      }
-
-      scrollRef.current?.scrollTo({ top: 0, behavior: 'instant' });
-    }, route.anchor ? 500 : 0);
-  }, [scrollRef, setActiveId, setActiveSection, setShowFullText, setShowSummary]);
+    routeEffectsRef.current.schedule({
+      anchor: route.anchor,
+      findAnchor: (anchor) => document.getElementById(anchor),
+      scrollToTop: () => {
+        scrollRef.current?.scrollTo({ top: 0, behavior: 'instant' });
+      },
+    });
+  }, [
+    scrollRef,
+    setActiveDocumentId,
+    setActiveId,
+    setActiveSection,
+    setShowFullText,
+    setShowSummary,
+  ]);
 
   const syncFromBrowser = useCallback(() => {
     const route = parseAppLocation(window.location.pathname, window.location.hash);
@@ -64,6 +77,7 @@ export const useAppRouting = ({
     return () => {
       window.removeEventListener('popstate', syncFromBrowser);
       window.removeEventListener('hashchange', syncFromBrowser);
+      routeEffectsRef.current?.cancel();
     };
   }, [syncFromBrowser]);
 
@@ -91,6 +105,18 @@ export const useAppRouting = ({
   const navigateTree = useCallback((treeId) => navigateTo(buildTreePath(treeId)), [navigateTo]);
   const navigateQuiz = useCallback(() => navigateTo(buildQuizPath()), [navigateTo]);
   const navigateTppt = useCallback(() => navigateTo(buildTpptPath()), [navigateTo]);
+  const navigateTransparencyHome = useCallback(() => {
+    navigateTo(buildTransparencyHomePath());
+  }, [navigateTo]);
+  const navigateTransparencyDocument = useCallback((documentId) => {
+    navigateTo(buildTransparencyDocumentPath(documentId));
+  }, [navigateTo]);
+  const navigateTransparencyUnit = useCallback((documentId, unitId) => {
+    navigateTo(buildTransparencyUnitPath(documentId, unitId));
+  }, [navigateTo]);
+  const navigateTransparencySection = useCallback((documentId, unitId, sectionId) => {
+    navigateTo(buildTransparencySectionPath(documentId, unitId, sectionId));
+  }, [navigateTo]);
 
   return {
     navigateHome,
@@ -101,5 +127,9 @@ export const useAppRouting = ({
     navigateTree,
     navigateQuiz,
     navigateTppt,
+    navigateTransparencyHome,
+    navigateTransparencyDocument,
+    navigateTransparencyUnit,
+    navigateTransparencySection,
   };
 };

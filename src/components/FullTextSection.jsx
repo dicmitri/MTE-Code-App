@@ -6,14 +6,38 @@ import { Highlight } from './Highlight';
 import { AppIcon } from './AppIcons';
 import { getTreesBySection } from '../data/treeData';
 import { buildCodeSectionPath } from '../utils/routeUtils';
+import { resolveResourceLinks } from '../utils/resourceUtils';
 
-export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTermClick, bookmarksControls, chapterId, chapterPrefix, searchFilters, onNavigateTree }) => {
+const EMPTY_RESOURCE_LINKS = Object.freeze({});
+
+export const FullTextSection = ({
+    id,
+    section,
+    showQA,
+    query,
+    glossaryMap,
+    onTermClick,
+    bookmarksControls,
+    bookmarkSection = 'code',
+    bookmarkDocumentId = null,
+    chapterId,
+    chapterPrefix,
+    fallbackTitle = '',
+    searchFilters,
+    buildSectionPath = buildCodeSectionPath,
+    citationSourceTitle = 'MedTech Europe Code of Ethical Business Practice',
+    citationMarkdownLabel = 'MedTech Europe Code',
+    resourceLinks = EMPTY_RESOURCE_LINKS,
+    supplement = null,
+    printAllQA = false,
+    onNavigateTree
+}) => {
     const processedHtml = useMemo(() => {
-        let html = section.legalText;
+        let html = resolveResourceLinks(section.legalText, resourceLinks);
         if (query && searchFilters?.text) return highlightSearchTerm(html, query);
         if (glossaryMap && !id.includes('glossary')) return processTextWithTerms(html, glossaryMap);
         return html;
-    }, [section.legalText, query, glossaryMap, id, searchFilters?.text]);
+    }, [section.legalText, query, glossaryMap, id, searchFilters?.text, resourceLinks]);
 
     const sanitizedHtml = useMemo(() => DOMPurify.sanitize(processedHtml), [processedHtml]);
 
@@ -99,7 +123,7 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
     };
 
     const getSectionUrl = (sectionId) => (
-        new URL(buildCodeSectionPath(chapterId, sectionId), window.location.origin).href
+        new URL(buildSectionPath(chapterId, sectionId), window.location.origin).href
     );
 
     const copyLink = async (sectionId) => {
@@ -110,14 +134,14 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
     const copyCitationFormat = async (format) => {
         const url = getSectionUrl(id);
         const prefix = chapterPrefix ? chapterPrefix : '';
-        const fullTitle = `${prefix}${section.title}`;
+        const fullTitle = section.title ? `${prefix}${section.title}` : fallbackTitle;
         const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
         let textToCopy = '';
 
         if (format === 'formal') {
-            textToCopy = `MedTech Europe Code of Ethical Business Practice, ${fullTitle}. (Accessed ${today}). Available at: ${url}`;
+            textToCopy = `${citationSourceTitle}, ${fullTitle}. (Accessed ${today}). Available at: ${url}`;
         } else if (format === 'markdown') {
-            textToCopy = `[${fullTitle} - MedTech Europe Code](${url})`;
+            textToCopy = `[${fullTitle} - ${citationMarkdownLabel}](${url})`;
         } else if (format === 'url') {
             textToCopy = url;
         }
@@ -135,7 +159,7 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
 
     const copyPlainText = async () => {
         const prefix = chapterPrefix ? chapterPrefix : '';
-        const fullTitle = `${prefix}${section.title}`;
+        const fullTitle = section.title ? `${prefix}${section.title}` : fallbackTitle;
         
         const tempEl = document.createElement('div');
         tempEl.innerHTML = section.legalText;
@@ -150,7 +174,11 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
                 tempQ.innerHTML = qa.q;
                 const tempA = document.createElement('div');
                 tempA.innerHTML = qa.a;
-                textToCopy += `\nQ: ${(tempQ.textContent || '').trim()}\nA: ${(tempA.textContent || '').trim()}\n`;
+                const questionText = (tempQ.textContent || '').trim();
+                const answerText = (tempA.textContent || '').trim();
+                const questionPrefix = /^Q:/i.test(questionText) ? '' : 'Q: ';
+                const answerPrefix = /^A:/i.test(answerText) ? '' : 'A: ';
+                textToCopy += `\n${qa.label ? `${qa.label}\n` : ''}${questionPrefix}${questionText}\n${answerPrefix}${answerText}\n`;
             });
         }
 
@@ -166,7 +194,12 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
         }
     };
 
-    const isBookmarked = bookmarksControls?.isBookmarked(id);
+    const isBookmarked = bookmarksControls?.isBookmarked(
+        id,
+        bookmarkSection,
+        bookmarkDocumentId,
+        chapterId,
+    );
 
     // Find related decision trees for this specific section only (no chapter fallback)
     const relatedTrees = useMemo(() => {
@@ -175,9 +208,9 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
 
     return (
         <div id={id} className="mb-8 scroll-mt-24" onClick={handleClick}>
-            {section.title && (
-                <div className="group flex flex-col gap-2 mb-3 mt-6 print:hidden sm:flex-row sm:items-baseline sm:justify-between">
-                    <h3 className="min-w-0 text-xl font-bold text-gray-800 flex items-center flex-wrap gap-2">
+            <div className={`group flex flex-col gap-2 mb-3 mt-6 sm:flex-row sm:items-baseline ${section.title ? 'sm:justify-between' : 'sm:justify-end print:hidden'}`}>
+                {section.title && (
+                    <h2 className="min-w-0 text-xl font-bold text-gray-800 flex items-center flex-wrap gap-2">
                         <Highlight text={section.title} query={searchFilters?.titles ? query : ''} />
                         {showQA && section.qas && section.qas.length > 0 && (
                             <button
@@ -187,19 +220,31 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
                                     const qaEl = document.getElementById(`qa-block-${id}`);
                                     if (qaEl) qaEl.scrollIntoView({ behavior: 'smooth' });
                                 }}
-                                className="text-xs font-semibold bg-purple-50 text-[#7654A1] hover:bg-purple-100 border border-purple-100/80 px-2 py-0.5 rounded-md flex items-center gap-1 transition-colors"
+                                className="text-xs font-semibold bg-purple-50 text-[#7654A1] hover:bg-purple-100 border border-purple-100/80 px-2 py-0.5 rounded-md flex items-center gap-1 transition-colors print:hidden"
                                 title={`Jump to ${section.qas.length} official Q&A guidance note${section.qas.length > 1 ? 's' : ''}`}
                             >
                                 <AppIcon name="HelpCircle" size={12} />
                                 <span>{section.qas.length} Q&A{section.qas.length > 1 ? 's' : ''}</span>
                             </button>
                         )}
-                    </h3>
-                    <div className="flex flex-wrap gap-x-2 gap-y-1 shrink-0 sm:ml-4 sm:justify-end">
+                    </h2>
+                )}
+                <div className="flex flex-wrap gap-x-2 gap-y-1 shrink-0 sm:ml-4 sm:justify-end print:hidden">
                         {bookmarksControls && (
                             <button
                                 type="button"
-                                onClick={(e) => { e.stopPropagation(); bookmarksControls.toggleBookmark(id, (chapterPrefix || '') + section.title, chapterId); }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                        bookmarksControls.toggleBookmark(
+                                            id,
+                                            section.title
+                                                ? (chapterPrefix || '') + section.title
+                                                : fallbackTitle,
+                                        chapterId,
+                                        bookmarkSection,
+                                        bookmarkDocumentId,
+                                    );
+                                }}
                                 className={`text-sm border rounded px-2 py-1 transition-colors ${isBookmarked ? 'bg-purple-100 text-purple-700 border-purple-200' : 'text-gray-500 hover:text-purple-600 border-transparent hover:border-purple-100'}`}
                                 title={isBookmarked ? 'Remove bookmark' : 'Bookmark this section'}
                             >
@@ -280,10 +325,10 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
                         >
                             Copy Text
                         </button>
-                    </div>
                 </div>
-            )}
+            </div>
             <div className="prose prose-slate max-w-none text-gray-800 leading-relaxed reader-content" dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />
+            {supplement}
             {onNavigateTree && relatedTrees.length > 0 && (
                 <div className="mt-4 bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3 print:hidden">
                     <span className="text-amber-600 shrink-0 mt-0.5">
@@ -325,10 +370,18 @@ export const FullTextSection = ({ id, section, showQA, query, glossaryMap, onTer
                     <span>{copyFeedback.message}</span>
                 </div>
             )}
-            {showQA && section.qas && (
-                <div id={`qa-block-${id}`} className="mt-4 space-y-4 scroll-mt-24">
+            {(showQA || printAllQA) && section.qas && (
+                <div
+                    id={`qa-block-${id}`}
+                    className={`mt-4 space-y-4 scroll-mt-24 ${!showQA && printAllQA ? 'hidden print-always' : ''}`}
+                >
                     {section.qas.map((qa, idx) => (
                         <div key={idx} className="bg-gray-50 p-4 rounded-lg border border-gray-100 print:bg-transparent print:border-none print:p-0 print:my-4">
+                            {qa.label && (
+                                <p className="text-xs font-bold text-[#0099A7] underline underline-offset-2 mb-2 reader-content">
+                                    {qa.label}
+                                </p>
+                            )}
                             <p className="font-bold text-gray-900 mb-1 reader-content">
                                 <Highlight text={qa.q} query={searchFilters?.qa ? query : ''} />
                             </p>

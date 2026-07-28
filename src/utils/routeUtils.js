@@ -22,8 +22,20 @@ function hashValue(hash) {
   return decodeSegment(normalizeHash(hash).slice(1));
 }
 
-function createRoute(activeSection, activeId, canonicalUrl, anchor = null) {
-  return { activeSection, activeId, anchor, canonicalUrl };
+function createRoute(
+  activeSection,
+  activeId,
+  canonicalUrl,
+  anchor = null,
+  activeDocumentId,
+) {
+  const route = { activeSection, activeId, anchor, canonicalUrl };
+
+  if (activeDocumentId !== undefined) {
+    route.activeDocumentId = activeDocumentId;
+  }
+
+  return route;
 }
 
 export function buildHomePath() {
@@ -59,14 +71,50 @@ export function buildTpptPath() {
   return '/tppt';
 }
 
-export function createRouteUtils(chapters, trees) {
+export function buildTransparencyHomePath() {
+  return '/transparency';
+}
+
+export function buildTransparencyDocumentPath(documentId) {
+  return `${buildTransparencyHomePath()}/${encodeURIComponent(documentId)}`;
+}
+
+export function buildTransparencyUnitPath(documentId, unitId) {
+  return `${buildTransparencyDocumentPath(documentId)}/${encodeURIComponent(unitId)}`;
+}
+
+export function buildTransparencySectionPath(documentId, unitId, sectionId) {
+  return `${buildTransparencyUnitPath(documentId, unitId)}#${encodeURIComponent(sectionId)}`;
+}
+
+export function createRouteUtils(chapters, trees, transparencyDocuments = []) {
   const chapterIds = new Set(chapters.map((chapter) => chapter.id));
   const treeIds = new Set(trees.map((tree) => tree.id));
   const sectionOwners = new Map();
+  const transparencyDocumentIndex = new Map();
 
   chapters.forEach((chapter) => {
     chapter.sections.forEach((section, index) => {
       sectionOwners.set(generateSectionId(chapter.id, section.title, index), chapter.id);
+    });
+  });
+
+  transparencyDocuments.forEach((document) => {
+    const units = document.units || [];
+    const unitIds = new Set();
+    const transparencySectionOwners = new Map();
+
+    units.forEach((unit) => {
+      unitIds.add(unit.id);
+      (unit.sections || []).forEach((section, index) => {
+        const sectionId = generateSectionId(unit.id, section.title, index);
+        transparencySectionOwners.set(sectionId, unit.id);
+      });
+    });
+
+    transparencyDocumentIndex.set(document.id, {
+      unitIds,
+      sectionOwners: transparencySectionOwners,
     });
   });
 
@@ -105,6 +153,24 @@ export function createRouteUtils(chapters, trees) {
     return resolveCodeHash(hash);
   }
 
+  function resolveTransparencyHash(documentId, hash) {
+    const value = hashValue(hash);
+    if (!value) return null;
+
+    const document = transparencyDocumentIndex.get(documentId);
+    const unitId = document?.sectionOwners.get(value);
+
+    if (!unitId) return null;
+
+    return createRoute(
+      'transparency',
+      unitId,
+      buildTransparencySectionPath(documentId, unitId, value),
+      value,
+      documentId,
+    );
+  }
+
   function parseAppLocation(pathname, hash = '') {
     const normalizedPath = normalizePathname(pathname);
     const segments = normalizedPath.split('/').filter(Boolean).map(decodeSegment);
@@ -134,6 +200,58 @@ export function createRouteUtils(chapters, trees) {
       if (segments.length === 2 && treeIds.has(segments[1])) {
         return createRoute('trees', segments[1], buildTreePath(segments[1]));
       }
+    }
+
+    if (segments[0] === 'transparency') {
+      if (segments.length === 1) {
+        return createRoute(
+          'transparency',
+          'transparency-home',
+          buildTransparencyHomePath(),
+        );
+      }
+
+      const documentId = segments[1];
+      const document = transparencyDocumentIndex.get(documentId);
+
+      if (!document) {
+        return createRoute(
+          'transparency',
+          'transparency-home',
+          buildTransparencyHomePath(),
+        );
+      }
+
+      const hashRoute = resolveTransparencyHash(documentId, hash);
+
+      if (segments.length === 2) {
+        return hashRoute || createRoute(
+          'transparency',
+          'home',
+          buildTransparencyDocumentPath(documentId),
+          null,
+          documentId,
+        );
+      }
+
+      if (segments.length === 3 && document.unitIds.has(segments[2])) {
+        if (hashRoute?.anchor) return hashRoute;
+        return createRoute(
+          'transparency',
+          segments[2],
+          buildTransparencyUnitPath(documentId, segments[2]),
+          null,
+          documentId,
+        );
+      }
+
+      return createRoute(
+        'transparency',
+        'home',
+        buildTransparencyDocumentPath(documentId),
+        null,
+        documentId,
+      );
     }
 
     if (segments.length === 1 && segments[0] === 'quiz') {

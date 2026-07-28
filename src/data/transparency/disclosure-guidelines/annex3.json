@@ -1,0 +1,20 @@
+{
+  "id": "dg-annex-3",
+  "documentId": "disclosure-guidelines",
+  "type": "annex",
+  "title": "Annex III: Methodology Note Example",
+  "icon": "FileText",
+  "sourcePages": [
+    15
+  ],
+  "sections": [
+    {
+      "title": "Structure",
+      "legalText": "<ul style=\"list-style-type: '-  ';\"><li>Introduction</li><li>Executive summary of the methodologies used for disclosure purposes and country specificities<div>Definitions (e.g. Recipients, Types of Educational Grants)</div></li><li>Disclosure scope and timelines</li><li>Disclosures in case of partial performance or cancellation</li><li>Cross-border activities</li><li>Specific considerations:<ul style=\"list-style-type: circle;\"><li>Multi-year agreements</li><li>Consent management (please note that some jurisdictions may require the legal entity’s consent for publication of data)<ul style=\"list-style-type: square;\"><li>Consent collection</li><li>Management of recipient consent withdrawal</li><li>Management of recipient’s request</li><li>Partial consent</li></ul></li></ul></li><li>Disclosure Form<ul style=\"list-style-type: circle;\"><li>Date of publication</li><li>Currency in case of aggregated payments made in different currencies</li><li>VAT included or excluded and any other tax aspects</li></ul></li><li>Disclosure of financial data and cash amount of Educational Grants provided</li><li>Calculation rules, including how exchange rates are select.</li></ul><p><strong><u>Disclaimer:</u></strong> This Methodology note is provided as a template to support Member Companies in the implementation of these Disclosure Guidelines. Any other template may be equally valid provided they comply with the general requirements set out in <em>Section 2.4 Methodology.</em></p>",
+      "sourcePages": [
+        15
+      ],
+      "qas": []
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @source "./data/code/*.json";
+@source "./data/transparency/**/*.json";
 
 :root {
   /* UI FONT: "Business Standard"
@@ -78,6 +79,37 @@
   font-weight: 700;
 }
 
+.reader-content a {
+  color: #007a86;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.transparency-reader .reader-content table {
+  display: block;
+  width: 100%;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.transparency-reader .reader-content th,
+.transparency-reader .reader-content td {
+  min-width: 10rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  vertical-align: top;
+  text-align: left;
+}
+
+.transparency-reader .reader-content th {
+  background: #f1f5f9;
+  color: #334155;
+  font-weight: 700;
+}
+
 @media print {
   *,
   *::before,
@@ -93,6 +125,14 @@
 
   .print\:hidden {
     display: none !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-always {
+    display: block !important;
   }
 
   .print\:bg-transparent {
@@ -116,6 +156,25 @@
   aside,
   header {
     display: none !important;
+  }
+
+  .transparency-reader .reader-content table {
+    display: table;
+    overflow: visible;
+    font-size: 9pt;
+    break-inside: auto;
+  }
+
+  .transparency-reader .reader-content tr {
+    break-inside: avoid;
+  }
+
+  .transparency-reader .reader-content th,
+  .transparency-reader .reader-content td {
+    min-width: 0;
+    padding: 0.35rem;
+    color: black !important;
+    border-color: #777;
   }
 }
 

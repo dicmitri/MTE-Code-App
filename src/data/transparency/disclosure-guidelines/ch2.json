@@ -1,0 +1,67 @@
+{
+  "id": "dg-chapter-2",
+  "documentId": "disclosure-guidelines",
+  "type": "chapter",
+  "title": "Chapter 2: Disclosure Obligation",
+  "icon": "2",
+  "sourcePages": [
+    5,
+    6,
+    7
+  ],
+  "sections": [
+    {
+      "title": "1. General Obligation",
+      "legalText": "Subject to the terms of these Disclosure Guidelines, each Member Company shall document and disclose all payments related to Educational Grants (as described in Chapter 4, section 3 of the Code) that it makes to a Healthcare Organisation based or registered in Europe, without limitation of value. For Educational Grants provided by Affiliates of the Member Company described above, but which are not registered in the MedTech Europe Geographic Area, it is strongly recommended that the disclosure is made by any of the Affiliates comprising said Member Company that are registered in the MedTech Europe Geographic Area. For the avoidance of doubt, these educational grants provided in the MedTech Europe Geographic Area shall be disclosed in any case.",
+      "sourcePages": [
+        5,
+        6
+      ],
+      "qas": [
+        {
+          "label": "Q&A 6",
+          "q": "Q: Which Affiliate should disclose a particular Educational Grant?",
+          "a": "To facilitate the tracking of Educational Grants made to individual Healthcare Organisations, it is recommended that the Affiliate making the payment in relation to a particular Educational Grant is the one disclosing the Educational Grant, but this is an internal decision of each Member Company, with the exception of Affiliates located outside the MedTech Europe Geographic Area, in which case it is strongly recommended that those disclosure are made via an Affiliate registered in the MedTech Europe Geographic Area.<br/><br/>A Member Company may choose to use internal arrangements of its choice to report the aggregated sum in relation to Educational Grants made by each legal entity composing the company (Affiliates) to a particular Healthcare Organisation during a disclosure period.",
+          "sourcePages": [
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "title": "2. Aggregate Disclosure",
+      "legalText": "Educational Grants shall be disclosed on an aggregate basis. Member Companies shall disclose, for each clearly identifiable and separate recipient, the amounts paid as Educational Grants to such recipient in each Reporting Period<sup>2</sup> which can be reasonably allocated to one of the categories set out below. Such amounts will be aggregated on a category-by-category basis, but itemised disclosure shall be made available upon request by the Member Company, as deemed necessary, to (i) the relevant recipient, and/or (ii) the relevant authorities.<br/><br/>Member Companies shall disclose at a minimum an aggregate amount related to any of the categories set forth below:<div class=\"pl-8 mt-2\">a. Educational Grants to support Third Party Organised Events (including Support for HCP Participation at Third Party Organised Educational Events) and,</div><div class=\"pl-8 mt-2\">b. Other Educational Grants to Healthcare Organisations (including Scholarships, Fellowships and/or Grants for Public Awareness Campaigns).</div><br/>As outlined in Q&A 3, Member Companies may voluntarily choose to disclose additional categories of transfers of value.",
+      "sourcePages": [
+        6
+      ],
+      "qas": []
+    },
+    {
+      "title": "3. Optional Object Specification",
+      "legalText": "Member Companies may voluntarily indicate the object of the Educational Grants disclosed for one or both categories set forth in <em>Section 2.2 Aggregate Disclosure</em>.",
+      "sourcePages": [
+        6
+      ],
+      "qas": []
+    },
+    {
+      "title": "4. Methodology",
+      "legalText": "Each Member Company shall create a note summarising the methodologies used by it in preparing the disclosures and identifying Educational Grants for each category described in <em>Section 2.2 Aggregate Disclosure</em>.<br/><br/>The note, including a general summary and/or country specific considerations, shall describe the recognition methodologies applied, and should include the treatment of VAT and other tax aspects, currency aspects and other issues related to the timing and amount of Educational Grants for purposes of these Disclosure Guidelines, as applicable. This Methodology Note shall be made available in the same website used for the Disclosures.<br/><br/><div class=\"border-t border-gray-300 pt-2 text-sm\"><sup>2</sup> Reporting Period means a full calendar year (starting on the 1st of January and ending on the 31st of December).</div>",
+      "sourcePages": [
+        6,
+        7
+      ],
+      "qas": [
+        {
+          "label": "Q&A 7",
+          "q": "Q: When should a Methodology Note be updated?",
+          "a": "Member Companies should assess whether an update is needed before the end of each Disclosure period.",
+          "sourcePages": [
+            7
+          ]
+        }
+      ]
+    }
+  ]
+}

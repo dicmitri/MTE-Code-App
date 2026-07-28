@@ -4,6 +4,7 @@ import { dirname, resolve } from 'node:path';
 
 import { generateSectionId } from '../src/utils/textUtils.js';
 import { loadSplitCodeData } from './lib/code-content.mjs';
+import { loadTransparencyData } from './lib/transparency-content.mjs';
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = resolve(SCRIPT_DIR, '..');
@@ -57,11 +58,18 @@ function extractRegisteredIconNames(iconSource) {
   return names;
 }
 
-export function validateProjectData({ codeData, treeData, quizData, iconSource = '' }) {
+export function validateProjectData({
+  codeData,
+  treeData,
+  quizData,
+  transparencyData = [],
+  iconSource = '',
+}) {
   const errors = [];
   const chapters = Array.isArray(codeData?.chapters) ? codeData.chapters : [];
   const trees = Array.isArray(treeData?.trees) ? treeData.trees : [];
   const questions = Array.isArray(quizData) ? quizData : [];
+  const transparencyDocuments = Array.isArray(transparencyData) ? transparencyData : [];
   const registeredIconNames = extractRegisteredIconNames(iconSource);
 
   if (!Array.isArray(codeData?.chapters)) {
@@ -72,6 +80,9 @@ export function validateProjectData({ codeData, treeData, quizData, iconSource =
   }
   if (!Array.isArray(quizData)) {
     errors.push('quizData.json: expected a top-level array.');
+  }
+  if (!Array.isArray(transparencyData)) {
+    errors.push('Transparency data: expected a documents array.');
   }
 
   const chapterIds = chapters.map((chapter) => chapter?.id).filter(isNonEmptyString);
@@ -234,6 +245,168 @@ export function validateProjectData({ codeData, treeData, quizData, iconSource =
     }
   });
 
+  const transparencyDocumentIds = transparencyDocuments
+    .map((document) => document?.id)
+    .filter(isNonEmptyString);
+  for (const duplicate of findDuplicates(transparencyDocumentIds)) {
+    errors.push(`Transparency data: duplicate document ID "${duplicate}".`);
+  }
+
+  let transparencyUnitCount = 0;
+  let transparencySectionCount = 0;
+  let transparencyQaCount = 0;
+
+  transparencyDocuments.forEach((document, documentIndex) => {
+    const documentPath = `Transparency data documents[${documentIndex}]`;
+    if (!isNonEmptyString(document?.id)) errors.push(`${documentPath}: missing document ID.`);
+    if (!isNonEmptyString(document?.title)) errors.push(`${documentPath}: missing title.`);
+    if (!isNonEmptyString(document?.icon)) {
+      errors.push(`${documentPath}: missing icon.`);
+    } else if (!registeredIconNames.has(document.icon)) {
+      errors.push(`${documentPath}: icon "${document.icon}" is not registered in AppIcons.jsx.`);
+    }
+    if (!Array.isArray(document?.units) || document.units.length === 0) {
+      errors.push(`${documentPath}: expected a non-empty units array.`);
+      return;
+    }
+
+    const resourceIds = (Array.isArray(document.resources) ? document.resources : [])
+      .map((resource) => resource?.id)
+      .filter(isNonEmptyString);
+    for (const duplicate of findDuplicates(resourceIds)) {
+      errors.push(`${documentPath}: duplicate resource ID "${duplicate}".`);
+    }
+    const resourceIdSet = new Set(resourceIds);
+
+    const unitIds = document.units.map((unit) => unit?.id).filter(isNonEmptyString);
+    for (const duplicate of findDuplicates(unitIds)) {
+      errors.push(`${documentPath}: duplicate unit ID "${duplicate}".`);
+    }
+    if (Array.isArray(document.unitIds)) {
+      if (
+        document.unitIds.length !== unitIds.length
+        || document.unitIds.some((unitId, index) => unitId !== unitIds[index])
+      ) {
+        errors.push(`${documentPath}: unitIds must exactly match the loaded unit order.`);
+      }
+    }
+
+    const generatedSectionIds = [];
+    let declarationTemplateLinks = 0;
+
+    document.units.forEach((unit, unitIndex) => {
+      transparencyUnitCount += 1;
+      const unitPath = `${documentPath} units[${unitIndex}]`;
+
+      if (!isNonEmptyString(unit?.id)) {
+        errors.push(`${unitPath}: missing unit ID.`);
+      } else {
+        if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(unit.id)) {
+          errors.push(`${unitPath}: unit ID "${unit.id}" is not route-safe.`);
+        }
+        if (document.id === 'disclosure-guidelines' && !unit.id.startsWith('dg-')) {
+          errors.push(`${unitPath}: Disclosure Guidelines unit ID "${unit.id}" must start with "dg-".`);
+        }
+      }
+      if (unit?.documentId !== document.id) {
+        errors.push(`${unitPath}: documentId must be "${document.id}".`);
+      }
+      if (!isNonEmptyString(unit?.title)) errors.push(`${unitPath}: missing title.`);
+      if (!isNonEmptyString(unit?.icon)) {
+        errors.push(`${unitPath}: missing icon.`);
+      } else if (!/^\d+$/.test(unit.icon) && !registeredIconNames.has(unit.icon)) {
+        errors.push(`${unitPath}: icon "${unit.icon}" is not registered in AppIcons.jsx.`);
+      }
+      if (
+        !Array.isArray(unit?.sourcePages)
+        || unit.sourcePages.length === 0
+        || unit.sourcePages.some((page) => !Number.isInteger(page) || page < 1)
+      ) {
+        errors.push(`${unitPath}: sourcePages must contain positive page numbers.`);
+      }
+      if (!Array.isArray(unit?.sections) || unit.sections.length === 0) {
+        errors.push(`${unitPath}: expected a non-empty sections array.`);
+        return;
+      }
+
+      unit.sections.forEach((section, sectionIndex) => {
+        transparencySectionCount += 1;
+        const sectionPath = `${unitPath} sections[${sectionIndex}]`;
+        generatedSectionIds.push(generateSectionId(unit.id, section?.title, sectionIndex));
+
+        if (typeof section?.title !== 'string') {
+          errors.push(`${sectionPath}: title must be a string (empty is allowed).`);
+        }
+        if (!isNonEmptyString(section?.legalText)) errors.push(`${sectionPath}: missing legalText.`);
+        if (
+          !Array.isArray(section?.sourcePages)
+          || section.sourcePages.length === 0
+          || section.sourcePages.some((page) => !Number.isInteger(page) || page < 1)
+        ) {
+          errors.push(`${sectionPath}: sourcePages must contain positive page numbers.`);
+        }
+        if (!Array.isArray(section?.qas)) {
+          errors.push(`${sectionPath}: expected a qas array.`);
+          return;
+        }
+
+        const resourceMatches = String(section.legalText || '')
+          .matchAll(/href=(["'])resource:([a-z0-9-]+)\1/gi);
+        for (const match of resourceMatches) {
+          const resourceId = match[2];
+          if (!resourceIdSet.has(resourceId)) {
+            errors.push(`${sectionPath}: resource "${resourceId}" is not declared by the document.`);
+          }
+          if (resourceId === 'declaration-csv-template') declarationTemplateLinks += 1;
+        }
+
+        section.qas.forEach((qa, qaIndex) => {
+          transparencyQaCount += 1;
+          const qaPath = `${sectionPath} qas[${qaIndex}]`;
+          if (!isNonEmptyString(qa?.q)) errors.push(`${qaPath}: missing question text (q).`);
+          if (!isNonEmptyString(qa?.a)) errors.push(`${qaPath}: missing answer text (a).`);
+          if (
+            !Array.isArray(qa?.sourcePages)
+            || qa.sourcePages.length === 0
+            || qa.sourcePages.some((page) => !Number.isInteger(page) || page < 1)
+          ) {
+            errors.push(`${qaPath}: sourcePages must contain positive page numbers.`);
+          }
+          if (document.id === 'disclosure-guidelines') {
+            if (!/^Q&A \d+$/.test(qa?.label || '')) {
+              errors.push(`${qaPath}: label must use the exact "Q&A N" format.`);
+            }
+            if (!/^Q:/.test(qa?.q || '')) {
+              errors.push(`${qaPath}: question text must retain its leading "Q:".`);
+            }
+            if (/^A:/.test(qa?.a || '')) {
+              errors.push(`${qaPath}: answer text must omit "A:" because the renderer supplies it.`);
+            }
+          }
+        });
+      });
+    });
+
+    for (const duplicate of findDuplicates(generatedSectionIds)) {
+      errors.push(`${documentPath}: duplicate generated section ID "${duplicate}".`);
+    }
+
+    if (document.id === 'disclosure-guidelines') {
+      if (!resourceIdSet.has('declaration-csv-template')) {
+        errors.push(`${documentPath}: missing declaration-csv-template resource.`);
+      }
+      if (declarationTemplateLinks !== 1) {
+        errors.push(
+          `${documentPath}: expected exactly one local declaration-csv-template link, found ${declarationTemplateLinks}.`,
+        );
+      }
+      const serialized = JSON.stringify(document.units);
+      if (/ethicalmedtech\.eu\/wp-content\/uploads/i.test(serialized)) {
+        errors.push(`${documentPath}: Annex I must not retain the external template URL.`);
+      }
+    }
+  });
+
   return {
     errors,
     stats: {
@@ -243,6 +416,10 @@ export function validateProjectData({ codeData, treeData, quizData, iconSource =
       trees: trees.length,
       treeNodes: treeNodeCount,
       quizQuestions: questions.length,
+      transparencyDocuments: transparencyDocuments.length,
+      transparencyUnits: transparencyUnitCount,
+      transparencySections: transparencySectionCount,
+      transparencyQas: transparencyQaCount,
     },
   };
 }
@@ -257,6 +434,7 @@ export function validateCurrentProject() {
     codeData: loadSplitCodeData(PROJECT_ROOT),
     treeData: readJson('src/data/treeData.json'),
     quizData: readJson('src/data/quizData.json'),
+    transparencyData: loadTransparencyData(PROJECT_ROOT),
     iconSource: readFileSync(resolve(PROJECT_ROOT, 'src/components/AppIcons.jsx'), 'utf8'),
   });
 }
@@ -272,6 +450,12 @@ function printReport({ errors, stats }) {
   console.log(`${stats.chapters} chapters, ${stats.sections} sections, ${stats.qas} Q&As`);
   console.log(`${stats.trees} decision trees, ${stats.treeNodes} nodes`);
   console.log(`${stats.quizQuestions} quiz questions`);
+  console.log(
+    `${stats.transparencyDocuments} Transparency document, `
+    + `${stats.transparencyUnits} reader units, `
+    + `${stats.transparencySections} sections, `
+    + `${stats.transparencyQas} Q&As`,
+  );
 }
 
 const isDirectRun = process.argv[1]

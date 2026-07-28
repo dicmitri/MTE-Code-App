@@ -15,6 +15,8 @@ import { InstallPrompt } from './components/InstallPrompt';
 import { HubPage } from './components/HubPage';
 import { TreeContent } from './components/TreeContent';
 import { QuizContent } from './components/quiz/QuizContent';
+import { TransparencyContent } from './components/TransparencyContent';
+import { getTransparencyUnit } from './data/transparency/transparencyData';
 
 const TPPTContent = lazy(() =>
   import('./components/TPPTContent').then((module) => ({
@@ -31,8 +33,9 @@ if (typeof FULL_CODE_DATA !== 'undefined') {
 }
 
 const App = () => {
-  const [activeSection, setActiveSection] = useState(null); // null = Home, 'code', 'trees', 'quiz', 'tppt'
+  const [activeSection, setActiveSection] = useState(null); // null = Home, 'code', 'trees', 'quiz', 'tppt', 'transparency'
   const [activeId, setActiveId] = useState('home');
+  const [activeDocumentId, setActiveDocumentId] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showSummary, setShowSummary] = useState(true);
   const [showFullText, setShowFullText] = useState(true);
@@ -59,8 +62,13 @@ const App = () => {
     navigateTree,
     navigateQuiz,
     navigateTppt,
+    navigateTransparencyHome,
+    navigateTransparencyDocument,
+    navigateTransparencyUnit,
+    navigateTransparencySection,
   } = useAppRouting({
     setActiveId,
+    setActiveDocumentId,
     setActiveSection,
     setShowSummary,
     setShowFullText,
@@ -82,9 +90,9 @@ const App = () => {
 
   useEffect(() => {
     if (activeId !== 'home') {
-      addHistory(activeId, activeSection || 'code');
+      addHistory(activeId, activeSection || 'code', activeDocumentId);
     }
-  }, [activeId, activeSection, addHistory]);
+  }, [activeId, activeSection, activeDocumentId, addHistory]);
 
   const handleTermClick = (termKey) => {
     const definition = glossaryMap[termKey];
@@ -101,7 +109,9 @@ const App = () => {
     root.style.setProperty('--reader-paragraph-spacing', readerSpace);
   }, [readerSize, readerLine, readerSpace]);
 
-  const activeContent = FULL_CODE_DATA.find((c) => c.id === activeId);
+  const activeContent = activeSection === 'transparency'
+    ? getTransparencyUnit(activeDocumentId, activeId)
+    : FULL_CODE_DATA.find((content) => content.id === activeId);
 
   const handleSectionSelect = (sectionId) => {
     setSidebarOpen(false);
@@ -109,6 +119,7 @@ const App = () => {
     if (sectionId === 'trees') navigateTreesHome();
     if (sectionId === 'quiz') navigateQuiz();
     if (sectionId === 'tppt') navigateTppt();
+    if (sectionId === 'transparency') navigateTransparencyHome();
   };
 
   const handleGoHome = () => {
@@ -165,6 +176,15 @@ const App = () => {
         setReaderLine={setReaderLine}
         readerSpace={readerSpace}
         setReaderSpace={setReaderSpace}
+        readerMode={
+          (activeSection === 'code' && activeId !== 'home')
+          || (activeSection === 'transparency' && Boolean(activeDocumentId) && activeId !== 'home')
+        }
+        showSummaryControl={activeSection === 'code'}
+        showFullTextControl={activeSection === 'code'}
+        showQAControl={Boolean(
+          activeContent?.sections?.some((section) => section.qas?.length > 0),
+        )}
       />
 
       <div className="flex flex-1 overflow-hidden relative print:block print:overflow-visible">
@@ -176,11 +196,17 @@ const App = () => {
           debouncedSearch={debouncedSearch}
           activeId={activeId}
           activeSection={activeSection}
+          activeDocumentId={activeDocumentId}
           onNavigateChapter={navigateChapter}
           onNavigateCodeSection={navigateCodeSection}
           onNavigateTrees={navigateTreesHome}
+          onNavigateTransparency={navigateTransparencyHome}
+          onNavigateTransparencyDocument={navigateTransparencyDocument}
+          onNavigateTransparencyUnit={navigateTransparencyUnit}
+          onNavigateTransparencySection={navigateTransparencySection}
           setShowSummary={setShowSummary}
           setShowFullText={setShowFullText}
+          setShowQA={setShowQA}
           onGoHome={handleGoHome}
           installPromptEvent={installPromptEvent}
           isIos={isIos}
@@ -221,6 +247,23 @@ const App = () => {
             bookmarksControls={{ toggleBookmark, isBookmarked }}
             searchFilters={searchFilters}
             onNavigateTree={handleNavigateTree}
+          />
+        ) : activeSection === 'transparency' ? (
+          <TransparencyContent
+            activeId={activeId}
+            activeDocumentId={activeDocumentId}
+            activeContent={activeContent}
+            onNavigateTransparencyHome={navigateTransparencyHome}
+            onNavigateDocument={navigateTransparencyDocument}
+            onNavigateUnit={navigateTransparencyUnit}
+            showFullText
+            showQA={showQA}
+            debouncedSearch={debouncedSearch}
+            scrollRef={scrollRef}
+            showIosPrompt={showIosPrompt}
+            setShowIosPrompt={setShowIosPrompt}
+            bookmarksControls={{ toggleBookmark, isBookmarked }}
+            searchFilters={searchFilters}
           />
         ) : activeSection === 'quiz' ? (
           <QuizContent

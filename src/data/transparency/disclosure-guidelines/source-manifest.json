@@ -1,0 +1,263 @@
+{
+  "schemaVersion": 1,
+  "documentId": "disclosure-guidelines",
+  "document": {
+    "file": "document.json",
+    "bytes": 901,
+    "sha256": "7D2C9A693CB94E9F3A014B68925960CAD5E2549744B9711A9420EB4A0ADA0124"
+  },
+  "pdf": {
+    "file": "../../mte-code_disclosure_guidelines.pdf",
+    "bytes": 335157,
+    "pages": 15,
+    "sha256": "2CA989BC707975CAD24E2FF1032B1AC90F76C90993B792929E36AC65A6F762F3"
+  },
+  "csv": {
+    "file": "../../declaration-csv-template.csv",
+    "bytes": 553,
+    "columns": 11,
+    "exampleRows": 3,
+    "sha256": "087FFA3CDC13C6F7FD57264B2EC0A7945091108B7CFCD39AF15F3EFD48BAF44F"
+  },
+  "normalizedBody": {
+    "sourcePages": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "characters": 19033,
+    "sha256": "BC01BF71770CCAB3FF932CDD958274CD0C83C8A41604C9A371BDD7C81F329E62"
+  },
+  "visibleBody": {
+    "characters": 19033,
+    "sha256": "B8A4929053619244F65BC3D223B422472AF792FD43E0743360F5EAD14527C70C"
+  },
+  "lexicalBody": {
+    "tokens": 3933,
+    "sha256": "F9C970823B2B666A46D8050C995D84625FA5D289876EAB16A63EA5535DE338AB"
+  },
+  "counts": {
+    "units": 7,
+    "sections": 19,
+    "qas": 11
+  },
+  "units": [
+    {
+      "id": "dg-preamble",
+      "file": "preamble.json",
+      "sourcePages": [
+        2
+      ],
+      "bytes": 1790,
+      "sha256": "66C0CE9590FED61A7E28B796C28E148BE63D11163C41D4CCDB4A68571625DA3B",
+      "sections": 1,
+      "qas": 0
+    },
+    {
+      "id": "dg-chapter-1",
+      "file": "ch1.json",
+      "sourcePages": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "bytes": 7328,
+      "sha256": "52DE93D8BF63C127294F5F758BF39228A5B0691A69F4AC493B4B2CF0EFD1B7E4",
+      "sections": 2,
+      "qas": 5
+    },
+    {
+      "id": "dg-chapter-2",
+      "file": "ch2.json",
+      "sourcePages": [
+        5,
+        6,
+        7
+      ],
+      "bytes": 5024,
+      "sha256": "EBFBC817E816D93A8C621468BB9FD80CEA9E478ACA454A466903ABBC35D409B7",
+      "sections": 4,
+      "qas": 2
+    },
+    {
+      "id": "dg-chapter-3",
+      "file": "ch3.json",
+      "sourcePages": [
+        7,
+        8,
+        9,
+        10
+      ],
+      "bytes": 7415,
+      "sha256": "0CA088AAFC8457FA39BE512A0F9562B1659AC4E11EFA4626B5AB2E842510D64C",
+      "sections": 7,
+      "qas": 4
+    },
+    {
+      "id": "dg-annex-1",
+      "file": "annex1.json",
+      "sourcePages": [
+        11
+      ],
+      "bytes": 487,
+      "sha256": "3259EC207F3731EE15B47137EEBB22792A501C755DFB8A0FA2C778AE1A95669A",
+      "sections": 1,
+      "qas": 0
+    },
+    {
+      "id": "dg-annex-2",
+      "file": "annex2.json",
+      "sourcePages": [
+        12,
+        13,
+        14
+      ],
+      "bytes": 5540,
+      "sha256": "B382B5E679E16179988CD5079982C33672AD0BBB348DB2AD011BC0AF339254FD",
+      "sections": 3,
+      "qas": 0
+    },
+    {
+      "id": "dg-annex-3",
+      "file": "annex3.json",
+      "sourcePages": [
+        15
+      ],
+      "bytes": 1823,
+      "sha256": "F20DA5B3CE7DB2DDBACF03AE90DE11801472BD9CEDC6A82592C9BF7427BA7BFA",
+      "sections": 1,
+      "qas": 0
+    }
+  ],
+  "pdfExtractionCorrections": [
+    {
+      "id": "annex-ii-member-company-staff-cell-order",
+      "comparison": "normalized-visible-and-lexical-body",
+      "sourcePages": [
+        13
+      ],
+      "pdfExtraction": "ServicesprovidedCompanyStaffbyMember",
+      "renderedText": "ServicesprovidedbyMemberCompanyStaff",
+      "pdfExtractionTokens": [
+        "Services",
+        "provided",
+        "Company",
+        "Staff",
+        "by",
+        "Member"
+      ],
+      "renderedTokens": [
+        "Services",
+        "provided",
+        "by",
+        "Member",
+        "Company",
+        "Staff"
+      ],
+      "reason": "The PDF content stream stores the wrapped cell fragments out of their rendered left-to-right order."
+    },
+    {
+      "id": "annex-ii-company-produced-hyphen-position",
+      "comparison": "normalized-visible-and-lexical-body",
+      "sourcePages": [
+        13
+      ],
+      "pdfExtraction": "Goods(whetherTPorcompanyproduced)-",
+      "renderedText": "Goods(whetherTPorcompany-produced)",
+      "pdfExtractionTokens": [
+        "Goods",
+        "(",
+        "whether",
+        "TP",
+        "or",
+        "company",
+        "produced",
+        ")",
+        "-"
+      ],
+      "renderedTokens": [
+        "Goods",
+        "(",
+        "whether",
+        "TP",
+        "or",
+        "company",
+        "-",
+        "produced",
+        ")"
+      ],
+      "reason": "The PDF content stream stores the wrapped hyphen after the cell's final text fragment."
+    },
+    {
+      "id": "chapter-3-qa-11-split-word",
+      "comparison": "lexical-body",
+      "sourcePages": [
+        9
+      ],
+      "pdfExtractionTokens": [
+        "Companies",
+        "c",
+        "ould"
+      ],
+      "renderedTokens": [
+        "Companies",
+        "could"
+      ],
+      "reason": "A PDF text-item boundary splits the visually continuous word \"could\"."
+    }
+  ],
+  "approvedRepresentationalChanges": [
+    {
+      "sourcePage": 1,
+      "type": "live-navigation",
+      "description": "The printed table of contents is represented by the document overview, Sidebar, and on-page navigation instead of duplicated as body text."
+    },
+    {
+      "sourcePage": 11,
+      "type": "local-link-target",
+      "description": "The published visible Annex I sentence and linked words are unchanged; the external link target is replaced with resource:declaration-csv-template, resolved to the bundled CSV."
+    },
+    {
+      "sourcePages": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "type": "semantic-html",
+      "description": "HTML supplies paragraph, emphasis, list, footnote, and table structure only; whitespace-normalized visible characters plus lexical word boundaries and punctuation must match the PDF extraction."
+    },
+    {
+      "sourcePage": 2,
+      "type": "section-end-footnote",
+      "description": "Footnote 1 retains its in-text marker and verbatim text but is rendered at the end of Chapter 1 section 1 for continuous reading; the verifier restores its source-page position solely for fidelity comparison."
+    },
+    {
+      "sourcePage": 11,
+      "type": "non-normative-csv-preview",
+      "description": "The app renders a convenience preview generated directly from the bundled CSV. It is explicitly labelled non-normative and omitted from print."
+    }
+  ]
+}

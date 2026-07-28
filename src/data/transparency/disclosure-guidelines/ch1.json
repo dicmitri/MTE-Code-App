@@ -1,0 +1,78 @@
+{
+  "id": "dg-chapter-1",
+  "documentId": "disclosure-guidelines",
+  "type": "chapter",
+  "title": "Chapter 1: Applicability of these Guidelines",
+  "icon": "1",
+  "sourcePages": [
+    2,
+    3,
+    4,
+    5
+  ],
+  "sections": [
+    {
+      "title": "1. Scope",
+      "legalText": "<p>These Disclosure Guidelines apply to Member Companies in their interactions with Healthcare Organisations based or registered in the MedTech Europe Geographic Area<sup>1</sup>.</p><p>Separate entities belonging to the same company or company group (“Affiliates”) – which could be the parent company (e.g. the headquarters, principal office, or controlling company of a commercial enterprise), subsidiary company or any other form of enterprise or organisation – shall be deemed to constitute a single company, and are as such bound to comply with these Disclosure Guidelines.</p><p>Transfers of value that are not included in the definition of Educational Grants (as described in Chapter 4, Section 3 of the Code) and that consequently cannot be allocated to any of the categories set forth in <em>Section 2.2 Aggregate Disclosure</em> are not within the scope of these Disclosure Guidelines.</p><p><small><sup>1</sup> The MedTech Europe Geographic Area currently includes: Austria, Belgium, Bulgaria, Croatia, Cyprus, the Czech Republic, Denmark, Finland, France, Germany, Greece, Hungary, Ireland, Italy, the countries where Mecomed is active, the Netherlands, Norway, Poland, Portugal, Romania, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, and the United Kingdom as countries with National Associations, and, Estonia, Iceland, Latvia, Liechtenstein Lithuania, Luxembourg and Malta as countries party to the European Economic Area agreement without a MedTech Europe National Association. Countries covered by Mecomed, the Middle East Medical Devices and Diagnostics association, are not currently under the scope of these Disclosure Guidelines.</small></p>",
+      "sourcePages": [
+        2,
+        3,
+        4
+      ],
+      "qas": [
+        {
+          "label": "Q&A 1",
+          "q": "Q: Does the Disclosure Guideline’s definition of “Affiliate” include legal entities belonging to the same parent Member Company but registered outside Europe?",
+          "a": "Yes. Educational Grants made by Affiliates (parent companies are included in the definition of Affiliates to the effect of the Disclosure Guidelines) incorporated outside of Europe to Healthcare Organisations registered in Europe are within the scope of these Disclosure Guidelines. Any of the Affiliates registered in Europe can disclose these Educational Grants. Each Member Company can choose which Affiliate will report these Educational Grants made by non-European Affiliates.",
+          "sourcePages": [
+            3
+          ]
+        },
+        {
+          "label": "Q&A 2",
+          "q": "Q: Are these Disclosure Guidelines applicable to third party intermediaries who interact with Healthcare Organisations in connection with the sale, promotion or other activity involving Member Companies’ products?",
+          "a": "No, these Disclosure Guidelines are not applicable to third parties such as third party sales & marketing intermediaries (SMIs), consultants, distributors, sales agents, marketing agents, brokers, commissionaire commercial agents and independent sales representatives (list not exhaustive). Nevertheless, its is recommended to document arrangements concluded between Member Companies and third parties intermediaries in order to comply with the provisions set out in the Code and, where appropriate, Member Companies may still choose to voluntary disclose these transfers of value.",
+          "sourcePages": [
+            3
+          ]
+        },
+        {
+          "label": "Q&A 3",
+          "q": "Q: Beyond the types of contributions expressly covered by these Disclosure Guidelines (educational grants to support Third Party Organised Educational Events, scholarships and fellowships and grants for public awareness campaigns), may Member Companies also disclose additional Transfers of Value?",
+          "a": "Yes. The disclosure of the types of contributions expressly covered by these Guidelines represents the minimum requirement. However, companies may choose to voluntarily disclose additional Transfers of Value. It is strongly recommended to use the same format used for the rest of the Disclosures to ensure consistency.",
+          "sourcePages": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "title": "2. Applicability of these Disclosure Guidelines",
+      "legalText": "<p>Member Companies need not report the same information twice due to being bound by national laws, regulations or professional codes imposing disclosure obligations regarding Educational Grants (as described in Chapter 4, section 3 of the Code) equivalent to the ones imposed by these Disclosure Guidelines.</p>",
+      "sourcePages": [
+        4,
+        5
+      ],
+      "qas": [
+        {
+          "label": "Q&A 4",
+          "q": "Q: Where a national professional code already imposes disclosure obligations in a given country, where may Corporate Members disclose the Educational Grants?",
+          "a": "Where a national professional code imposes disclosure obligations regarding Educational Grants (as regulated in Chapter 4, Section 3 of the Code) to the same extent as regulated by these Guidelines, Corporate Members, who are not a member of the National Association responsible for that national professional code, may choose either:<br>- To disclose on their own website; or<br>- To disclose on the national platform, if that possibility is provided for.<br>Corporate Members who are bound by this national professional code may choose either:<br>- To disclose only on the national platform or<br>- To disclose both on their own website and the national platform.<br>This selected option shall be included in the Methodology Note.",
+          "sourcePages": [
+            4
+          ]
+        },
+        {
+          "label": "Q&A 5",
+          "q": "Q: How will it be decided if a national law, regulation or professional code imposes disclosure obligations regarding Educational Grants equivalent to the ones imposed by the Disclosure Guidelines?",
+          "a": "The Secretariat shall conduct regular assessments of the equivalence of national laws, regulations and/or professional codes imposing disclosure obligations with the MedTech Europe Transparency Obligations (as regulated in Chapter 4, Section 3 of the Code). Members can at any time submit any information or documentation they possess that could be relevant for this assessment to the Secretariat.<br><br>The Secretariat shall submit its assessment to the MedTech Europe Transparency Task Force, who will analyse the proposal. If the MedTech Europe Transparency Task Force agrees with the proposal, it will be submitted for approval to the MedTech Europe Code Committee.<br><br>If the disclosure obligations imposed by a national law, regulation or professional code are deemed equivalent to the ones imposed by the Disclosure Guidelines, the assessment will be made public on the MedTech Europe website.",
+          "sourcePages": [
+            4,
+            5
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+"BENEFICIARY_NAME";"BENEFICIARY_ADDRESS";"BENEFICIARY_POSTAL_CODE";"BENEFICIARY_CITY";"BENEFICIARY_COUNTRY_CODE";"BENEFICIARY_VAT_OR_UNIQUE_IDENTIFIER";"DECLARATION_YEAR";"EDUCATIONAL_GRANT_TYPE";"AMOUNT";"CURRENCY_CODE";"COMMENT"
+"John Doe";"767 5th Avenue";"10153";"New York";"US";"346437";"2015";"support_event";"10,000";"USD";""
+"Pierre Dupont";"Rue de la Croix Monet 2";"5310";"Éghezée";"BE";"695960";"2015";"other_grant";"10.50";"EUR";""
+"James Andrews";"87-135 Brompton Rd";"SW1X 7XL";"London";"GB";"U43834";"2015";"support_event";"15";"GBP";""

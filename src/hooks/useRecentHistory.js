@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { FULL_CODE_DATA } from '../data/codeData';
+import { getTransparencyUnit } from '../data/transparency/transparencyData';
 
 export const useRecentHistory = (maxItems = 5) => {
   const [history, setHistory] = useState(() => {
@@ -12,12 +13,13 @@ export const useRecentHistory = (maxItems = 5) => {
     }
   });
 
-  const addHistory = useCallback((chapterId, section = 'code') => {
+  const addHistory = useCallback((chapterId, section = 'code', documentId = null) => {
     if (!chapterId || chapterId === 'home') return;
     
     setHistory(prev => {
-      // Find the chapter in Code data
-      const chapter = FULL_CODE_DATA.find(c => c.id === chapterId);
+      const chapter = section === 'transparency'
+        ? getTransparencyUnit(documentId, chapterId)
+        : FULL_CODE_DATA.find(c => c.id === chapterId);
       if (!chapter) return prev;
 
       const newEntry = {
@@ -26,11 +28,17 @@ export const useRecentHistory = (maxItems = 5) => {
         icon: chapter.icon,
         part: chapter.part,
         section: section || 'code',
+        documentId,
         timestamp: Date.now()
       };
 
-      // Remove existing entry for same chapter if it exists
-      const filtered = prev.filter(item => item.id !== chapterId);
+      // IDs are only unique inside their publication, so retain similarly named
+      // entries from other Code/Transparency documents.
+      const filtered = prev.filter((item) => !(
+        item.id === chapterId
+        && (item.section || 'code') === (section || 'code')
+        && (item.documentId || null) === (documentId || null)
+      ));
       
       const newHistory = [newEntry, ...filtered].slice(0, maxItems);
       
