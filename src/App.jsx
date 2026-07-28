@@ -259,6 +259,8 @@ const App = () => {
             showFullText
             showQA={showQA}
             debouncedSearch={debouncedSearch}
+            glossaryMap={glossaryMap}
+            handleTermClick={handleTermClick}
             scrollRef={scrollRef}
             showIosPrompt={showIosPrompt}
             setShowIosPrompt={setShowIosPrompt}

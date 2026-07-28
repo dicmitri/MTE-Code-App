@@ -41,7 +41,7 @@ The app is built using **React**, **Vite**, and **Cloudflare Workers**. All the 
 | `DecisionTree.jsx` | Interactive step-by-step decision tree |
 | `DefinitionPopup.jsx` | Glossary term tooltip popup |
 | `DocumentReader.jsx` | Shared legal-document reader used by the Code and Transparency publications |
-| `FullTextSection.jsx` | Renders a single legal text section with cite/link/bookmark + related tree callouts |
+| `FullTextSection.jsx` | Renders a single legal text section with citation/link menu, bookmark, copy-text, and related-tree actions |
 | `Header.jsx` | Top bar with section-aware toolbar (Summary, Full Text, Q&A, Reader, Print) |
 | `Highlight.jsx` | Wraps matched text in highlight marks during search |
 | `HubPage.jsx` | Home landing page with section cards |
@@ -148,15 +148,14 @@ Interactive compliance decision guides that let users step through real-world co
 - **Cross-linking:** Code chapters that have related decision trees show an inline amber callout with a direct link. Clicking it switches the user from the Code section to the relevant tree.
 
 ### 📚 Glossary & Definitions
-The Code reader automatically detects glossary terms within its legal text and renders them as interactive links. Clicking a term opens a `DefinitionPopup` tooltip with the glossary definition. Standalone Transparency publications intentionally disable this transformation so their approved visible text remains unchanged.
+The Code glossary is shared by the Code and Transparency publication readers. Whenever a defined term appears in legal text or official Q&A questions and answers, the existing words become interactive links; clicking one opens a `DefinitionPopup` with the glossary definition. This instrumentation adds no visible wording and does not alter the approved publication text. The Knowledge Quiz remains a separate testing interface and does not apply glossary instrumentation.
 
 ### 📑 Reading Utilities
 To facilitate heavy professional reference usage, the app includes several quality-of-life tools:
 - **Table of Contents (On This Page):** A sticky, scroll-tracking minimap located on the right side of the screen on desktop displays.
 - **Reading Progress Line:** A sticky top progress bar that smoothly tracks scrolling completion down long legal chapters.
 - **Q&A Fast-Jump Badges:** Section titles with associated Q&As feature a `💬 Q&A` badge that smooth-scrolls directly to the guidance notes for that provision.
-- **Multi-Format Citation Dropdown:** A `[Cite]` popover offering Formal Citations (including section title and current access date), Markdown links, and Direct URL links with confirmation toast notifications.
-- **Copy Link:** A `[Link]` button copies the direct URL to the section.
+- **Multi-Format Citation and Link Dropdown:** A `[Cite/Link]` popover offering Formal Citations (including section title and current access date), Markdown links, and Direct URL links with confirmation toast notifications.
 - **Next/Prev Navigation:** Large footer buttons at the bottom of every reader unit allow for linear reading without returning to the sidebar.
 - **Reader Settings:** An `Aa` button in the header opens a panel to customize font size, line spacing, and paragraph spacing.
 

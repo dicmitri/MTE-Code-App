@@ -18,7 +18,9 @@ Versions are internal application-release labels; they are independent of the pr
 ### Changed
 - Extracted the shared `DocumentReader` used by the Code and Transparency.
 - Extended routing, direct links, search, bookmarks, recent history, citations, print behavior, responsive navigation, and offline precaching to Transparency publications.
+- Shared the Code glossary with Transparency publications and all official reader Q&As so defined terms open the same pop-up definitions while preserving their visible text verbatim.
 - Documented the publication registry, source-replacement controls, offline resource limits, routing stability rules, and release checks.
+- Consolidated the redundant section-level `Cite` and `Link` actions into one `Cite/Link` menu across Code and Transparency readers.
 
 ### Fixed
 - Scoped standalone-publication table defaults so they cannot override existing Tailwind-authored Code annex tables.

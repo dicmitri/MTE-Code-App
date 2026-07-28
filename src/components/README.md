@@ -10,5 +10,10 @@ clearly labelled convenience preview; it must not be treated as normative
 Disclosure Guidelines content. Transparency passes the `transparency-reader`
 root class to `DocumentReader`; keep standalone-publication table defaults scoped
 to that class so they cannot override the Code annexes' Tailwind-authored tables.
+Both readers receive the same Code glossary map and definition-popup handler;
+glossary instrumentation applies to legal text and official Q&A questions and
+answers. It may wrap existing visible words but must never change
+standalone-publication wording. The Knowledge Quiz remains outside this reader
+behavior.
 
 For more details on how these components interact with the rest of the application, see the [Project Map](../../AGENTS.md#project-map).

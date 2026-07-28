@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import DOMPurify from 'dompurify';
-import { highlightSearchTerm, processTextWithTerms } from '../utils/textUtils';
+import { processReaderHtml } from '../utils/textUtils';
 import { copyTextToClipboard } from '../utils/clipboardUtils';
 import { Highlight } from './Highlight';
 import { AppIcon } from './AppIcons';
@@ -33,13 +33,34 @@ export const FullTextSection = ({
     onNavigateTree
 }) => {
     const processedHtml = useMemo(() => {
-        let html = resolveResourceLinks(section.legalText, resourceLinks);
-        if (query && searchFilters?.text) return highlightSearchTerm(html, query);
-        if (glossaryMap && !id.includes('glossary')) return processTextWithTerms(html, glossaryMap);
-        return html;
+        const html = resolveResourceLinks(section.legalText, resourceLinks);
+        return processReaderHtml(html, {
+            query,
+            highlight: searchFilters?.text,
+            glossaryMap,
+            enableGlossary: !id.includes('glossary'),
+        });
     }, [section.legalText, query, glossaryMap, id, searchFilters?.text, resourceLinks]);
 
     const sanitizedHtml = useMemo(() => DOMPurify.sanitize(processedHtml), [processedHtml]);
+    const processedQas = useMemo(() => (
+        (section.qas || []).map((qa) => {
+            const processingOptions = {
+                query,
+                highlight: searchFilters?.qa,
+                glossaryMap,
+                enableGlossary: !id.includes('glossary'),
+            };
+            const questionHtml = processReaderHtml(qa.q, processingOptions);
+            const answerHtml = processReaderHtml(`A: ${qa.a}`, processingOptions);
+
+            return {
+                ...qa,
+                questionHtml: DOMPurify.sanitize(questionHtml),
+                answerHtml: DOMPurify.sanitize(answerHtml),
+            };
+        })
+    ), [section.qas, query, searchFilters?.qa, glossaryMap, id]);
 
     const [copyFeedback, setCopyFeedback] = useState(null);
     const [citeMenuOpen, setCiteMenuOpen] = useState(false);
@@ -126,11 +147,6 @@ export const FullTextSection = ({
         new URL(buildSectionPath(chapterId, sectionId), window.location.origin).href
     );
 
-    const copyLink = async (sectionId) => {
-        const url = getSectionUrl(sectionId);
-        await copyWithFeedback(url, 'Link copied to clipboard!');
-    };
-
     const copyCitationFormat = async (format) => {
         const url = getSectionUrl(id);
         const prefix = chapterPrefix ? chapterPrefix : '';
@@ -190,7 +206,7 @@ export const FullTextSection = ({
         if (termNode) {
             e.stopPropagation(); 
             const termKey = termNode.getAttribute('data-term');
-            onTermClick(termKey);
+            onTermClick?.(termKey);
         }
     };
 
@@ -261,7 +277,7 @@ export const FullTextSection = ({
                                 aria-expanded={citeMenuOpen}
                                 aria-controls={citeMenuOpen ? citeMenuId : undefined}
                             >
-                                <span>Cite</span>
+                                <span>Cite/Link</span>
                                 <AppIcon name={citeMenuOpen ? "ChevronUp" : "ChevronDown"} size={12} />
                             </button>
                             {citeMenuOpen && (
@@ -309,14 +325,6 @@ export const FullTextSection = ({
                                 </div>
                             )}
                         </div>
-                        <button
-                            type="button"
-                            onClick={(e) => { e.stopPropagation(); copyLink(id); }}
-                            className="text-sm text-purple-600 hover:text-purple-800 border border-transparent hover:border-purple-100 rounded px-2 py-1"
-                            title="Copy raw link to this section"
-                        >
-                            Link
-                        </button>
                         <button
                             type="button"
                             onClick={(e) => { e.stopPropagation(); copyPlainText(); }}
@@ -375,20 +383,20 @@ export const FullTextSection = ({
                     id={`qa-block-${id}`}
                     className={`mt-4 space-y-4 scroll-mt-24 ${!showQA && printAllQA ? 'hidden print-always' : ''}`}
                 >
-                    {section.qas.map((qa, idx) => (
+                    {processedQas.map((qa, idx) => (
                         <div key={idx} className="bg-gray-50 p-4 rounded-lg border border-gray-100 print:bg-transparent print:border-none print:p-0 print:my-4">
                             {qa.label && (
                                 <p className="text-xs font-bold text-[#0099A7] underline underline-offset-2 mb-2 reader-content">
                                     {qa.label}
                                 </p>
                             )}
-                            <p className="font-bold text-gray-900 mb-1 reader-content">
-                                <Highlight text={qa.q} query={searchFilters?.qa ? query : ''} />
-                            </p>
-                            <div className="text-gray-700 prose prose-sm max-w-none reader-content" 
-                                dangerouslySetInnerHTML={{ 
-                                    __html: DOMPurify.sanitize('A: ' + (query && searchFilters?.qa ? highlightSearchTerm(qa.a, query) : qa.a)) 
-                                }} 
+                            <p
+                                className="font-bold text-gray-900 mb-1 reader-content"
+                                dangerouslySetInnerHTML={{ __html: qa.questionHtml }}
+                            />
+                            <div
+                                className="text-gray-700 prose prose-sm max-w-none reader-content"
+                                dangerouslySetInnerHTML={{ __html: qa.answerHtml }}
                             />
                         </div>
                     ))}

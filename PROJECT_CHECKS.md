@@ -66,8 +66,8 @@ npm test
 A successful result ends with output similar to:
 
 ```text
-tests 55
-pass 55
+tests 60
+pass 60
 fail 0
 ```
 

@@ -53,6 +53,23 @@ export const processTextWithTerms = (htmlContent, glossaryMap) => {
     }).join('');
 };
 
+export const processReaderHtml = (
+    htmlContent,
+    {
+        query = '',
+        highlight = false,
+        glossaryMap = null,
+        enableGlossary = true,
+    } = {},
+) => {
+    if (!htmlContent) return '';
+    if (query && highlight) return highlightSearchTerm(htmlContent, query);
+    if (enableGlossary && glossaryMap) {
+        return processTextWithTerms(htmlContent, glossaryMap);
+    }
+    return htmlContent;
+};
+
 export const generateSectionId = (chapterId, title, index) => {
     if (!chapterId) return '';
     

@@ -33,6 +33,8 @@ export const TransparencyContent = ({
   showFullText,
   showQA,
   debouncedSearch,
+  glossaryMap,
+  handleTermClick,
   scrollRef,
   showIosPrompt,
   setShowIosPrompt,
@@ -110,7 +112,8 @@ export const TransparencyContent = ({
       showFullText={showFullText}
       showQA={showQA}
       debouncedSearch={debouncedSearch}
-      glossaryMap={null}
+      glossaryMap={glossaryMap}
+      handleTermClick={handleTermClick}
       scrollRef={scrollRef}
       showIosPrompt={showIosPrompt}
       setShowIosPrompt={setShowIosPrompt}
