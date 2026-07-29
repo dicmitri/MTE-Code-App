@@ -111,12 +111,7 @@ export const TransparencyDocumentLandingPage = ({
             <AppIcon name={unit.icon || 'FileText'} size={26} />
           </span>
           <span className="text-lg font-bold text-gray-900 mb-2">{unit.title}</span>
-          {unit.sourcePages?.length > 0 && (
-            <span className="text-xs text-slate-400">
-              PDF {unit.sourcePages.length === 1 ? 'page' : 'pages'} {unit.sourcePages.join(', ')}
-            </span>
-          )}
-          <span className="mt-6 flex items-center text-xs font-bold text-[#7654A1] uppercase tracking-wider">
+          <span className="mt-auto pt-6 flex items-center text-xs font-bold text-[#7654A1] uppercase tracking-wider">
             Read
             <AppIcon
               name="ChevronRight"
