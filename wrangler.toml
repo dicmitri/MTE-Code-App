@@ -13,3 +13,10 @@ custom_domain = true
 [assets]
 directory = "dist"
 binding = "ASSETS"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "historical-declarations"
+# Placeholder — replace with the real ID after running:
+#   npx wrangler d1 create historical-declarations
+database_id = "REPLACE_AFTER_WRANGLER_D1_CREATE"

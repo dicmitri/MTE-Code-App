@@ -1,10 +1,13 @@
 /**
  * Cloudflare Worker entry point for MTE Code App.
- * Handles the Decap CMS OAuth flow and serves the React app as static assets.
+ * Handles the Decap CMS OAuth flow, the Historical Declarations API, and
+ * serves the React app as static assets.
  *
  * Security: Uses HMAC-signed state tokens for CSRF protection,
  * no-cache headers on token responses, and generic error messages.
  */
+
+import { handleHistoricalDeclarationsRequest } from './historical-declarations-api.js';
 
 /**
  * Generate an HMAC-signed state token for CSRF protection.
@@ -143,7 +146,14 @@ export default {
       }
     }
 
-    // 3. Fallback: Serve static assets
+    // 3. Handle Historical Declarations API: /api/historical-declarations/*
+    // Must run before the SPA fallback below, since that fallback serves
+    // index.html for any dotless path and would otherwise swallow these.
+    if (url.pathname.startsWith('/api/historical-declarations')) {
+      return handleHistoricalDeclarationsRequest(request, env);
+    }
+
+    // 4. Fallback: Serve static assets
     // Ensure the Decap CMS admin interface is served correctly
     if (url.pathname === '/admin' || url.pathname === '/admin/') {
       return env.ASSETS.fetch(new Request(new URL('/admin/index.html', request.url), request));
