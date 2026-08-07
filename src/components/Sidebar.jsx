@@ -692,7 +692,7 @@ export const Sidebar = ({
                 onNavigateTransparencyDocument(HISTORICAL_DECLARATIONS_DOCUMENT_ID);
                 setSidebarOpen(false);
               }}
-              className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ml-2 ${
+              className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ml-2 mb-2 ${
                 activeSection === 'transparency' && activeDocumentId === HISTORICAL_DECLARATIONS_DOCUMENT_ID
                   ? 'bg-[#7654A1] text-white shadow-md'
                   : 'text-gray-600 hover:bg-gray-50'
