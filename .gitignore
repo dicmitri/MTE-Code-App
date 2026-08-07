@@ -4,6 +4,7 @@ dist/
 .env.local
 *.log
 .DS_Store
+.wrangler/
 scratch/extracted/
 scratch/parsed/
 scratch/agenda_analysis_report.md
