@@ -7,6 +7,7 @@ import {
 } from '../data/transparency/transparencyData';
 import { addRecentSearch, normalizeRecentSearches } from '../utils/recentSearchUtils';
 import { htmlToPlainText } from '../utils/htmlTextUtils';
+import { HISTORICAL_DECLARATIONS_DOCUMENT_ID } from '../utils/routeUtils';
 import {
   getSearchExpansionRestore,
   getSearchExpansionSnapshot,
@@ -683,6 +684,22 @@ export const Sidebar = ({
             >
               <AppIcon name="Eye" size={17} />
               <span className="truncate flex-1">Transparency Home</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                onNavigateTransparencyDocument(HISTORICAL_DECLARATIONS_DOCUMENT_ID);
+                setSidebarOpen(false);
+              }}
+              className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ml-2 ${
+                activeSection === 'transparency' && activeDocumentId === HISTORICAL_DECLARATIONS_DOCUMENT_ID
+                  ? 'bg-[#7654A1] text-white shadow-md'
+                  : 'text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              <AppIcon name="Search" size={17} />
+              <span className="truncate flex-1">Historical Declarations</span>
             </button>
 
             {TRANSPARENCY_DOCUMENTS.map((document) => {
