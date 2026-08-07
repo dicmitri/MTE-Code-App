@@ -191,7 +191,10 @@ test('routes the Historical Declarations registry as a Transparency special case
   const parsed = parseAppLocation(path, '');
   assert.equal(parsed.activeSection, 'transparency');
   assert.equal(parsed.activeDocumentId, HISTORICAL_DECLARATIONS_DOCUMENT_ID);
-  assert.equal(parsed.activeId, HISTORICAL_DECLARATIONS_DOCUMENT_ID);
+  // 'home', not the document id — matches a real document's own overview
+  // route, since App.jsx's readerMode flag keys off activeId !== 'home' to
+  // enable reader-only chrome that doesn't apply to this feature.
+  assert.equal(parsed.activeId, 'home');
   assert.equal(parsed.canonicalUrl, path);
 
   // Works even when no real Transparency documents are registered, since it

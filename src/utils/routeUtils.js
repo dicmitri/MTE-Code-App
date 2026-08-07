@@ -226,10 +226,14 @@ export function createRouteUtils(chapters, trees, transparencyDocuments = []) {
       if (documentId === HISTORICAL_DECLARATIONS_DOCUMENT_ID) {
         // The search state hash (e.g. #search?q=...) is opaque, component-
         // managed state, not a section anchor — pass it through untouched
-        // rather than resolving it against sectionOwners.
+        // rather than resolving it against sectionOwners. activeId is
+        // 'home' (matching a real document's own overview route) rather
+        // than the document id, since App.jsx's readerMode flag keys off
+        // `activeId !== 'home'` to enable the legal-text reader's font
+        // size/line spacing controls — this page isn't a reader.
         return createRoute(
           'transparency',
-          HISTORICAL_DECLARATIONS_DOCUMENT_ID,
+          'home',
           buildHistoricalDeclarationsPath(hash),
           null,
           HISTORICAL_DECLARATIONS_DOCUMENT_ID,
