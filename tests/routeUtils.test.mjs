@@ -10,6 +10,7 @@ import { loadTransparencyData } from '../scripts/lib/transparency-content.mjs';
 import {
   buildChapterPath,
   buildCodeSectionPath,
+  buildHistoricalDeclarationsPath,
   buildQuizPath,
   buildTransparencyDocumentPath,
   buildTransparencyHomePath,
@@ -17,6 +18,7 @@ import {
   buildTransparencyUnitPath,
   buildTreePath,
   createRouteUtils,
+  HISTORICAL_DECLARATIONS_DOCUMENT_ID,
 } from '../src/utils/routeUtils.js';
 
 const testDirectory = dirname(fileURLToPath(import.meta.url));
@@ -180,6 +182,34 @@ test('keeps existing shared Quiz hashes on the Quiz path', () => {
   assert.equal(buildQuizPath(hash), `/quiz${hash}`);
   assert.equal(parseAppLocation('/', hash).canonicalUrl, `/quiz${hash}`);
   assert.equal(parseAppLocation('/quiz', hash).canonicalUrl, `/quiz${hash}`);
+});
+
+test('routes the Historical Declarations registry as a Transparency special case', () => {
+  const path = buildTransparencyDocumentPath(HISTORICAL_DECLARATIONS_DOCUMENT_ID);
+  assert.equal(path, '/transparency/historical-declarations');
+
+  const parsed = parseAppLocation(path, '');
+  assert.equal(parsed.activeSection, 'transparency');
+  assert.equal(parsed.activeDocumentId, HISTORICAL_DECLARATIONS_DOCUMENT_ID);
+  assert.equal(parsed.activeId, HISTORICAL_DECLARATIONS_DOCUMENT_ID);
+  assert.equal(parsed.canonicalUrl, path);
+
+  // Works even when no real Transparency documents are registered, since it
+  // never depends on transparencyDocumentIndex.
+  const legacyParser = createRouteUtils(FULL_CODE_DATA, TREE_DATA).parseAppLocation;
+  assert.equal(legacyParser(path, '').activeDocumentId, HISTORICAL_DECLARATIONS_DOCUMENT_ID);
+});
+
+test('preserves the Historical Declarations search-state hash through parsing', () => {
+  const hash = '#search?q=acme&year=2024';
+  assert.equal(
+    buildHistoricalDeclarationsPath(hash),
+    `/transparency/historical-declarations${hash}`,
+  );
+
+  const parsed = parseAppLocation('/transparency/historical-declarations', hash);
+  assert.equal(parsed.canonicalUrl, `/transparency/historical-declarations${hash}`);
+  assert.equal(parsed.anchor, null);
 });
 
 test('falls back safely for unknown paths and malformed URL encoding', () => {

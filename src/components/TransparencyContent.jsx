@@ -6,9 +6,13 @@ import {
   DISCLOSURE_GUIDELINES_DOCUMENT,
   TRANSPARENCY_DOCUMENTS,
 } from '../data/transparency/transparencyData';
-import { buildTransparencySectionPath } from '../utils/routeUtils';
+import {
+  buildTransparencySectionPath,
+  HISTORICAL_DECLARATIONS_DOCUMENT_ID,
+} from '../utils/routeUtils';
 import { CsvTemplatePreview } from './CsvTemplatePreview';
 import { DocumentReader } from './DocumentReader';
+import { HistoricalDeclarationsContent } from './HistoricalDeclarationsContent';
 import {
   TransparencyDocumentLandingPage,
   TransparencyLandingPage,
@@ -22,6 +26,23 @@ const DISCLOSURE_RESOURCE_LINKS = Object.freeze({
     filename: 'declaration-csv-template.csv',
   }),
 });
+
+// Landing-page card for the Historical Declarations registry. It renders
+// through the same document-card grid as real publications but isn't a
+// real TRANSPARENCY_DOCUMENTS entry — it has no units/sections and is
+// handled as a special case below rather than by the generic document
+// reader.
+const HISTORICAL_DECLARATIONS_CARD = Object.freeze({
+  id: HISTORICAL_DECLARATIONS_DOCUMENT_ID,
+  title: 'Historical Declarations',
+  description: 'Search past transparency declarations by company, beneficiary, year, or country.',
+  icon: 'Search',
+});
+
+const TRANSPARENCY_LANDING_CARDS = Object.freeze([
+  ...TRANSPARENCY_DOCUMENTS,
+  HISTORICAL_DECLARATIONS_CARD,
+]);
 
 export const TransparencyContent = ({
   activeId,
@@ -44,8 +65,16 @@ export const TransparencyContent = ({
   if (!activeDocumentId) {
     return (
       <TransparencyLandingPage
-        documents={TRANSPARENCY_DOCUMENTS}
+        documents={TRANSPARENCY_LANDING_CARDS}
         onOpenDocument={onNavigateDocument}
+      />
+    );
+  }
+
+  if (activeDocumentId === HISTORICAL_DECLARATIONS_DOCUMENT_ID) {
+    return (
+      <HistoricalDeclarationsContent
+        onNavigateTransparencyHome={onNavigateTransparencyHome}
       />
     );
   }
@@ -57,7 +86,7 @@ export const TransparencyContent = ({
   if (!activeDocument) {
     return (
       <TransparencyLandingPage
-        documents={TRANSPARENCY_DOCUMENTS}
+        documents={TRANSPARENCY_LANDING_CARDS}
         onOpenDocument={onNavigateDocument}
       />
     );

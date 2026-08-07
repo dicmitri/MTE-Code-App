@@ -87,6 +87,16 @@ export function buildTransparencySectionPath(documentId, unitId, sectionId) {
   return `${buildTransparencyUnitPath(documentId, unitId)}#${encodeURIComponent(sectionId)}`;
 }
 
+// The Historical Declarations registry is a live D1-backed search feature
+// nested under Transparency, not a static JSON publication — it never goes
+// through the chapters/units document reader below, so it's special-cased
+// wherever a real transparencyDocuments entry would normally be looked up.
+export const HISTORICAL_DECLARATIONS_DOCUMENT_ID = 'historical-declarations';
+
+export function buildHistoricalDeclarationsPath(searchHash = '') {
+  return `${buildTransparencyDocumentPath(HISTORICAL_DECLARATIONS_DOCUMENT_ID)}${normalizeHash(searchHash)}`;
+}
+
 export function createRouteUtils(chapters, trees, transparencyDocuments = []) {
   const chapterIds = new Set(chapters.map((chapter) => chapter.id));
   const treeIds = new Set(trees.map((tree) => tree.id));
@@ -212,6 +222,20 @@ export function createRouteUtils(chapters, trees, transparencyDocuments = []) {
       }
 
       const documentId = segments[1];
+
+      if (documentId === HISTORICAL_DECLARATIONS_DOCUMENT_ID) {
+        // The search state hash (e.g. #search?q=...) is opaque, component-
+        // managed state, not a section anchor — pass it through untouched
+        // rather than resolving it against sectionOwners.
+        return createRoute(
+          'transparency',
+          HISTORICAL_DECLARATIONS_DOCUMENT_ID,
+          buildHistoricalDeclarationsPath(hash),
+          null,
+          HISTORICAL_DECLARATIONS_DOCUMENT_ID,
+        );
+      }
+
       const document = transparencyDocumentIndex.get(documentId);
 
       if (!document) {
