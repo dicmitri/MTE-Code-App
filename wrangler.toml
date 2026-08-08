@@ -19,4 +19,4 @@ binding = "DB"
 database_name = "historical-declarations"
 # Placeholder — replace with the real ID after running:
 #   npx wrangler d1 create historical-declarations
-database_id = "REPLACE_AFTER_WRANGLER_D1_CREATE"
+database_id = "R0282ae30-8e3b-4461-bf4c-1c76fdd3a12e"
