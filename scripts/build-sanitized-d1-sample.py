@@ -149,8 +149,11 @@ def build():
         "-- placeholders. All other fields (ids, amounts, countries, years,",
         "-- contact_url) are taken as-is from the rehearsal dataset for",
         "-- realistic filtering/search behavior during local testing only.",
-        "-- Regenerate with scratchpad/build_sample.py.",
-        "BEGIN TRANSACTION;",
+        "-- Regenerate with scripts/build-sanitized-d1-sample.py.",
+        "-- No explicit BEGIN TRANSACTION/COMMIT: D1 rejects raw SQL",
+        "-- transaction control statements over `wrangler d1 execute --remote`",
+        "-- (it manages transactions itself); the local emulator tolerates them,",
+        "-- which is why this only surfaces against the real API.",
         "",
     ]
     out_lines += insert_statements("countries", country_cols, countries)
@@ -162,8 +165,6 @@ def build():
     out_lines += insert_statements("beneficiaries", beneficiary_cols, beneficiaries)
     out_lines.append("")
     out_lines += insert_statements("declarations", decl_cols, declarations)
-    out_lines.append("")
-    out_lines.append("COMMIT;")
 
     with open(OUT_PATH, "w", encoding="utf-8") as f:
         f.write("\n".join(out_lines) + "\n")
