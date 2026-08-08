@@ -48,6 +48,25 @@ Prefer explicit labels, semantic controls, and keyboard access in existing workf
 
 The current project scale does not justify adding a routing library, global state management, accounts or cloud synchronization, a full TypeScript migration, a backend content API, or an AI assistant. Reconsider only if a future requirement offers a major gain that cannot be achieved within the existing architecture.
 
+## Audit Findings — 2026-08-08
+
+Found by an automated repo audit (read-only pass: `npm install`, `npm run lint`, `npm test`, `npm run validate:data`, `npm run build`, `npm run verify:disclosure-guidelines`, `npm run verify:production-disclosure-assets`, `npm audit`, plus manual inspection). All checks above passed cleanly at the time of the audit; nothing here indicates a currently-broken build. Items are grouped by how safe they are to act on, not by importance. None of these were implemented — evaluate and fold in the ones that make sense the next time related files are touched, per the "component splitting... only when a file is being changed" principle above.
+
+### Low engineering risk (small, localized, no logic change) — still verify before shipping to production
+- Delete `temp_ch10.json`, `temp_ch4.json`, `temp_ch8.json`, `temp_scope.json` (repo root). Leftover working files from a past content-migration session; confirmed unreferenced by any `.js`/`.mjs`/`.py` file.
+- Delete `public/manifest.json`. Dead legacy PWA manifest, superseded by the `vite-plugin-pwa`-generated `manifest.webmanifest` actually linked from `index.html`. Its icon paths (`/icons/icon-192x192.svg` etc.) don't even exist, and its theme color doesn't match current branding. Confirmed unreferenced, including from `public/admin/index.html`.
+- Delete `public/service-worker.js`. Pre-`vite-plugin-pwa` leftover; nothing in current app code registers it (the app registers the Workbox worker via `virtual:pwa-register` in `src/main.jsx`), yet Vite still copies it into every build as `/service-worker.js`. Confirmed no in-app references.
+- Remove the `public/icons/` subfolder's three PNGs (byte-identical duplicates of `public/icon-192.png`, `public/icon-512.png`, `public/maskable-icon-512x512.png` — verified via checksum). The root-level copies are the ones wired into `vite.config.ts` and `index.html`; the subfolder copies and `public/icons.svg` (an unrelated, unreferenced social-icon sprite) appear to be dead weight.
+- Remove the `"TPPT checker"` entry from `tsconfig.json`'s `exclude` array — that folder no longer exists in the repo.
+- Rename `package.json`'s `"name"` from the Vite scaffold default `"react-example"` to something reflecting the project. Not coupled to `wrangler.toml`'s own `name` field.
+- `index.html`: the viewport meta tag sets `maximum-scale=1.0, user-scalable=no`, disabling pinch-to-zoom (a WCAG 1.4.4 concern for a document-reading app). No touch/pinch gesture handling exists anywhere in the app that this could be protecting, so removing the zoom lock is interaction-safe — but it is a visible UX change on a live site, so treat it as a product decision, not just a bug fix.
+
+### Needs real evaluation before touching (not drop-in fixes)
+- `pdfjs-dist` has a published high-severity advisory (arbitrary JS execution on a malicious PDF). Relevant here because the TPPT Checker parses user-uploaded PDFs client-side with this library. `npm audit fix --force` upgrades to a breaking major version (6.2.108) — needs a real test pass against `src/utils/tpptExtraction.js` and the TPPT upload flow before shipping.
+- `oauth-proxy.js` reflects any HTTPS `Origin` header back in `Access-Control-Allow-Origin` (CORS restricted by protocol only, not by domain). Not currently exploitable given the HMAC-signed state token and postMessage-based token delivery, but broader than necessary. Tightening it requires first enumerating every legitimate calling origin so real CMS editors aren't locked out.
+- `tsconfig.json` has no `strict`/`noImplicitAny`. Turning on strict mode will likely surface new type errors in `TPPTContent.tsx` that need fixing — plan it as its own pass, not a quick toggle.
+- Lower-priority `npm audit` findings (dompurify, vite, postcss, esbuild, nanoid, picomatch) are mostly dev-tooling-only exposure, not shipped to end users; revisit opportunistically via `npm audit fix` (non-breaking) rather than urgently.
+
 ## Verification Commands
 
 Run from the project root:
