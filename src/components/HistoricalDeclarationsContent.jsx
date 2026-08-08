@@ -12,6 +12,35 @@ const EMPTY_FILTERS = Object.freeze({
   currency: '',
 });
 
+// appearance-none + explicit pr-8 reserves fixed room for the custom arrow
+// instead of relying on the browser's native select arrow, whose spacing
+// varies by OS/browser and was overlapping the selected text.
+const FilterSelect = ({ id, label, value, onChange, defaultOptionLabel, options, getOptionValue, getOptionLabel }) => (
+  <div>
+    <label className="block text-sm font-medium text-slate-700 mb-1" htmlFor={id}>
+      {label}
+    </label>
+    <div className="relative">
+      <select
+        id={id}
+        className="w-full appearance-none p-2 pr-8 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-[#7654A1] focus:border-[#7654A1]"
+        value={value}
+        onChange={onChange}
+      >
+        <option value="">{defaultOptionLabel}</option>
+        {options?.map((option) => (
+          <option key={getOptionValue(option)} value={getOptionValue(option)}>
+            {getOptionLabel(option)}
+          </option>
+        ))}
+      </select>
+      <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400">
+        <AppIcon name="ChevronDown" size={14} />
+      </span>
+    </div>
+  </div>
+);
+
 function parseHash(hash) {
   const queryIdx = hash.indexOf('?');
   const params = new URLSearchParams(queryIdx === -1 ? '' : hash.slice(queryIdx + 1));
@@ -231,7 +260,7 @@ export const HistoricalDeclarationsContent = ({ onNavigateTransparencyHome }) =>
         {/* Filters */}
         <section className="no-print bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mb-6">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-            <div className="md:col-span-4">
+            <div className="md:col-span-3">
               <label className="block text-sm font-medium text-slate-700 mb-1" htmlFor="hd-search">
                 Search
               </label>
@@ -250,84 +279,64 @@ export const HistoricalDeclarationsContent = ({ onNavigateTransparencyHome }) =>
               </div>
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-slate-700 mb-1" htmlFor="hd-year">
-                Year
-              </label>
-              <select
+              <FilterSelect
                 id="hd-year"
-                className="w-full p-2 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-[#7654A1] focus:border-[#7654A1]"
+                label="Year"
                 value={filters.year}
                 onChange={(e) => handleFilterChange({ year: e.target.value })}
-              >
-                <option value="">All years</option>
-                {metadata?.years?.map((y) => (
-                  <option key={y} value={y}>{y}</option>
-                ))}
-              </select>
+                defaultOptionLabel="All years"
+                options={metadata?.years}
+                getOptionValue={(y) => y}
+                getOptionLabel={(y) => y}
+              />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-slate-700 mb-1" htmlFor="hd-country">
-                Beneficiary country
-              </label>
-              <select
+              <FilterSelect
                 id="hd-country"
-                className="w-full p-2 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-[#7654A1] focus:border-[#7654A1]"
+                label="Beneficiary country"
                 value={filters.country}
                 onChange={(e) => handleFilterChange({ country: e.target.value })}
-              >
-                <option value="">All countries</option>
-                {metadata?.countries?.map((c) => (
-                  <option key={c.iso_code} value={c.iso_code}>{c.name}</option>
-                ))}
-              </select>
+                defaultOptionLabel="All countries"
+                options={metadata?.countries}
+                getOptionValue={(c) => c.iso_code}
+                getOptionLabel={(c) => c.name}
+              />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-slate-700 mb-1" htmlFor="hd-company-country">
-                Company country
-              </label>
-              <select
+              <FilterSelect
                 id="hd-company-country"
-                className="w-full p-2 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-[#7654A1] focus:border-[#7654A1]"
+                label="Company country"
                 value={filters.company_country}
                 onChange={(e) => handleFilterChange({ company_country: e.target.value })}
-              >
-                <option value="">All countries</option>
-                {metadata?.countries?.map((c) => (
-                  <option key={c.iso_code} value={c.iso_code}>{c.name}</option>
-                ))}
-              </select>
+                defaultOptionLabel="All countries"
+                options={metadata?.countries}
+                getOptionValue={(c) => c.iso_code}
+                getOptionLabel={(c) => c.name}
+              />
             </div>
-            <div className="md:col-span-1">
-              <label className="block text-sm font-medium text-slate-700 mb-1" htmlFor="hd-nature">
-                Type
-              </label>
-              <select
+            <div className="md:col-span-2">
+              <FilterSelect
                 id="hd-nature"
-                className="w-full p-2 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-[#7654A1] focus:border-[#7654A1]"
+                label="Type"
                 value={filters.nature}
                 onChange={(e) => handleFilterChange({ nature: e.target.value })}
-              >
-                <option value="">All types</option>
-                {metadata?.natures?.map((n) => (
-                  <option key={n.nature} value={n.nature}>{n.nature_label}</option>
-                ))}
-              </select>
+                defaultOptionLabel="All types"
+                options={metadata?.natures}
+                getOptionValue={(n) => n.nature}
+                getOptionLabel={(n) => n.nature_label}
+              />
             </div>
             <div className="md:col-span-1">
-              <label className="block text-sm font-medium text-slate-700 mb-1" htmlFor="hd-currency">
-                Currency
-              </label>
-              <select
+              <FilterSelect
                 id="hd-currency"
-                className="w-full p-2 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-[#7654A1] focus:border-[#7654A1]"
+                label="Currency"
                 value={filters.currency}
                 onChange={(e) => handleFilterChange({ currency: e.target.value })}
-              >
-                <option value="">All</option>
-                {metadata?.currencies?.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
+                defaultOptionLabel="All"
+                options={metadata?.currencies}
+                getOptionValue={(c) => c}
+                getOptionLabel={(c) => c}
+              />
             </div>
           </div>
         </section>
