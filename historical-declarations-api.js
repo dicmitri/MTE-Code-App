@@ -11,7 +11,11 @@ const MAX_ACCESSIBLE_RECORDS = 1000;
 function jsonResponse(data, { status = 200, cacheSeconds } = {}) {
   const headers = { 'Content-Type': 'application/json' };
   if (cacheSeconds) {
-    headers['Cache-Control'] = `public, max-age=${cacheSeconds}, s-maxage=${cacheSeconds}`;
+    // The Cloudflare edge caches for the full window (s-maxage), but browsers
+    // must revalidate on every request (max-age=0). A shared browser max-age
+    // here makes a dataset swap invisible to anyone who loaded the page before
+    // it -- for /metadata that stale window was 24 hours.
+    headers['Cache-Control'] = `public, max-age=0, must-revalidate, s-maxage=${cacheSeconds}`;
   }
   return new Response(JSON.stringify(data), { status, headers });
 }

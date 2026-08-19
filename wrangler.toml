@@ -14,9 +14,19 @@ custom_domain = true
 directory = "dist"
 binding = "ASSETS"
 
+# Historical declarations archive (read-only).
+#
+# IMPORTANT: the two values below identify the REMOTE database only.
+# `wrangler dev` runs against a local SQLite emulation by default and ignores
+# them entirely, so editing them does NOT change what a plain `wrangler dev`
+# serves. Choose the dataset with the npm script, not with this file:
+#
+#   npm run dev:worker         -> local fixture in .wrangler/state, seeded from
+#                                 d1/historical-declarations/seed.sample.sql
+#                                 (100 rows, years 2022-2024; 2022 is the tell)
+#   npm run dev:worker:remote  -> the real archive configured below
+#                                 (31,095 rows, years 2023-2025, no 2022)
 [[d1_databases]]
 binding = "DB"
-database_name = "historical-declarations"
-# Placeholder — replace with the real ID after running:
-#   npx wrangler d1 create historical-declarations
-database_id = "0282ae30-8e3b-4461-bf4c-1c76fdd3a12e"
+database_name = "historical-declarations-final"
+database_id = "cd4e5d0a-0fa1-4aae-94b4-be4aa540adb0"
