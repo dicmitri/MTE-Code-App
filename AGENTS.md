@@ -1,6 +1,6 @@
 # Agent Instructions
 
-<!-- Version: v1.7 - 2026-07-28 -->
+<!-- Version: v1.8 - 2026-08-08 -->
 
 ## Table of Contents
 - [Project Map](#project-map)
@@ -51,6 +51,7 @@ The project is structured around a centralized state architecture in `App.jsx`, 
 - **`scripts/validate-data.mjs`**: Dependency-free structural validation for Code, Transparency, decision-tree, and quiz data. Run with `npm run validate:data` after content edits.
 - **`tests/`**: Focused Node tests for stable project logic. Run with `npm test`. The plain-language operating guide is `PROJECT_CHECKS.md`.
 - **`ROUTING.md`**: Canonical URL formats, legacy compatibility guarantees, identifier stability rules, hosting requirements, and manual release checks.
+- **`ranked_changed.md`**: The maintenance backlog — verified, risk-tiered technical debt and improvement candidates, including findings from periodic repo audits. Before starting a change, check whether it touches a file with an open item here; if so, evaluate whether folding in that fix is in scope for the current update, consistent with that file's own guidance to extract/fix things only when a file is already being changed, not as unrelated batch cleanup. Update or remove an item's entry once it's resolved, and add newly discovered issues here rather than leaving them undocumented.
 
 ## Standards
 
