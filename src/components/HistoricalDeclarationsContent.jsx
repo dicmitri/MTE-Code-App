@@ -238,14 +238,14 @@ export const HistoricalDeclarationsContent = ({ onNavigateTransparencyHome }) =>
         <button
           type="button"
           onClick={onNavigateTransparencyHome}
-          className="no-print inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[#0099A7] hover:text-[#7654A1] mb-6"
+          className="no-print inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[#007A86] hover:text-[#7654A1] mb-6"
         >
           <AppIcon name="ChevronLeft" size={14} />
           Transparency
         </button>
 
         <header className="mb-8">
-          <div className="inline-flex items-center gap-2 text-[#0099A7] text-xs font-bold uppercase tracking-[0.18em] mb-4">
+          <div className="inline-flex items-center gap-2 text-[#007A86] text-xs font-bold uppercase tracking-[0.18em] mb-4">
             <AppIcon name="Search" size={18} />
             Transparency
           </div>
@@ -368,11 +368,11 @@ export const HistoricalDeclarationsContent = ({ onNavigateTransparencyHome }) =>
                   <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
                     <div>
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="bg-cyan-50 text-[#0099A7] px-2 py-0.5 rounded text-xs font-bold tracking-wide uppercase">
+                        <span className="bg-cyan-50 text-[#007A86] px-2 py-0.5 rounded text-xs font-bold tracking-wide uppercase">
                           {item.year}
                         </span>
                         <span className="text-slate-300">•</span>
-                        <span className="text-[#0099A7] font-medium text-sm">{item.nature_label}</span>
+                        <span className="text-[#007A86] font-medium text-sm">{item.nature_label}</span>
                       </div>
                       <h3 className="text-lg font-bold text-slate-900">{item.beneficiary_name}</h3>
                       <p className="text-slate-500 text-sm">
@@ -446,10 +446,10 @@ export const HistoricalDeclarationsContent = ({ onNavigateTransparencyHome }) =>
             <div className="p-6 space-y-8">
               <div className="flex justify-between items-start">
                 <div>
-                  <span className="inline-block bg-cyan-50 text-[#0099A7] px-3 py-1 rounded-full text-sm font-bold tracking-wide uppercase mb-2">
+                  <span className="inline-block bg-cyan-50 text-[#007A86] px-3 py-1 rounded-full text-sm font-bold tracking-wide uppercase mb-2">
                     {selectedDeclaration.year}
                   </span>
-                  <p className="text-[#0099A7] font-medium">{selectedDeclaration.nature_label}</p>
+                  <p className="text-[#007A86] font-medium">{selectedDeclaration.nature_label}</p>
                 </div>
                 <div className="text-right">
                   <div className="text-3xl font-black text-slate-900">
@@ -505,7 +505,7 @@ export const HistoricalDeclarationsContent = ({ onNavigateTransparencyHome }) =>
                           href={selectedDeclaration.contact_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-[#0099A7] hover:underline break-all"
+                          className="text-[#007A86] hover:underline break-all"
                         >
                           {selectedDeclaration.contact_url}
                         </a>

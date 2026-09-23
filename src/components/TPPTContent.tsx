@@ -27,6 +27,14 @@ interface PdfExportRuntime {
   pdfMake: any;
 }
 
+// Shared by the on-screen questionnaire and the exported PDF, so the report
+// always records answers against the questions the user actually answered.
+const ELIGIBILITY_QUESTIONS = {
+  venue: 'Is the Event being organised in a clinical environment or in a place suitable for medical procedures?',
+  largerEvent: 'Is the Event taking place around, next to or in connection with a larger Educational Event?',
+  size: 'Does the expected number of attendants per session allow for real hands-on experiences?',
+};
+
 function generatePdfFileName(eventName: string) {
   const sanitizedName = (eventName || 'MedTech_Event')
     .replace(/[^a-zA-Z0-9\s]/g, '')
@@ -65,7 +73,7 @@ async function loadPdfExportRuntime(): Promise<PdfExportRuntime> {
 const typeStyles: Record<SessionType, string> = {
   "General Educational": "bg-neutral-50 text-neutral-600 border-neutral-200",
   "Other": "bg-stone-50 text-stone-600 border-stone-200",
-  "Hands-on": "bg-[#0099A7]/10 text-[#0099A7] border-[#0099A7]/20",
+  "Hands-on": "bg-[#0099A7]/10 text-[#007A86] border-[#0099A7]/20",
   "Streaming": "bg-sky-50 text-sky-700 border-sky-200",
   "Case Study": "bg-indigo-50 text-indigo-700 border-indigo-200"
 };
@@ -88,7 +96,7 @@ function renderHighlightedTitle(title: string, type: SessionType) {
         if (isMatch) {
           let colorClass = "font-bold underline decoration-2 decoration-amber-500 text-amber-600 bg-amber-50/50 px-1 rounded";
           if (type === "Hands-on") {
-            colorClass = "font-bold underline decoration-2 decoration-[#0099A7] text-[#0099A7] bg-[#0099A7]/5 px-1 rounded";
+            colorClass = "font-bold underline decoration-2 decoration-[#0099A7] text-[#007A86] bg-[#0099A7]/5 px-1 rounded";
           } else if (type === "Streaming") {
             colorClass = "font-bold underline decoration-2 decoration-sky-500 text-sky-700 bg-sky-50 px-1 rounded";
           } else if (type === "Case Study") {
@@ -443,9 +451,9 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
           { text: '4. Eligibility Questionnaire', style: 'sectionHeader' },
           {
             ul: [
-              { text: `Venue is clinical environment or simulation setting? \nAnswer: ${qVenue || 'Not Provided'}`, margin: [0, 0, 0, 10] },
-              { text: `Stand-alone event (not part of larger conference)? \nAnswer: ${qStandalone || 'Not Provided'}`, margin: [0, 0, 0, 10] },
-              { text: `Size allows for real hands-on experience? \nAnswer: ${qSize || 'Not Provided'}`, margin: [0, 0, 0, 10] }
+              { text: `${ELIGIBILITY_QUESTIONS.venue} \nAnswer: ${qVenue || 'Not Provided'}`, margin: [0, 0, 0, 10] },
+              { text: `${ELIGIBILITY_QUESTIONS.largerEvent} \nAnswer: ${qStandalone || 'Not Provided'}`, margin: [0, 0, 0, 10] },
+              { text: `${ELIGIBILITY_QUESTIONS.size} \nAnswer: ${qSize || 'Not Provided'}`, margin: [0, 0, 0, 10] }
             ],
             margin: [0, 10, 0, 20]
           },
@@ -630,7 +638,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
             
             <button
               onClick={addSession}
-              className="flex items-center gap-1.5 text-xs font-bold text-[#0099A7] hover:text-[#008692] bg-[#0099A7]/10 px-3 py-1.5 rounded-xl border border-[#0099A7]/20 transition-all cursor-pointer shadow-sm"
+              className="flex items-center gap-1.5 text-xs font-bold text-[#007A86] hover:text-[#005F68] bg-[#0099A7]/10 px-3 py-1.5 rounded-xl border border-[#0099A7]/20 transition-all cursor-pointer shadow-sm"
             >
               <AppIcon name="Plus" size={12} /> Add Session
             </button>
@@ -704,7 +712,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
                            value={session.startTime}
                            onChange={(e) => updateSession(session.id, 'startTime', e.target.value)}
                            aria-label={`Start time for ${session.title}`}
-                           className="w-24 text-xs font-semibold text-gray-700 rounded-lg border border-gray-200 px-2 py-1.5 outline-none focus:border-[#634488] bg-white shadow-inner"
+                           className="w-auto text-xs font-semibold text-gray-700 rounded-lg border border-gray-200 px-2 py-1.5 outline-none focus:border-[#634488] bg-white shadow-inner"
                          />
                          <span className="text-gray-300 text-xs">-</span>
                          <input
@@ -712,7 +720,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
                            value={session.endTime}
                            onChange={(e) => updateSession(session.id, 'endTime', e.target.value)}
                            aria-label={`End time for ${session.title}`}
-                           className="w-24 text-xs font-semibold text-gray-700 rounded-lg border border-gray-200 px-2 py-1.5 outline-none focus:border-[#634488] bg-white shadow-inner"
+                           className="w-auto text-xs font-semibold text-gray-700 rounded-lg border border-gray-200 px-2 py-1.5 outline-none focus:border-[#634488] bg-white shadow-inner"
                          />
                        </div>
                     </div>
@@ -792,7 +800,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
                   <span className="text-2xl font-black text-gray-800">{formatHrs(result.handsOn)}</span>
                   <div className="mt-2 flex items-center gap-1.5">
                     <span className={`px-2 py-0.5 rounded-md text-xs font-extrabold ${
-                      (result.total > 0 && result.handsOn >= result.total / 3) ? "bg-[#634488]/10 text-[#634488] border border-[#634488]/20" : "bg-[#0099A7]/10 text-[#0099A7] border border-[#0099A7]/20"
+                      (result.total > 0 && result.handsOn >= result.total / 3) ? "bg-[#634488]/10 text-[#634488] border border-[#634488]/20" : "bg-[#0099A7]/10 text-[#007A86] border border-[#0099A7]/20"
                     }`}>
                       {result.total > 0 ? Math.round((result.handsOn / result.total) * 100) : 0}%
                     </span>
@@ -809,7 +817,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
                   <span className="text-2xl font-black text-gray-800">{formatHrs(result.practical)}</span>
                   <div className="mt-2 flex items-center gap-1.5">
                     <span className={`px-2 py-0.5 rounded-md text-xs font-extrabold ${
-                      (result.total > 0 && result.practical > result.total / 2) ? "bg-[#634488]/10 text-[#634488] border border-[#634488]/20" : "bg-[#0099A7]/10 text-[#0099A7] border border-[#0099A7]/20"
+                      (result.total > 0 && result.practical > result.total / 2) ? "bg-[#634488]/10 text-[#634488] border border-[#634488]/20" : "bg-[#0099A7]/10 text-[#007A86] border border-[#0099A7]/20"
                     }`}>
                       {result.total > 0 ? Math.round((result.practical / result.total) * 100) : 0}%
                     </span>
@@ -823,7 +831,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
               {!result.passesAgenda && (
                 <div className="flex flex-col gap-3 p-6 bg-slate-50 border border-slate-200 rounded-2xl text-gray-900 shadow-inner animate-fade-in">
                   <div className="flex items-center gap-2 font-bold text-sm sm:text-base text-gray-900">
-                    <div className="text-[#0099A7] shrink-0"><AppIcon name="AlertCircle" size={18} /></div>
+                    <div className="text-[#007A86] shrink-0"><AppIcon name="AlertCircle" size={18} /></div>
                     Agenda Requirements Not Fully Met
                   </div>
                   <div className="text-xs sm:text-sm space-y-2 leading-relaxed text-gray-700">
@@ -850,7 +858,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
                   {/* Q1: Venue */}
                   <div className="bg-white/95 backdrop-blur-sm p-6 rounded-2xl border border-slate-100/80 shadow-sm">
                      <div className="text-xs font-bold text-[#634488] uppercase tracking-wider mb-1.5">1. Venue & Location</div>
-                     <p className="text-sm sm:text-base text-gray-800 font-semibold mb-4 leading-relaxed">Is the Event being organised in a clinical environment or in a place suitable for medical procedures?</p>
+                     <p className="text-sm sm:text-base text-gray-800 font-semibold mb-4 leading-relaxed">{ELIGIBILITY_QUESTIONS.venue}</p>
                      
                      <div className="flex flex-wrap gap-2.5 mb-5">
                         {(["Yes", "No", "I am not sure"] as const).map(opt => (
@@ -876,7 +884,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
                   {/* Q2: Stand-alone event */}
                   <div className="bg-white/95 backdrop-blur-sm p-6 rounded-2xl border border-slate-100/80 shadow-sm">
                      <div className="text-xs font-bold text-[#634488] uppercase tracking-wider mb-1.5">2. Event Scope</div>
-                     <p className="text-sm sm:text-base text-gray-800 font-semibold mb-4 leading-relaxed">Is the Event taking place around, next to or in connection with a larger Educational Event?</p>
+                     <p className="text-sm sm:text-base text-gray-800 font-semibold mb-4 leading-relaxed">{ELIGIBILITY_QUESTIONS.largerEvent}</p>
                      
                      <div className="flex flex-wrap gap-2.5 mb-5">
                         {(["Yes", "No", "I am not sure"] as const).map(opt => (
@@ -902,7 +910,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
                   {/* Q3: Size */}
                   <div className="bg-white/95 backdrop-blur-sm p-6 rounded-2xl border border-slate-100/80 shadow-sm">
                      <div className="text-xs font-bold text-[#634488] uppercase tracking-wider mb-1.5">3. Size & Engagement</div>
-                     <p className="text-sm sm:text-base text-gray-800 font-semibold mb-4 leading-relaxed">Does the expected number of attendants per session allow for real hands-on experiences?</p>
+                     <p className="text-sm sm:text-base text-gray-800 font-semibold mb-4 leading-relaxed">{ELIGIBILITY_QUESTIONS.size}</p>
                      
                      <div className="flex flex-wrap gap-2.5 mb-5">
                         {(["Yes", "No", "I am not sure"] as const).map(opt => (
@@ -931,7 +939,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
               {/* TPOEE Final Outcome */}
               {finalOutcome === 'TPOEE' && (
                 <div className="mt-4 p-8 rounded-2xl border border-[#0099A7]/30 bg-[#0099A7]/5 shadow-[0_8px_30px_rgba(0,153,167,0.06)] text-center animate-fade-in">
-                  <h3 className="text-xl md:text-2xl font-extrabold tracking-tight leading-tight text-[#0099A7]">
+                  <h3 className="text-xl md:text-2xl font-extrabold tracking-tight leading-tight text-[#007A86]">
                     Would NOT in principle qualify as Third Party Procedure Training; it may qualify as a Third Party Organised Educational Event
                   </h3>
                   <p className="mt-3 text-xs text-slate-500 font-light max-w-lg mx-auto leading-relaxed">Please note: This outcome is a preliminary assessment based on the provided inputs and does not constitute a formal certification. Please double-check all requirements.</p>
@@ -951,7 +959,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
               {/* MIXED Final Outcome */}
               {finalOutcome === 'MIXED' && (
                 <div className="mt-4 p-8 rounded-2xl border border-[#0099A7]/30 bg-[#0099A7]/5 shadow-[0_8px_30px_rgba(0,153,167,0.06)] text-center animate-fade-in">
-                  <h3 className="text-xl md:text-2xl font-extrabold tracking-tight leading-tight text-[#0099A7]">
+                  <h3 className="text-xl md:text-2xl font-extrabold tracking-tight leading-tight text-[#007A86]">
                     Would NOT in principle qualify as Third Party Procedure Training; it may qualify as a Third Party Organised Educational Event
                   </h3>
                   <p className="mt-3 text-xs text-slate-500/80 font-light max-w-lg mx-auto leading-relaxed">Please double check the different elements. This is a preliminary assessment based on the provided inputs and does not constitute a formal certification.</p>
@@ -1004,7 +1012,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
             </div>
 
             <p id="tppt-parse-warning-description" className="text-sm text-gray-600 leading-relaxed">
-              The TPPT Checker pre-assigns types of sessions based on keywords. The user must verify every single one of them, miss-asignations happen, and you will rely on an assessment that has used pre-assigned session types at your own risk.
+              The TPPT Checker pre-assigns types of sessions based on keywords. The user must verify every single one of them, misassignments happen, and you will rely on an assessment that has used pre-assigned session types at your own risk.
             </p>
 
             <div className="flex justify-end mt-1">
@@ -1054,7 +1062,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
                 placeholder="e.g. 3rd Annual Endoscopy Workshop"
                 className="w-full text-sm font-semibold text-gray-800 border border-gray-200 bg-gray-50 px-4 py-3 rounded-xl outline-none focus:border-[#634488] focus:bg-white focus:ring-2 focus:ring-[#634488]/15 transition-all shadow-inner"
               />
-              <p className="text-[11px] text-[#0099A7] font-light leading-relaxed">
+              <p className="text-[11px] text-[#007A86] font-light leading-relaxed">
                 💡 We extracted this suggestion from the top of your parsed agenda. Please correct it if needed to ensure the report is accurate.
               </p>
             </div>
@@ -1069,7 +1077,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
             {exportDownloadUrl && (
               <div className="rounded-xl border border-[#0099A7]/25 bg-[#0099A7]/5 px-4 py-3 text-xs text-slate-700 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div className="flex items-start gap-2">
-                  <AppIcon name="CheckCircle" size={16} className="shrink-0 mt-0.5 text-[#0099A7]" />
+                  <AppIcon name="CheckCircle" size={16} className="shrink-0 mt-0.5 text-[#007A86]" />
                   <span>The PDF is ready. If the download did not start automatically, use the link.</span>
                 </div>
                 <a

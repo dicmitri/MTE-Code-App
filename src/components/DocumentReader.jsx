@@ -23,8 +23,6 @@ export const DocumentReader = ({
   glossaryMap,
   handleTermClick,
   scrollRef,
-  showIosPrompt,
-  setShowIosPrompt,
   bookmarksControls,
   bookmarkSection = 'code',
   bookmarkDocumentId = null,
@@ -111,7 +109,7 @@ export const DocumentReader = ({
           <div className="flex-1 min-w-0 px-4 md:px-10 max-w-5xl mx-auto w-full">
             <div
               id="summary-top"
-              className="no-print mb-6 flex items-center text-xs font-bold text-[#0099A7] uppercase tracking-widest gap-2 scroll-mt-24"
+              className="no-print mb-6 flex items-center text-xs font-bold text-[#007A86] uppercase tracking-widest gap-2 scroll-mt-24"
             >
               <button onClick={onNavigateHome} className="hover:text-purple-700">
                 {homeLabel}
@@ -139,7 +137,7 @@ export const DocumentReader = ({
                     href={sourceDocumentUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1 text-xs font-bold text-[#0099A7] hover:text-[#7654A1]"
+                    className="inline-flex items-center gap-1 text-xs font-bold text-[#007A86] hover:text-[#7654A1]"
                   >
                     <AppIcon name="ExternalLink" size={14} />
                     Original PDF
@@ -246,24 +244,6 @@ export const DocumentReader = ({
               </div>
             )}
 
-            {showIosPrompt && (
-              <div className="fixed inset-0 bg-black/50 z-[100] flex items-end sm:items-center justify-center p-4">
-                <div className="bg-white p-6 border border-gray-200 rounded-xl shadow-2xl w-full max-w-sm text-center transform transition-all">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Install on iOS</h3>
-                  <p className="text-base text-gray-600 mb-6">
-                    To install this app, tap the <strong className="text-blue-500">Share</strong>{' '}
-                    icon at the bottom of Safari, then scroll down and tap <br />
-                    <strong>Add to Home Screen</strong>.
-                  </p>
-                  <button
-                    onClick={() => setShowIosPrompt(false)}
-                    className="w-full px-6 py-3 bg-gray-100 text-gray-800 rounded-lg text-base font-bold hover:bg-gray-200 transition-colors"
-                  >
-                    Got it, close
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
 
           {showFullText && activeContent?.sections?.length > 0 && (

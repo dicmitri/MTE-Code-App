@@ -111,10 +111,11 @@ export const QuizConfig = ({ onStart }) => {
         </div>
         <div className="p-6">
           <div className="flex justify-between items-center mb-4">
-            <span className="text-gray-600 font-medium">How many questions?</span>
+            <label htmlFor="quiz-question-count" className="text-gray-600 font-medium">How many questions?</label>
             <span className="text-2xl font-bold text-pink-600">{questionLimit}</span>
           </div>
           <input
+            id="quiz-question-count"
             type="range"
             min="1"
             max={selectedQuestionCount || 1}

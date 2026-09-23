@@ -272,7 +272,7 @@ export const FullTextSection = ({
                                 ref={citeTriggerRef}
                                 type="button"
                                 onClick={(e) => { e.stopPropagation(); setCiteMenuOpen(!citeMenuOpen); }}
-                                className="text-sm text-[#0099A7] hover:text-[#007A86] border border-transparent hover:border-cyan-100 rounded px-2 py-1 flex items-center gap-1 font-medium transition-colors"
+                                className="text-sm text-[#007A86] hover:text-[#005F68] border border-transparent hover:border-cyan-100 rounded px-2 py-1 flex items-center gap-1 font-medium transition-colors"
                                 title="Copy citation or reference link for this section"
                                 aria-expanded={citeMenuOpen}
                                 aria-controls={citeMenuOpen ? citeMenuId : undefined}
@@ -292,13 +292,13 @@ export const FullTextSection = ({
                                     <button
                                         type="button"
                                         onClick={() => copyCitationFormat('formal')}
-                                        className="w-full text-left px-2.5 py-1.5 text-xs text-gray-700 hover:bg-cyan-50 hover:text-[#0099A7] rounded-lg transition-colors flex items-center justify-between group"
+                                        className="w-full text-left px-2.5 py-1.5 text-xs text-gray-700 hover:bg-cyan-50 hover:text-[#007A86] rounded-lg transition-colors flex items-center justify-between group"
                                     >
                                         <div>
                                             <div className="font-semibold">Formal Citation</div>
                                             <div className="text-[10px] text-gray-400 group-hover:text-cyan-700">Includes date & full title</div>
                                         </div>
-                                        <AppIcon name="Copy" size={14} className="text-gray-400 group-hover:text-[#0099A7]" />
+                                        <AppIcon name="Copy" size={14} className="text-gray-400 group-hover:text-[#007A86]" />
                                     </button>
                                     <button
                                         type="button"
@@ -386,7 +386,7 @@ export const FullTextSection = ({
                     {processedQas.map((qa, idx) => (
                         <div key={idx} className="bg-gray-50 p-4 rounded-lg border border-gray-100 print:bg-transparent print:border-none print:p-0 print:my-4">
                             {qa.label && (
-                                <p className="text-xs font-bold text-[#0099A7] underline underline-offset-2 mb-2 reader-content">
+                                <p className="text-xs font-bold text-[#007A86] underline underline-offset-2 mb-2 reader-content">
                                     {qa.label}
                                 </p>
                             )}

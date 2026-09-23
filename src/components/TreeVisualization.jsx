@@ -226,7 +226,7 @@ export const TreeVisualization = ({ treeId, highlightedPath = [], onClose }) => 
   <div class="legend">
     ${Object.entries(OUTCOME_COLORS).map(([outcome, colors]) =>
       `<span class="legend-item" style="background:${colors.bg};border-color:${colors.border};color:${colors.text}">
-        <span class="legend-dot" style="background:${colors.border}"></span>${outcome.replace('-', ' ')}
+        <span class="legend-dot" style="background:${colors.border}"></span>${outcome.replaceAll('-', ' ')}
       </span>`
     ).join('')}
   </div>
@@ -291,7 +291,7 @@ export const TreeVisualization = ({ treeId, highlightedPath = [], onClose }) => 
               style={{ backgroundColor: colors.bg, borderColor: colors.border, color: colors.text }}
             >
               <div className="w-2 h-2 rounded-full" style={{ backgroundColor: colors.border }} />
-              {outcome.replace('-', ' ')}
+              {outcome.replaceAll('-', ' ')}
             </div>
           ))}
         </div>
@@ -380,7 +380,7 @@ export const TreeVisualization = ({ treeId, highlightedPath = [], onClose }) => 
                     className={`transition-all ${isHL ? 'ring-2 ring-amber-400 ring-offset-2' : ''}`}
                   >
                     <div style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.7, marginBottom: '4px' }}>
-                      {node.outcome?.replace('-', ' ')}
+                      {node.outcome?.replaceAll('-', ' ')}
                     </div>
                     <p style={{ fontSize: '10px', fontWeight: 500, lineHeight: 1.5 }}>{node.text}</p>
                   </div>

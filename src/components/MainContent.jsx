@@ -18,8 +18,6 @@ export const MainContent = ({
   glossaryMap,
   handleTermClick,
   scrollRef,
-  showIosPrompt,
-  setShowIosPrompt,
   bookmarksControls,
   searchFilters,
   onNavigateTree,
@@ -71,8 +69,6 @@ export const MainContent = ({
       glossaryMap={glossaryMap}
       handleTermClick={handleTermClick}
       scrollRef={scrollRef}
-      showIosPrompt={showIosPrompt}
-      setShowIosPrompt={setShowIosPrompt}
       bookmarksControls={bookmarksControls}
       searchFilters={searchFilters}
       renderBeforeSections={renderRelatedTrees}

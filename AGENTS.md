@@ -64,7 +64,7 @@ The project is structured around a centralized state architecture in `App.jsx`, 
 - **Tailwind CSS**: Use utility classes for all component styling. Avoid creating new `.css` files.
 - **Brand Colors**: 
   - Purple (`#7654A1`): Primary actions, active states, bookmarks.
-  - Teal (`#0099A7`): Code and Transparency reader accent, links, citations.
+  - Teal (`#0099A7`): Code and Transparency reader accent, links, citations. For teal *text*, use `#007A86`: `#0099A7` is below the 4.5:1 AA contrast minimum on white, so keep it for fills, borders and icons.
   - Amber: Decision Tree warnings and callouts.
 - **Print Optimization**: All new UI elements must be evaluated for their appearance in Print Mode (managed via `@media print` in `index.css`). Use the `.no-print` class to hide interactive elements.
 

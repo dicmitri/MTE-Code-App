@@ -21,7 +21,7 @@ export const LandingPage = ({ onSelectChapter }) => (
                     onClick={() => onSelectChapter(item.id)}
                     className="chapter-card bg-white p-6 rounded-2xl border border-gray-200 shadow-sm text-left transition-all flex flex-col h-full active:scale-95 group"
                 >
-                    <div className="p-3 bg-purple-50 rounded-xl w-fit mb-4 text-[#0099A7] group-hover:bg-[#0099A7] group-hover:text-white transition-colors">
+                    <div className="p-3 bg-purple-50 rounded-xl w-fit mb-4 text-[#007A86] group-hover:bg-[#0099A7] group-hover:text-white transition-colors">
                         <AppIcon name={item.icon} size={28} />
                     </div>
                     <h3 className="text-xl font-bold text-gray-900 mb-2">{item.title}</h3>

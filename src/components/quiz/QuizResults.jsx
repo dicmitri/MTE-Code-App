@@ -10,23 +10,29 @@ export const QuizResults = ({ results, onRestart, onExit, config }) => {
 
   let message = '';
   let color = '';
+  let badgeColor = '';
   let icon = '';
 
+  // Full class names only: Tailwind cannot generate classes built at runtime.
   if (percentage >= 90) {
     message = 'Excellent!';
     color = 'text-green-600';
+    badgeColor = 'bg-green-100';
     icon = 'Award';
   } else if (percentage >= 70) {
     message = 'Great Job!';
     color = 'text-blue-600';
+    badgeColor = 'bg-blue-100';
     icon = 'ThumbsUp';
   } else if (percentage >= 50) {
     message = 'Good Effort!';
-    color = 'text-yellow-600';
+    color = 'text-amber-700';
+    badgeColor = 'bg-amber-100';
     icon = 'Star';
   } else {
     message = 'Keep Learning!';
     color = 'text-red-600';
+    badgeColor = 'bg-red-100';
     icon = 'BookOpen';
   }
 
@@ -68,7 +74,7 @@ export const QuizResults = ({ results, onRestart, onExit, config }) => {
         {/* Score Header */}
         <div className="p-8 sm:p-12 text-center border-b border-gray-100 bg-gray-50/50">
           <div className="mb-6 flex justify-center">
-            <div className={`w-20 h-20 rounded-full flex items-center justify-center ${color.replace('text-', 'bg-').replace('600', '100')} ${color}`}>
+            <div className={`w-20 h-20 rounded-full flex items-center justify-center ${badgeColor} ${color}`}>
               <AppIcon name={icon} size={40} />
             </div>
           </div>

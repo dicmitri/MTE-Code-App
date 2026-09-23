@@ -57,8 +57,6 @@ export const TransparencyContent = ({
   glossaryMap,
   handleTermClick,
   scrollRef,
-  showIosPrompt,
-  setShowIosPrompt,
   bookmarksControls,
   searchFilters,
 }) => {
@@ -144,8 +142,6 @@ export const TransparencyContent = ({
       glossaryMap={glossaryMap}
       handleTermClick={handleTermClick}
       scrollRef={scrollRef}
-      showIosPrompt={showIosPrompt}
-      setShowIosPrompt={setShowIosPrompt}
       bookmarksControls={bookmarksControls}
       bookmarkSection="transparency"
       bookmarkDocumentId={activeDocumentId}
