@@ -150,7 +150,10 @@ def build():
         "-- contact_url) are taken as-is from the rehearsal dataset for",
         "-- realistic filtering/search behavior during local testing only.",
         "-- Regenerate with scripts/build-sanitized-d1-sample.py.",
-        "-- No explicit BEGIN TRANSACTION/COMMIT: D1 rejects raw SQL",
+        # Don't spell out the transaction keywords in this header: wrangler's
+        # file check matches them even inside SQL comments and then refuses to
+        # import the whole file.
+        "-- No explicit transaction statements: D1 rejects raw SQL",
         "-- transaction control statements over `wrangler d1 execute --remote`",
         "-- (it manages transactions itself); the local emulator tolerates them,",
         "-- which is why this only surfaces against the real API.",

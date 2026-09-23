@@ -608,7 +608,7 @@ export const Sidebar = ({
                       <span
                         className={`shrink-0 ${
                           activeSection === 'code' && activeId === item.id
-                            ? 'text-[#0099A7]'
+                            ? 'text-white'
                             : 'text-gray-400'
                         }`}
                       >

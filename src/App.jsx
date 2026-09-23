@@ -8,6 +8,7 @@ import { usePWAInstall } from './hooks/usePWAInstall';
 import { useAppRouting } from './hooks/useAppRouting';
 import { useBookmarks } from './hooks/useBookmarks';
 import { useRecentHistory } from './hooks/useRecentHistory';
+import { useReaderSettings } from './hooks/useReaderSettings';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { MainContent } from './components/MainContent';
@@ -16,12 +17,21 @@ import { HubPage } from './components/HubPage';
 import { TreeContent } from './components/TreeContent';
 import { QuizContent } from './components/quiz/QuizContent';
 import { TransparencyContent } from './components/TransparencyContent';
+import { SectionLoadError } from './components/SectionLoadError';
 import { getTransparencyUnit } from './data/transparency/transparencyData';
 
 const TPPTContent = lazy(() =>
-  import('./components/TPPTContent').then((module) => ({
-    default: module.TPPTContent,
-  }))
+  import('./components/TPPTContent')
+    .then((module) => ({
+      default: module.TPPTContent,
+    }))
+    // A failed chunk fetch (offline, or removed by a newer deploy) would
+    // otherwise reject inside Suspense and blank the whole app.
+    .catch(() => ({
+      default: ({ onGoHome }) => (
+        <SectionLoadError sectionName="TPPT Checker" onGoHome={onGoHome} />
+      ),
+    }))
 );
 
 if (typeof FULL_CODE_DATA !== 'undefined') {
@@ -43,9 +53,14 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearch = useDebounce(searchTerm, 300);
   const [readerOpen, setReaderOpen] = useState(false);
-  const [readerSize, setReaderSize] = useState('1rem');
-  const [readerLine, setReaderLine] = useState('1.65');
-  const [readerSpace, setReaderSpace] = useState('0.75rem');
+  const {
+    readerSize,
+    setReaderSize,
+    readerLine,
+    setReaderLine,
+    readerSpace,
+    setReaderSpace,
+  } = useReaderSettings();
   const [glossaryMap, setGlossaryMap] = useState({});
   const [activeDefinition, setActiveDefinition] = useState(null);
   const scrollRef = useRef(null);
@@ -242,8 +257,6 @@ const App = () => {
             glossaryMap={glossaryMap}
             handleTermClick={handleTermClick}
             scrollRef={scrollRef}
-            showIosPrompt={showIosPrompt}
-            setShowIosPrompt={setShowIosPrompt}
             bookmarksControls={{ toggleBookmark, isBookmarked }}
             searchFilters={searchFilters}
             onNavigateTree={handleNavigateTree}
@@ -262,8 +275,6 @@ const App = () => {
             glossaryMap={glossaryMap}
             handleTermClick={handleTermClick}
             scrollRef={scrollRef}
-            showIosPrompt={showIosPrompt}
-            setShowIosPrompt={setShowIosPrompt}
             bookmarksControls={{ toggleBookmark, isBookmarked }}
             searchFilters={searchFilters}
           />

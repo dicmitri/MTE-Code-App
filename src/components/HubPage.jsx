@@ -56,7 +56,7 @@ export const HubPage = ({ onSelectSection }) => (
 
           <div
             className="flex items-center text-xs font-bold uppercase tracking-wider transition-colors duration-300"
-            style={{ color: section.color }}
+            style={{ color: section.textColor || section.color }}
           >
             Open
             <AppIcon

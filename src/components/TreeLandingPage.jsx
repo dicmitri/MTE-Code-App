@@ -5,7 +5,7 @@ import { filterDecisionTrees } from '../utils/treeSearchUtils';
 
 const CATEGORY_CONFIG = {
   scope:      { label: 'Scope & Applicability', color: '#e11d48', icon: 'Compass' },
-  events:     { label: 'Events',                color: '#0099A7', icon: 'Globe' },
+  events:     { label: 'Events',                color: '#0099A7', textColor: '#007A86', icon: 'Globe' },
   grants:     { label: 'Grants and Donations',  color: '#e67e22', icon: 'Star' },
   consulting: { label: 'Consulting Agreements', color: '#7654A1', icon: 'FileText' },
   items:      { label: 'Educational & Promotional Items', color: '#3b82f6', icon: 'Gift' },
@@ -114,7 +114,7 @@ export const TreeLandingPage = ({ onSelectTree }) => {
                       <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
                         {tree.description}
                       </p>
-                      <div className="mt-3 flex items-center text-xs font-bold uppercase tracking-wider" style={{ color: config.color }}>
+                      <div className="mt-3 flex items-center text-xs font-bold uppercase tracking-wider" style={{ color: config.textColor || config.color }}>
                         Start
                         <AppIcon name="ChevronRight" size={12} className="ml-1 transition-transform group-hover:translate-x-1" />
                       </div>

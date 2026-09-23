@@ -10,6 +10,7 @@ export const SECTIONS = [
     description: 'Browse chapters, sections, Q&As, and the full legal text of the MedTech Europe Code.',
     icon: 'FileText',
     color: '#0099A7',
+    textColor: '#007A86', // brand teal is too light for small text
     available: true,
   },
   {

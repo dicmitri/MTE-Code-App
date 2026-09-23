@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AppIcon } from './AppIcons';
 import { Logo } from './Logo';
 import { SuggestionModal } from './SuggestionModal';
+import {
+  READER_FONT_SIZES,
+  READER_LINE_HEIGHTS,
+  READER_PARAGRAPH_SPACINGS,
+} from '../config/readerSettings';
 
 export const Header = ({
   activeId,
@@ -28,6 +33,32 @@ export const Header = ({
   showQAControl = true,
 }) => {
   const [suggestionModalOpen, setSuggestionModalOpen] = useState(false);
+  const readerMenuRef = useRef(null);
+  const readerTriggerRef = useRef(null);
+
+  useEffect(() => {
+    if (!readerOpen) return undefined;
+
+    const handlePointerDown = (event) => {
+      if (!readerMenuRef.current?.contains(event.target)) {
+        setReaderOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event) => {
+      if (event.key !== 'Escape') return;
+      event.preventDefault();
+      setReaderOpen(false);
+      readerTriggerRef.current?.focus();
+    };
+
+    document.addEventListener('pointerdown', handlePointerDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [readerOpen, setReaderOpen]);
 
   return (
     <>
@@ -121,93 +152,60 @@ export const Header = ({
 
             <div className="w-px h-4 bg-gray-300 mx-0.5"></div>
 
-            <div className="relative">
+            <div ref={readerMenuRef} className="relative">
               <button
+                ref={readerTriggerRef}
+                type="button"
                 onClick={() => setReaderOpen((v) => !v)}
                 className="px-2 py-1 md:px-3 md:py-1.5 text-xs font-bold rounded-md md:rounded-lg transition-all flex items-center gap-1 md:gap-2 h-full bg-white text-[#7654A1] shadow-sm hover:opacity-80"
                 title="Reading settings"
+                aria-label="Reading settings"
                 aria-expanded={readerOpen}
+                aria-controls={readerOpen ? 'reader-settings-panel' : undefined}
               >
                 Aa
               </button>
 
               {readerOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-3 animate-fade-in z-50">
-                  <div className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">
-                    Font size
-                  </div>
-                  <div className="flex gap-2 mb-3">
-                    {[
-                      { label: 'A-', value: '0.95rem' },
-                      { label: 'A', value: '1rem' },
-                      { label: 'A+', value: '1.125rem' },
-                      { label: 'A++', value: '1.25rem' },
-                    ].map((s) => (
-                      <button
-                        key={s.value}
-                        onClick={() => setReaderSize(s.value)}
-                        className={`px-2 py-1 rounded border text-xs ${
-                          readerSize === s.value
-                            ? 'text-teal-700'
-                            : 'text-gray-700'
-                        }`}
-                        style={{ borderColor: 'var(--color-teal)' }}
-                        aria-label={`Set font size ${s.label}`}
-                      >
-                        {s.label}
-                      </button>
-                    ))}
-                  </div>
-
-                  <div className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">
-                    Line spacing
-                  </div>
-                  <div className="flex gap-2 mb-3">
-                    {[
-                      { label: 'Tight', value: '1.50' },
-                      { label: 'Normal', value: '1.65' },
-                      { label: 'Comfort', value: '1.80' },
-                    ].map((l) => (
-                      <button
-                        key={l.value}
-                        onClick={() => setReaderLine(l.value)}
-                        className={`px-2 py-1 rounded border text-xs ${
-                          readerLine === l.value
-                            ? 'text-purple-700'
-                            : 'text-gray-700'
-                        }`}
-                        style={{ borderColor: 'var(--color-purple)' }}
-                        aria-label={`Set line spacing ${l.label}`}
-                      >
-                        {l.label}
-                      </button>
-                    ))}
-                  </div>
-
-                  <div className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">
-                    Paragraph spacing
-                  </div>
-                  <div className="flex gap-2">
-                    {[
-                      { label: '–', value: '0.5rem' },
-                      { label: '•', value: '0.75rem' },
-                      { label: '+', value: '1rem' },
-                    ].map((sp) => (
-                      <button
-                        key={sp.value}
-                        onClick={() => setReaderSpace(sp.value)}
-                        className={`px-2 py-1 rounded border text-xs ${
-                          readerSpace === sp.value
-                            ? 'text-gray-900'
-                            : 'text-gray-700'
-                        }`}
-                        style={{ borderColor: '#cbd5e1' }}
-                        aria-label={`Paragraph spacing ${sp.label}`}
-                      >
-                        {sp.label}
-                      </button>
-                    ))}
-                  </div>
+                <div
+                  id="reader-settings-panel"
+                  role="group"
+                  aria-label="Reading settings"
+                  className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-3 animate-fade-in z-50"
+                >
+                  {[
+                    { heading: 'Font size', options: READER_FONT_SIZES, value: readerSize, onChange: setReaderSize },
+                    { heading: 'Line spacing', options: READER_LINE_HEIGHTS, value: readerLine, onChange: setReaderLine },
+                    { heading: 'Paragraph spacing', options: READER_PARAGRAPH_SPACINGS, value: readerSpace, onChange: setReaderSpace },
+                  ].map((setting, index, settings) => (
+                    <div key={setting.heading}>
+                      <div className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">
+                        {setting.heading}
+                      </div>
+                      <div className={`flex gap-2 ${index < settings.length - 1 ? 'mb-3' : ''}`}>
+                        {setting.options.map((option) => {
+                          const selected = setting.value === option.value;
+                          return (
+                            <button
+                              key={option.value}
+                              type="button"
+                              onClick={() => setting.onChange(option.value)}
+                              className={`px-2 py-1 rounded border text-xs font-semibold transition-colors ${
+                                selected
+                                  ? 'bg-[#7654A1] border-[#7654A1] text-white'
+                                  : 'bg-white border-gray-300 text-gray-700 hover:border-[#7654A1] hover:text-[#7654A1]'
+                              }`}
+                              aria-pressed={selected}
+                              aria-label={`${setting.heading}: ${option.name}`}
+                              title={option.name}
+                            >
+                              {option.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>

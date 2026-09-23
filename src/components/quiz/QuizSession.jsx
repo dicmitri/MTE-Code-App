@@ -110,13 +110,13 @@ export const QuizSession = ({ questions, onComplete, onExit }) => {
                     </span>
                   </div>
                   {hasSubmitted && opt.isCorrect && (
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 text-green-500">
-                      <AppIcon name="CheckCircle" size={24} fill="currentColor" className="text-white" />
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 text-green-600">
+                      <AppIcon name="CheckCircle" size={24} />
                     </div>
                   )}
                   {hasSubmitted && isSelected && !opt.isCorrect && (
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 text-red-500">
-                      <AppIcon name="XCircle" size={24} fill="currentColor" className="text-white" />
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 text-red-600">
+                      <AppIcon name="XCircle" size={24} />
                     </div>
                   )}
                 </button>

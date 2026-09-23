@@ -5,7 +5,7 @@ export const TransparencyLandingPage = ({ documents, onOpenDocument }) => (
   <main className="flex-1 overflow-y-auto bg-slate-50/60 custom-scrollbar h-full">
     <div className="animate-fade-in py-12 px-4 max-w-5xl mx-auto pb-24">
       <div className="mb-12">
-        <div className="inline-flex items-center gap-2 text-[#0099A7] text-xs font-bold uppercase tracking-[0.18em] mb-4">
+        <div className="inline-flex items-center gap-2 text-[#007A86] text-xs font-bold uppercase tracking-[0.18em] mb-4">
           <AppIcon name="Eye" size={18} />
           Transparency
         </div>
@@ -26,7 +26,7 @@ export const TransparencyLandingPage = ({ documents, onOpenDocument }) => (
             className="group text-left bg-white rounded-2xl border border-slate-200 shadow-sm p-7 transition-all hover:border-[#0099A7] hover:shadow-md active:scale-[0.99]"
           >
             <span className="flex items-start justify-between gap-4">
-              <span className="p-3 rounded-xl bg-cyan-50 text-[#0099A7] transition-colors group-hover:bg-[#0099A7] group-hover:text-white">
+              <span className="p-3 rounded-xl bg-cyan-50 text-[#007A86] transition-colors group-hover:bg-[#0099A7] group-hover:text-white">
                 <AppIcon name={document.icon || 'FileText'} size={30} />
               </span>
               {document.publicationDate && (
@@ -70,14 +70,14 @@ export const TransparencyDocumentLandingPage = ({
       <button
         type="button"
         onClick={onBack}
-        className="no-print inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[#0099A7] hover:text-[#7654A1] mb-6"
+        className="no-print inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[#007A86] hover:text-[#7654A1] mb-6"
       >
         <AppIcon name="ChevronLeft" size={14} />
         Transparency
       </button>
       <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#0099A7] mb-3">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#007A86] mb-3">
             {document.eyebrow || 'MedTech Europe Code of Ethical Business Practice'}
           </p>
           <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">
@@ -107,7 +107,7 @@ export const TransparencyDocumentLandingPage = ({
           onClick={() => onSelectUnit(unit.id)}
           className="chapter-card bg-white p-6 rounded-2xl border border-gray-200 shadow-sm text-left transition-all flex flex-col h-full active:scale-95 group"
         >
-          <span className="p-3 bg-cyan-50 rounded-xl w-fit mb-4 text-[#0099A7] group-hover:bg-[#0099A7] group-hover:text-white transition-colors">
+          <span className="p-3 bg-cyan-50 rounded-xl w-fit mb-4 text-[#007A86] group-hover:bg-[#0099A7] group-hover:text-white transition-colors">
             <AppIcon name={unit.icon || 'FileText'} size={26} />
           </span>
           <span className="text-lg font-bold text-gray-900 mb-2">{unit.title}</span>

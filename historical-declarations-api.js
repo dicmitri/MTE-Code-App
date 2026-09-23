@@ -43,7 +43,7 @@ async function handleMetadata(env) {
 }
 
 async function handleSearch(url, env) {
-  const q = url.searchParams.get('q');
+  const q = url.searchParams.get('q')?.trim();
   const year = parseIntOrNull(url.searchParams.get('year'));
   const country = url.searchParams.get('country');
   const companyCountry = url.searchParams.get('company_country');
@@ -62,7 +62,11 @@ async function handleSearch(url, env) {
   }
 
   const pageNum = Math.max(parseIntOrNull(url.searchParams.get('page')) ?? 1, 1);
-  const limitNum = Math.min(parseIntOrNull(url.searchParams.get('limit')) ?? PAGE_SIZE_DEFAULT, PAGE_SIZE_MAX);
+  // Clamp both ends: SQLite treats a negative LIMIT as "no limit".
+  const limitNum = Math.min(
+    Math.max(parseIntOrNull(url.searchParams.get('limit')) ?? PAGE_SIZE_DEFAULT, 1),
+    PAGE_SIZE_MAX,
+  );
   const offset = (pageNum - 1) * limitNum;
 
   // Anti-scraping: cap total accessible offset per query. Narrower filters
@@ -79,8 +83,11 @@ async function handleSearch(url, env) {
   const params = [];
 
   if (q) {
-    query += ' AND (company_name LIKE ? OR beneficiary_name LIKE ?)';
-    params.push(`%${q}%`, `%${q}%`);
+    // Match the search text literally. "%" and "_" are LIKE wildcards, so a bare
+    // "%" would otherwise count as a filter and match every row.
+    const pattern = `%${q.replace(/[!%_]/g, '!$&')}%`;
+    query += " AND (company_name LIKE ? ESCAPE '!' OR beneficiary_name LIKE ? ESCAPE '!')";
+    params.push(pattern, pattern);
   }
   if (year) {
     query += ' AND year = ?';
@@ -167,7 +174,14 @@ export async function handleHistoricalDeclarationsRequest(request, env) {
     return handleSearch(url, env);
   }
   if (path) {
-    return handleDetail(decodeURIComponent(path), env);
+    let id;
+    try {
+      id = decodeURIComponent(path);
+    } catch {
+      // Malformed percent-encoding cannot name a real declaration.
+      return jsonResponse({ error: 'Declaration not found' }, { status: 404 });
+    }
+    return handleDetail(id, env);
   }
 
   return jsonResponse({ error: 'Not found' }, { status: 404 });

@@ -31,7 +31,7 @@ export const TableOfContents = ({ sections, showSummary }) => {
 
   return (
     <div className="space-y-4 font-sans no-print opacity-0 animate-fade-in" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
-      <h2 className="text-[10px] font-bold text-[#0099A7] uppercase tracking-widest mb-4">On This Page</h2>
+      <h2 className="text-[10px] font-bold text-[#007A86] uppercase tracking-widest mb-4">On This Page</h2>
       <ul className="space-y-3 pl-2 border-l-2 border-gray-100">
         {showSummary && (
           <li>
@@ -43,7 +43,7 @@ export const TableOfContents = ({ sections, showSummary }) => {
               }}
               className={`block pl-4 text-xs leading-relaxed transition-all text-left ${
                 activeSection === 'summary-top' || !activeSection
-                  ? 'text-[#0099A7] font-bold border-l-2 border-[#0099A7] -ml-[2px]'
+                  ? 'text-[#007A86] font-bold border-l-2 border-[#0099A7] -ml-[2px]'
                   : 'text-gray-500 hover:text-gray-900 border-l-2 border-transparent -ml-[2px]'
               }`}
             >
@@ -60,7 +60,7 @@ export const TableOfContents = ({ sections, showSummary }) => {
               }}
               className={`block pl-4 text-xs leading-relaxed transition-all text-left ${
                 activeSection === s.computedId
-                  ? 'text-[#0099A7] font-bold border-l-2 border-[#0099A7] -ml-[2px]'
+                  ? 'text-[#007A86] font-bold border-l-2 border-[#0099A7] -ml-[2px]'
                   : 'text-gray-500 hover:text-gray-900 border-l-2 border-transparent -ml-[2px]'
               }`}
             >
