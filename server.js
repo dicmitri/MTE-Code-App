@@ -159,10 +159,12 @@ export default {
       return env.ASSETS.fetch(new Request(new URL('/admin/index.html', request.url), request));
     }
 
-    // For any other SPA route, serve the main index.html
+    // For any other SPA route, serve the app shell. Request "/" rather than
+    // "/index.html": the assets binding answers /index.html with a 307 to "/",
+    // which would send every deep link to the home page.
     let assetReq = request;
     if (!url.pathname.includes('.')) {
-      assetReq = new Request(new URL('/index.html', request.url), request);
+      assetReq = new Request(new URL('/', request.url), request);
     }
 
     return env.ASSETS.fetch(assetReq);

@@ -84,9 +84,9 @@ Keeping URL construction in these files prevents individual components from inve
 A fresh request for a nested URL such as `/code/ch1` or
 `/transparency/disclosure-guidelines/dg-chapter-1` must return the React app's
 `index.html`; otherwise direct links and browser refreshes will produce a server
-404.
+404 or a redirect to the home page.
 
-The current Cloudflare Worker in `server.js` already provides this fallback for extensionless app paths after handling its reserved server routes. If the app is moved to another host, configure that host with the equivalent single-page-app fallback before deployment.
+The current Cloudflare Worker in `server.js` provides this fallback for extensionless app paths after handling its reserved server routes. It requests `/` from the static-assets binding, not `/index.html`, because the binding redirects `/index.html` to `/`. That redirect sends every deep link to the home page. `tests/serverSpaFallback.test.mjs` guards this. If the app is moved to another host, configure that host with the equivalent single-page-app fallback before deployment.
 
 ## Verification
 
@@ -108,6 +108,6 @@ Before a release that changes navigation or identifiers, also check manually:
    and an exact section link. Use Back/Forward and refresh the nested unit URL.
 5. Open one legacy chapter or section hash and confirm it changes to the canonical URL.
 6. Open and refresh a decision-tree URL, a shared Quiz URL, and `/tppt`.
-7. Refresh a nested chapter URL in the production preview or deployed app to confirm the hosting fallback works.
+7. In a new private window, open a nested chapter URL without a `#` anchor (for example `/code/ch1`) as the first page, in the production preview or deployed app. Confirm the chapter appears. A browser that has opened the app before is served by the offline service worker, which hides a broken server fallback.
 
 Do not release a route change if an existing link resolves to the wrong content, even when the automated checks pass.
