@@ -32,35 +32,42 @@ export const FullTextSection = ({
     printAllQA = false,
     onNavigateTree
 }) => {
-    const processedHtml = useMemo(() => {
-        const html = resolveResourceLinks(section.legalText, resourceLinks);
-        return processReaderHtml(html, {
+    // A glossary term is linked only where it first appears in the section: the legal
+    // text and then each Q&A, in reading order, share one set of linked terms.
+    // The { __html } objects are memoized because React rewrites the markup whenever the
+    // object changes, which would replace a focused glossary term and clear text selections.
+    const { legalTextMarkup, processedQas } = useMemo(() => {
+        const linkedTerms = new Set();
+        const enableGlossary = !id.includes('glossary');
+        const processedHtml = processReaderHtml(resolveResourceLinks(section.legalText, resourceLinks), {
             query,
             highlight: searchFilters?.text,
             glossaryMap,
-            enableGlossary: !id.includes('glossary'),
+            enableGlossary,
+            linkedTerms,
         });
-    }, [section.legalText, query, glossaryMap, id, searchFilters?.text, resourceLinks]);
+        const processingOptions = {
+            query,
+            highlight: searchFilters?.qa,
+            glossaryMap,
+            enableGlossary,
+            linkedTerms,
+        };
 
-    const sanitizedHtml = useMemo(() => DOMPurify.sanitize(processedHtml), [processedHtml]);
-    const processedQas = useMemo(() => (
-        (section.qas || []).map((qa) => {
-            const processingOptions = {
-                query,
-                highlight: searchFilters?.qa,
-                glossaryMap,
-                enableGlossary: !id.includes('glossary'),
-            };
-            const questionHtml = processReaderHtml(qa.q, processingOptions);
-            const answerHtml = processReaderHtml(`A: ${qa.a}`, processingOptions);
+        return {
+            legalTextMarkup: { __html: DOMPurify.sanitize(processedHtml) },
+            processedQas: (section.qas || []).map((qa) => {
+                const questionHtml = processReaderHtml(qa.q, processingOptions);
+                const answerHtml = processReaderHtml(`A: ${qa.a}`, processingOptions);
 
-            return {
-                ...qa,
-                questionHtml: DOMPurify.sanitize(questionHtml),
-                answerHtml: DOMPurify.sanitize(answerHtml),
-            };
-        })
-    ), [section.qas, query, searchFilters?.qa, glossaryMap, id]);
+                return {
+                    ...qa,
+                    questionMarkup: { __html: DOMPurify.sanitize(questionHtml) },
+                    answerMarkup: { __html: DOMPurify.sanitize(answerHtml) },
+                };
+            }),
+        };
+    }, [section.legalText, section.qas, resourceLinks, query, searchFilters?.text, searchFilters?.qa, glossaryMap, id]);
 
     const [copyFeedback, setCopyFeedback] = useState(null);
     const [citeMenuOpen, setCiteMenuOpen] = useState(false);
@@ -201,13 +208,26 @@ export const FullTextSection = ({
         await copyWithFeedback(textToCopy, 'Plain text copied to clipboard!');
     };
 
+    const openGlossaryTerm = (target) => {
+        const termNode = target.closest?.('.glossary-term');
+        if (!termNode) return false;
+        onTermClick?.(termNode.getAttribute('data-term'));
+        return true;
+    };
+
     const handleClick = (e) => {
-        const termNode = e.target.closest('.glossary-term');
-        if (termNode) {
-            e.stopPropagation(); 
-            const termKey = termNode.getAttribute('data-term');
-            onTermClick?.(termKey);
-        }
+        if (openGlossaryTerm(e.target)) e.stopPropagation();
+    };
+
+    // Glossary terms are role="button" spans so they wrap with the text; give them a
+    // native button's keys: Enter on key down, Space on key up (without scrolling the page).
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && openGlossaryTerm(e.target)) e.preventDefault();
+        if (e.key === ' ' && e.target.closest?.('.glossary-term')) e.preventDefault();
+    };
+
+    const handleKeyUp = (e) => {
+        if (e.key === ' ') openGlossaryTerm(e.target);
     };
 
     const isBookmarked = bookmarksControls?.isBookmarked(
@@ -223,7 +243,7 @@ export const FullTextSection = ({
     }, [id]);
 
     return (
-        <div id={id} className="mb-8 scroll-mt-24" onClick={handleClick}>
+        <div id={id} className="mb-8 scroll-mt-24" onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} onClick={handleClick}>
             <div className={`group flex flex-col gap-2 mb-3 mt-6 sm:flex-row sm:items-baseline ${section.title ? 'sm:justify-between' : 'sm:justify-end print:hidden'}`}>
                 {section.title && (
                     <h2 className="min-w-0 text-xl font-bold text-gray-800 flex items-center flex-wrap gap-2">
@@ -335,7 +355,7 @@ export const FullTextSection = ({
                         </button>
                 </div>
             </div>
-            <div className="prose prose-slate max-w-none text-gray-800 leading-relaxed reader-content" dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />
+            <div className="prose prose-slate max-w-none text-gray-800 leading-relaxed reader-content" dangerouslySetInnerHTML={legalTextMarkup} />
             {supplement}
             {onNavigateTree && relatedTrees.length > 0 && (
                 <div className="mt-4 bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3 print:hidden">
@@ -392,11 +412,11 @@ export const FullTextSection = ({
                             )}
                             <p
                                 className="font-bold text-gray-900 mb-1 reader-content"
-                                dangerouslySetInnerHTML={{ __html: qa.questionHtml }}
+                                dangerouslySetInnerHTML={qa.questionMarkup}
                             />
                             <div
                                 className="text-gray-700 prose prose-sm max-w-none reader-content"
-                                dangerouslySetInnerHTML={{ __html: qa.answerHtml }}
+                                dangerouslySetInnerHTML={qa.answerMarkup}
                             />
                         </div>
                     ))}

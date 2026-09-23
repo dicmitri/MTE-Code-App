@@ -110,10 +110,9 @@ const App = () => {
   }, [activeId, activeSection, activeDocumentId, addHistory]);
 
   const handleTermClick = (termKey) => {
-    const definition = glossaryMap[termKey];
-    if (definition) {
-      const displayTitle = termKey.charAt(0).toUpperCase() + termKey.slice(1);
-      setActiveDefinition({ term: displayTitle, definition });
+    const entry = glossaryMap[termKey];
+    if (entry) {
+      setActiveDefinition({ term: entry.term, definition: entry.definition });
     }
   };
 
