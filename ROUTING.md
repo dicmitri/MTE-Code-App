@@ -12,10 +12,12 @@ The routing system is intentionally small and does not use a third-party routing
 | Code index | `/code` | `https://medtecheurope-code.org/code` |
 | Code chapter | `/code/:chapterId` | `https://medtecheurope-code.org/code/ch1` |
 | Exact Code section | `/code/:chapterId#section-id` | `https://medtecheurope-code.org/code/ch1#ch1-2-event-location-and-venue` |
+| Exact Code Q&A | `/code/:chapterId#section-id-qa-k` | `https://medtecheurope-code.org/code/ch4#ch4-3-educational-grants-qa-3` |
 | Transparency index | `/transparency` | `https://medtecheurope-code.org/transparency` |
 | Transparency document | `/transparency/:documentId` | `https://medtecheurope-code.org/transparency/disclosure-guidelines` |
 | Transparency reader unit | `/transparency/:documentId/:unitId` | `https://medtecheurope-code.org/transparency/disclosure-guidelines/dg-chapter-1` |
 | Exact Transparency section | `/transparency/:documentId/:unitId#section-id` | `https://medtecheurope-code.org/transparency/disclosure-guidelines/dg-chapter-1#dg-chapter-1-2-applicability-of-these-disclosure-guidelines` |
+| Exact Transparency Q&A | `/transparency/:documentId/:unitId#section-id-qa-k` | `https://medtecheurope-code.org/transparency/disclosure-guidelines/dg-chapter-3#dg-chapter-3-3-template-and-language-of-disclosure-qa-1` |
 | Decision-tree index | `/trees` | `https://medtecheurope-code.org/trees` |
 | Decision tree | `/trees/:treeId` | `https://medtecheurope-code.org/trees/dt-ch1-event-location` |
 | Knowledge Quiz | `/quiz` | `https://medtecheurope-code.org/quiz` |
@@ -56,6 +58,17 @@ a slug of the section title. An untitled section instead uses its zero-based
 position (`section-0`, `section-1`, and so on), so changing a title or reordering
 untitled sections can change public URLs and existing bookmarks.
 
+A Q&A anchor is its section anchor plus `-qa-` plus that Q&A's position within
+that section (first, second, third, and so on) — for example
+`ch4-3-educational-grants-qa-3` is the third Q&A in Code chapter ch4's
+"3. Educational Grants" section. It does not use the printed "Q&A N" number,
+because a new Code edition can renumber Q&As across the whole publication while
+each Q&A's position within its own section stays the same. A Q&A anchor
+therefore changes if its section title changes (which changes the section
+anchor it is built on) or if that section's own Q&As are reordered, inserted,
+or removed before it. Opening a Q&A link switches the Q&A view on so the linked
+answer is visible.
+
 Before renaming a Code chapter ID, Transparency document ID, Transparency unit
 ID, decision-tree ID, or section title:
 
@@ -72,7 +85,7 @@ The bookmark and Recently Viewed storage formats are independent from the browse
 - `src/config/routes.js` creates the parser from the current Code, Transparency, and decision-tree data.
 - `src/hooks/useAppRouting.js` synchronizes React state with the address bar and handles Back, Forward, current navigation, and legacy URL replacement.
 - `src/App.jsx` passes route-aware navigation callbacks to the existing components.
-- `src/components/FullTextSection.jsx` builds canonical links and citation URLs for Code and Transparency sections.
+- `src/components/FullTextSection.jsx` builds canonical links and citation URLs for Code and Transparency sections, and gives each Q&A block its own anchor id (`getQaAnchorId`) so it can be linked directly.
 - `src/components/quiz/QuizContent.jsx` loads shared Quiz URLs and responds when Back or Forward changes the shared challenge.
 - `src/components/quiz/QuizResults.jsx` builds canonical shared Quiz URLs.
 - `tests/routeUtils.test.mjs` exercises every current Code chapter/section, Transparency document/unit/section, decision tree, and supported legacy format.

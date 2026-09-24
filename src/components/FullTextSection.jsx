@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import DOMPurify from 'dompurify';
-import { processReaderHtml } from '../utils/textUtils';
+import { processReaderHtml, getQaAnchorId } from '../utils/textUtils';
 import { copyTextToClipboard } from '../utils/clipboardUtils';
 import { Highlight } from './Highlight';
 import { AppIcon } from './AppIcons';
@@ -404,7 +404,7 @@ export const FullTextSection = ({
                     className={`mt-4 space-y-4 scroll-mt-24 ${!showQA && printAllQA ? 'hidden print-always' : ''}`}
                 >
                     {processedQas.map((qa, idx) => (
-                        <div key={idx} className="bg-gray-50 p-4 rounded-lg border border-gray-100 print:bg-transparent print:border-none print:p-0 print:my-4">
+                        <div key={idx} id={getQaAnchorId(id, idx)} className="bg-gray-50 p-4 rounded-lg border border-gray-100 scroll-mt-24 print:bg-transparent print:border-none print:p-0 print:my-4">
                             {qa.label && (
                                 <p className="text-xs font-bold text-[#007A86] underline underline-offset-2 mb-2 reader-content">
                                     {qa.label}

@@ -87,6 +87,7 @@ const App = () => {
     setActiveSection,
     setShowSummary,
     setShowFullText,
+    setShowQA,
     scrollRef,
   });
   const { bookmarks, toggleBookmark, isBookmarked } = useBookmarks();

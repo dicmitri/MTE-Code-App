@@ -1,4 +1,4 @@
-import { generateSectionId } from './textUtils.js';
+import { generateSectionId, getQaAnchorId } from './textUtils.js';
 
 function normalizePathname(pathname) {
   if (!pathname || pathname === '/') return '/';
@@ -101,11 +101,16 @@ export function createRouteUtils(chapters, trees, transparencyDocuments = []) {
   const chapterIds = new Set(chapters.map((chapter) => chapter.id));
   const treeIds = new Set(trees.map((tree) => tree.id));
   const sectionOwners = new Map();
+  const qaOwners = new Map();
   const transparencyDocumentIndex = new Map();
 
   chapters.forEach((chapter) => {
     chapter.sections.forEach((section, index) => {
-      sectionOwners.set(generateSectionId(chapter.id, section.title, index), chapter.id);
+      const sectionId = generateSectionId(chapter.id, section.title, index);
+      sectionOwners.set(sectionId, chapter.id);
+      (section.qas || []).forEach((_qa, qaIndex) => {
+        qaOwners.set(getQaAnchorId(sectionId, qaIndex), chapter.id);
+      });
     });
   });
 
@@ -113,18 +118,23 @@ export function createRouteUtils(chapters, trees, transparencyDocuments = []) {
     const units = document.units || [];
     const unitIds = new Set();
     const transparencySectionOwners = new Map();
+    const transparencyQaOwners = new Map();
 
     units.forEach((unit) => {
       unitIds.add(unit.id);
       (unit.sections || []).forEach((section, index) => {
         const sectionId = generateSectionId(unit.id, section.title, index);
         transparencySectionOwners.set(sectionId, unit.id);
+        (section.qas || []).forEach((_qa, qaIndex) => {
+          transparencyQaOwners.set(getQaAnchorId(sectionId, qaIndex), unit.id);
+        });
       });
     });
 
     transparencyDocumentIndex.set(document.id, {
       unitIds,
       sectionOwners: transparencySectionOwners,
+      qaOwners: transparencyQaOwners,
     });
   });
 
@@ -139,6 +149,13 @@ export function createRouteUtils(chapters, trees, transparencyDocuments = []) {
     const chapterId = sectionOwners.get(value);
     if (chapterId) {
       return createRoute('code', chapterId, buildCodeSectionPath(chapterId, value), value);
+    }
+
+    const qaChapterId = qaOwners.get(value);
+    if (qaChapterId) {
+      const route = createRoute('code', qaChapterId, buildCodeSectionPath(qaChapterId, value), value);
+      route.anchorType = 'qa';
+      return route;
     }
 
     return null;
@@ -170,15 +187,30 @@ export function createRouteUtils(chapters, trees, transparencyDocuments = []) {
     const document = transparencyDocumentIndex.get(documentId);
     const unitId = document?.sectionOwners.get(value);
 
-    if (!unitId) return null;
+    if (unitId) {
+      return createRoute(
+        'transparency',
+        unitId,
+        buildTransparencySectionPath(documentId, unitId, value),
+        value,
+        documentId,
+      );
+    }
 
-    return createRoute(
-      'transparency',
-      unitId,
-      buildTransparencySectionPath(documentId, unitId, value),
-      value,
-      documentId,
-    );
+    const qaUnitId = document?.qaOwners.get(value);
+    if (qaUnitId) {
+      const route = createRoute(
+        'transparency',
+        qaUnitId,
+        buildTransparencySectionPath(documentId, qaUnitId, value),
+        value,
+        documentId,
+      );
+      route.anchorType = 'qa';
+      return route;
+    }
+
+    return null;
   }
 
   function parseAppLocation(pathname, hash = '') {

@@ -26,6 +26,7 @@ export const useAppRouting = ({
   setActiveSection,
   setShowSummary,
   setShowFullText,
+  setShowQA,
   scrollRef,
 }) => {
   const routeEffectsRef = useRef(null);
@@ -41,6 +42,9 @@ export const useAppRouting = ({
     if (route.anchor) {
       setShowSummary(true);
       setShowFullText(true);
+      if (route.anchorType === 'qa') {
+        setShowQA?.(true);
+      }
     }
 
     routeEffectsRef.current.schedule({
@@ -56,6 +60,7 @@ export const useAppRouting = ({
     setActiveId,
     setActiveSection,
     setShowFullText,
+    setShowQA,
     setShowSummary,
   ]);
 

@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { generateSectionId } from '../src/utils/textUtils.js';
+import { generateSectionId, getQaAnchorId } from '../src/utils/textUtils.js';
 import { loadSplitCodeData } from '../scripts/lib/code-content.mjs';
 import { loadTransparencyData } from '../scripts/lib/transparency-content.mjs';
 import {
@@ -153,6 +153,104 @@ test('round-trips every live section link without changing its anchor ID', () =>
       assert.equal(urls.has(url), false, `Duplicate section URL: ${url}`);
       urls.add(url);
     });
+  }
+});
+
+test('round-trips every live Code Q&A anchor without using the printed Q&A number', () => {
+  const sectionUrls = new Set();
+  const qaUrls = new Set();
+
+  for (const chapter of FULL_CODE_DATA) {
+    chapter.sections.forEach((section, index) => {
+      const sectionId = generateSectionId(chapter.id, section.title, index);
+      sectionUrls.add(buildCodeSectionPath(chapter.id, sectionId));
+
+      (section.qas || []).forEach((_qa, qaIndex) => {
+        const qaAnchor = getQaAnchorId(sectionId, qaIndex);
+        const url = buildCodeSectionPath(chapter.id, qaAnchor);
+
+        const parsedFromChapter = parseAppLocation(buildChapterPath(chapter.id), `#${qaAnchor}`);
+        assert.equal(parsedFromChapter.activeSection, 'code');
+        assert.equal(parsedFromChapter.activeId, chapter.id);
+        assert.equal(parsedFromChapter.anchor, qaAnchor);
+        assert.equal(parsedFromChapter.anchorType, 'qa');
+        assert.equal(parsedFromChapter.canonicalUrl, url);
+
+        assert.equal(parseAppLocation('/', `#${qaAnchor}`).canonicalUrl, url);
+
+        assert.equal(qaUrls.has(url), false, `Duplicate Q&A URL: ${url}`);
+        qaUrls.add(url);
+      });
+    });
+  }
+
+  for (const url of qaUrls) {
+    assert.equal(sectionUrls.has(url), false, `Q&A URL collides with a section URL: ${url}`);
+  }
+});
+
+test('round-trips every live Transparency Q&A anchor without using the printed Q&A number', () => {
+  const qaUrls = new Set();
+
+  for (const document of TRANSPARENCY_DOCUMENTS) {
+    for (const unit of document.units) {
+      unit.sections.forEach((section, index) => {
+        const sectionId = generateSectionId(unit.id, section.title, index);
+
+        (section.qas || []).forEach((_qa, qaIndex) => {
+          const qaAnchor = getQaAnchorId(sectionId, qaIndex);
+          const url = buildTransparencySectionPath(document.id, unit.id, qaAnchor);
+
+          const parsedFromUnit = parseAppLocation(
+            buildTransparencyUnitPath(document.id, unit.id),
+            `#${qaAnchor}`,
+          );
+          assert.equal(parsedFromUnit.activeSection, 'transparency');
+          assert.equal(parsedFromUnit.activeDocumentId, document.id);
+          assert.equal(parsedFromUnit.activeId, unit.id);
+          assert.equal(parsedFromUnit.anchor, qaAnchor);
+          assert.equal(parsedFromUnit.anchorType, 'qa');
+          assert.equal(parsedFromUnit.canonicalUrl, url);
+
+          const parsedFromDocument = parseAppLocation(
+            buildTransparencyDocumentPath(document.id),
+            `#${qaAnchor}`,
+          );
+          assert.equal(parsedFromDocument.activeSection, 'transparency');
+          assert.equal(parsedFromDocument.activeDocumentId, document.id);
+          assert.equal(parsedFromDocument.activeId, unit.id);
+          assert.equal(parsedFromDocument.anchor, qaAnchor);
+          assert.equal(parsedFromDocument.anchorType, 'qa');
+          assert.equal(parsedFromDocument.canonicalUrl, url);
+
+          assert.equal(qaUrls.has(url), false, `Duplicate Transparency Q&A URL: ${url}`);
+          qaUrls.add(url);
+        });
+      });
+    }
+  }
+});
+
+test('keeps anchorType off every live section route', () => {
+  for (const chapter of FULL_CODE_DATA) {
+    chapter.sections.forEach((section, index) => {
+      const sectionId = generateSectionId(chapter.id, section.title, index);
+      const parsed = parseAppLocation(buildChapterPath(chapter.id), `#${sectionId}`);
+      assert.equal('anchorType' in parsed, false);
+    });
+  }
+
+  for (const document of TRANSPARENCY_DOCUMENTS) {
+    for (const unit of document.units) {
+      unit.sections.forEach((section, index) => {
+        const sectionId = generateSectionId(unit.id, section.title, index);
+        const parsed = parseAppLocation(
+          buildTransparencyUnitPath(document.id, unit.id),
+          `#${sectionId}`,
+        );
+        assert.equal('anchorType' in parsed, false);
+      });
+    }
   }
 });
 
