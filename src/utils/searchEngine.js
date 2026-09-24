@@ -36,7 +36,7 @@ export const SEARCH_RANKING = deepFreeze({
   weights: {
     same: 0.8,
     oneWay: 0.7,
-    oneWayWhenWordInScope: 0.35,
+    oneWayWhenWordInScope: 0.3,
     glossaryLink: 0.5,
     spelling1: 0.7,
     spelling2: 0.5,
@@ -348,6 +348,7 @@ export const createSearchIndex = (documents, { phrasebook = { groups: [] }, glos
     phrasebookWords,
     glossaryLinks,
     equivalents,
+    longForms: [...equivalents.keys()].filter((key) => key.includes(' ')),
     definedTerms,
     displayText,
     bodyTokensByDoc,
@@ -392,8 +393,9 @@ function correctToken(word, index) {
 
 const displayFor = (index, resolvedText, fallback) => index.displayText.get(resolvedText) || fallback;
 
-// One position's concept: the longest phrasebook phrase starting here (else the single word),
-// chained once through abbreviations and Glossary links (two passes, half weight for links).
+// One position's concept: the longest phrasebook phrase or abbreviation long form starting here
+// (else the single word), chained once through abbreviations and Glossary links (two passes,
+// half weight for links).
 function buildStandardConceptAt(corrected, keysInQuery, i, index) {
   let rule = null;
   for (const candidateRule of index.rules) {
@@ -403,14 +405,30 @@ function buildStandardConceptAt(corrected, keysInQuery, i, index) {
       rule = candidateRule;
     }
   }
-  const length = rule ? rule.from.split(' ').length : 1;
-  const literal = rule ? rule.from : keysInQuery[i];
-  // A plain, uncorrected word is shown as typed; a phrasebook phrase or a spelling correction
-  // is shown as its resolved, human display text (never the raw typo).
-  const literalText = (!rule && corrected[i].source === 'query')
-    ? corrected[i].word
+  // A typed long form ("healthcare professional") is one concept, so the chain below also finds
+  // its abbreviation (HCP). A phrasebook phrase of the same length wins.
+  const lengthOf = (phrase) => (phrase ? phrase.split(' ').length : 1);
+  let longForm = null;
+  for (const candidate of index.longForms) {
+    const len = lengthOf(candidate);
+    if (len > lengthOf(rule?.from) && len > lengthOf(longForm)
+      && keysInQuery.slice(i, i + len).join(' ') === candidate) {
+      longForm = candidate;
+    }
+  }
+  if (longForm) rule = null;
+  const literal = longForm || (rule ? rule.from : keysInQuery[i]);
+  const length = lengthOf(literal);
+  // A spelling correction anywhere in the phrase lowers the whole phrase's weight.
+  const span = corrected.slice(i, i + length);
+  const spanWeight = Math.min(...span.map((c) => c.weight));
+  const spanCorrected = span.some((c) => c.source !== 'query');
+  // Uncorrected words are shown as typed; a phrasebook phrase or a spelling correction is
+  // shown as its resolved, human display text (never the raw typo).
+  const literalText = (!rule && !spanCorrected)
+    ? span.map((c) => c.word).join(' ')
     : displayFor(index, literal, literal);
-  const members = new Map([[literal, { weight: corrected[i].weight, source: corrected[i].source, text: literalText }]]);
+  const members = new Map([[literal, { weight: spanWeight, source: spanCorrected ? 'spelling' : 'query', text: literalText }]]);
   const wordInScope = index.docFrequency(literal.split(' ')[0]) > SEARCH_RANKING.rareWordMaxDocs;
 
   if (rule) {
@@ -421,7 +439,7 @@ function buildStandardConceptAt(corrected, keysInQuery, i, index) {
       for (const to of candidateRule.to) {
         if (!members.has(to)) {
           members.set(to, {
-            weight: corrected[i].weight * weightFactor,
+            weight: spanWeight * weightFactor,
             source: 'phrasebook',
             text: displayFor(index, to, to),
           });

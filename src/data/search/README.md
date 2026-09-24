@@ -33,7 +33,7 @@ Because these are true synonyms, the connection works in both directions: search
 { "same": ["agreement", "contract", "arrangement"] }
 ```
 
-### `from` → `to` — everyday word to formal/broader word (one-way, weight 0.7, or 0.35 if the typed word is already in the Code)
+### `from` → `to` — everyday word to formal/broader word (one-way, weight 0.7, or 0.3 if the typed word is already in the Code)
 
 Use this when a word is a lay, casual, or narrower way of describing something the Code discusses in more formal or more general terms. The connection only runs one way, from the everyday word to the formal one — never the other way round. For example, "doctor" should point to "healthcare professional", but "healthcare professional" should not point back to "doctor", because not every healthcare professional is a doctor.
 
@@ -41,7 +41,7 @@ Use this when a word is a lay, casual, or narrower way of describing something t
 { "from": ["doctor", "surgeon", "gp"], "to": ["physician", "healthcare professional", "clinician"] }
 ```
 
-**"Your word first":** if the word someone typed already appears in more than two places in the text being searched, the phrasebook's suggestions for that word count for less (0.35 instead of 0.7). Results containing the person's own word therefore stay on top, and the phrasebook only adds extra reach. You don't do anything to make this happen; the engine checks it automatically at search time.
+**"Your word first":** if the word someone typed already appears in more than two places in the text being searched, the phrasebook's suggestions for that word count for less (0.3 instead of 0.7). Results containing the person's own word therefore stay on top, and the phrasebook only adds extra reach. You don't do anything to make this happen; the engine checks it automatically at search time.
 
 ## Format rules
 

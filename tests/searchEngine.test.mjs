@@ -329,6 +329,23 @@ test('detects an abbreviation and expands it both ways', () => {
   const shortFormOnly = find(bridgedQuery, 'fx/lsp-only');
   assert.ok(shortFormOnly, 'the phrasebook target must chain on to the abbreviation and reach "LSP"-only content');
   assert.equal(shortFormOnly.matched[0].source, 'abbreviation');
+
+  // Typing the long form itself groups its words into one concept, which reaches "LSP"-only
+  // content directly.
+  const longQuery = runSearch(index, 'lantern society program');
+  assert.deepEqual(longQuery.concepts.map((concept) => concept.label), ['lantern society program']);
+  const typedLongForm = find(longQuery, 'fx/lsp-only');
+  assert.ok(typedLongForm, 'the typed long form must reach a document that only says "LSP"');
+  assert.equal(typedLongForm.matched[0].source, 'abbreviation');
+});
+
+test('a spelling correction anywhere in a phrase lowers the whole phrase\'s weight', () => {
+  const response = runSearch(index, 'lantern society progrm ');
+  assert.equal(response.concepts.length, 1);
+  const [literal] = response.concepts[0].members;
+  assert.equal(literal.source, 'spelling');
+  assert.equal(literal.weight, SEARCH_RANKING.weights.spelling1);
+  assert.equal(literal.text, 'Lantern Society Program');
 });
 
 test('links a rare word that appears in exactly one Glossary definition', () => {
