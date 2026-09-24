@@ -18,12 +18,13 @@ The project is structured around a centralized state architecture in `App.jsx`, 
 
 - **`src/App.jsx`**: The core orchestrator. It manages the `activeSection` (Home Hub, Code, Transparency, Decision Trees, Quiz, TPPT), the active Transparency publication, and shared reader state. Custom hooks synchronize state with the browser URL and `localStorage`. `TPPTContent` is loaded via `React.lazy()` so its heavy dependencies (pdfmake, pdfjs-dist, mammoth) are not included in the main bundle.
 - **`src/components/`**: UI building blocks.
-  - **Layout Components**: `Header.jsx` and `Sidebar.jsx` are persistent across sections. `Header` dynamically changes its toolbar based on the `activeSection`. `Sidebar.jsx` includes search category breakdown badges (`Title`, `Q&A`, `Text`).
+  - **Layout Components**: `Header.jsx` and `Sidebar.jsx` are persistent across sections. `Header` dynamically changes its toolbar based on the `activeSection`. `Sidebar.jsx` hosts the search box; while a search is active it shows `SearchResults.jsx` (ranked provisions, Q&As and definitions with type chips) in place of the navigation groups.
   - **Section Controllers**: `MainContent.jsx` (Code), `TransparencyContent.jsx` (Transparency publications and resource mapping), `TreeContent.jsx` (Trees with `TreeLandingPage.jsx` filter search), `QuizContent.jsx` (Quiz), and `TPPTContent.tsx` (TPPT Checker) act as sub-routers and layout managers for their respective features.
   - **Feature Components**: `DocumentReader.jsx` provides the shared Code/Transparency reader shell. Specialized UI includes `DecisionTree.jsx` (interactive logic), `DefinitionPopup.jsx` (shared Code glossary definitions in Code and Transparency reader text and official Q&As), `FullTextSection.jsx` (legal text, Q&A, citation, resource-link, glossary, and bookmark rendering), `TransparencyLandingPage.jsx` (publication and unit cards), and `TableOfContents.jsx` (navigation).
 - **`src/hooks/`**: Business logic and side effects.
   - `useAppRouting.js`: Drives `App.jsx` state from readable paths, section anchors, and browser Back/Forward events without a routing library. It also upgrades supported legacy hash URLs with `replaceState`.
   - `useBookmarks.js` / `useRecentHistory.js`: Persist user interactions to `localStorage`.
+  - `useSearch.js`: Runs the search for the active scope and emits the `settled` event.
   - `usePWAInstall.js`: Manages the PWA lifecycle and install prompts.
 - **`src/data/`**: The "Source of Truth" for content.
   - `code/*.json`: One canonical MedTech Code chapter per file (Sections -> Q&As).
@@ -32,16 +33,21 @@ The project is structured around a centralized state architecture in `App.jsx`, 
   - `codeOrder.js`: Explicit chapter order shared by the app and validation tools.
   - `codeData.js`: Compatibility adapter that assembles `FULL_CODE_DATA` without changing component APIs.
   - `code-manifest.json`: Frozen raw-byte evidence for the 2026 monolith-to-chapters migration; it is not an everyday content baseline.
+  - `search/phrasebook.json`: General-English search phrasebook (see `search/README.md`). It never references Code content, so it needs no edits when the Code changes.
   - `transparency/`: Standalone publication metadata, ordered reader-unit JSON, and source evidence. The Disclosure Guidelines use `transparency/disclosure-guidelines/`; their authoritative PDF and Annex I CSV are `mte-code_disclosure_guidelines.pdf` and `declaration-csv-template.csv`.
   - `transparency/transparencyData.js`: Runtime publication registry and computed-section adapter.
   - `treeData.json`: Graph-based logic for compliance decision trees.
   - `quizData.json`: Question bank for the knowledge quiz.
-- **`src/config/`**: Shared registries like `sections.js`, which defines the modules available in the Home Hub, and `routes.js`, which configures the route parser from live Code, Transparency, and decision-tree data.
+- **`src/config/`**: Shared registries like `sections.js`, which defines the modules available in the Home Hub; `routes.js`, which configures the route parser from live Code, Transparency, and decision-tree data; and `search.js`, which builds each scope's index on first use and prebuilds the Code index on idle.
 - **`src/utils/`**: Deterministic helpers for text processing, search highlighting, and ID generation.
   - `routeUtils.js`: Pure URL builders and parsing rules for canonical paths and supported legacy hash URLs.
   - `routeEffects.js`: Cancels/version-controls delayed anchor scrolling and highlighting so stale effects cannot win after Back/Forward or another route change.
-  - `searchResultUtils.js`: Normalizes search terms and detects Q&A-only results that require the Q&A reader view.
-  - `textUtils.js`: Also builds the glossary from the glossary chapter's `<p><strong>Term:</strong>` headwords (a definition runs to the next headword) and links terms in reader text. Terms match as the Code capitalises them, including abbreviations such as HCP, short names introduced in brackets such as “Member Companies”, and plurals. Generic lowercase words stay plain (“In the event that”), and each term links only at its first occurrence per section.
+  - `searchDocuments.js`: Turns Code and Transparency content into search documents (provisions, Q&As, definitions, app summaries).
+  - `searchEngine.js`: Builds the in-memory index for one scope and ranks results with BM25F, coverage and proximity; exports `SEARCH_RANKING` with tuning constants.
+  - `searchEvents.js`: Emits `mte:search` browser events (`settled` and `select` types) and provides the `?searchDebug` URL switch.
+  - `searchResultUtils.js`: Normalizes whitespace-only queries.
+  - `searchText.js`: Normalization, tokens with offsets, stopwords, bounded edit distance, word forms checked against the current text.
+  - `textUtils.js`: Also builds the glossary from the glossary chapter's `<p><strong>Term:</strong>` headwords (a definition runs to the next headword) and links terms in reader text. Terms match as the Code capitalises them, including abbreviations such as HCP, short names introduced in brackets such as “Member Companies”, and plurals. Generic lowercase words stay plain (“In the event that”), and each term links only at its first occurrence per section. Includes `splitGlossaryDefinitions()` (splits glossary into definitions without a DOM) and `getQaAnchorId()` (Q&A anchors). `highlightSearchTerm()` and `Highlight.jsx` accept a RegExp as well as a string.
   - `tpptParser.js`: The TPPT agenda parsing engine. Contains `parseTpptSessions()` (the main parser), `classifySessionTitle()` (type classification), `calculateTpptEligibility()` (threshold checker), `normalizeCapitalization()`, `getSuggestedEventName()`, and all time/duration utilities. This is the single source of truth for parsing logic — both `TPPTContent.tsx` and `scratch/analyze_agendas.js` import from it.
   - `tpptExtraction.js`: PDF text extraction using `pdfjs-dist`. Contains `extractPdfPageText()` and `extractPdfTextFromPdf()`. Imported by both `TPPTContent.tsx` and `scratch/analyze_agendas.js`.
 - **`scratch/analyze_agendas.js`**: CLI verification script that runs the TPPT parser against real PDF agendas. Imports from `src/utils/tpptParser.js` and `src/utils/tpptExtraction.js` (single source of truth). Run with `node scratch/analyze_agendas.js [pdf-paths...]` to validate session parsing. If no paths are given, reads from `TPPT agendas/` folder.
@@ -49,7 +55,8 @@ The project is structured around a centralized state architecture in `App.jsx`, 
 - **`scripts/verify_code_docx_against_pdf.py`**: Strictly compares the DOCX with the PDF word for word (case, punctuation, spacing, superscripts, Q&A labels and bullets). The only accepted wording differences are the corrections recorded in the DOCX. Run it after every rebuild.
 - **`scripts/verify-disclosure-guidelines.mjs`**: Pins the Disclosure PDF, CSV, document metadata, raw reader units, visible text, Q&As, and annex structures. Run with `npm run verify:disclosure-guidelines` after any Disclosure source or data edit.
 - **`scripts/verify-production-disclosure-assets.mjs`**: After `npm run build`, proves that the emitted Disclosure PDF/CSV remain byte-identical to their sources and appear in the Workbox precache.
-- **`scripts/validate-data.mjs`**: Dependency-free structural validation for Code, Transparency, decision-tree, and quiz data. Run with `npm run validate:data` after content edits.
+- **`scripts/validate-data.mjs`**: Dependency-free structural validation for Code, Transparency, decision-tree and quiz data, and for the search phrasebook's structure. Run with `npm run validate:data` after content edits.
+- **`scripts/search-tools.mjs`**: Search maintainer tools. `npm run search:explain -- "<query>" [--scope transparency]` shows how a query is understood and ranked; `npm run search:report` prints everyday example queries and the self-retrieval check. Both are informational. `scripts/lib/search-content.mjs` builds the same indexes in Node for these tools and the tests.
 - **`tests/`**: Focused Node tests for stable project logic. Run with `npm test`. The plain-language operating guide is `PROJECT_CHECKS.md`.
 - **`ROUTING.md`**: Canonical URL formats, legacy compatibility guarantees, identifier stability rules, hosting requirements, and manual release checks.
 - **`ranked_changed.md`**: The maintenance backlog — verified, risk-tiered technical debt and improvement candidates, including findings from periodic repo audits. Before starting a change, check whether it touches a file with an open item here; if so, evaluate whether folding in that fix is in scope for the current update, consistent with that file's own guidance to extract/fix things only when a file is already being changed, not as unrelated batch cleanup. Update or remove an item's entry once it's resolved, and add newly discovered issues here rather than leaving them undocumented.
@@ -80,6 +87,7 @@ The project is structured around a centralized state architecture in `App.jsx`, 
 - **Migration Evidence**: `code-manifest.json` proves the 2026 content-neutral split. Do not regenerate it after ordinary approved content edits.
 - **Sanitization**: When rendering HTML from JSON (e.g., `legalText`), always wrap it in a sanitizer if not already handled by a central component.
 - **Computed IDs**: Section IDs are generated dynamically via `utils/textUtils.js`. Maintain this consistency to avoid breaking bookmarks and deep links.
+- **Search Phrasebook**: Only general-English equivalences go in `src/data/search/phrasebook.json` — never chapter, section, or Q&A references. Never add search rules or tests tied to specific Code content; search must keep working unchanged when the Code changes.
 - **Validation**: Run `npm run validate:data` after changing JSON under `src/data/`. After Disclosure Guidelines changes, also run `npm run verify:disclosure-guidelines`. Do not weaken a rule or alter content merely to silence a validation error; first determine whether the content or the rule is wrong.
 
 ### 5. Naming Conventions

@@ -15,8 +15,9 @@ This file records the current maintenance position of The Code App. It replaces 
 
 ## Implemented Maintenance Guardrails
 
-- `npm run validate:data` checks structural integrity of Code, tree, and quiz data without changing files.
-- `npm test` runs focused tests for route compatibility, TPPT rules, parser behavior, stable section IDs, and validator behavior.
+- `npm run validate:data` checks structural integrity of Code, tree, and quiz data, and the structure of the search phrasebook, without changing files.
+- `npm test` runs focused tests for route compatibility, TPPT rules, parser behavior, stable section IDs, validator behavior, and search (synthetic engine fixtures plus a content-independent self-retrieval check).
+- `npm run search:explain` and `npm run search:report` show how search interprets and ranks queries; they are informational and never fail.
 - `npm run check` runs validation, tests, TypeScript checks, and a production build.
 - `PROJECT_CHECKS.md` explains these commands and their output for non-technical maintainers.
 
@@ -40,7 +41,7 @@ Prefer explicit labels, semantic controls, and keyboard access in existing workf
 
 ## Changes Requiring Evidence Before Implementation
 
-- Indexed search should be considered only if the current search becomes measurably slow or inadequate.
+- Search analytics: the app emits `mte:search` browser events, but nothing collects them. Adding a collector needs a concrete reporting need and a privacy notice first.
 - New profile filters, checklists, exports, or cross-links require a concrete user need and maintained content model.
 - Component splitting should happen only when a file is being changed and extraction clearly reduces risk or duplication.
 
@@ -65,6 +66,14 @@ Found by an automated repo audit (read-only pass: `npm install`, `npm run lint`,
 - `oauth-proxy.js` reflects any HTTPS `Origin` header back in `Access-Control-Allow-Origin` (CORS restricted by protocol only, not by domain). Not currently exploitable given the HMAC-signed state token and postMessage-based token delivery, but broader than necessary. Tightening it requires first enumerating every legitimate calling origin so real CMS editors aren't locked out.
 - `tsconfig.json` has no `strict`/`noImplicitAny`. Turning on strict mode will likely surface new type errors in `TPPTContent.tsx` that need fixing — plan it as its own pass, not a quick toggle.
 - Lower-priority `npm audit` findings (dompurify, vite, postcss, esbuild, nanoid, picomatch) are mostly dev-tooling-only exposure, not shipped to end users; revisit opportunistically via `npm audit fix` (non-breaking) rather than urgently.
+
+## Found While Rebuilding Search — 2026-09-24
+
+- The main entry bundle statically imports Rollup's CommonJS interop helper from the lazy `tppt-pdfmake` chunk (about 1.8 MB), because `manualChunks` in `vite.config.ts` let the shared `commonjsHelpers` module land in that chunk.
+  - Every first visit downloads pdfmake even if TPPT is never opened.
+  - The PWA precache deliberately ignores `tppt-*.js`, so an installed app reloaded offline shows a blank page. Reproduced with Playwright on the production preview: the service worker controlled the page, then an offline reload failed on `/assets/tppt-pdfmake-*.js`.
+  - Present on `main` before the search rewrite.
+  - Fix: give the helper its own chunk. Then confirm no `index-*.js` statically imports a `tppt-*` chunk and that the offline check in `PROJECT_CHECKS.md` passes.
 
 ## Verification Commands
 

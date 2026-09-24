@@ -16,6 +16,7 @@ This directory serves as the source of truth for application content.
 - `declaration-csv-template.csv` is the local Annex I download and the sole
   source for its non-normative in-app preview.
 - `treeData.json` and `quizData.json` contain decision-tree and quiz content.
+- `search/phrasebook.json` is the general-English search phrasebook (everyday words mapped to formal ones; never Code content references). It needs no edits when the Code changes. See `search/README.md`.
 
 After editing these JSON files, run `npm run validate:data` from the project
 root. After any Disclosure Guidelines change, also run

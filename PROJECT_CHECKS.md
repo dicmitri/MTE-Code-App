@@ -35,6 +35,7 @@ Data validation passed.
 23 chapters, 68 sections, 43 Q&As
 8 decision trees, 116 nodes
 60 quiz questions
+86 phrasebook groups
 1 Transparency document, 7 reader units, 19 sections, 11 Q&As
 ```
 
@@ -44,7 +45,7 @@ The Code is stored as one chapter per file in `src/data/code/`, while standalone
 Transparency publications live under `src/data/transparency/`. This command
 checks that every file listed in `src/data/codeOrder.js` exists, that its chapter
 ID matches its filename, and that publication, section, resource, tree, and quiz
-references remain valid.
+references remain valid. It also checks that the search phrasebook (`src/data/search/phrasebook.json`) is well formed.
 
 If validation fails, the output identifies the file and item involved. For example:
 
@@ -76,6 +77,30 @@ The number of tests may grow. The important value is `fail 0`.
 The URL tests use the current project data. They confirm that every current Code chapter/section, Transparency document/unit/section, and decision tree has a working unique route, that representative section-ID generation rules remain stable, and that supported legacy link formats still resolve. If one fails after a content edit, do not rename IDs simply to make the test pass; keep the output and have the reported route reviewed.
 
 Automated checks cannot decide whether changing a public identifier was intentional. Read [`ROUTING.md`](ROUTING.md) before changing Code chapter IDs, Transparency document or unit IDs, tree IDs, section titles, navigation behavior, or hosting rules.
+
+## Check Search
+
+Search needs no updates when the Code changes. Everything search knows about the Code is recomputed from the current content every time the app loads. The only hand-written search file is `src/data/search/phrasebook.json`; see `src/data/search/README.md`.
+
+To see how a search is understood and ranked, run:
+
+```powershell
+npm run search:explain -- "wife travel"
+```
+
+Add `--scope transparency` to search the Disclosure Guidelines instead. The output shows which extra words were searched and why (with their weight), any spelling corrections, and how each result was scored.
+
+To see the top results for a list of everyday example searches, plus a check that each provision, Q&A and definition can be found by its own wording, run:
+
+```powershell
+npm run search:report
+```
+
+This is informational and never fails. It is useful after a Code update, to see that everyday searches still find sensible results.
+
+The self-check in `npm test` confirms that at least 95% of provisions, Q&As and definitions come back in the top 3 when searched by their own heading, question or term. If it fails after a content edit, keep the output and ask for technical help. Do not rename content just to make it pass.
+
+To update the search phrasebook, edit `src/data/search/phrasebook.json`, following the rules in `src/data/search/README.md` (general English only, never chapter, section or Q&A references), and run `npm run validate:data`.
 
 ## Revised Word-to-App Code Check
 
@@ -170,6 +195,7 @@ also confirm its emitted asset appears in `dist/sw.js`.
 ## When To Run The Checks
 
 - After editing files in `src/data`, run `npm run validate:data`.
+- After editing `src/data/search/phrasebook.json`, run `npm run validate:data`.
 - After editing Disclosure Guidelines data or sources, also run `npm run verify:disclosure-guidelines`.
 - After changing TPPT or other tested logic, run `npm test`.
 - Before a release or deployment, run `npm run check`.

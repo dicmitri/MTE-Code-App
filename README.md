@@ -15,12 +15,13 @@ The app is built using **React**, **Vite**, and **Cloudflare Workers**. All the 
  ├── /public/        # Static assets (icons, manifest, Decap CMS config)
  ├── /src/
  │   ├── /components/ # The building blocks of the UI (Header, Decision Trees, Quiz, etc.)
- │   ├── /config/     # Centralized registries (section definitions)
+ │   ├── /config/     # Centralized registries (sections, routes, search indexes)
  │   ├── /data/       # Legal documents, decision trees, quiz data, and content manifests
  │   │   ├── /code/   # One canonical JSON file per Code chapter
+ │   │   ├── /search/ # General-English search phrasebook
  │   │   └── /transparency/ # Standalone Transparency publications, split into reader units
  │   ├── /hooks/      # Custom React hooks (PWA, bookmarks, routing, keyboard, history)
- │   ├── /utils/      # Helper functions (search highlighting, glossary processing)
+ │   ├── /utils/      # Helper functions (search engine, highlighting, glossary processing)
  │   ├── App.jsx      # The main "brain" that connects everything together
  │   ├── main.jsx     # React entry point
  │   └── index.css    # Global styles, fonts, and print rules
@@ -43,7 +44,7 @@ The app is built using **React**, **Vite**, and **Cloudflare Workers**. All the 
 | `DocumentReader.jsx` | Shared legal-document reader used by the Code and Transparency publications |
 | `FullTextSection.jsx` | Renders a single legal text section with citation/link menu, bookmark, copy-text, and related-tree actions |
 | `Header.jsx` | Top bar with section-aware toolbar (Summary, Full Text, Q&A, Reader, Print) |
-| `Highlight.jsx` | Wraps matched text in highlight marks during search |
+| `Highlight.jsx` | Wraps matched words in highlight marks during search |
 | `HubPage.jsx` | Home landing page with section cards |
 | `InstallPrompt.jsx` | PWA install banner |
 | `LandingPage.jsx` | Code section landing page with chapter grid |
@@ -53,7 +54,8 @@ The app is built using **React**, **Vite**, and **Cloudflare Workers**. All the 
 | `quiz/QuizConfig.jsx` | Setup screen for selecting quiz chapters and question count |
 | `quiz/QuizResults.jsx` | Displays quiz score, review of incorrect answers, and share link |
 | `quiz/QuizSession.jsx` | The interactive gameplay screen for answering questions |
-| `Sidebar.jsx` | Collapsible navigation sidebar with search, bookmarks, and history |
+| `SearchResults.jsx` | Ranked search results: type badges, snippets, "Matched:" lines, and the expansion and spelling notes |
+| `Sidebar.jsx` | Collapsible navigation sidebar with the search box, ranked search results, bookmarks, and history |
 | `TableOfContents.jsx` | Sticky "On This Page" minimap |
 | `TPPTContent.tsx` | TPPT Checker UI: agenda ingestion (PDF/Word/text), session card editor, compliance threshold visualization, and PDF report export. Lazy-loaded via `React.lazy()`. Parser logic lives in `src/utils/tpptParser.js` |
 | `TransparencyContent.jsx` | Transparency landing/document controller and local Annex I resource wiring |
@@ -71,7 +73,11 @@ The app is built using **React**, **Vite**, and **Cloudflare Workers**. All the 
 | `utils/csvUtils.js` | Parses the bundled Annex I CSV for its non-normative preview |
 | `utils/htmlTextUtils.js` | Extracts normalized visible text from legal HTML for search and copy utilities |
 | `utils/routeEffects.js` | Cancels/version-controls delayed anchor scrolling and section highlighting across route changes |
-| `utils/searchResultUtils.js` | Normalizes search queries and identifies results visible only through Q&A content |
+| `utils/searchDocuments.js` | Turns Code and Transparency content into search documents (provisions, Q&As, definitions, app summaries) |
+| `utils/searchEngine.js` | Builds the in-memory index and ranks results with BM25F, coverage and proximity; tuning constants are in `SEARCH_RANKING` |
+| `utils/searchEvents.js` | Emits `mte:search` browser events and provides the `?searchDebug` URL switch |
+| `utils/searchResultUtils.js` | Normalizes whitespace-only search queries |
+| `utils/searchText.js` | Search text primitives: normalization, tokens with offsets, stopwords, bounded edit distance, and word forms checked against the current text |
 | `utils/textUtils.js` | Text processing, search highlighting, glossary extraction, ID generation |
 | `utils/resourceUtils.js` | Resolves approved local `resource:` links without changing their visible text |
 | `utils/tpptParser.js` | TPPT agenda parsing engine — session detection, type classification, capitalization normalization, eligibility calculation. Single source of truth used by both `TPPTContent.tsx` and `scratch/analyze_agendas.js` |
@@ -118,13 +124,33 @@ The app uses readable browser-history routes without adding a routing dependency
 See [`ROUTING.md`](ROUTING.md) before changing Code chapter IDs, Transparency document or unit IDs, tree IDs, section titles, navigation behavior, or deployment routing.
 
 ### 🔍 Dynamic Search Engine
-The search bar lives in the `Sidebar`. It splits the user's query and counts matches across **titles, summaries, full legal texts, and Q&As**.
-- Users can toggle **Advanced Search Filters** (Titles, Full Text, Q&As) to restrict precisely where the app hunts for matches.
-- The sidebar auto-expands any collapsible groups that contain matches and shows per-group match counts.
-- Whitespace-only input is treated as an empty search. Expansion snapshots are scoped to the current legal collection, and selecting a Q&A-only result automatically reveals its Q&A content.
-- Highlighting is handled dynamically in `utils/textUtils.js` which wraps matching terms in a `<mark>` tag.
-- Keyboard shortcut: Users can press `/` anywhere to immediately focus the search bar, or press `Escape` while the search field is focused to clear it.
-- **Important:** Search is scoped to the active legal collection: Code content in the Code section and Transparency publications in the Transparency section. It intentionally does not search Decision Tree content.
+The search box sits at the top of the `Sidebar`. In the Code section, the Home Hub and the other tools it searches the MedTech Europe Code; in the Transparency section it searches the Transparency publications. It intentionally does not search Decision Tree content.
+
+- **Results:** every Code provision (section), official Q&A and Glossary definition is its own result, ranked by relevance (up to 30). Each shows a badge (Provision, Q&A 31, Definition), its location, a snippet with the matched words marked, and a "Matched:" line saying why it matched, e.g. `Matched: Guests (Glossary, for “wife”) · travel`. App-written chapter summaries and publication details are listed after them under "App content — not Code text" (or "Publication details — not Guidelines text").
+- **Type chips** filter the list: Provisions / Q&As / Definitions in the Code, Provisions / Q&As in Transparency.
+- **Everyday wording:**
+  - word forms (plurals, -ing, -ed) are matched only when the shorter word exists in the text, so "hospitality" never becomes "hospital";
+  - spelling mistakes in unknown words are corrected;
+  - abbreviations work both ways (HCP ↔ Healthcare Professional);
+  - a rare word used in exactly one Glossary definition links to that term (spouse → Guests);
+  - a general-English phrasebook maps everyday words to formal ones (doctor → physician; wife → spouse).
+- **Explanation lines** above the results:
+  - what else was searched ("Also searching: spouse, partner, Guests (for “wife”)");
+  - spelling fixes ("Spelling: consultacy → consultancy");
+  - words that matched nothing ("No match for “students”…");
+  - a notice when no result contains all your words;
+  - the tip `Use "quotes" for exact wording.`
+- **Shortcuts:** quoted text matches exactly with no expansions, "Q&A 31" shows that Q&A, typing a Glossary term shows its definition first, and the last word is completed while typing.
+- **Opening a result:**
+  - a provision goes straight to its section;
+  - a Q&A switches Q&As on and scrolls to it (each Q&A has its own link, e.g. `/code/ch4#ch4-3-educational-grants-qa-3`);
+  - a definition opens its pop-up.
+
+  The reader highlights the words that actually matched, including expansions.
+- **Zero upkeep:** everything search knows about the Code is recomputed from the current content each time the app loads, so search needs no edits when the Code changes. The only hand-written search file is the general-English phrasebook, `src/data/search/phrasebook.json` (see its [README](src/data/search/README.md)).
+- **Performance and privacy:** search runs entirely in the browser with no network requests and no new dependencies. Building the Code index takes tens of milliseconds on a desktop computer and happens once, when the browser is idle; each query then takes a few milliseconds. `mte:search` events (`settled`, `select`) are dispatched on `window` for future analytics, but nothing collects or stores them.
+- **Keyboard:** press `/` anywhere to focus the search box, or `Escape` while it is focused to clear it. Recent searches are remembered on Enter or when a result is opened.
+- **Maintainer tools:** `npm run search:explain -- "wife travel"` (add `--scope transparency` for the Guidelines) prints how a query is understood and ranked. `npm run search:report` prints the top results for everyday example queries plus a self-retrieval check. In the app, `?searchDebug=1` shows each result's score, coverage and proximity (`?searchDebug=0` turns it off).
 
 ### 📱 Progressive Web App (PWA) Offline Capabilities
 This app precaches the core reader and application assets via `vite-plugin-pwa` so that previously installed users can open the main app without an internet connection. The emitted Disclosure Guidelines PDF and Annex I CSV template are included in the production service-worker precache. The large TPPT document-processing bundles and PDF worker are deliberately excluded, so the TPPT Checker is not guaranteed to load offline unless the required resources are already available in the browser cache.
@@ -139,7 +165,7 @@ The sidebar uses a hierarchical, fully collapsible group structure:
 - **Code section:** "The Code" parent group expands automatically, revealing sub-groups (Introductory Chapters, Part 1: The Code, Part 2: Complaint Handling, Part 3: Annexes & Glossary, Website).
 - **Transparency section:** The "Transparency" group reveals each registered publication and its reader units.
 - **Decision Trees section:** The "Decision Trees" group expands, showing a "Browse Decision Trees" link.
-- **Search mode:** When a search query is active, groups with matching chapters auto-expand. The prior expansion state is saved and restored when the search is cleared.
+- **Search mode:** While a search is active, the ranked result list replaces the groups. Their expansion state is left untouched and comes back as it was when the search is cleared.
 
 ### 🌳 Decision Trees
 Interactive compliance decision guides that let users step through real-world compliance scenarios:
@@ -683,4 +709,4 @@ User opens app
 
 - All HTML in `legalText` and Q&A answers is sanitized through **DOMPurify** before rendering. This prevents cross-site scripting (XSS) even if someone injects malicious code into the JSON content.
 - The hosted Decap CMS uses the separately deployed `oauth-proxy.js`; `server.js` serves the application and also offers optional same-origin OAuth endpoints. Both OAuth implementations use HMAC-signed state tokens for CSRF protection.
-- Public reader interactions and TPPT source documents are processed client-side. Bookmarks, history, and recent searches stay in `localStorage`; the separate `/admin/` CMS communicates with GitHub and its OAuth service when editors sign in or save content.
+- Public reader interactions and TPPT source documents are processed client-side. Bookmarks, history, and recent searches stay in `localStorage`; the separate `/admin/` CMS communicates with GitHub and its OAuth service when editors sign in or save content. Search runs entirely in the browser, and search events are not sent or stored anywhere.

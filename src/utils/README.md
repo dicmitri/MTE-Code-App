@@ -6,8 +6,9 @@ This directory contains deterministic helper functions and utility modules for n
 coercing or reformatting cell values. `htmlTextUtils.js` produces visible-text
 search input so HTML tags and resource attributes do not create false matches.
 `routeEffects.js` owns cancellable delayed anchor scrolling and highlighting;
-`searchResultUtils.js` normalizes whitespace-only queries and identifies
-Q&A-only search results.
+`searchResultUtils.js` normalizes whitespace-only queries.
+
+`searchText.js`, `searchDocuments.js`, `searchEngine.js` and `searchEvents.js` make up the in-browser search engine; its ranking constants live in `SEARCH_RANKING` in `searchEngine.js`. Everything is derived from the current content every time the app loads, so Code updates need no search changes.
 
 Routing behavior and identifier stability requirements are documented in the [URL Routing Guide](../../ROUTING.md).
 

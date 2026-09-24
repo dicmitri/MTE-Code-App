@@ -7,6 +7,35 @@ Versions are internal application-release labels; they are independent of the pr
 
 ---
 
+## [Unreleased]
+
+### Added
+- Added a deterministic, in-browser search engine with no new dependencies. It indexes every Code provision, official Q&A and Glossary definition (and each Transparency provision and Q&A) and ranks them with BM25F, coverage and proximity.
+- Everyday wording now finds the Code's formal wording:
+  - word forms (plurals, -ing, -ed), checked against the current text;
+  - spelling correction for unknown words;
+  - abbreviations in both directions (HCP ↔ Healthcare Professional);
+  - Glossary links for rare words (spouse → Guests);
+  - a general-English phrasebook (`src/data/search/phrasebook.json`, e.g. doctor → physician, wife → spouse), whose structure `npm run validate:data` now checks.
+- Added explained results: type badges, snippets, "Matched:" lines, and notes on expansions, spelling corrections, words that match nothing, and results without every word.
+- Added search shortcuts: quoted text matches exactly, "Q&A 31" shows that Q&A, a Glossary term shows its definition first, and the last word is completed while typing.
+- Gave every Code and Transparency Q&A its own deep link (e.g. `/code/ch4#ch4-3-educational-grants-qa-3`); opening one switches Q&As on and scrolls to it.
+- Added analytics-ready `mte:search` browser events (`settled`, `select`); nothing is sent or stored.
+- Added `?searchDebug=1` to show each result's score, coverage and proximity.
+- Added the maintainer tools `npm run search:explain -- "<query>"` and `npm run search:report`.
+
+### Changed
+- Search results are now a ranked list of individual provisions, Q&As and definitions in the sidebar. This replaces the chapter tree with per-chapter match counts and Title / Q&A / Text pills. App-written summaries are listed separately as "not Code text".
+- Replaced the Titles / Full Text / Q&As filters with Provisions / Q&As / Definitions type chips.
+- The reader now highlights the words that actually matched, including expansions, instead of the literal query.
+- Search is rebuilt from the current content on every app load, so Code updates need no search changes.
+
+### Fixed
+- Multi-word everyday queries such as "wife travel" or "hospital donation" used to return nothing unless the exact phrase appeared in the text.
+- The chapter summary is no longer re-sanitized on every re-render, which cleared any text selected in it.
+
+---
+
 ## [1.6.0] - 2026-07-28
 
 ### Added
