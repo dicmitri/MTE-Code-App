@@ -1,13 +1,20 @@
 export const highlightSearchTerm = (html, query) => {
     if (!html) return "";
-    if (!query || !query.trim()) return html;
-    const term = query.trim();
-    const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const pattern = new RegExp(`(${escaped})`, 'gi');
+    if (!query) return html;
+    const isPattern = query instanceof RegExp;
+    if (!isPattern && !query.trim()) return html;
+
+    const pattern = isPattern
+        ? (query.global ? query : new RegExp(query.source, `${query.flags}g`))
+        : new RegExp(`(${query.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    const replacement = isPattern
+        ? '<mark class="bg-yellow-200 text-black rounded px-0.5">$&</mark>'
+        : '<mark class="bg-yellow-200 text-black rounded px-0.5">$1</mark>';
+
     const parts = html.split(/(<[^>]*>)/);
     return parts.map(part => {
         if (part.startsWith('<')) return part;
-        return part.replace(pattern, '<mark class="bg-yellow-200 text-black rounded px-0.5">$1</mark>');
+        return part.replace(pattern, replacement);
     }).join('');
 };
 
@@ -172,6 +179,34 @@ export const processReaderHtml = (
     }
     return htmlContent;
 };
+
+// Splits the Glossary chapter's raw HTML into its definition blocks without a DOM: each
+// headword paragraph starts a new block that runs up to the next headword (or the end of the
+// text). Mirrors the DOM-based splitting in extractGlossaryMap above, for callers (like the
+// search index) that only have raw HTML available.
+export const splitGlossaryDefinitions = (html) => {
+    if (!html) return [];
+    const source = String(html);
+    const headwordPattern = /<p><strong>([^<]+)<\/strong>/g;
+    const matches = [...source.matchAll(headwordPattern)];
+
+    return matches.map((match, index) => {
+        const start = match.index;
+        const end = index + 1 < matches.length ? matches[index + 1].index : source.length;
+        const blockHtml = source.slice(start, end);
+        const rawHeadword = match[1];
+
+        return {
+            headword: rawHeadword.replace(/:\s*$/, ''),
+            entry: createGlossaryEntry(rawHeadword, blockHtml),
+            html: blockHtml,
+        };
+    });
+};
+
+// The Q&A's position within its section (not the printed "Q&A N" number, which renumbers
+// globally when the Code is republished). Stable as long as a section's own Q&As don't change.
+export const getQaAnchorId = (sectionId, index) => `${sectionId}-qa-${index + 1}`;
 
 export const generateSectionId = (chapterId, title, index) => {
     if (!chapterId) return '';
