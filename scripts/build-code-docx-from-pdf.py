@@ -104,6 +104,13 @@ CORRECTIONS = (
     ),
     Correction(
         26,
+        r"where the meeting is being hosted$",
+        "where the meeting is being hosted.",
+        "where the meeting is being hosted",
+        "Missing sentence-ending punctuation",
+    ),
+    Correction(
+        26,
         r"a larger Third Party Organised Educational Conferences",
         "a larger Third Party Organised Educational Conference",
         "a larger Third Party Organised Educational Conferences",
@@ -111,6 +118,13 @@ CORRECTIONS = (
     ),
     Correction(27, r"\bKkind\b", "Kind", "Kkind", "Spelling"),
     Correction(35, r"\bTechnoloy\b", "Technology", "Technoloy", "Spelling"),
+    Correction(
+        33,
+        r"Charitable Donations\.\.",
+        "Charitable Donations.",
+        "Charitable Donations..",
+        "Duplicated punctuation",
+    ),
     Correction(
         37,
         r"However,Member Ccompanies",
@@ -134,6 +148,34 @@ CORRECTIONS = (
         "Spelling",
     ),
     Correction(
+        38,
+        r"Healthcare Organisation, , all",
+        "Healthcare Organisation, all",
+        "Healthcare Organisation, , all",
+        "Duplicated punctuation",
+    ),
+    Correction(
+        43,
+        r"Medical Technology,\.",
+        "Medical Technology.",
+        "Medical Technology,.",
+        "Duplicated punctuation",
+    ),
+    Correction(
+        44,
+        r"scope of the Consultancy Arrangement\s*Member Companies",
+        "scope of the Consultancy Arrangement. Member Companies",
+        "scope of the Consultancy Arrangement Member Companies",
+        "Missing sentence-ending punctuation",
+    ),
+    Correction(
+        47,
+        r"\bwww\.who\.org\b",
+        "www.who.int.",
+        "www.who.org",
+        "Corrected URL and sentence-ending punctuation",
+    ),
+    Correction(
         48,
         r"\bethicalrequirements\b",
         "ethical requirements",
@@ -149,6 +191,13 @@ CORRECTIONS = (
         "Mismatched quotation mark",
     ),
     Correction(49, r"\byhird party-", "third party-", "yhird party-", "Spelling"),
+    Correction(
+        49,
+        r"\bMember companies may contract researchers\b",
+        "Member Companies may contract researchers",
+        "Member companies may contract researchers",
+        "Defined-term capitalization",
+    ),
     Correction(
         50,
         r"\bMember\s+company\s+to\s+conduct\s+collaborative\s+research\b",
@@ -206,6 +255,13 @@ CORRECTIONS = (
         "directly by",
         "directlyby",
         "Joined words",
+    ),
+    Correction(
+        72,
+        r"within this category$",
+        "within this category.",
+        "within this category",
+        "Missing sentence-ending punctuation",
     ),
     Correction(
         76,

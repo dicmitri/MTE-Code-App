@@ -19,6 +19,29 @@ Approved on 22 July 2026:
 The immutable split manifest remains the proof of the original migration. It
 must not be regenerated after approved content corrections.
 
+## Revised Word Reconciliation — 2026-09-24
+
+The app text was compared directly with `code-september-2024.docx`. The content
+owner reviewed the short wording differences and approved these Word-aligned
+changes:
+
+| Location | Previous app text | Approved text |
+| --- | --- | --- |
+| Chapter 1 | `with the the requirements` | `with the requirements` |
+| Chapter 2 | `Such In-Kind support` | `Such In Kind support` |
+| Chapter 3 | `Chapter 3, Section 2` | `Chapter 3, Section2` |
+| Annex VI | `it is a third party chooses` | `a third party chooses` |
+| Annex VII | `3D rending software` | `3D rendering software` |
+
+The content owner chose to retain the app wording for the other reviewed short
+differences, including the punctuation corrections, `www.who.int`, defined-term
+capitalization, and the Annex I sentence-ending full stop. Those are approved
+app-versus-Word exceptions rather than unresolved discrepancies.
+The PDF-to-DOCX builder records all 13 reviewed choices so the next rebuild
+will produce the aligned Word working copy. The binary DOCX is intentionally
+left unchanged in this text-only change so it can be merged through review
+systems that do not accept binary patches.
+
 ## Scope
 
 - File: `src/data/code/scope.json`

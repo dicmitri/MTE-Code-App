@@ -198,6 +198,17 @@ The DOCX is generated directly from the PDF by `scripts/build-code-docx-from-pdf
 
 Use `scripts/verify_code_docx_against_pdf.py` to check the Word file against the published PDF word for word. Case, punctuation, spacing, superscript footnote references, Q&A labels and bullets must all match; the only accepted wording differences are the corrections listed in the DOCX's editorial correction record. Both scripts need `pip install pdfplumber python-docx`.
 
+Run `npm run verify:code-docx` to compare the source-backed text in all 22 Code
+chapter JSON files with the revised Word working copy. The project command uses
+the existing Mammoth dependency and checks exact words, punctuation, case,
+numbers, and apostrophes; it ignores HTML layout, bullet glyphs, images, and the different presentation of
+Q&A labels. A failure is a reconciliation report, not permission to change
+either source: review every reported difference and document any approved
+exception before updating normative text. Add
+`-- --report code-docx-review.md` to produce a numbered Markdown checklist in
+which each candidate can be marked `keep app`, `keep Word`, or
+`structural difference`.
+
 `src/data/code-manifest.json` is frozen evidence of the 2026 monolith-to-chapters migration. It is not an everyday content baseline and must not be regenerated after an ordinary approved content edit. See [`docs/content-migration/README.md`](docs/content-migration/README.md) and its reconciliation record for the audit history.
 
 ### Understanding the Chapter Schema
@@ -611,6 +622,7 @@ Alternatively, you can manually deploy using `npx wrangler deploy`.
 | `npm run clean` | Delete the `dist/` folder (the current script requires a shell that provides `rm`; in PowerShell use `Remove-Item -Recurse -Force dist`) |
 | `npm run lint` | Run TypeScript checks without emitting files |
 | `npm run validate:data` | Check Code, Transparency, tree, and quiz data integrity |
+| `npm run verify:code-docx` | Compare the app's source-backed Code text with the pinned revised Word copy |
 | `npm run verify:disclosure-guidelines` | Verify verbatim Disclosure Guidelines data and pinned PDF/CSV sources |
 | `npm run verify:production-disclosure-assets` | After a build, prove the emitted Disclosure PDF/CSV remain byte-exact and precached |
 | `npm test` | Run focused tests for stable project logic |

@@ -17,7 +17,7 @@
         },
         {
           "title": "Guidance",
-          "legalText": " <div class=\"space-y-4 text-sm text-gray-700 leading-relaxed\"> <p>In order to determine whether an event is a TPOE or a Company Event, the following aspects should be taken into account:</p> <ul class=\"list-disc pl-5 space-y-2\"> <li>Open events (not only Company’s customers) are typical of a TPOE, and in this case, it is a third party chooses which HCPs attend or HCPs self-select;</li> <li>Who is the primary initiator of the Event: To what extent is the third party vs. the Member Company involved and who is determining the agenda?</li> <li>CME accreditation is an indication of a TPOE;</li> <li>TPOE generally have a broader focus than one or only a few products;</li> <li>Single-sponsored events are often Company Events.</li> </ul> </div> ",
+          "legalText": " <div class=\"space-y-4 text-sm text-gray-700 leading-relaxed\"> <p>In order to determine whether an event is a TPOE or a Company Event, the following aspects should be taken into account:</p> <ul class=\"list-disc pl-5 space-y-2\"> <li>Open events (not only Company’s customers) are typical of a TPOE, and in this case, a third party chooses which HCPs attend or HCPs self-select;</li> <li>Who is the primary initiator of the Event: To what extent is the third party vs. the Member Company involved and who is determining the agenda?</li> <li>CME accreditation is an indication of a TPOE;</li> <li>TPOE generally have a broader focus than one or only a few products;</li> <li>Single-sponsored events are often Company Events.</li> </ul> </div> ",
           "qas": []
         }
       ]

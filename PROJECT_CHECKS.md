@@ -77,6 +77,35 @@ The URL tests use the current project data. They confirm that every current Code
 
 Automated checks cannot decide whether changing a public identifier was intentional. Read [`ROUTING.md`](ROUTING.md) before changing Code chapter IDs, Transparency document or unit IDs, tree IDs, section titles, navigation behavior, or hosting rules.
 
+## Revised Word-to-App Code Check
+
+To compare the source-backed Code text in the app with the revised Word working
+copy, run:
+
+```powershell
+npm run verify:code-docx
+```
+
+The command prints numbered candidates with an `app:` line and a `word:` line.
+For a shareable Markdown checklist, run:
+
+```powershell
+npm run verify:code-docx -- --report code-docx-review.md
+```
+
+The command exits with status 1 while candidates remain; that means the audit
+found items to review, not that the script crashed. For each number, decide
+**keep app**, **keep Word**, or **structural difference**. The JSON path printed
+beside the number identifies the exact chapter field, so a decision can be sent
+as briefly as `#1 keep Word; #6 keep app`.
+
+The check reads all 22 publication JSON files, deliberately excludes app-only
+summaries and Version History, and reports every text fragment that is not an
+exact lexical match in the pinned DOCX. HTML layout, image elements, bullet
+glyphs, and the app's `Q&A n:` versus Word's separate `Qn`/`An` labels are not
+normative wording and are normalized. Do not silence a result by changing text:
+first reconcile it against the Word file and record any approved exception.
+
 ## Historical Split Proof
 
 The 2026 migration from one large Code JSON file to chapter files has a separate
