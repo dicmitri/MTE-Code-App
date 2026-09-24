@@ -53,12 +53,11 @@ export const TransparencyContent = ({
   onNavigateUnit,
   showFullText,
   showQA,
-  debouncedSearch,
+  searchHighlight,
   glossaryMap,
   handleTermClick,
   scrollRef,
   bookmarksControls,
-  searchFilters,
 }) => {
   if (!activeDocumentId) {
     return (
@@ -138,14 +137,13 @@ export const TransparencyContent = ({
       showSummary={false}
       showFullText={showFullText}
       showQA={showQA}
-      debouncedSearch={debouncedSearch}
+      searchHighlight={searchHighlight}
       glossaryMap={glossaryMap}
       handleTermClick={handleTermClick}
       scrollRef={scrollRef}
       bookmarksControls={bookmarksControls}
       bookmarkSection="transparency"
       bookmarkDocumentId={activeDocumentId}
-      searchFilters={searchFilters}
       formatContentTitle={(content) => content?.displayTitle || content?.title}
       formatSectionPrefix={(content) => content?.citationPrefix || ''}
       buildSectionPath={buildSectionPath}

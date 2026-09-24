@@ -66,10 +66,6 @@ Found by an automated repo audit (read-only pass: `npm install`, `npm run lint`,
 - `tsconfig.json` has no `strict`/`noImplicitAny`. Turning on strict mode will likely surface new type errors in `TPPTContent.tsx` that need fixing — plan it as its own pass, not a quick toggle.
 - Lower-priority `npm audit` findings (dompurify, vite, postcss, esbuild, nanoid, picomatch) are mostly dev-tooling-only exposure, not shipped to end users; revisit opportunistically via `npm audit fix` (non-breaking) rather than urgently.
 
-## Found While Fixing Glossary Links — 2026-09-23
-
-- `DocumentReader.jsx` passes a new `{ __html }` object to the chapter summary's `dangerouslySetInnerHTML` on every render. React 19 rewrites the markup whenever that object changes, so every App re-render (opening a glossary definition, changing a reader setting) re-sanitizes the summary and clears any text selected in it. Memoize the object, as `FullTextSection.jsx` now does, the next time that file is changed.
-
 ## Verification Commands
 
 Run from the project root:

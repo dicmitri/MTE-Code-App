@@ -14,12 +14,11 @@ export const MainContent = ({
   showSummary,
   showFullText,
   showQA,
-  debouncedSearch,
+  searchHighlight,
   glossaryMap,
   handleTermClick,
   scrollRef,
   bookmarksControls,
-  searchFilters,
   onNavigateTree,
 }) => {
   const renderRelatedTrees = (content) => {
@@ -65,12 +64,11 @@ export const MainContent = ({
       showSummary={showSummary}
       showFullText={showFullText}
       showQA={showQA}
-      debouncedSearch={debouncedSearch}
+      searchHighlight={searchHighlight}
       glossaryMap={glossaryMap}
       handleTermClick={handleTermClick}
       scrollRef={scrollRef}
       bookmarksControls={bookmarksControls}
-      searchFilters={searchFilters}
       renderBeforeSections={renderRelatedTrees}
       buildSectionPath={buildCodeSectionPath}
       citationSourceTitle="MedTech Europe Code of Ethical Business Practice"

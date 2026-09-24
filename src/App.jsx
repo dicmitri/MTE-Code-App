@@ -3,6 +3,7 @@ import { FULL_CODE_DATA } from './data/codeData';
 import { DefinitionPopup } from './components/DefinitionPopup';
 import { extractGlossaryMap, generateSectionId } from './utils/textUtils';
 import { useDebounce } from './hooks/useDebounce';
+import { useSearch } from './hooks/useSearch';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { usePWAInstall } from './hooks/usePWAInstall';
 import { useAppRouting } from './hooks/useAppRouting';
@@ -93,11 +94,9 @@ const App = () => {
   const { bookmarks, toggleBookmark, isBookmarked } = useBookmarks();
   const { history, addHistory } = useRecentHistory();
 
-  const [searchFilters, setSearchFilters] = useState({
-    titles: true,
-    text: true,
-    qa: true
-  });
+  const searchScope = activeSection === 'transparency' ? 'transparency' : 'code';
+  const searchResponse = useSearch(debouncedSearch, searchScope);
+  const searchHighlight = searchResponse?.highlight ?? null;
 
   useEffect(() => {
     const map = extractGlossaryMap(FULL_CODE_DATA);
@@ -229,8 +228,8 @@ const App = () => {
           handleInstallClick={handleInstallClick}
           bookmarks={bookmarks}
           recentHistory={history}
-          searchFilters={searchFilters}
-          setSearchFilters={setSearchFilters}
+          searchResponse={searchResponse}
+          onOpenDefinition={handleTermClick}
         />
 
         {sidebarOpen && (
@@ -253,12 +252,11 @@ const App = () => {
             showSummary={showSummary}
             showFullText={showFullText}
             showQA={showQA}
-            debouncedSearch={debouncedSearch}
+            searchHighlight={searchHighlight}
             glossaryMap={glossaryMap}
             handleTermClick={handleTermClick}
             scrollRef={scrollRef}
             bookmarksControls={{ toggleBookmark, isBookmarked }}
-            searchFilters={searchFilters}
             onNavigateTree={handleNavigateTree}
           />
         ) : activeSection === 'transparency' ? (
@@ -271,12 +269,11 @@ const App = () => {
             onNavigateUnit={navigateTransparencyUnit}
             showFullText
             showQA={showQA}
-            debouncedSearch={debouncedSearch}
+            searchHighlight={searchHighlight}
             glossaryMap={glossaryMap}
             handleTermClick={handleTermClick}
             scrollRef={scrollRef}
             bookmarksControls={{ toggleBookmark, isBookmarked }}
-            searchFilters={searchFilters}
           />
         ) : activeSection === 'quiz' ? (
           <QuizContent

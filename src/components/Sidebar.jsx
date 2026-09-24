@@ -1,19 +1,14 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { AppIcon } from './AppIcons';
-import { Highlight } from './Highlight';
+import { SearchResults } from './SearchResults';
 import { FULL_CODE_DATA, updateSearchStatus } from '../data/codeData';
 import {
   TRANSPARENCY_DOCUMENTS,
 } from '../data/transparency/transparencyData';
 import { addRecentSearch, normalizeRecentSearches } from '../utils/recentSearchUtils';
-import { htmlToPlainText } from '../utils/htmlTextUtils';
 import { HISTORICAL_DECLARATIONS_DOCUMENT_ID } from '../utils/routeUtils';
-import {
-  getSearchExpansionRestore,
-  getSearchExpansionSnapshot,
-  hasOnlyQaMatches,
-  normalizeSearchQuery,
-} from '../utils/searchResultUtils';
+import { normalizeSearchQuery } from '../utils/searchResultUtils';
+import { describeSearchResponse, emitSearchEvent, isSearchDebugEnabled } from '../utils/searchEvents';
 
 /**
  * CollapsibleGroup — a generic collapsible section with a header and children.
@@ -64,43 +59,6 @@ const CollapsibleGroup = ({
   );
 };
 
-const getItemSearchResult = (item, term, searchFilters) => {
-  const count = (text) => (
-    htmlToPlainText(text).toLowerCase().split(term).length - 1
-  );
-  let titleMatches = 0;
-  let textMatches = 0;
-  let qaMatches = 0;
-
-  if (searchFilters.titles) {
-    [...new Set([item.title, item.displayTitle].filter(Boolean))]
-      .forEach((title) => {
-        titleMatches += count(title);
-      });
-  }
-  if (searchFilters.text) textMatches += count(item.summary);
-  (item.sections || []).forEach((section) => {
-    if (searchFilters.titles) titleMatches += count(section.title);
-    if (searchFilters.text) textMatches += count(section.legalText);
-    if (searchFilters.qa) {
-      (section.qas || []).forEach((qa) => {
-        qaMatches += count(qa.label) + count(qa.q) + count(qa.a);
-      });
-    }
-  });
-
-  const matchCount = titleMatches + textMatches + qaMatches;
-  return {
-    ...item,
-    matchCount,
-    matchBreakdown: {
-      title: titleMatches,
-      text: textMatches,
-      qa: qaMatches,
-    },
-  };
-};
-
 const getDefaultExpandedGroups = ({
   activeSection,
   activeDocumentId,
@@ -129,6 +87,26 @@ const getDefaultExpandedGroups = ({
   return groups;
 };
 
+// Code chapter parts config
+const CODE_PARTS = [
+  { id: 'intro', groupKey: 'code-intro', label: 'Introductory Chapters' },
+  { id: 'part1', groupKey: 'code-part1', label: 'Part 1: The Code' },
+  { id: 'part2', groupKey: 'code-part2', label: 'Part 2: Complaint Handling' },
+  { id: 'part3', groupKey: 'code-part3', label: 'Part 3: Annexes & Glossary' },
+  { id: 'website', groupKey: 'code-website', label: 'Website' },
+];
+
+const CODE_TYPE_CHIPS = [
+  { key: 'provision', label: 'Provisions' },
+  { key: 'qa', label: 'Q&As' },
+  { key: 'definition', label: 'Definitions' },
+];
+const TRANSPARENCY_TYPE_CHIPS = [
+  { key: 'provision', label: 'Provisions' },
+  { key: 'qa', label: 'Q&As' },
+];
+const DEFAULT_TYPE_FILTER_KEYS = ['provision', 'qa', 'definition'];
+
 export const Sidebar = ({
   sidebarOpen,
   setSidebarOpen,
@@ -155,10 +133,13 @@ export const Sidebar = ({
   handleInstallClick,
   bookmarks = [],
   recentHistory = [],
-  searchFilters = { titles: true, text: true, qa: true },
-  setSearchFilters
+  searchResponse = null,
+  onOpenDefinition,
 }) => {
-  const isTransparencySearch = activeSection === 'transparency';
+  // True while the active *section* is Transparency, independent of whether a search is
+  // active -- it decides both the search scope and which parts of the non-search tree show.
+  const isTransparencySection = activeSection === 'transparency';
+  const searchScope = isTransparencySection ? 'transparency' : 'code';
 
   // Track which groups are expanded
   const [expandedGroups, setExpandedGroups] = useState(() => (
@@ -170,13 +151,11 @@ export const Sidebar = ({
     })
   ));
 
-  // Track pre-search expansion state for restoration
-  const [preSearchExpanded, setPreSearchExpanded] = useState(null);
-  const normalizedSearchTerm = normalizeSearchQuery(debouncedSearch);
-  const hasActiveSearch = normalizedSearchTerm.length > 0;
-  const searchResultsAreCurrent = normalizeSearchQuery(searchTerm)
-    === normalizedSearchTerm;
-  const searchExpansionScope = `${activeSection || 'home'}:${activeDocumentId || ''}`;
+  const normalizedDebouncedSearch = normalizeSearchQuery(debouncedSearch);
+  const hasActiveSearch = normalizedDebouncedSearch.length > 0;
+  const searchResultsAreCurrent = normalizeSearchQuery(searchTerm) === normalizedDebouncedSearch;
+  const isStale = !searchResultsAreCurrent;
+
   const defaultExpandedGroups = useMemo(() => (
     getDefaultExpandedGroups({
       activeSection,
@@ -190,6 +169,18 @@ export const Sidebar = ({
     bookmarks.length,
     recentHistory.length,
   ]);
+
+  // Result-type chips (Provisions / Q&As / Definitions), local to the sidebar and on by default.
+  const [typeFilter, setTypeFilter] = useState(() => new Set(DEFAULT_TYPE_FILTER_KEYS));
+  const toggleType = (key) => {
+    setTypeFilter((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key); else next.add(key);
+      return next;
+    });
+  };
+
+  const [debug] = useState(() => isSearchDebugEnabled());
 
   // Recent searches state & localStorage sync
   const [recentSearches, setRecentSearches] = useState(() => {
@@ -234,149 +225,57 @@ export const Sidebar = ({
     });
   };
 
-  // Code chapter parts config
-  const CODE_PARTS = [
-    { id: 'intro', groupKey: 'code-intro', label: 'Introductory Chapters' },
-    { id: 'part1', groupKey: 'code-part1', label: 'Part 1: The Code' },
-    { id: 'part2', groupKey: 'code-part2', label: 'Part 2: Complaint Handling' },
-    { id: 'part3', groupKey: 'code-part3', label: 'Part 3: Annexes & Glossary' },
-    { id: 'website', groupKey: 'code-website', label: 'Website' },
-  ];
-  // Compute search results for Code sections
-  const searchResults = useMemo(() => {
-    if (!hasActiveSearch || isTransparencySearch) return null;
-
-    const term = normalizedSearchTerm.toLowerCase();
-    const results = {};
-    let totalMatches = 0;
-
-    CODE_PARTS.forEach(part => {
-      const items = FULL_CODE_DATA
-        .filter((chapter) => chapter.part === part.id)
-        .map((chapter) => getItemSearchResult(chapter, term, searchFilters))
-        .filter((chapter) => chapter.matchCount > 0);
-
-      const sectionTotal = items.reduce((acc, curr) => acc + curr.matchCount, 0);
-      results[part.id] = { items, total: sectionTotal };
-      totalMatches += sectionTotal;
-    });
-
-    return { byPart: results, total: totalMatches };
-  }, [
-    hasActiveSearch,
-    isTransparencySearch,
-    normalizedSearchTerm,
-    searchFilters,
-  ]);
-
-  const transparencySearchResults = useMemo(() => {
-    if (!hasActiveSearch || !isTransparencySearch) return null;
-
-    const term = normalizedSearchTerm.toLowerCase();
-    const byDocument = {};
-    let total = 0;
-
-    TRANSPARENCY_DOCUMENTS.forEach((document) => {
-      const documentResult = getItemSearchResult({
-        title: document.title,
-        displayTitle: document.eyebrow,
-        summary: [document.description, document.publicationDate]
-          .filter(Boolean)
-          .join(' '),
-        sections: [],
-      }, term, searchFilters);
-      const items = (document.units || [])
-        .map((item) => getItemSearchResult(item, term, searchFilters))
-        .filter((item) => item.matchCount > 0);
-      const documentTotal = documentResult.matchCount
-        + items.reduce((sum, item) => sum + item.matchCount, 0);
-      byDocument[document.id] = {
-        documentMatchCount: documentResult.matchCount,
-        items,
-        total: documentTotal,
-      };
-      total += documentTotal;
-    });
-
-    return {
-      byDocument,
-      total,
-    };
-  }, [
-    hasActiveSearch,
-    isTransparencySearch,
-    normalizedSearchTerm,
-    searchFilters,
-  ]);
-
-  // When search starts, save current expansion and auto-expand matching groups
+  // Announce result counts for screen readers whenever the response changes during an active
+  // search, and announce when the search is cleared. The tree's own expansion state is never
+  // touched by search (it is simply not rendered while a search is active), so there is nothing
+  // to snapshot or restore here any more.
   useEffect(() => {
-    if (hasActiveSearch) {
-      const nextSnapshot = getSearchExpansionSnapshot({
-        currentSnapshot: preSearchExpanded,
-        scope: searchExpansionScope,
-        expandedGroups,
-        defaultExpandedGroups,
-      });
-      if (nextSnapshot !== preSearchExpanded) {
-        setPreSearchExpanded(nextSnapshot);
-      }
-      // Auto-expand the active search scope and matching groups
-      setExpandedGroups(prev => {
-        const next = new Set(prev);
-        if (isTransparencySearch) {
-          next.add('section-transparency');
-          TRANSPARENCY_DOCUMENTS.forEach((document) => {
-            if (transparencySearchResults?.byDocument[document.id]?.total > 0) {
-              next.add(`transparency-${document.id}`);
-            }
-          });
-        } else {
-          next.add('section-code');
-        }
-        if (!isTransparencySearch && searchResults) {
-          CODE_PARTS.forEach(part => {
-            if (searchResults.byPart[part.id]?.total > 0) {
-              next.add(part.groupKey);
-            }
-          });
-        }
-        return next;
-      });
-
-      // Update search status for accessibility
-      const activeResults = isTransparencySearch
-        ? transparencySearchResults
-        : searchResults;
-      if (activeResults) {
-        updateSearchStatus(
-          activeResults.total > 0
-            ? `${activeResults.total} matches found for "${normalizedSearchTerm}"`
-            : `No results found for "${normalizedSearchTerm}"`
-        );
-      }
-    } else {
-      // Restore pre-search state
-      if (preSearchExpanded) {
-        setExpandedGroups(getSearchExpansionRestore({
-          snapshot: preSearchExpanded,
-          scope: searchExpansionScope,
-          defaultExpandedGroups,
-        }));
-        setPreSearchExpanded(null);
-      }
+    if (!hasActiveSearch) {
       updateSearchStatus('Search empty');
+      return;
     }
-  }, [
-    defaultExpandedGroups,
-    hasActiveSearch,
-    isTransparencySearch,
-    normalizedSearchTerm,
-    preSearchExpanded,
-    searchExpansionScope,
-    searchResults,
-    transparencySearchResults,
-  ]);
+    if (!searchResponse) return;
+    const count = searchResponse.results.length;
+    updateSearchStatus(
+      count > 0
+        ? `${count} results for "${searchResponse.query}"`
+        : `No results for "${searchResponse.query}"`,
+    );
+  }, [hasActiveSearch, searchResponse]);
+
+  const handleSelectResult = (hit, rank) => {
+    const target = hit.target || {};
+    switch (target.kind) {
+      case 'code-section':
+        onNavigateCodeSection(target.chapterId, target.anchor);
+        break;
+      case 'transparency-section':
+        onNavigateTransparencySection(target.documentId, target.unitId, target.anchor);
+        break;
+      case 'definition':
+        onOpenDefinition?.(target.termId);
+        break;
+      case 'chapter':
+        setShowSummary(true);
+        setShowFullText(true);
+        onNavigateChapter(target.chapterId);
+        break;
+      case 'transparency-document':
+        onNavigateTransparencyDocument(target.documentId);
+        break;
+      default:
+        break;
+    }
+
+    rememberSearch(searchTerm);
+    emitSearchEvent('select', {
+      query: describeSearchResponse(searchResponse).query,
+      id: hit.id,
+      rank,
+      type: hit.type,
+    });
+    setSidebarOpen(false);
+  };
 
   return (
     <aside
@@ -413,14 +312,14 @@ export const Sidebar = ({
           <input
             id="searchTerm"
             type="text"
-            placeholder={isTransparencySearch ? 'Search Transparency...' : 'Search the Code...'}
+            placeholder={isTransparencySection ? 'Search Transparency...' : 'Search the Code...'}
             className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-10 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-[#7654A1] transition-all"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === 'Enter') rememberSearch(searchTerm);
             }}
-            aria-label={isTransparencySearch ? 'Search Transparency publications' : 'Search the Code'}
+            aria-label={isTransparencySection ? 'Search Transparency publications' : 'Search the Code'}
           />
           {searchTerm && (
             <button
@@ -472,30 +371,6 @@ export const Sidebar = ({
           </div>
         )}
 
-        {/* Search filter chips */}
-        {searchTerm && (
-          <div className="mb-6 px-2 flex flex-wrap gap-1.5 animate-fade-in no-print">
-            {[
-              { key: 'titles', label: 'Titles' },
-              { key: 'text', label: 'Full Text' },
-              { key: 'qa', label: 'Q&As' }
-            ].map(f => (
-              <button
-                key={f.key}
-                onClick={() => setSearchFilters(prev => ({ ...prev, [f.key]: !prev[f.key] }))}
-                className={`px-2 py-0.5 text-[10px] font-bold rounded-md border transition-colors ${
-                  searchFilters[f.key]
-                    ? 'bg-purple-100 text-purple-700 border-purple-200'
-                    : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100'
-                }`}
-                type="button"
-              >
-                {f.label}
-              </button>
-            ))}
-          </div>
-        )}
-
         {/* Home button */}
         <button
           onClick={() => {
@@ -519,267 +394,204 @@ export const Sidebar = ({
           paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 2rem)',
         }}
       >
-        {/* Bookmarks */}
-        {bookmarks && bookmarks.length > 0 && !hasActiveSearch && (
-          <CollapsibleGroup
-            label="Bookmarks"
-            icon="Star"
-            expanded={expandedGroups.has('bookmarks')}
-            onToggle={() => toggleGroup('bookmarks')}
-          >
-            <div className="space-y-1">
-              {bookmarks.map((b) => (
+        {hasActiveSearch ? (
+          <>
+            {/* Result-type chips */}
+            <div className="px-2 flex flex-wrap gap-1.5 animate-fade-in no-print">
+              {(isTransparencySection ? TRANSPARENCY_TYPE_CHIPS : CODE_TYPE_CHIPS).map((chip) => (
                 <button
-                  key={`bm-${b.key || b.id}`}
-                  onClick={() => {
-                    if (b.section === 'transparency' && b.documentId) {
-                      onNavigateTransparencySection(b.documentId, b.chapterId, b.id);
-                    } else {
-                      onNavigateCodeSection(b.chapterId, b.id);
-                    }
-                    setSidebarOpen(false);
-                  }}
-                  className="w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 text-purple-700 hover:bg-purple-50 hover:text-purple-900 border border-transparent hover:border-purple-200"
+                  key={chip.key}
+                  onClick={() => toggleType(chip.key)}
+                  className={`px-2 py-0.5 text-[10px] font-bold rounded-md border transition-colors ${
+                    typeFilter.has(chip.key)
+                      ? 'bg-purple-100 text-purple-700 border-purple-200'
+                      : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-gray-100'
+                  }`}
+                  type="button"
                 >
-                  <span className="shrink-0 text-purple-400">
-                    <AppIcon name="Bookmark" size={16} />
-                  </span>
-                  <span className="truncate flex-1 font-medium text-xs">
-                    {b.title}
-                  </span>
+                  {chip.label}
                 </button>
               ))}
             </div>
-          </CollapsibleGroup>
-        )}
 
-        {/* The Code section group */}
-        {!isTransparencySearch && (
-          <CollapsibleGroup
-            label="The Code"
-            icon="FileText"
-            badge={hasActiveSearch && searchResults ? (searchResults.total > 0 ? `${searchResults.total}` : null) : null}
-            expanded={expandedGroups.has('section-code')}
-            onToggle={() => toggleGroup('section-code')}
-            className="space-y-2"
-          >
-          {CODE_PARTS.map((part) => {
-            const items = hasActiveSearch && searchResults
-              ? searchResults.byPart[part.id]?.items || []
-              : FULL_CODE_DATA.filter(ch => ch.part === part.id).map(ch => ({ ...ch, matchCount: 0 }));
-
-            if (hasActiveSearch && items.length === 0) return null;
-
-            const partTotal = items.reduce((acc, curr) => acc + (curr.matchCount || 0), 0);
-
-            return (
+            <SearchResults
+              response={searchResponse}
+              scope={searchScope}
+              typeFilter={typeFilter}
+              isStale={isStale}
+              debug={debug}
+              onSelect={handleSelectResult}
+            />
+          </>
+        ) : (
+          <>
+            {/* Bookmarks */}
+            {bookmarks && bookmarks.length > 0 && (
               <CollapsibleGroup
-                key={part.id}
-                label={part.label}
-                badge={hasActiveSearch && partTotal > 0 ? `${partTotal}` : null}
-                expanded={expandedGroups.has(part.groupKey)}
-                onToggle={() => toggleGroup(part.groupKey)}
-                className="ml-2"
+                label="Bookmarks"
+                icon="Star"
+                expanded={expandedGroups.has('bookmarks')}
+                onToggle={() => toggleGroup('bookmarks')}
               >
                 <div className="space-y-1">
-                  {items.map((item) => (
+                  {bookmarks.map((b) => (
                     <button
-                      key={item.id}
-                      disabled={Boolean(searchTerm.trim()) && !searchResultsAreCurrent}
+                      key={`bm-${b.key || b.id}`}
                       onClick={() => {
-                        onNavigateChapter(item.id);
-                        if (hasActiveSearch) {
-                          rememberSearch(searchTerm);
-                          setShowSummary(true);
-                          setShowFullText(true);
-                          if (hasOnlyQaMatches(item.matchBreakdown)) {
-                            setShowQA?.(true);
-                          }
+                        if (b.section === 'transparency' && b.documentId) {
+                          onNavigateTransparencySection(b.documentId, b.chapterId, b.id);
+                        } else {
+                          onNavigateCodeSection(b.chapterId, b.id);
                         }
                         setSidebarOpen(false);
-                        window.scrollTo(0, 0);
                       }}
-                      className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 disabled:cursor-wait disabled:opacity-70 ${
-                        activeSection === 'code' && activeId === item.id
-                          ? 'bg-[#7654A1] text-white shadow-md'
-                          : 'text-gray-600 hover:bg-gray-50'
-                      }`}
+                      className="w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 text-purple-700 hover:bg-purple-50 hover:text-purple-900 border border-transparent hover:border-purple-200"
                     >
-                      <span
-                        className={`shrink-0 ${
-                          activeSection === 'code' && activeId === item.id
-                            ? 'text-white'
-                            : 'text-gray-400'
-                        }`}
-                      >
-                        <AppIcon name={item.icon} size={18} />
+                      <span className="shrink-0 text-purple-400">
+                        <AppIcon name="Bookmark" size={16} />
                       </span>
-
-                      <span className="truncate flex-1">
-                        <Highlight text={item.title} query={normalizedSearchTerm} />
+                      <span className="truncate flex-1 font-medium text-xs">
+                        {b.title}
                       </span>
-
-                      {item.matchCount > 0 && (
-                        <div className="flex items-center gap-1 shrink-0">
-                          {hasActiveSearch && item.matchBreakdown?.title > 0 && (
-                            <span className={`text-[8px] font-semibold px-1 py-0.5 rounded ${activeSection === 'code' && activeId === item.id ? 'bg-amber-400/30 text-white' : 'bg-amber-100 text-amber-800'}`} title={`${item.matchBreakdown.title} title match(es)`}>
-                              Title
-                            </span>
-                          )}
-                          {hasActiveSearch && item.matchBreakdown?.qa > 0 && (
-                            <span className={`text-[8px] font-semibold px-1 py-0.5 rounded ${activeSection === 'code' && activeId === item.id ? 'bg-cyan-400/30 text-white' : 'bg-cyan-100 text-cyan-800'}`} title={`${item.matchBreakdown.qa} Q&A match(es)`}>
-                              Q&A
-                            </span>
-                          )}
-                          {hasActiveSearch && item.matchBreakdown?.text > 0 && (
-                            <span className={`text-[8px] font-semibold px-1 py-0.5 rounded ${activeSection === 'code' && activeId === item.id ? 'bg-white/20 text-white' : 'bg-purple-100 text-purple-800'}`} title={`${item.matchBreakdown.text} text match(es)`}>
-                              Text
-                            </span>
-                          )}
-                          <span
-                            className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md ${
-                              activeSection === 'code' && activeId === item.id
-                                ? 'bg-white/20 text-white'
-                                : 'bg-purple-100 text-purple-700'
-                            }`}
-                          >
-                            {item.matchCount}
-                          </span>
-                        </div>
-                      )}
                     </button>
                   ))}
                 </div>
               </CollapsibleGroup>
-            );
-          })}
-          </CollapsibleGroup>
-        )}
+            )}
 
-        {/* Transparency section group */}
-        {(!hasActiveSearch || isTransparencySearch) && (
-          <CollapsibleGroup
-            label="Transparency"
-            icon="Eye"
-            badge={
-              hasActiveSearch && transparencySearchResults?.total > 0
-                ? `${transparencySearchResults.total}`
-                : null
-            }
-            expanded={expandedGroups.has('section-transparency')}
-            onToggle={() => toggleGroup('section-transparency')}
-            className="space-y-2"
-          >
-            <button
-              type="button"
-              onClick={() => {
-                onNavigateTransparency();
-                setSidebarOpen(false);
-              }}
-              className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ml-2 ${
-                activeSection === 'transparency' && !activeDocumentId
-                  ? 'bg-[#007A86] text-white shadow-md'
-                  : 'text-gray-600 hover:bg-gray-50'
-              }`}
+            {/* The Code section group */}
+            {!isTransparencySection && (
+              <CollapsibleGroup
+                label="The Code"
+                icon="FileText"
+                expanded={expandedGroups.has('section-code')}
+                onToggle={() => toggleGroup('section-code')}
+                className="space-y-2"
+              >
+              {CODE_PARTS.map((part) => {
+                const items = FULL_CODE_DATA.filter((chapter) => chapter.part === part.id);
+
+                return (
+                  <CollapsibleGroup
+                    key={part.id}
+                    label={part.label}
+                    expanded={expandedGroups.has(part.groupKey)}
+                    onToggle={() => toggleGroup(part.groupKey)}
+                    className="ml-2"
+                  >
+                    <div className="space-y-1">
+                      {items.map((item) => (
+                        <button
+                          key={item.id}
+                          onClick={() => {
+                            onNavigateChapter(item.id);
+                            setSidebarOpen(false);
+                            window.scrollTo(0, 0);
+                          }}
+                          className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ${
+                            activeSection === 'code' && activeId === item.id
+                              ? 'bg-[#7654A1] text-white shadow-md'
+                              : 'text-gray-600 hover:bg-gray-50'
+                          }`}
+                        >
+                          <span
+                            className={`shrink-0 ${
+                              activeSection === 'code' && activeId === item.id
+                                ? 'text-white'
+                                : 'text-gray-400'
+                            }`}
+                          >
+                            <AppIcon name={item.icon} size={18} />
+                          </span>
+
+                          <span className="truncate flex-1">{item.title}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </CollapsibleGroup>
+                );
+              })}
+              </CollapsibleGroup>
+            )}
+
+            {/* Transparency section group */}
+            <CollapsibleGroup
+              label="Transparency"
+              icon="Eye"
+              expanded={expandedGroups.has('section-transparency')}
+              onToggle={() => toggleGroup('section-transparency')}
+              className="space-y-2"
             >
-              <AppIcon name="Eye" size={17} />
-              <span className="truncate flex-1">Transparency Home</span>
-            </button>
+              <button
+                type="button"
+                onClick={() => {
+                  onNavigateTransparency();
+                  setSidebarOpen(false);
+                }}
+                className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ml-2 ${
+                  activeSection === 'transparency' && !activeDocumentId
+                    ? 'bg-[#007A86] text-white shadow-md'
+                    : 'text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                <AppIcon name="Eye" size={17} />
+                <span className="truncate flex-1">Transparency Home</span>
+              </button>
 
-            <button
-              type="button"
-              onClick={() => {
-                onNavigateTransparencyDocument(HISTORICAL_DECLARATIONS_DOCUMENT_ID);
-                setSidebarOpen(false);
-              }}
-              className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ml-2 mb-2 ${
-                activeSection === 'transparency' && activeDocumentId === HISTORICAL_DECLARATIONS_DOCUMENT_ID
-                  ? 'bg-[#7654A1] text-white shadow-md'
-                  : 'text-gray-600 hover:bg-gray-50'
-              }`}
-            >
-              <AppIcon name="Search" size={17} />
-              <span className="truncate flex-1">Historical Declarations</span>
-            </button>
+              <button
+                type="button"
+                onClick={() => {
+                  onNavigateTransparencyDocument(HISTORICAL_DECLARATIONS_DOCUMENT_ID);
+                  setSidebarOpen(false);
+                }}
+                className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ml-2 mb-2 ${
+                  activeSection === 'transparency' && activeDocumentId === HISTORICAL_DECLARATIONS_DOCUMENT_ID
+                    ? 'bg-[#7654A1] text-white shadow-md'
+                    : 'text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                <AppIcon name="Search" size={17} />
+                <span className="truncate flex-1">Historical Declarations</span>
+              </button>
 
-            {TRANSPARENCY_DOCUMENTS.map((document) => {
-              const documentSearch = transparencySearchResults?.byDocument[document.id];
-              if (hasActiveSearch && !documentSearch?.total) return null;
-
-              return (
+              {TRANSPARENCY_DOCUMENTS.map((document) => (
                 <CollapsibleGroup
                   key={document.id}
                   label={document.title}
-                  badge={
-                    hasActiveSearch && documentSearch?.total > 0
-                      ? `${documentSearch.total}`
-                      : null
-                  }
                   expanded={expandedGroups.has(`transparency-${document.id}`)}
                   onToggle={() => toggleGroup(`transparency-${document.id}`)}
                   className="ml-2"
                 >
                   <div className="space-y-1">
-                    {(!hasActiveSearch || documentSearch?.documentMatchCount > 0) && (
-                      <button
-                        type="button"
-                        disabled={Boolean(searchTerm.trim()) && !searchResultsAreCurrent}
-                        onClick={() => {
-                          onNavigateTransparencyDocument(document.id);
-                          if (hasActiveSearch) {
-                            rememberSearch(searchTerm);
-                          }
-                          setSidebarOpen(false);
-                        }}
-                        className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 disabled:cursor-wait disabled:opacity-70 ${
-                          activeSection === 'transparency'
-                            && activeDocumentId === document.id
-                            && activeId === 'home'
-                            ? 'bg-[#7654A1] text-white shadow-md'
-                            : 'text-gray-600 hover:bg-gray-50'
-                        }`}
-                      >
-                        <AppIcon name="List" size={16} />
-                        <span className="min-w-0 flex-1">
-                          <span className="block truncate">Document Overview</span>
-                          {hasActiveSearch && document.publicationDate && (
-                            <span className="block truncate text-[10px] opacity-75">
-                              <Highlight
-                                text={document.publicationDate}
-                                query={normalizedSearchTerm}
-                              />
-                            </span>
-                          )}
-                        </span>
-                        {documentSearch?.documentMatchCount > 0 && (
-                          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-purple-100 text-purple-700">
-                            {documentSearch.documentMatchCount}
-                          </span>
-                        )}
-                      </button>
-                    )}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onNavigateTransparencyDocument(document.id);
+                        setSidebarOpen(false);
+                      }}
+                      className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ${
+                        activeSection === 'transparency'
+                          && activeDocumentId === document.id
+                          && activeId === 'home'
+                          ? 'bg-[#7654A1] text-white shadow-md'
+                          : 'text-gray-600 hover:bg-gray-50'
+                      }`}
+                    >
+                      <AppIcon name="List" size={16} />
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate">Document Overview</span>
+                      </span>
+                    </button>
 
-                    {(hasActiveSearch
-                      ? documentSearch?.items || []
-                      : document.units || []
-                    ).map((item) => (
+                    {(document.units || []).map((item) => (
                       <button
                         key={item.id}
                         type="button"
-                        disabled={Boolean(searchTerm.trim()) && !searchResultsAreCurrent}
                         onClick={() => {
                           onNavigateTransparencyUnit(document.id, item.id);
-                          if (hasActiveSearch) {
-                            rememberSearch(searchTerm);
-                            setShowSummary(false);
-                            setShowFullText(true);
-                            if (hasOnlyQaMatches(item.matchBreakdown)) {
-                              setShowQA?.(true);
-                            }
-                          }
                           setSidebarOpen(false);
                         }}
-                        className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 disabled:cursor-wait disabled:opacity-70 ${
+                        className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ${
                           activeSection === 'transparency'
                             && activeDocumentId === document.id
                             && activeId === item.id
@@ -790,85 +602,76 @@ export const Sidebar = ({
                         <span className="shrink-0">
                           <AppIcon name={item.icon || 'FileText'} size={16} />
                         </span>
-                        <span className="truncate flex-1">
-                          <Highlight text={item.title} query={normalizedSearchTerm} />
-                        </span>
-                        {item.matchCount > 0 && (
-                          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-purple-100 text-purple-700">
-                            {item.matchCount}
-                          </span>
-                        )}
+                        <span className="truncate flex-1">{item.title}</span>
                       </button>
                     ))}
                   </div>
                 </CollapsibleGroup>
-              );
-            })}
-          </CollapsibleGroup>
-        )}
-
-        {/* Decision Trees section group */}
-        {!hasActiveSearch && (
-          <CollapsibleGroup
-            label="Decision Trees"
-            icon="GitBranch"
-            expanded={expandedGroups.has('section-trees')}
-            onToggle={() => toggleGroup('section-trees')}
-            className="space-y-2"
-          >
-            <button
-              onClick={() => {
-                onNavigateTrees();
-                setSidebarOpen(false);
-              }}
-              className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ml-2 ${
-                activeSection === 'trees'
-                  ? 'bg-amber-600 text-white shadow-md'
-                  : 'text-gray-600 hover:bg-gray-50'
-              }`}
-            >
-              <span className={`shrink-0 ${activeSection === 'trees' ? 'text-amber-200' : 'text-gray-400'}`}>
-                <AppIcon name="GitBranch" size={18} />
-              </span>
-              <span className="truncate flex-1">Browse Decision Trees</span>
-            </button>
-          </CollapsibleGroup>
-        )}
-
-        {/* Recently Viewed */}
-        {!hasActiveSearch && recentHistory && recentHistory.length > 0 && (
-          <CollapsibleGroup
-            label="Recently Viewed"
-            icon="Clock"
-            expanded={expandedGroups.has('history')}
-            onToggle={() => toggleGroup('history')}
-            className="mt-4"
-          >
-            <div className="space-y-1">
-              {recentHistory.map((h) => (
-                <button
-                  key={`history-${h.timestamp}`}
-                  onClick={() => {
-                    if (h.section === 'transparency' && h.documentId) {
-                      onNavigateTransparencyUnit(h.documentId, h.id);
-                    } else {
-                      onNavigateChapter(h.id);
-                    }
-                    setSidebarOpen(false);
-                    window.scrollTo(0, 0);
-                  }}
-                  className="w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 border border-transparent hover:border-slate-200"
-                >
-                  <span className="shrink-0 text-slate-400">
-                    <AppIcon name={h.icon || 'BookOpen'} size={16} />
-                  </span>
-                  <span className="truncate flex-1 font-medium text-xs">
-                    {h.title}
-                  </span>
-                </button>
               ))}
-            </div>
-          </CollapsibleGroup>
+            </CollapsibleGroup>
+
+            {/* Decision Trees section group */}
+            <CollapsibleGroup
+              label="Decision Trees"
+              icon="GitBranch"
+              expanded={expandedGroups.has('section-trees')}
+              onToggle={() => toggleGroup('section-trees')}
+              className="space-y-2"
+            >
+              <button
+                onClick={() => {
+                  onNavigateTrees();
+                  setSidebarOpen(false);
+                }}
+                className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ml-2 ${
+                  activeSection === 'trees'
+                    ? 'bg-amber-600 text-white shadow-md'
+                    : 'text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                <span className={`shrink-0 ${activeSection === 'trees' ? 'text-amber-200' : 'text-gray-400'}`}>
+                  <AppIcon name="GitBranch" size={18} />
+                </span>
+                <span className="truncate flex-1">Browse Decision Trees</span>
+              </button>
+            </CollapsibleGroup>
+
+            {/* Recently Viewed */}
+            {recentHistory && recentHistory.length > 0 && (
+              <CollapsibleGroup
+                label="Recently Viewed"
+                icon="Clock"
+                expanded={expandedGroups.has('history')}
+                onToggle={() => toggleGroup('history')}
+                className="mt-4"
+              >
+                <div className="space-y-1">
+                  {recentHistory.map((h) => (
+                    <button
+                      key={`history-${h.timestamp}`}
+                      onClick={() => {
+                        if (h.section === 'transparency' && h.documentId) {
+                          onNavigateTransparencyUnit(h.documentId, h.id);
+                        } else {
+                          onNavigateChapter(h.id);
+                        }
+                        setSidebarOpen(false);
+                        window.scrollTo(0, 0);
+                      }}
+                      className="w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 border border-transparent hover:border-slate-200"
+                    >
+                      <span className="shrink-0 text-slate-400">
+                        <AppIcon name={h.icon || 'BookOpen'} size={16} />
+                      </span>
+                      <span className="truncate flex-1 font-medium text-xs">
+                        {h.title}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </CollapsibleGroup>
+            )}
+          </>
         )}
 
         {/* Install button */}

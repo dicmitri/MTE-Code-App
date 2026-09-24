@@ -19,14 +19,13 @@ export const DocumentReader = ({
   showSummary,
   showFullText,
   showQA,
-  debouncedSearch,
+  searchHighlight = null,
   glossaryMap,
   handleTermClick,
   scrollRef,
   bookmarksControls,
   bookmarkSection = 'code',
   bookmarkDocumentId = null,
-  searchFilters,
   formatContentTitle = (content) => (
     Number.isNaN(Number(content?.icon))
       ? content?.title
@@ -85,6 +84,17 @@ export const DocumentReader = ({
     }
   }, [activeId]);
 
+  // Memoized so a re-render (opening a glossary definition, changing a reader setting) doesn't
+  // hand dangerouslySetInnerHTML a new { __html } object every time, which would otherwise
+  // re-sanitize the summary and clear any text the user had selected in it.
+  const summaryMarkup = React.useMemo(() => ({
+    __html: DOMPurify.sanitize(
+      searchHighlight
+        ? highlightSearchTerm(activeContent?.summary, searchHighlight)
+        : (activeContent?.summary || ''),
+    ),
+  }), [activeContent?.summary, searchHighlight]);
+
   return (
     <main
       ref={scrollRef}
@@ -122,7 +132,7 @@ export const DocumentReader = ({
               <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">
                 <Highlight
                   text={formatContentTitle(activeContent)}
-                  query={searchFilters?.titles ? debouncedSearch : ''}
+                  query={searchHighlight}
                 />
               </h1>
               <span className="flex items-center gap-3 no-print">
@@ -152,13 +162,7 @@ export const DocumentReader = ({
                   <h2 className="text-3xl font-extrabold text-gray-900 mb-4">Summary</h2>
                   <div
                     className="text-lg text-gray-700 font-light reader-content summary-content"
-                    dangerouslySetInnerHTML={{
-                      __html: DOMPurify.sanitize(
-                        searchFilters?.text && debouncedSearch
-                          ? highlightSearchTerm(activeContent.summary, debouncedSearch)
-                          : activeContent.summary,
-                      ),
-                    }}
+                    dangerouslySetInnerHTML={summaryMarkup}
                   />
                 </div>
               </div>
@@ -174,8 +178,7 @@ export const DocumentReader = ({
                     id={section.computedId}
                     section={section}
                     showQA={showQA}
-                    query={debouncedSearch}
-                    searchFilters={searchFilters}
+                    query={searchHighlight}
                     glossaryMap={glossaryMap}
                     onTermClick={handleTermClick}
                     bookmarksControls={bookmarksControls}

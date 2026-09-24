@@ -23,7 +23,6 @@ export const FullTextSection = ({
     chapterId,
     chapterPrefix,
     fallbackTitle = '',
-    searchFilters,
     buildSectionPath = buildCodeSectionPath,
     citationSourceTitle = 'MedTech Europe Code of Ethical Business Practice',
     citationMarkdownLabel = 'MedTech Europe Code',
@@ -41,14 +40,14 @@ export const FullTextSection = ({
         const enableGlossary = !id.includes('glossary');
         const processedHtml = processReaderHtml(resolveResourceLinks(section.legalText, resourceLinks), {
             query,
-            highlight: searchFilters?.text,
+            highlight: Boolean(query),
             glossaryMap,
             enableGlossary,
             linkedTerms,
         });
         const processingOptions = {
             query,
-            highlight: searchFilters?.qa,
+            highlight: Boolean(query),
             glossaryMap,
             enableGlossary,
             linkedTerms,
@@ -67,7 +66,7 @@ export const FullTextSection = ({
                 };
             }),
         };
-    }, [section.legalText, section.qas, resourceLinks, query, searchFilters?.text, searchFilters?.qa, glossaryMap, id]);
+    }, [section.legalText, section.qas, resourceLinks, query, glossaryMap, id]);
 
     const [copyFeedback, setCopyFeedback] = useState(null);
     const [citeMenuOpen, setCiteMenuOpen] = useState(false);
@@ -247,7 +246,7 @@ export const FullTextSection = ({
             <div className={`group flex flex-col gap-2 mb-3 mt-6 sm:flex-row sm:items-baseline ${section.title ? 'sm:justify-between' : 'sm:justify-end print:hidden'}`}>
                 {section.title && (
                     <h2 className="min-w-0 text-xl font-bold text-gray-800 flex items-center flex-wrap gap-2">
-                        <Highlight text={section.title} query={searchFilters?.titles ? query : ''} />
+                        <Highlight text={section.title} query={query} />
                         {showQA && section.qas && section.qas.length > 0 && (
                             <button
                                 type="button"
