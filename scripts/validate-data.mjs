@@ -38,6 +38,117 @@ function findDuplicates(values) {
   return [...duplicates];
 }
 
+function countWords(phrase) {
+  return phrase.split(/\s+/).length;
+}
+
+function validatePhrasebookPhrase(phrase, path, errors) {
+  if (typeof phrase !== 'string') {
+    errors.push(`${path}: must be a string.`);
+    return false;
+  }
+
+  if (phrase !== phrase.trim()) {
+    errors.push(`${path}: must be equal to its trimmed form.`);
+    return false;
+  }
+
+  if (!/^[a-z]+(?:[ '-][a-z]+)*$/.test(phrase)) {
+    errors.push(`${path}: must be lowercase letters, spaces, hyphens or apostrophes only.`);
+    return false;
+  }
+
+  const words = countWords(phrase);
+  if (words < 1 || words > 4) {
+    errors.push(`${path}: must be 1 to 4 words.`);
+    return false;
+  }
+
+  return true;
+}
+
+// Checks a phrase list and returns its valid phrases, reporting format errors and repeats.
+function validatePhrasebookList(group, key, groupPath, errors) {
+  const phrases = [];
+  group[key].forEach((phrase, phraseIndex) => {
+    if (validatePhrasebookPhrase(phrase, `${groupPath} ${key}[${phraseIndex}]`, errors)) {
+      phrases.push(phrase);
+    }
+  });
+  for (const duplicate of findDuplicates(phrases)) {
+    errors.push(`${groupPath}: "${key}" contains duplicate phrase "${duplicate}".`);
+  }
+  return phrases;
+}
+
+// The search phrasebook is general English, so only its structure is checked here. Whether its
+// words appear in the Code is deliberately never checked: it must keep working, unedited, when
+// the Code changes. Returns the number of groups.
+function validateSearchPhrasebook(phrasebook, errors) {
+  const phrasebookPath = 'phrasebook.json';
+
+  if (typeof phrasebook !== 'object' || phrasebook === null || Array.isArray(phrasebook)) {
+    errors.push(`${phrasebookPath}: must be an object.`);
+    return 0;
+  }
+  if (Object.keys(phrasebook).length !== 1 || !Array.isArray(phrasebook.groups)) {
+    errors.push(`${phrasebookPath}: must have exactly one key "groups" containing an array.`);
+    return 0;
+  }
+
+  const fromGroupByPhrase = new Map();
+  const samePhrases = new Set();
+
+  phrasebook.groups.forEach((group, groupIndex) => {
+    const groupPath = `${phrasebookPath} groups[${groupIndex}]`;
+    if (typeof group !== 'object' || group === null || Array.isArray(group)) {
+      errors.push(`${groupPath}: must be an object.`);
+      return;
+    }
+
+    const keys = Object.keys(group).sort().join(',');
+    if ('same' in group && ('from' in group || 'to' in group)) {
+      errors.push(`${groupPath}: cannot mix "same" with "from"/"to".`);
+    } else if (keys === 'same') {
+      if (!Array.isArray(group.same) || group.same.length < 2) {
+        errors.push(`${groupPath}: "same" must be an array of at least 2 phrases.`);
+        return;
+      }
+      for (const phrase of validatePhrasebookList(group, 'same', groupPath, errors)) {
+        if (samePhrases.has(phrase)) {
+          errors.push(`${groupPath}: "same" phrase "${phrase}" appears in more than one "same" group.`);
+        }
+        samePhrases.add(phrase);
+      }
+    } else if (keys === 'from,to') {
+      if (!Array.isArray(group.from) || group.from.length === 0) {
+        errors.push(`${groupPath}: "from" must be a non-empty array.`);
+      }
+      if (!Array.isArray(group.to) || group.to.length === 0) {
+        errors.push(`${groupPath}: "to" must be a non-empty array.`);
+      }
+      if (!Array.isArray(group.from) || !Array.isArray(group.to)) return;
+
+      const fromPhrases = validatePhrasebookList(group, 'from', groupPath, errors);
+      const toPhrases = validatePhrasebookList(group, 'to', groupPath, errors);
+      for (const phrase of fromPhrases) {
+        if (fromGroupByPhrase.has(phrase)) {
+          errors.push(`${groupPath}: "from" phrase "${phrase}" also appears in groups[${fromGroupByPhrase.get(phrase)}].`);
+        } else {
+          fromGroupByPhrase.set(phrase, groupIndex);
+        }
+        if (toPhrases.includes(phrase)) {
+          errors.push(`${groupPath}: "from" phrase "${phrase}" also appears in "to".`);
+        }
+      }
+    } else {
+      errors.push(`${groupPath}: must have either "same" or both "from" and "to", and no other keys.`);
+    }
+  });
+
+  return phrasebook.groups.length;
+}
+
 function asArray(value) {
   if (value === null || value === undefined) return [];
   return Array.isArray(value) ? value : [value];
@@ -64,6 +175,7 @@ export function validateProjectData({
   quizData,
   transparencyData = [],
   iconSource = '',
+  searchPhrasebook,
 }) {
   const errors = [];
   const chapters = Array.isArray(codeData?.chapters) ? codeData.chapters : [];
@@ -407,6 +519,10 @@ export function validateProjectData({
     }
   });
 
+  const phrasebookGroups = searchPhrasebook === undefined
+    ? 0
+    : validateSearchPhrasebook(searchPhrasebook, errors);
+
   return {
     errors,
     stats: {
@@ -420,6 +536,7 @@ export function validateProjectData({
       transparencyUnits: transparencyUnitCount,
       transparencySections: transparencySectionCount,
       transparencyQas: transparencyQaCount,
+      phrasebookGroups,
     },
   };
 }
@@ -429,14 +546,32 @@ function readJson(relativePath) {
   return JSON.parse(readFileSync(absolutePath, 'utf8'));
 }
 
+const PHRASEBOOK_PATH = 'src/data/search/phrasebook.json';
+
+function readSearchPhrasebook() {
+  try {
+    return { value: readJson(PHRASEBOOK_PATH) };
+  } catch (error) {
+    return {
+      error: error.code === 'ENOENT'
+        ? `${PHRASEBOOK_PATH}: file is missing.`
+        : `${PHRASEBOOK_PATH}: invalid JSON (${error.message}).`,
+    };
+  }
+}
+
 export function validateCurrentProject() {
-  return validateProjectData({
+  const phrasebook = readSearchPhrasebook();
+  const result = validateProjectData({
     codeData: loadSplitCodeData(PROJECT_ROOT),
     treeData: readJson('src/data/treeData.json'),
     quizData: readJson('src/data/quizData.json'),
     transparencyData: loadTransparencyData(PROJECT_ROOT),
     iconSource: readFileSync(resolve(PROJECT_ROOT, 'src/components/AppIcons.jsx'), 'utf8'),
+    searchPhrasebook: phrasebook.value,
   });
+  if (phrasebook.error) result.errors.push(phrasebook.error);
+  return result;
 }
 
 function printReport({ errors, stats }) {
@@ -450,6 +585,7 @@ function printReport({ errors, stats }) {
   console.log(`${stats.chapters} chapters, ${stats.sections} sections, ${stats.qas} Q&As`);
   console.log(`${stats.trees} decision trees, ${stats.treeNodes} nodes`);
   console.log(`${stats.quizQuestions} quiz questions`);
+  console.log(`${stats.phrasebookGroups} phrasebook groups`);
   console.log(
     `${stats.transparencyDocuments} Transparency document, `
     + `${stats.transparencyUnits} reader units, `

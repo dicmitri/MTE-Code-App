@@ -69,6 +69,12 @@ function makeValidFixture() {
       }],
     }],
     iconSource: 'const lucideIconMap = { Eye, FileText, Info };',
+    searchPhrasebook: {
+      groups: [
+        { same: ['agreement', 'contract'] },
+        { from: ['doctor'], to: ['physician'] },
+      ],
+    },
   };
 }
 
@@ -86,6 +92,7 @@ test('accepts a structurally valid project fixture', () => {
     transparencyUnits: 1,
     transparencySections: 1,
     transparencyQas: 1,
+    phrasebookGroups: 2,
   });
 });
 
@@ -150,4 +157,56 @@ test('reports duplicate section routes and unresolved local resources', () => {
   const errors = validateProjectData(fixture).errors;
   assert.ok(errors.some((error) => error.includes('duplicate generated section ID')));
   assert.ok(errors.some((error) => error.includes('resource "not-declared" is not declared')));
+});
+
+test('reports phrasebook structural errors comprehensively', () => {
+  const fixture = makeValidFixture();
+  fixture.searchPhrasebook = {
+    groups: [
+      { same: ['doctor'], from: ['surgeon'], to: ['physician'] }, // mixing same with from/to
+      { same: ['UPPERCASE', 'contract'] }, // uppercase phrase
+      { same: ['has digit5', 'contract'] }, // digit in phrase
+      { from: ['five word phrase that is too long'], to: ['physician'] }, // 5-word phrase
+      { from: ['doctor'], to: [] }, // empty to
+      { from: ['lawyer'], to: ['attorney'] },
+      { from: ['lawyer'], to: ['counselor'] }, // lawyer appears as from in two groups
+      { from: ['judge'], to: ['judge', 'magistrate'] }, // judge in both from and to
+    ],
+  };
+
+  const errors = validateProjectData(fixture).errors;
+  const reports = (location, message) => errors.some(
+    (error) => error.startsWith(`phrasebook.json ${location}`) && error.includes(message),
+  );
+
+  assert.ok(reports('groups[0]:', 'cannot mix "same" with "from"'));
+  assert.ok(reports('groups[1] same[0]:', 'must be lowercase letters'));
+  assert.ok(reports('groups[2] same[0]:', 'must be lowercase letters'));
+  assert.ok(reports('groups[2]:', '"contract" appears in more than one "same" group'));
+  assert.ok(reports('groups[3] from[0]:', 'must be 1 to 4 words'));
+  assert.ok(reports('groups[4]:', '"to" must be a non-empty array'));
+  assert.ok(reports('groups[6]:', '"lawyer" also appears in groups[5]'));
+  assert.ok(reports('groups[7]:', '"judge" also appears in "to"'));
+});
+
+test('reports phrasebook top-level structural errors', () => {
+  const fixture = makeValidFixture();
+  fixture.searchPhrasebook = {
+    groups: [
+      { same: ['agreement', 'contract'] },
+    ],
+    extra: 'key',
+  };
+
+  const errors = validateProjectData(fixture).errors;
+  assert.ok(errors.some((e) => e.includes('must have exactly one key "groups"')));
+});
+
+test('does not report phrasebook errors when searchPhrasebook is undefined', () => {
+  const fixture = makeValidFixture();
+  fixture.searchPhrasebook = undefined;
+
+  const result = validateProjectData(fixture);
+  assert.deepEqual(result.stats.phrasebookGroups, 0);
+  assert.ok(!result.errors.some((e) => e.includes('phrasebook')));
 });
