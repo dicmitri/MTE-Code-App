@@ -196,7 +196,7 @@ The September 2024 PDF and editable Word file have distinct roles:
 
 The DOCX is generated directly from the PDF by `scripts/build-code-docx-from-pdf.py`; the script deliberately does not read the JSON. Do not regenerate the DOCX from application data. When a revised DOCX is returned after review, identify the deliberate Word changes against the PDF-derived structure and apply only the approved changes to the relevant chapter JSON files.
 
-Use `scripts/verify_code_docx_against_pdf.py` to independently check the generated Word file against the published PDF and its documented editorial corrections. These Python scripts require the document-processing dependencies imported by the scripts.
+Use `scripts/verify_code_docx_against_pdf.py` to check the Word file against the published PDF word for word. Case, punctuation, spacing, superscript footnote references, Q&A labels and bullets must all match; the only accepted wording differences are the corrections listed in the DOCX's editorial correction record. Both scripts need `pip install pdfplumber python-docx`.
 
 `src/data/code-manifest.json` is frozen evidence of the 2026 monolith-to-chapters migration. It is not an everyday content baseline and must not be regenerated after an ordinary approved content edit. See [`docs/content-migration/README.md`](docs/content-migration/README.md) and its reconciliation record for the audit history.
 
