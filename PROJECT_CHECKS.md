@@ -32,7 +32,7 @@ A successful result looks like this:
 
 ```text
 Data validation passed.
-23 chapters, 68 sections, 43 Q&As
+23 chapters, 72 sections, 43 Q&As
 8 decision trees, 116 nodes
 60 quiz questions
 199 phrasebook groups

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FULL_CODE_DATA } from '../data/codeData';
+import { CODE_CHAPTERS } from '../data/codeData';
 import { AppIcon } from './AppIcons';
 import { Logo } from './Logo';
 
@@ -15,7 +15,7 @@ export const LandingPage = ({ onSelectChapter }) => (
             </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {FULL_CODE_DATA.map((item) => (
+            {CODE_CHAPTERS.map((item) => (
                 <button 
                     key={item.id}
                     onClick={() => onSelectChapter(item.id)}

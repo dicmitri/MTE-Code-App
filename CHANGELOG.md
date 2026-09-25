@@ -24,19 +24,32 @@ Versions are internal application-release labels; they are independent of the pr
 - Gave every Code and Transparency Q&A its own deep link (e.g. `/code/ch4#ch4-3-educational-grants-qa-3`); opening one switches Q&As on and scrolls to it.
 - Added analytics-ready `mte:search` browser events (`settled`, `select`); nothing is sent or stored.
 - Added `?searchDebug=1` to show each result's score, coverage and proximity.
-- Added the maintainer tools `npm run search:explain -- "<query>"` and `npm run search:report`.
+- Added the maintainer tools `npm run search:explain -- "<query>"` and `npm run search:report`; `search:report` also takes `--queries <file.json>` and `--json`.
+- Added Historical Declarations (`/transparency/historical-declarations`): search past transparency declarations by company or beneficiary name, filter by year, beneficiary country, company country, type and currency, and open a detail dialog. It is reachable from the Transparency landing page and sidebar, and served read-only by the Worker from a Cloudflare D1 database through `/api/historical-declarations/*`, with a capped result window.
+- Added a page description, Open Graph and Twitter sharing tags, `robots.txt` and `sitemap.xml`.
+- Added Version History entries for July 2026 Update 3, August 2026 Update and September 2026 Updates 1 and 2, reconstructed from the Git history, and listed the recent-search, Copy Text and Send a Suggestion features missing from July 2026 Update 2.
 
 ### Changed
 - Search results are now a ranked list of individual provisions, Q&As and definitions in the sidebar. This replaces the chapter tree with per-chapter match counts and Title / Q&A / Text pills. App-written summaries are listed separately as "not Code text".
 - Replaced the Titles / Full Text / Q&As filters with Provisions / Q&As / Definitions type chips.
 - The reader now highlights the words that actually matched, including expansions, instead of the literal query.
 - Search is rebuilt from the current content on every app load, so Code updates need no search changes.
+- Version History has its own top-level "Website" sidebar group, shown in every section, instead of a "Website" part inside The Code. Website pages are left out of the Code landing page and the Code's Previous/Next navigation (`CODE_CHAPTERS` and `WEBSITE_CHAPTERS` in `codeData.js`); the chapter file and its `/code/changelog` route are unchanged.
+- Glossary links cover every defined term, including abbreviations, plurals and short names introduced in brackets. Each term links once per section, at its first occurrence, and opens in an accessible dialog.
+- Reading settings are remembered between visits, pinch-to-zoom is re-enabled, and teal text uses `#007A86` for AA contrast.
+- The Code's Word working copy is rebuilt verbatim from the PDF and checked by a strict verifier; five Code text corrections bring the JSON in line with the published Code.
+- Expanded the search phrasebook with Code and Disclosure Guidelines vocabulary. Overlapping rules keep their strongest weight, and validation rejects duplicate sources after normalization and stopword-only phrases.
+- A multiword phrasebook source is recognised only in a scope where the phrase or one of its targets occurs; elsewhere its words are searched one by one. Everyday words the expansion had dropped were restored, rules whose targets never occur were repointed, and sentence-specific entries were removed.
 
 ### Fixed
 - Multi-word everyday queries such as "wife travel" or "hospital donation" used to return nothing unless the exact phrase appeared in the text.
 - The chapter summary is no longer re-sanitized on every re-render, which cleared any text selected in it.
 - Quoted searches ignored small words: "in kind" searched only "kind" and also matched "different kinds of". Phrases now keep their small words.
 - Phrasebook phrases with small words collapsed to a single everyday word, so plain queries picked up wrong expansions: "travel cost" also searched "free of charge" and "in kind", because "at no cost" had become "cost". A phrasebook phrase now applies only when typed as a phrase, and a typed phrase counts as present in the text when it appears anywhere.
+- Deep links to chapters, Transparency pages, decision trees and the TPPT Checker opened the home page on a first visit. The Worker's app-shell fallback now requests `/` instead of `/index.html`, which the assets binding redirected.
+- The TPPT PDF report printed the larger-event answer under the opposite question ("Stand-alone event?"); the screen and the PDF now share one set of question texts. A TPPT chunk that fails to load shows a reload message instead of a blank app.
+- Quiz answer icons were white on white, the results badge had no background, and the question-count slider had no label.
+- The Historical Declarations API clamps the page size, matches search text literally, ignores whitespace-only text, and returns 404 for malformed ids.
 
 ---
 

@@ -4,7 +4,7 @@ This directory serves as the source of truth for application content.
 
 - `code/` contains one JSON file per MedTech Code chapter.
 - `codeOrder.js` defines the chapter order.
-- `codeData.js` assembles the chapter files behind the existing `FULL_CODE_DATA` export.
+- `codeData.js` assembles the chapter files behind the existing `FULL_CODE_DATA` export, and splits them into the Code's own chapters (`CODE_CHAPTERS`) and website pages such as Version History (`WEBSITE_CHAPTERS`).
 - `code-manifest.json` is the immutable evidence for the 2026 content-neutral split. Do not regenerate it after ordinary content edits.
 - `code-september-2024 (1).pdf` is the supplied authoritative reference PDF.
 - `transparency/` contains standalone Transparency publications. The Disclosure

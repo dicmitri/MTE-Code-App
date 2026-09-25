@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { AppIcon } from './AppIcons';
 import { SearchResults } from './SearchResults';
-import { FULL_CODE_DATA, updateSearchStatus } from '../data/codeData';
+import { CODE_CHAPTERS, WEBSITE_CHAPTERS, updateSearchStatus } from '../data/codeData';
 import {
   TRANSPARENCY_DOCUMENTS,
 } from '../data/transparency/transparencyData';
@@ -62,6 +62,7 @@ const CollapsibleGroup = ({
 const getDefaultExpandedGroups = ({
   activeSection,
   activeDocumentId,
+  isWebsitePage,
   hasBookmarks,
   hasRecentHistory,
 }) => {
@@ -70,13 +71,14 @@ const getDefaultExpandedGroups = ({
   if (!activeSection) {
     if (hasBookmarks) groups.add('bookmarks');
     if (hasRecentHistory) groups.add('history');
+  } else if (isWebsitePage) {
+    groups.add('section-website');
   } else if (activeSection === 'code') {
     groups.add('section-code');
     groups.add('code-intro');
     groups.add('code-part1');
     groups.add('code-part2');
     groups.add('code-part3');
-    groups.add('code-website');
   } else if (activeSection === 'trees') {
     groups.add('section-trees');
   } else if (activeSection === 'transparency') {
@@ -93,7 +95,6 @@ const CODE_PARTS = [
   { id: 'part1', groupKey: 'code-part1', label: 'Part 1: The Code' },
   { id: 'part2', groupKey: 'code-part2', label: 'Part 2: Complaint Handling' },
   { id: 'part3', groupKey: 'code-part3', label: 'Part 3: Annexes & Glossary' },
-  { id: 'website', groupKey: 'code-website', label: 'Website' },
 ];
 
 const CODE_TYPE_CHIPS = [
@@ -140,12 +141,15 @@ export const Sidebar = ({
   // active -- it decides both the search scope and which parts of the non-search tree show.
   const isTransparencySection = activeSection === 'transparency';
   const searchScope = isTransparencySection ? 'transparency' : 'code';
+  const isWebsitePage = activeSection === 'code'
+    && WEBSITE_CHAPTERS.some((chapter) => chapter.id === activeId);
 
   // Track which groups are expanded
   const [expandedGroups, setExpandedGroups] = useState(() => (
     getDefaultExpandedGroups({
       activeSection,
       activeDocumentId,
+      isWebsitePage,
       hasBookmarks: bookmarks.length > 0,
       hasRecentHistory: recentHistory.length > 0,
     })
@@ -160,12 +164,14 @@ export const Sidebar = ({
     getDefaultExpandedGroups({
       activeSection,
       activeDocumentId,
+      isWebsitePage,
       hasBookmarks: bookmarks.length > 0,
       hasRecentHistory: recentHistory.length > 0,
     })
   ), [
     activeDocumentId,
     activeSection,
+    isWebsitePage,
     bookmarks.length,
     recentHistory.length,
   ]);
@@ -470,7 +476,7 @@ export const Sidebar = ({
                 className="space-y-2"
               >
               {CODE_PARTS.map((part) => {
-                const items = FULL_CODE_DATA.filter((chapter) => chapter.part === part.id);
+                const items = CODE_CHAPTERS.filter((chapter) => chapter.part === part.id);
 
                 return (
                   <CollapsibleGroup
@@ -635,6 +641,41 @@ export const Sidebar = ({
                 </span>
                 <span className="truncate flex-1">Browse Decision Trees</span>
               </button>
+            </CollapsibleGroup>
+
+            {/* Website section group: pages about the app itself, available from every section */}
+            <CollapsibleGroup
+              label="Website"
+              icon="Info"
+              expanded={expandedGroups.has('section-website')}
+              onToggle={() => toggleGroup('section-website')}
+              className="space-y-2"
+            >
+              {WEBSITE_CHAPTERS.map((item) => {
+                const isActive = activeSection === 'code' && activeId === item.id;
+
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => {
+                      onNavigateChapter(item.id);
+                      setSidebarOpen(false);
+                      window.scrollTo(0, 0);
+                    }}
+                    className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ml-2 ${
+                      isActive
+                        ? 'bg-[#7654A1] text-white shadow-md'
+                        : 'text-gray-600 hover:bg-gray-50'
+                    }`}
+                  >
+                    <span className={`shrink-0 ${isActive ? 'text-white' : 'text-gray-400'}`}>
+                      <AppIcon name={item.icon} size={18} />
+                    </span>
+                    <span className="truncate flex-1">{item.title}</span>
+                  </button>
+                );
+              })}
             </CollapsibleGroup>
 
             {/* Recently Viewed */}

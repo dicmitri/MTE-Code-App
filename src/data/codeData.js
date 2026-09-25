@@ -55,6 +55,13 @@ export const FULL_CODE_DATA = CODE_CHAPTER_IDS.map((id) => {
   return chapter;
 });
 
+// Website pages (Version History) are stored and routed like Code chapters, but they describe
+// the app, not the Code: the sidebar, the Code landing page and chapter-to-chapter navigation
+// keep them apart from the Code's own chapters.
+export const WEBSITE_PART_ID = 'website';
+export const CODE_CHAPTERS = FULL_CODE_DATA.filter((chapter) => chapter.part !== WEBSITE_PART_ID);
+export const WEBSITE_CHAPTERS = FULL_CODE_DATA.filter((chapter) => chapter.part === WEBSITE_PART_ID);
+
 export const updateSearchStatus = (message) => {
   const statusEl = document.getElementById('search-status');
   if (statusEl) {

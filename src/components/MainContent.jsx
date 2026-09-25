@@ -2,7 +2,7 @@ import React from 'react';
 import { DocumentReader } from './DocumentReader';
 import { LandingPage } from './LandingPage';
 import { AppIcon } from './AppIcons';
-import { FULL_CODE_DATA } from '../data/codeData';
+import { CODE_CHAPTERS, WEBSITE_CHAPTERS, WEBSITE_PART_ID } from '../data/codeData';
 import { getTreesByChapter } from '../data/treeData';
 import { buildCodeSectionPath } from '../utils/routeUtils';
 
@@ -57,7 +57,8 @@ export const MainContent = ({
     <DocumentReader
       activeId={activeId}
       activeContent={activeContent}
-      items={FULL_CODE_DATA}
+      // Previous/Next stays within the Code's own chapters, or within the website pages.
+      items={activeContent?.part === WEBSITE_PART_ID ? WEBSITE_CHAPTERS : CODE_CHAPTERS}
       renderLanding={() => <LandingPage onSelectChapter={handleChapterChange} />}
       onItemChange={handleChapterChange}
       onNavigateHome={onNavigateCodeHome}
