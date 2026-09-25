@@ -197,6 +197,11 @@ export function formatExplain(response, options = {}) {
   }
   lines.push('');
 
+  if (response.phraseSuggestion) {
+    lines.push(`Phrase suggestion: ${response.phraseSuggestion}`);
+    lines.push('');
+  }
+
   const results = (response.results || []).slice(0, limit);
   lines.push(...formatHitList('Results', results, response.results?.length ?? 0));
   lines.push('');

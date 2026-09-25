@@ -13,8 +13,9 @@
 import {
   boundedEditDistance,
   createWordResolver,
+  isContentWord,
   spellingBudget,
-  tokenizeWithOffsets,
+  tokenizeAllWithOffsets,
   tokenizeWords,
 } from './searchText.js';
 
@@ -89,6 +90,60 @@ function sequencePositions(tokens, seq) {
     if (ok) out.push(i);
   }
   return out;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Members. `full` holds every key of a word or phrase, `seq` only its content words. A phrase
+// with a small word in it ("in kind", "at no cost"), and any quoted phrase, is matched word for
+// word on the full token stream (`doc.fk`), small words included. Everything else is matched on
+// the content words (`doc.k`), exactly as before. Positions are always reported in content-word
+// units, so proximity and snippets compare like with like.
+// ---------------------------------------------------------------------------------------------
+function makeMember(key, info, { quoted = false } = {}) {
+  const full = key.split(' ');
+  const seq = full.filter(isContentWord);
+  if (seq.length === 0) return null;
+  const matchOn = seq.length !== full.length || (quoted && full.length > 1) ? 'full' : 'content';
+  return {
+    ...info, full, seq, matchOn, lead: full.findIndex(isContentWord),
+  };
+}
+
+const memberId = (member) => `${member.matchOn}:${member.full.join(' ')}`;
+
+function memberCount(doc, field, member) {
+  return member.matchOn === 'full'
+    ? countSequence(doc.fk[field], member.full)
+    : countSequence(doc.k[field], member.seq);
+}
+
+function memberPositions(doc, field, member) {
+  if (member.matchOn !== 'full') return sequencePositions(doc.k[field], member.seq);
+  return sequencePositions(doc.fk[field], member.full).map((p) => doc.f2c[field][p + member.lead]);
+}
+
+// Body occurrences for snippets: content-word start/end (end exclusive) plus the character
+// range to highlight, which for a phrase includes its small words ("in kind", not "kind").
+function memberBodyOccurrences(doc, di, member, index) {
+  if (member.matchOn !== 'full') {
+    const tokens = index.bodyTokensByDoc[di];
+    return sequencePositions(doc.k.body, member.seq).map((p) => ({
+      start: p,
+      end: p + member.seq.length,
+      charStart: tokens[p].start,
+      charEnd: tokens[p + member.seq.length - 1].end,
+    }));
+  }
+  const tokens = index.bodyFullTokensByDoc[di];
+  return sequencePositions(doc.fk.body, member.full).map((p) => {
+    const contentPositions = doc.f2c.body.slice(p, p + member.full.length).filter((c) => c >= 0);
+    return {
+      start: contentPositions[0],
+      end: contentPositions[contentPositions.length - 1] + 1,
+      charStart: tokens[p].start,
+      charEnd: tokens[p + member.full.length - 1].end,
+    };
+  });
 }
 
 // Schwartz & Hearst (2003): find the long form immediately preceding a "(SHORT)" abbreviation.
@@ -173,12 +228,16 @@ function parsePhrasebookGroups(phrasebook) {
 export const createSearchIndex = (documents, { phrasebook = { groups: [] }, glossary = [], scope = 'code' } = {}) => {
   const docs = documents || [];
 
-  // 1. Vocabulary: surface word -> frequency, across every field of every document.
+  // 1. Tokens (every word, small words flagged) and the vocabulary: content word -> frequency,
+  // across every field of every document.
+  const fieldTokens = docs.map((doc) => Object.fromEntries(
+    FIELD_NAMES.map((field) => [field, tokenizeAllWithOffsets(doc.fields[field])]),
+  ));
   const vocabulary = new Map();
-  for (const doc of docs) {
+  for (const tokensByField of fieldTokens) {
     for (const field of FIELD_NAMES) {
-      for (const word of tokenizeWords(doc.fields[field])) {
-        vocabulary.set(word, (vocabulary.get(word) || 0) + 1);
+      for (const token of tokensByField[field]) {
+        if (token.content) vocabulary.set(token.word, (vocabulary.get(token.word) || 0) + 1);
       }
     }
   }
@@ -190,22 +249,41 @@ export const createSearchIndex = (documents, { phrasebook = { groups: [] }, glos
   // (element, index) callback signature would otherwise feed the array index in as `depth`.
   const keysOf = (text) => tokenizeWords(text).map((word) => keyOf(word));
 
-  // 2. Per-document field keys, plus body token offsets (for snippets) and average field
-  // lengths (for BM25F length normalization). Mutates each doc with a `k` property, mirroring
-  // the reference prototype.
+  // 2. Per-document field keys, body token offsets (for snippets) and average field lengths
+  // (for BM25F length normalization). Mutates each doc: `k` holds the content words (lengths,
+  // postings, proximity, as in the reference prototype), `fk` every word including small words
+  // (for phrases), and `f2c` maps each `fk` position to its `k` position (-1 for a small word).
   const averageLength = Object.fromEntries(FIELD_NAMES.map((field) => [field, 0]));
   const bodyTokensByDoc = [];
+  const bodyFullTokensByDoc = [];
   docs.forEach((doc, di) => {
     doc.k = {};
+    doc.fk = {};
+    doc.f2c = {};
     for (const field of FIELD_NAMES) {
-      if (field === 'body') {
-        const withOffsets = tokenizeWithOffsets(doc.fields.body);
-        bodyTokensByDoc[di] = withOffsets;
-        doc.k.body = withOffsets.map((token) => keyOf(token.word));
-      } else {
-        doc.k[field] = tokenizeWords(doc.fields[field]).map((word) => keyOf(word));
+      const tokens = fieldTokens[di][field];
+      const k = [];
+      const fk = [];
+      const f2c = [];
+      for (const token of tokens) {
+        if (token.content) {
+          const key = keyOf(token.word);
+          f2c.push(k.length);
+          k.push(key);
+          fk.push(key);
+        } else {
+          f2c.push(-1);
+          fk.push(token.word);
+        }
       }
-      averageLength[field] += doc.k[field].length;
+      doc.k[field] = k;
+      doc.fk[field] = fk;
+      doc.f2c[field] = f2c;
+      if (field === 'body') {
+        bodyFullTokensByDoc[di] = tokens;
+        bodyTokensByDoc[di] = tokens.filter((token) => token.content);
+      }
+      averageLength[field] += k.length;
     }
   });
   for (const field of FIELD_NAMES) averageLength[field] /= Math.max(1, docs.length);
@@ -223,7 +301,17 @@ export const createSearchIndex = (documents, { phrasebook = { groups: [] }, glos
   const docFrequency = (key) => (postings.get(key)?.size) || 0;
   const isIndexedKey = (key) => postings.has(key);
   const resolveWord = (word) => resolver.resolve(word, isIndexedKey);
-  const resolvedPhrase = (text) => tokenizeWords(text).map(resolveWord).join(' ');
+  // A phrase's key: content words resolved like query words, small words kept as they are, so
+  // "in kind" stays a two-word phrase instead of collapsing to "kind". Empty when the text has
+  // no content word at all.
+  const phraseKey = (text) => {
+    const tokens = tokenizeAllWithOffsets(text);
+    if (!tokens.some((token) => token.content)) return '';
+    return tokens.map((token) => (token.content ? resolveWord(token.word) : token.word)).join(' ');
+  };
+  // Every word of a term, keyed like the documents themselves (for the defined-term rule).
+  const fullKeysOf = (text) => tokenizeAllWithOffsets(text)
+    .map((token) => (token.content ? keyOf(token.word) : token.word));
 
   // Resolved key/phrase -> human display text, for explanations. First source to claim a key
   // wins (abbreviations, then Glossary links, then the phrasebook -- the same order they are
@@ -253,8 +341,8 @@ export const createSearchIndex = (documents, { phrasebook = { groups: [] }, glos
       const window = preceding.slice(-Math.min(shortForm.length + 5, shortForm.length * 2)).join(' ');
       const longForm = bestLongForm(shortForm, window);
       if (!longForm || longForm.split(/\s+/).length < 2) continue;
-      const shortKey = resolvedPhrase(shortForm);
-      const longKey = resolvedPhrase(longForm);
+      const shortKey = phraseKey(shortForm);
+      const longKey = phraseKey(longForm);
       addEquivalent(shortKey, longKey);
       addEquivalent(longKey, shortKey);
       registerDisplayText(shortKey, shortForm);
@@ -284,7 +372,8 @@ export const createSearchIndex = (documents, { phrasebook = { groups: [] }, glos
   for (const [word, definitions] of seenIn) {
     if (definitions.size !== 1 || termWords.has(word) || /\d/.test(word) || docFrequency(word) > maxLinkDocs) continue;
     const [entry] = definitions;
-    const target = resolvedPhrase(String(entry.term || '').replace(/\s*\([^)]*\)$/, ''));
+    const target = phraseKey(String(entry.term || '').replace(/\s*\([^)]*\)$/, ''));
+    if (!target) continue;
     glossaryLinks.set(word, target);
     registerDisplayText(target, entry.term);
   }
@@ -294,35 +383,54 @@ export const createSearchIndex = (documents, { phrasebook = { groups: [] }, glos
   const rules = [];
   for (const group of parsePhrasebookGroups(phrasebook)) {
     if (group.kind === 'same') {
-      const validPhrases = group.phrases.filter((phrase) => resolvedPhrase(phrase).length > 0);
+      const validPhrases = group.phrases.filter((phrase) => phraseKey(phrase).length > 0);
       if (validPhrases.length < 2) continue;
       for (const phrase of validPhrases) {
-        const to = validPhrases.filter((other) => other !== phrase).map((other) => resolvedPhrase(other));
+        const to = validPhrases.filter((other) => other !== phrase).map((other) => phraseKey(other));
         if (to.length === 0) continue;
-        const from = resolvedPhrase(phrase);
+        const from = phraseKey(phrase);
         rules.push({ from, to, kind: 'same' });
         registerDisplayText(from, phrase);
       }
     } else {
-      const validTo = group.to.filter((phrase) => resolvedPhrase(phrase).length > 0);
+      const validTo = group.to.filter((phrase) => phraseKey(phrase).length > 0);
       if (validTo.length === 0) continue;
-      const resolvedTo = validTo.map((phrase) => resolvedPhrase(phrase));
-      validTo.forEach((phrase) => registerDisplayText(resolvedPhrase(phrase), phrase));
+      const resolvedTo = validTo.map((phrase) => phraseKey(phrase));
+      validTo.forEach((phrase) => registerDisplayText(phraseKey(phrase), phrase));
       for (const phrase of group.from) {
-        const from = resolvedPhrase(phrase);
+        const from = phraseKey(phrase);
         if (!from) continue;
         rules.push({ from, to: resolvedTo, kind: 'oneWay' });
         registerDisplayText(from, phrase);
       }
     }
   }
-  const phrasebookWords = new Set(rules.flatMap((rule) => rule.from.split(' ')));
+  // Content words only: a typo must never be "corrected" into a small word.
+  const phrasebookWords = new Set(rules.flatMap((rule) => rule.from.split(' ').filter(isContentWord)));
 
-  // 7. Defined terms: the whole query equals a Glossary term, form or abbreviation.
+  // Phrases a query can contain (phrasebook "from" phrases, abbreviation long forms), with the
+  // number of small words before their first content word, for lining them up with the query.
+  const toCandidate = (phrase, kind) => {
+    const full = phrase.split(' ');
+    return {
+      phrase,
+      full,
+      kind,
+      lead: full.findIndex(isContentWord),
+      contentLength: full.filter(isContentWord).length,
+    };
+  };
+  const phraseCandidates = [
+    ...[...new Set(rules.map((rule) => rule.from))].map((from) => toCandidate(from, 'rule')),
+    ...[...equivalents.keys()].filter((key) => key.includes(' ')).map((key) => toCandidate(key, 'longForm')),
+  ];
+
+  // 7. Defined terms: the whole query equals a Glossary term, form or abbreviation (every word,
+  // small words included: "in kind" is a defined term, "kind" is not).
   const definedTerms = new Map();
   for (const doc of docs) {
     if (doc.type !== 'definition') continue;
-    for (const term of doc.terms || []) definedTerms.set(keysOf(term).join(' '), doc);
+    for (const term of doc.terms || []) definedTerms.set(fullKeysOf(term).join(' '), doc);
   }
 
   // 8. Surface forms per key ("guest" -> guest, guests), for the reader-highlight RegExp.
@@ -348,10 +456,11 @@ export const createSearchIndex = (documents, { phrasebook = { groups: [] }, glos
     phrasebookWords,
     glossaryLinks,
     equivalents,
-    longForms: [...equivalents.keys()].filter((key) => key.includes(' ')),
+    phraseCandidates,
     definedTerms,
     displayText,
     bodyTokensByDoc,
+    bodyFullTokensByDoc,
     surfaceFormsByKey,
   };
 };
@@ -393,46 +502,52 @@ function correctToken(word, index) {
 
 const displayFor = (index, resolvedText, fallback) => index.displayText.get(resolvedText) || fallback;
 
-// One position's concept: the longest phrasebook phrase or abbreviation long form starting here
-// (else the single word), chained once through abbreviations and Glossary links (two passes,
-// half weight for links).
-function buildStandardConceptAt(corrected, keysInQuery, i, index) {
-  let rule = null;
-  for (const candidateRule of index.rules) {
-    const len = candidateRule.from.split(' ').length;
-    if (keysInQuery.slice(i, i + len).join(' ') === candidateRule.from
-      && (!rule || len > rule.from.split(' ').length)) {
-      rule = candidateRule;
+// One position's concept: the longest phrasebook phrase or abbreviation long form whose words,
+// small words included, line up with the typed words here (else the single word), chained once
+// through abbreviations and Glossary links (two passes, half weight for links). A phrasebook
+// phrase beats a long form of the same length.
+function buildStandardConceptAt(ctx, i, index) {
+  const {
+    corrected, keysInQuery, fullKeys, fullWords, fullIndexOfContent,
+  } = ctx;
+  const at = fullIndexOfContent[i];
+  let best = null;
+  let bestStart = at;
+  for (const candidate of index.phraseCandidates) {
+    const start = at - candidate.lead;
+    if (start < 0 || start + candidate.full.length > fullKeys.length) continue;
+    if (!candidate.full.every((key, j) => fullKeys[start + j] === key)) continue;
+    const longer = !best
+      || candidate.contentLength > best.contentLength
+      || (candidate.contentLength === best.contentLength && candidate.full.length > best.full.length);
+    if (longer) {
+      best = candidate;
+      bestStart = start;
     }
   }
-  // A typed long form ("healthcare professional") is one concept, so the chain below also finds
-  // its abbreviation (HCP). A phrasebook phrase of the same length wins.
-  const lengthOf = (phrase) => (phrase ? phrase.split(' ').length : 1);
-  let longForm = null;
-  for (const candidate of index.longForms) {
-    const len = lengthOf(candidate);
-    if (len > lengthOf(rule?.from) && len > lengthOf(longForm)
-      && keysInQuery.slice(i, i + len).join(' ') === candidate) {
-      longForm = candidate;
-    }
-  }
-  if (longForm) rule = null;
-  const literal = longForm || (rule ? rule.from : keysInQuery[i]);
-  const length = lengthOf(literal);
+  const rule = best?.kind === 'rule' ? best : null;
+  const length = best ? best.contentLength : 1;
+  const literal = best ? best.phrase : keysInQuery[i];
+  const typed = best ? fullWords.slice(bestStart, bestStart + best.full.length).join(' ') : corrected[i].word;
   // A spelling correction anywhere in the phrase lowers the whole phrase's weight.
   const span = corrected.slice(i, i + length);
   const spanWeight = Math.min(...span.map((c) => c.weight));
   const spanCorrected = span.some((c) => c.source !== 'query');
   // Uncorrected words are shown as typed; a phrasebook phrase or a spelling correction is
   // shown as its resolved, human display text (never the raw typo).
-  const literalText = (!rule && !spanCorrected)
-    ? span.map((c) => c.word).join(' ')
-    : displayFor(index, literal, literal);
+  const literalText = (!rule && !spanCorrected) ? typed : displayFor(index, literal, literal);
   const members = new Map([[literal, { weight: spanWeight, source: spanCorrected ? 'spelling' : 'query', text: literalText }]]);
-  const wordInScope = index.docFrequency(literal.split(' ')[0]) > SEARCH_RANKING.rareWordMaxDocs;
+  // "Your word first": when what was typed already appears in this scope, the phrasebook's
+  // suggestions count for less. A single word must appear in more than a couple of documents; a
+  // typed phrase is specific enough that appearing once counts ("advance payment" is in the Code,
+  // "at no cost" is not).
+  const literalMember = makeMember(literal, {});
+  const wordInScope = literal.includes(' ')
+    ? Boolean(literalMember) && memberMatchesScope(index, literalMember)
+    : index.docFrequency(literal) > SEARCH_RANKING.rareWordMaxDocs;
 
   if (rule) {
-    for (const candidateRule of index.rules.filter((r) => r.from === rule.from)) {
+    for (const candidateRule of index.rules.filter((r) => r.from === rule.phrase)) {
       const weightFactor = candidateRule.kind === 'same'
         ? SEARCH_RANKING.weights.same
         : (wordInScope ? SEARCH_RANKING.weights.oneWayWhenWordInScope : SEARCH_RANKING.weights.oneWay);
@@ -466,29 +581,28 @@ function buildStandardConceptAt(corrected, keysInQuery, i, index) {
     }
   }
 
-  const label = corrected.slice(i, i + length).map((c) => c.word).join(' ');
   return {
     length,
     concept: {
       quoted: false,
-      label,
-      members: [...members].map(([resolvedKey, info]) => ({ seq: resolvedKey.split(' '), ...info })),
+      label: typed,
+      members: [...members].map(([key, info]) => makeMember(key, info)).filter(Boolean),
     },
   };
 }
 
-// A quoted segment becomes one concept with a single member: the phrase of resolved keys, no
-// spelling correction and no expansions.
+// A quoted segment becomes one concept with a single member: the exact phrase, every word in
+// order and small words included (word forms still count, so "educational grant" also finds
+// "Educational Grants"), with no spelling correction and no expansions.
 function buildQuotedConcept(innerText, index) {
-  const words = tokenizeWords(innerText);
-  if (words.length === 0) return null;
-  const seq = words.map((word) => index.resolveWord(word));
+  const tokens = tokenizeAllWithOffsets(innerText);
+  if (!tokens.some((token) => token.content)) return null;
+  const key = tokens.map((token) => (token.content ? index.resolveWord(token.word) : token.word)).join(' ');
+  const label = collapseWhitespace(innerText);
   return {
     quoted: true,
-    label: collapseWhitespace(innerText),
-    members: [{
-      seq, text: seq.join(' '), weight: 1, source: 'query',
-    }],
+    label,
+    members: [makeMember(key, { weight: 1, source: 'query', text: label }, { quoted: true })],
   };
 }
 
@@ -517,14 +631,15 @@ function buildCompletionConcept(word, index) {
   return {
     quoted: false,
     label: word,
-    members: [...members].map(([resolvedKey, info]) => ({ seq: resolvedKey.split(' '), ...info })),
+    members: [...members].map(([key, info]) => makeMember(key, info)).filter(Boolean),
   };
 }
 
 // Splits the raw query into quoted/unquoted segments and builds the flat list of query
 // concepts, applying completion (only to the last unquoted word, only while it is still being
-// typed) and quoting along the way. Also returns a flat resolved-key sequence for the
-// defined-term rule.
+// typed) and quoting along the way. Also returns every typed key in order (small words
+// included) for the defined-term rule, and, for a query without quotes, what the exact-phrase
+// suggestion needs.
 function planQuery(index, rawQuery) {
   const segments = splitQuotedSegments(rawQuery);
   const endsWithBoundary = /[\s"“”]$/.test(rawQuery);
@@ -536,6 +651,7 @@ function planQuery(index, rawQuery) {
   const concepts = [];
   const flatKeys = [];
   let exact = false;
+  let phrase = null;
 
   segments.forEach((segment, segmentIndex) => {
     if (segment.quoted) {
@@ -543,16 +659,25 @@ function planQuery(index, rawQuery) {
       const concept = buildQuotedConcept(segment.text, index);
       if (concept) {
         concepts.push(concept);
-        flatKeys.push(...concept.members[0].seq);
+        flatKeys.push(...concept.members[0].full);
       }
       return;
     }
 
-    const tokens = tokenizeWords(segment.text);
+    const allTokens = tokenizeAllWithOffsets(segment.text);
+    const tokens = allTokens.filter((token) => token.content).map((token) => token.word);
     if (tokens.length === 0) return;
     const corrected = tokens.map((word) => correctToken(word, index));
     const keysInQuery = corrected.map((c) => c.key);
-    flatKeys.push(...keysInQuery);
+    // Every typed word in order, small words included: content words by their (corrected) key.
+    const fullIndexOfContent = [];
+    const fullKeys = allTokens.map((token, fi) => {
+      if (!token.content) return token.word;
+      fullIndexOfContent.push(fi);
+      return keysInQuery[fullIndexOfContent.length - 1];
+    });
+    const fullWords = allTokens.map((token) => token.word);
+    flatKeys.push(...fullKeys);
 
     const lastIndex = tokens.length - 1;
     let completionConcept = null;
@@ -565,6 +690,18 @@ function planQuery(index, rawQuery) {
       }
     }
 
+    if (segments.length === 1) {
+      phrase = {
+        full: fullKeys,
+        hasSmallWord: allTokens.some((token) => !token.content),
+        endsWithContentWord: allTokens[allTokens.length - 1].content,
+        altered: Boolean(completionConcept) || corrected.some((c) => c.source !== 'query'),
+      };
+    }
+
+    const ctx = {
+      corrected, keysInQuery, fullKeys, fullWords, fullIndexOfContent,
+    };
     let i = 0;
     while (i < tokens.length) {
       if (completionConcept && i === lastIndex) {
@@ -572,13 +709,26 @@ function planQuery(index, rawQuery) {
         i += 1;
         continue;
       }
-      const { length, concept } = buildStandardConceptAt(corrected, keysInQuery, i, index);
+      const { length, concept } = buildStandardConceptAt(ctx, i, index);
       concepts.push(concept);
       i += length;
     }
   });
 
-  return { concepts, exact, flatKeys };
+  return {
+    concepts, exact, flatKeys, phrase,
+  };
+}
+
+// An unquoted query with small words ("in kind") whose exact wording occurs in this scope: offer
+// the quoted search, which matches only that phrase. Not offered when a word was corrected or is
+// still being completed, or when the query ends in a small word (usually mid-typing).
+function suggestExactPhrase(index, phrase, query) {
+  if (!phrase || !phrase.hasSmallWord || !phrase.endsWithContentWord || phrase.altered) return null;
+  if (phrase.full.length < 2 || /["“”]/.test(query)) return null;
+  const member = makeMember(phrase.full.join(' '), {}, { quoted: true });
+  if (!member || !memberMatchesScope(index, member)) return null;
+  return `"${collapseWhitespace(query)}"`;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -597,7 +747,7 @@ function scoreQuery(index, concepts) {
         const doc = index.docs[di];
         let tf = 0;
         for (const field of index.fieldNames) {
-          const n = countSequence(doc.k[field], member.seq);
+          const n = memberCount(doc, field, member);
           if (n) {
             const { weight, b } = SEARCH_RANKING.fields[field];
             tf += (weight * n) / (1 - b + (b * doc.k[field].length) / index.averageLength[field]);
@@ -633,7 +783,7 @@ function scoreQuery(index, concepts) {
       for (const field of ['title', 'body']) {
         const events = [];
         for (const [ci, v] of matched) {
-          for (const p of sequencePositions(doc.k[field], v.member.seq)) events.push([p, ci]);
+          for (const p of memberPositions(doc, field, v.member)) events.push([p, ci]);
         }
         events.sort((a, b) => a[0] - b[0]);
         const counts = new Map();
@@ -660,15 +810,15 @@ function scoreQuery(index, concepts) {
   return { hits, effectiveConcepts };
 }
 
-// Does this member's sequence appear anywhere (any field, any document) in this scope?
-function memberMatchesScope(index, seq) {
-  const candidateDocs = index.postings.get(seq[0]);
+// Does this member appear anywhere (any field, any document) in this scope?
+function memberMatchesScope(index, member) {
+  const candidateDocs = index.postings.get(member.seq[0]);
   if (!candidateDocs || candidateDocs.size === 0) return false;
-  if (seq.length === 1) return true;
+  if (member.matchOn === 'content' && member.seq.length === 1) return true;
   for (const di of candidateDocs) {
     const doc = index.docs[di];
     for (const field of index.fieldNames) {
-      if (countSequence(doc.k[field], seq) > 0) return true;
+      if (memberCount(doc, field, member) > 0) return true;
     }
   }
   return false;
@@ -691,11 +841,8 @@ function buildSnippet(doc, di, matched, index) {
   const bodyTokens = index.bodyTokensByDoc[di] || [];
   const occurrences = [];
   for (const [ci, info] of matched) {
-    const { seq } = info.member;
-    for (const position of sequencePositions(doc.k.body, seq)) {
-      occurrences.push({
-        ci, start: position, end: position + seq.length,
-      });
+    for (const occurrence of memberBodyOccurrences(doc, di, info.member, index)) {
+      occurrences.push({ ci, ...occurrence });
     }
   }
 
@@ -730,13 +877,20 @@ function buildSnippet(doc, di, matched, index) {
   // Render starting 3 tokens before the first match (clamped), extending to ~220 chars, cut at
   // token boundaries.
   const startTokenIndex = Math.max(0, firstMatchedPosition - SNIPPET_LEAD_TOKENS);
-  const startChar = bodyTokens[startTokenIndex].start;
+  let startChar = bodyTokens[startTokenIndex].start;
   let endTokenIndex = startTokenIndex;
   let endChar = bodyTokens[startTokenIndex].end;
   for (let t = startTokenIndex; t < bodyTokens.length; t += 1) {
     if (t > startTokenIndex && bodyTokens[t].end - startChar > SNIPPET_MAX_CHARS) break;
     endTokenIndex = t;
     endChar = bodyTokens[t].end;
+  }
+  // A phrase's small words lie outside the content words: widen the text to include them
+  // ("In kind" at the very start of the body).
+  const shown = occurrences.filter((o) => o.start >= startTokenIndex && o.end - 1 <= endTokenIndex);
+  for (const o of shown) {
+    startChar = Math.min(startChar, o.charStart);
+    endChar = Math.max(endChar, o.charEnd);
   }
 
   const prefix = startTokenIndex > 0 ? '…' : '';
@@ -746,10 +900,14 @@ function buildSnippet(doc, di, matched, index) {
 
   // Offsets are relative to `text` itself, including any leading ellipsis.
   const offset = prefix.length - startChar;
-  const highlights = occurrences
-    .filter((o) => o.start >= startTokenIndex && o.end - 1 <= endTokenIndex)
-    .map((o) => [bodyTokens[o.start].start + offset, bodyTokens[o.end - 1].end + offset])
-    .sort((a, b) => a[0] - b[0]);
+  // Sorted, with overlapping ranges merged (a phrase and one of its own words can both match).
+  const ranges = shown.map((o) => [o.charStart + offset, o.charEnd + offset]).sort((a, b) => a[0] - b[0]);
+  const highlights = [];
+  for (const [start, end] of ranges) {
+    const last = highlights[highlights.length - 1];
+    if (last && start < last[1]) last[1] = Math.max(last[1], end);
+    else highlights.push([start, end]);
+  }
 
   return { text, highlights };
 }
@@ -765,7 +923,19 @@ function surfaceFormsForKey(index, keyWord) {
   return index.surfaceFormsByKey.get(keyWord) || [keyWord];
 }
 
-function collectAlternatives(index, seq) {
+// Between the words of a phrase matched word for word: any run of spaces or punctuation (so
+// "in kind" also highlights "In-Kind"), but never another word.
+const FULL_PHRASE_CONNECTOR = '[^a-z0-9]+';
+
+function collectAlternatives(index, member) {
+  if (member.matchOn === 'full') {
+    return [member.full.map((key) => {
+      if (!isContentWord(key)) return escapeRegExp(key);
+      const forms = surfaceFormsForKey(index, key).map(escapeRegExp);
+      return forms.length > 1 ? `(?:${forms.join('|')})` : forms[0];
+    }).join(FULL_PHRASE_CONNECTOR)];
+  }
+  const { seq } = member;
   if (seq.length === 1) {
     return surfaceFormsForKey(index, seq[0]).map(escapeRegExp);
   }
@@ -778,14 +948,14 @@ function collectAlternatives(index, seq) {
 
 function buildHighlightRegExp(index, concepts, matchesScope) {
   const alternatives = new Set();
-  const seenSeq = new Set();
+  const seen = new Set();
   for (const concept of concepts) {
     for (const member of concept.members) {
-      const seqKey = member.seq.join(' ');
-      if (seenSeq.has(seqKey)) continue;
-      seenSeq.add(seqKey);
-      if (!matchesScope(member.seq)) continue;
-      for (const alternative of collectAlternatives(index, member.seq)) {
+      const id = memberId(member);
+      if (seen.has(id)) continue;
+      seen.add(id);
+      if (!matchesScope(member)) continue;
+      for (const alternative of collectAlternatives(index, member)) {
         if (alternative) alternatives.add(alternative);
       }
     }
@@ -798,9 +968,9 @@ function buildHighlightRegExp(index, concepts, matchesScope) {
 // ---------------------------------------------------------------------------------------------
 // SearchHit shaping.
 // ---------------------------------------------------------------------------------------------
-function fieldFor(doc, seq) {
+function fieldFor(doc, member) {
   for (const field of MATCHED_FIELD_ORDER) {
-    if (countSequence(doc.k[field], seq) > 0) return field;
+    if (memberCount(doc, field, member) > 0) return field;
   }
   return 'body';
 }
@@ -827,7 +997,7 @@ function toSearchHit(hit, index, concepts) {
       concept: concepts[ci]?.label ?? null,
       text: m.member.text,
       source: m.member.source,
-      field: fieldFor(doc, m.member.seq),
+      field: fieldFor(doc, m.member),
     })),
   };
 }
@@ -846,6 +1016,7 @@ const emptyResponse = (query, scope, exact = false) => ({
   appResults: [],
   allTermsMatched: false,
   highlight: null,
+  phraseSuggestion: null,
 });
 
 const QA_NUMBER_PATTERN = /^\s*q\s*&?\s*a\s*(\d+)\s*$/i;
@@ -885,11 +1056,14 @@ export const runSearch = (index, rawQueryInput) => {
         appResults: [],
         allTermsMatched: true,
         highlight: null,
+        phraseSuggestion: null,
       };
     }
   }
 
-  const { concepts, exact, flatKeys } = planQuery(index, rawQuery);
+  const {
+    concepts, exact, flatKeys, phrase,
+  } = planQuery(index, rawQuery);
   if (concepts.length === 0) return emptyResponse(query, scope, exact);
 
   const { hits } = scoreQuery(index, concepts);
@@ -925,10 +1099,10 @@ export const runSearch = (index, rawQueryInput) => {
 
   // Whether a member occurs anywhere in this scope, computed once per member for this query.
   const scopeMatches = new Map();
-  const matchesScope = (seq) => {
-    const seqKey = seq.join(' ');
-    if (!scopeMatches.has(seqKey)) scopeMatches.set(seqKey, memberMatchesScope(index, seq));
-    return scopeMatches.get(seqKey);
+  const matchesScope = (member) => {
+    const id = memberId(member);
+    if (!scopeMatches.has(id)) scopeMatches.set(id, memberMatchesScope(index, member));
+    return scopeMatches.get(id);
   };
 
   const reportedConcepts = concepts.map((concept) => {
@@ -936,7 +1110,7 @@ export const runSearch = (index, rawQueryInput) => {
       text: member.text,
       source: member.source,
       weight: member.weight,
-      matched: matchesScope(member.seq),
+      matched: matchesScope(member),
     }));
     return {
       label: concept.label,
@@ -961,5 +1135,6 @@ export const runSearch = (index, rawQueryInput) => {
     appResults,
     allTermsMatched: results.some((h) => h.coverage === 1),
     highlight: buildHighlightRegExp(index, concepts, matchesScope),
+    phraseSuggestion: suggestExactPhrase(index, phrase, query),
   };
 };

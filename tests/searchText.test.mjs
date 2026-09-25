@@ -7,6 +7,7 @@ import {
   normalizeText,
   spellingBudget,
   STOPWORDS,
+  tokenizeAllWithOffsets,
   tokenizeWithOffsets,
   tokenizeWords,
 } from '../src/utils/searchText.js';
@@ -49,6 +50,29 @@ test('drops stopwords and 1-character non-numeric tokens, keeps digits', () => {
     assert.ok(STOPWORDS.has(word), `"${word}" should be a stopword`);
   }
   assert.deepEqual(tokenizeWords('a I x 9'), ['9']);
+});
+
+test('tokenizeAllWithOffsets keeps small words, flagged as not content, with their offsets', () => {
+  const text = 'Provided In-Kind, e.g. the Company’s gift';
+  const tokens = tokenizeAllWithOffsets(text);
+  assert.deepEqual(tokens.map((token) => [token.word, token.content]), [
+    ['provided', true],
+    ['in', false],
+    ['kind', true],
+    ['e', false],
+    ['g', false],
+    ['the', false],
+    ['company', true],
+    ['gift', true],
+  ]);
+  for (const token of tokens) {
+    assert.equal(text.slice(token.start, token.end).toLowerCase(), token.word);
+  }
+  // Its content tokens are exactly what tokenizeWithOffsets returns.
+  assert.deepEqual(
+    tokens.filter((token) => token.content).map(({ word, start, end }) => ({ word, start, end })),
+    tokenizeWithOffsets(text),
+  );
 });
 
 test('splits on hyphens and punctuation, and normalizes multi-word text consistently', () => {

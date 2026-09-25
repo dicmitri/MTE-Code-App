@@ -521,6 +521,122 @@ test('handles a query made only of stopwords', () => {
   assert.deepEqual(response.results, []);
 });
 
+// ---------------------------------------------------------------------------------------------
+// Phrases with small words ("in kind", "at no cost") are matched word for word, small words
+// included. A separate corpus, so the shared fixture's rankings above never move.
+// ---------------------------------------------------------------------------------------------
+const PHRASE_DOCUMENTS = [
+  makeDoc({
+    id: 'px/in-kind',
+    title: 'Support Rules',
+    fields: { title: 'Support Rules', context: 'Support Chapter', body: 'Support may be provided in kind at the congress, subject to approval.' },
+  }),
+  makeDoc({
+    id: 'px/hyphenated',
+    type: 'qa',
+    title: 'What is an In-Kind grant?',
+    fields: { title: 'What is an In-Kind grant?', context: 'Support Chapter', body: 'It is a grant given as goods or services rather than money.' },
+  }),
+  makeDoc({
+    id: 'px/kinds',
+    title: 'Record Keeping',
+    fields: { title: 'Record Keeping', context: 'Records Chapter', body: 'All kinds of support need written records kept for five years.' },
+  }),
+  makeDoc({
+    id: 'px/travel-cost',
+    title: 'Travel Expenses',
+    fields: { title: 'Travel Expenses', context: 'Travel Chapter', body: 'The travel cost must be reasonable and documented.' },
+  }),
+  makeDoc({
+    id: 'px/complimentary',
+    title: 'Complimentary Items',
+    fields: { title: 'Complimentary Items', context: 'Gifts Chapter', body: 'Complimentary items must be modest in value.' },
+  }),
+  // The defined term lives only in `terms`, so a promotion can be told apart from a natural match.
+  makeDoc({
+    id: 'px/definition',
+    type: 'definition',
+    label: 'Definition',
+    title: 'Goods and Services Support',
+    location: 'Glossary',
+    terms: ['In Kind'],
+    fields: { title: 'Goods and Services Support', context: 'Glossary', body: 'Support given as goods or services.' },
+  }),
+];
+
+const phraseIndex = createSearchIndex(PHRASE_DOCUMENTS.map((doc) => ({ ...doc, fields: { ...doc.fields } })), {
+  phrasebook: {
+    groups: [
+      { from: ['at no cost'], to: ['complimentary'] },
+      { from: ['gratis'], to: ['in kind'] },
+    ],
+  },
+  glossary: [],
+  scope: 'fixture',
+});
+
+test('a quoted phrase keeps its small words: "in kind" does not match "kinds of"', () => {
+  const quoted = runSearch(phraseIndex, '"in kind"');
+  assert.equal(quoted.exact, true);
+  assert.ok(find(quoted, 'px/in-kind'), 'matches "in kind"');
+  assert.ok(find(quoted, 'px/hyphenated'), 'matches "In-Kind"');
+  assert.equal(find(quoted, 'px/kinds'), undefined, 'must not match "kinds of"');
+
+  const unquoted = runSearch(phraseIndex, 'in kind');
+  assert.ok(find(unquoted, 'px/kinds'), 'without quotes, small words are ignored');
+});
+
+test('a quoted phrase is reported, snippeted and highlighted as the whole phrase', () => {
+  const response = runSearch(phraseIndex, '"in kind"');
+  assert.equal(response.concepts[0].label, 'in kind');
+  assert.equal(response.concepts[0].members[0].text, 'in kind');
+
+  const hit = find(response, 'px/in-kind');
+  assert.deepEqual(hit.matched.map((m) => m.text), ['in kind']);
+  const [start, end] = hit.snippet.highlights[0];
+  assert.equal(hit.snippet.text.slice(start, end), 'in kind');
+
+  const highlight = new RegExp(response.highlight.source, 'i');
+  assert.ok(highlight.test('an In-Kind grant'));
+  assert.ok(highlight.test('provided in kind'));
+  assert.ok(!highlight.test('all kinds of support'));
+});
+
+test('a phrasebook phrase with small words applies only when the whole phrase is typed', () => {
+  const plainWord = runSearch(phraseIndex, 'travel cost');
+  assert.deepEqual(plainWord.concepts.map((concept) => concept.label), ['travel', 'cost']);
+  assert.ok(plainWord.concepts.every((concept) => concept.members.every((m) => m.source !== 'phrasebook')));
+
+  const phrase = runSearch(phraseIndex, 'at no cost');
+  assert.deepEqual(phrase.concepts.map((concept) => concept.label), ['at no cost']);
+  const [literal, ...expansions] = phrase.concepts[0].members;
+  assert.equal(literal.matched, false, '"at no cost" is not in the fixture');
+  const complimentary = expansions.find((m) => m.text === 'complimentary');
+  assert.equal(complimentary.source, 'phrasebook');
+  assert.equal(complimentary.weight, SEARCH_RANKING.weights.oneWay, 'an absent phrase gets the full one-way weight');
+});
+
+test('a phrasebook target with small words matches only the phrase', () => {
+  const response = runSearch(phraseIndex, 'gratis');
+  assert.ok(find(response, 'px/in-kind'));
+  assert.equal(find(response, 'px/kinds'), undefined);
+});
+
+test('the defined-term rule compares every word: "in kind" promotes the term, "kind" does not', () => {
+  assert.equal(runSearch(phraseIndex, 'in kind').results[0].id, 'px/definition');
+  assert.equal(find(runSearch(phraseIndex, 'kind'), 'px/definition'), undefined);
+});
+
+test('suggests the quoted phrase only for an unquoted phrase with small words that occurs as typed', () => {
+  assert.equal(runSearch(phraseIndex, 'in kind').phraseSuggestion, '"in kind"');
+  assert.equal(runSearch(phraseIndex, '  In   kind ').phraseSuggestion, '"In kind"');
+  assert.equal(runSearch(phraseIndex, '"in kind"').phraseSuggestion, null, 'already quoted');
+  assert.equal(runSearch(phraseIndex, 'kind').phraseSuggestion, null, 'no small word');
+  assert.equal(runSearch(phraseIndex, 'in support').phraseSuggestion, null, 'the phrase does not occur');
+  assert.equal(runSearch(phraseIndex, 'support of').phraseSuggestion, null, 'ends in a small word');
+  assert.equal(runSearch(phraseIndex, 'in kindd ').phraseSuggestion, null, 'a word was corrected');
+});
+
 test('SEARCH_RANKING is deeply frozen', () => {
   assert.ok(Object.isFrozen(SEARCH_RANKING));
   assert.ok(Object.isFrozen(SEARCH_RANKING.fields));

@@ -21,16 +21,19 @@ export const normalizeText = (value) => String(value || '')
 const isApostrophe = (character) => character === "'" || character === '’';
 const isLetter = (character) => /\p{L}/u.test(character || '');
 
-const isKeptWord = (word) => (word.length > 1 || /\d/.test(word)) && !STOPWORDS.has(word);
+// A content word carries meaning on its own. Small words (stopwords, and one-letter words that
+// are not digits) are kept only inside phrases: "in kind" is not the same as "kind".
+export const isContentWord = (word) => (word.length > 1 || /\d/.test(word)) && !STOPWORDS.has(word);
 
 // Nearly every word in the Code is plain ASCII, which normalizes to its own lowercase form.
 const ASCII_RUN = /^[A-Za-z0-9]+$/;
 
-// Scans runs of [\p{L}\p{N}]+ in the ORIGINAL string, normalizes each run, and splits the
-// normalized run into ASCII [a-z0-9]+ sub-runs (normalization only rarely changes a run's
-// length -- e.g. a fraction character decomposing into digits and a separator -- and offsets
-// for those sub-runs are approximated proportionally rather than being exact).
-export const tokenizeWithOffsets = (text) => {
+// Every word, in order, as { word, start, end, content }: small words are included with
+// `content: false`. Scans runs of [\p{L}\p{N}]+ in the ORIGINAL string, normalizes each run, and
+// splits the normalized run into ASCII [a-z0-9]+ sub-runs (normalization only rarely changes a
+// run's length -- e.g. a fraction character decomposing into digits and a separator -- and
+// offsets for those sub-runs are approximated proportionally rather than being exact).
+export const tokenizeAllWithOffsets = (text) => {
   const source = String(text || '');
   const tokens = [];
   const runPattern = /[\p{L}\p{N}]+/gu;
@@ -50,7 +53,9 @@ export const tokenizeWithOffsets = (text) => {
       // skip
     } else if (ASCII_RUN.test(runText)) {
       const word = runText.toLowerCase();
-      if (isKeptWord(word)) tokens.push({ word, start: runStart, end: runEnd });
+      tokens.push({
+        word, start: runStart, end: runEnd, content: isContentWord(word),
+      });
     } else {
       const normalizedRun = normalizeText(runText);
       const subMatches = [...normalizedRun.matchAll(/[a-z0-9]+/g)];
@@ -59,10 +64,11 @@ export const tokenizeWithOffsets = (text) => {
 
       for (const subMatch of subMatches) {
         const word = subMatch[0];
-        if (!isKeptWord(word)) continue;
         const start = exact ? runStart : runStart + Math.round(subMatch.index * scale);
         const end = exact ? runEnd : runStart + Math.round((subMatch.index + word.length) * scale);
-        tokens.push({ word, start, end });
+        tokens.push({
+          word, start, end, content: isContentWord(word),
+        });
       }
     }
 
@@ -71,7 +77,14 @@ export const tokenizeWithOffsets = (text) => {
   return tokens;
 };
 
-export const tokenizeWords = (text) => tokenizeWithOffsets(text).map((token) => token.word);
+// Content words only, with offsets -- what ordinary word matching uses.
+export const tokenizeWithOffsets = (text) => tokenizeAllWithOffsets(text)
+  .filter((token) => token.content)
+  .map(({ word, start, end }) => ({ word, start, end }));
+
+export const tokenizeWords = (text) => tokenizeAllWithOffsets(text)
+  .filter((token) => token.content)
+  .map((token) => token.word);
 
 // Bounded optimal-string-alignment (Damerau) distance; returns max + 1 once the bound is
 // exceeded, so callers never need the exact distance beyond their budget.

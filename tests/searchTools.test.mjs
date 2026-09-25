@@ -159,6 +159,14 @@ test('formatExplain reports no concepts, no results and no corrections gracefull
   assert.match(output, /Publication details \(not Guidelines text\)/);
 });
 
+test('formatExplain prints the exact-phrase suggestion only when there is one', () => {
+  const withSuggestion = formatExplain({ ...buildFixtureResponse(), phraseSuggestion: '"in kind"' });
+  assert.match(withSuggestion, /Phrase suggestion: "in kind"/);
+
+  const without = formatExplain({ ...buildFixtureResponse(), phraseSuggestion: null });
+  assert.doesNotMatch(without, /Phrase suggestion/);
+});
+
 test('formatExplain reports a shortcut when present', () => {
   const output = formatExplain({
     query: 'Q&A 31',
