@@ -1,16 +1,38 @@
 # Agent Instructions
 
-<!-- Version: v1.8 - 2026-08-08 -->
+<!-- Version: v1.9 - 2026-09-25 -->
 
 ## Table of Contents
+- [Hard Rules](#hard-rules)
 - [Project Map](#project-map)
 - [Standards](#standards)
-  - [Architecture & State](#architecture--state)
-  - [Styling & Branding](#styling--branding)
-  - [Components & Icons](#components--icons)
-  - [Data Handling](#data-handling)
-  - [Naming Conventions](#naming-conventions)
-- [Architecture Overview](#architecture-overview)
+  - [Architecture & State](#1-architecture--state)
+  - [Styling & Branding](#2-styling--branding)
+  - [Components & Icons](#3-components--icons)
+  - [Data Handling](#4-data-handling)
+  - [Naming Conventions](#5-naming-conventions)
+- [Example Snippets](#example-snippets)
+
+## Hard Rules
+
+These rules are mandatory for every agent, on every task.
+
+<!-- CLAUDE.md repeats the Version History rule in brief. Keep the two in step. -->
+
+### Propose a Version History Update Before Every Push
+
+Before you commit and push, propose a draft update to the in-app Version History (`src/data/code/changelog.json`, shown at `/code/changelog`) and wait for the user's approval or edits. Then add the approved text to `changelog.json` in the same push as the changes it describes.
+
+- **Draft:** Cover every user-facing change in the push. Say whether it is a new entry, with a title in the style of the existing ones (such as “September 2026 Update 2”), or an addition to the current entry. Show it as plain headings and bullets, not HTML.
+- **Apply:** Copy the markup of the latest entry. A new entry goes at the top and takes the “Current” badge from the previous one; otherwise leave earlier entries as they are unless the user asks. Then run `npm run validate:data`.
+- **Nothing user-facing:** If the push changes nothing users see or do (for example documentation, tests, tooling, or a refactor with no visible effect), say so in one line instead of drafting an entry.
+- **No one to ask:** In an unattended run, commit the draft with the changes and flag it for review in the commit message and pull request description.
+
+Write for the people who use the app, not for developers:
+
+- Describe what users can now do, what looks or works differently, what was fixed, and any correction to the Code or Transparency text. Use plain language, the names shown on screen, and the style of the existing entries.
+- Leave out how the change was built: architecture, refactors, file and component names, dependencies, tests, tooling, documentation, and hosting, infrastructure or administration details. Those belong in `CHANGELOG.md`.
+- Mention an architectural or technical change only when users notice its effect, and then describe the effect, not the mechanism. Write “Direct links to chapters now open the right page on a first visit”, not “The Worker's app-shell fallback now requests `/` instead of `/index.html`”.
 
 ## Project Map
 
