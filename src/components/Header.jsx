@@ -5,7 +5,9 @@ import { SuggestionModal } from './SuggestionModal';
 import {
   READER_FONT_SIZES,
   READER_LINE_HEIGHTS,
+  READER_LINE_LENGTHS,
   READER_PARAGRAPH_SPACINGS,
+  READER_SIDE_PANEL_OPTIONS,
 } from '../config/readerSettings';
 
 export const Header = ({
@@ -27,6 +29,10 @@ export const Header = ({
   setReaderLine,
   readerSpace,
   setReaderSpace,
+  readerLineLength,
+  setReaderLineLength,
+  readerSidePanel,
+  setReaderSidePanel,
   readerMode = activeSection === 'code' && activeId !== 'home',
   showSummaryControl = true,
   showFullTextControl = true,
@@ -67,7 +73,7 @@ export const Header = ({
           <button
             type="button"
             onClick={() => setSidebarOpen(true)}
-            className="md:hidden p-1.5 sm:p-2 text-gray-500 hover:bg-gray-100 rounded-lg"
+            className="lg:hidden p-1.5 sm:p-2 text-gray-500 hover:bg-gray-100 rounded-lg"
             aria-label="Open navigation"
           >
             <AppIcon name="Menu" size={24} />
@@ -94,7 +100,7 @@ export const Header = ({
               aria-haspopup="dialog"
             >
               <AppIcon name="Lightbulb" size={16} className="text-amber-600 shrink-0" />
-              <span className="hidden md:inline">Send a Suggestion</span>
+              <span className="hidden lg:inline">Send a Suggestion</span>
             </button>
 
             <div className="w-px h-4 bg-gray-300 mx-0.5"></div>
@@ -112,7 +118,7 @@ export const Header = ({
                 aria-pressed={showSummary}
               >
                 <AppIcon name="List" size={16} />
-                <span className="hidden md:inline">Summary</span>
+                <span className="hidden lg:inline">Summary</span>
               </button>
             )}
             
@@ -129,7 +135,7 @@ export const Header = ({
                 aria-pressed={showFullText}
               >
                 <AppIcon name="FileText" size={16} />
-                <span className="hidden md:inline">Full Text</span>
+                <span className="hidden lg:inline">Full Text</span>
               </button>
             )}
             
@@ -146,7 +152,7 @@ export const Header = ({
                 aria-pressed={showQA}
               >
                 <AppIcon name="Eye" size={16} />
-                <span className="hidden md:inline">Q&A</span>
+                <span className="hidden lg:inline">Q&A</span>
               </button>
             )}
 
@@ -171,17 +177,28 @@ export const Header = ({
                   id="reader-settings-panel"
                   role="group"
                   aria-label="Reading settings"
-                  className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-3 animate-fade-in z-50"
+                  className="absolute right-0 mt-2 w-60 bg-white border border-gray-200 rounded-lg shadow-lg p-3 animate-fade-in z-50"
                 >
                   {[
                     { heading: 'Font size', options: READER_FONT_SIZES, value: readerSize, onChange: setReaderSize },
                     { heading: 'Line spacing', options: READER_LINE_HEIGHTS, value: readerLine, onChange: setReaderLine },
                     { heading: 'Paragraph spacing', options: READER_PARAGRAPH_SPACINGS, value: readerSpace, onChange: setReaderSpace },
+                    { heading: 'Line length', options: READER_LINE_LENGTHS, value: readerLineLength, onChange: setReaderLineLength },
+                    {
+                      heading: 'Side panel',
+                      note: 'Definitions and previews beside the text on wide screens',
+                      options: READER_SIDE_PANEL_OPTIONS,
+                      value: readerSidePanel,
+                      onChange: setReaderSidePanel,
+                    },
                   ].map((setting, index, settings) => (
                     <div key={setting.heading}>
                       <div className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">
                         {setting.heading}
                       </div>
+                      {setting.note && (
+                        <p className="-mt-1.5 mb-2 text-[11px] leading-snug text-gray-500">{setting.note}</p>
+                      )}
                       <div className={`flex gap-2 ${index < settings.length - 1 ? 'mb-3' : ''}`}>
                         {setting.options.map((option) => {
                           const selected = setting.value === option.value;
@@ -216,7 +233,7 @@ export const Header = ({
               title="Print Current View"
             >
               <AppIcon name="Printer" size={16} />
-              <span className="hidden md:inline">Print</span>
+              <span className="hidden lg:inline">Print</span>
             </button>
 
           </div>

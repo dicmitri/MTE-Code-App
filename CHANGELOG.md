@@ -28,6 +28,14 @@ Versions are internal application-release labels; they are independent of the pr
 - Added Historical Declarations (`/transparency/historical-declarations`): search past transparency declarations by company or beneficiary name, filter by year, beneficiary country, company country, type and currency, and open a detail dialog. It is reachable from the Transparency landing page and sidebar, and served read-only by the Worker from a Cloudflare D1 database through `/api/historical-declarations/*`, with a capped result window.
 - Added a page description, Open Graph and Twitter sharing tags, `robots.txt` and `sitemap.xml`.
 - Added Version History entries for July 2026 Update 3, August 2026 Update and September 2026 Updates 1 and 2, reconstructed from the Git history, and listed the recent-search, Copy Text and Send a Suggestion features missing from July 2026 Update 2.
+- Added a side panel beside the reader text on wide screens (`ContextPanel.jsx`, from 1440px at the default text size; `useSidePanelFits.js` raises the threshold for larger text or wide lines). It shows one item at a time, only on request: a Glossary definition instead of the modal, a preview of a cross-reference, or a preview of a search result (new eye button on each result). Esc and × close it and return focus to the opener; "On This Page" shrinks to one line while it is open.
+- Added cross-reference links (`utils/crossReferences.js`, `data/referenceIndex.js`). "Chapter 4", "Section 3 of Chapter 4", "Chapter 4, Section 3", "Chapters 1, 2 and 4", "Part 2", "Annex III", "Q&A 3" and, in Transparency publications, "Section 2.2" are linked at render time with real `href`s; numbers are read from the loaded titles. In a Transparency publication, "of the Code" or a number the publication lacks means the Code's chapter. A page never links to itself, and a missing section falls back to its chapter. Nothing in the stored text changes.
+- `npm run validate:data` checks every cross-reference and decision-tree citation: unresolved ones are errors, chapter fallbacks are printed as notes (currently two: "section 3 of Chapter 2" in Chapter 1, where Chapter 2 has two numbered sections).
+- Decision-tree results preview their cited provision in place ("Reference" expands, with "Open in the Code"), so the tree keeps its answers.
+- Added "Line length" (Comfortable / Wide) and "Side panel" (On / Off) to the `Aa` reading settings; saved settings from before are upgraded with defaults.
+- Added a "Your answers" column to decision trees from 1280px; any earlier answer can be changed from it.
+- Added the self-hosted Inter typeface (`@fontsource-variable/inter`, normal and italic); its Latin subset is precached for offline use.
+- Added tests for cross-references, the side-panel width rule and the new reader settings.
 
 ### Changed
 - Search results are now a ranked list of individual provisions, Q&As and definitions in the sidebar. This replaces the chapter tree with per-chapter match counts and Title / Q&A / Text pills. App-written summaries are listed separately as "not Code text".
@@ -40,6 +48,13 @@ Versions are internal application-release labels; they are independent of the pr
 - The Code's Word working copy is rebuilt verbatim from the PDF and checked by a strict verifier; five Code text corrections bring the JSON in line with the published Code.
 - Expanded the search phrasebook with Code and Disclosure Guidelines vocabulary. Overlapping rules keep their strongest weight, and validation rejects duplicate sources after normalization and stopword-only phrases.
 - A multiword phrasebook source is recognised only in a scope where the phrase or one of its targets occurs; elsewhere its words are searched one by one. Everyday words the expansion had dropped were restored, rules whose targets never occur were repointed, and sentence-specific entries were removed.
+- Reader layout: the text column is capped at `--reader-measure` (40 × reader font size, about 85 characters per line) and centred together with the right-hand column; one-section pages no longer reserve an empty column. The right-hand column is 240px from 1280px, 320px from 1440px and 380px from 1920px. Section actions wrap under long titles instead of squeezing them.
+- Sidebar: full-width search box, tighter padding, chapter names on up to three lines (full name on hover) instead of an ellipsis, 360px wide from 1536px. Below 1024px it is the slide-in menu (was below 768px), header toolbar labels show from 1024px, and `/` opens the menu before focusing search.
+- Home shows three section cards per row from 1280px with a smaller heading (`Logo` accepts `size={null}` for class-based sizing); the Code landing page uses four columns from 1536px and the decision-tree landing page three from 1280px.
+- Quiz setup lists chapters in a grid with the question count and Start button in a sticky column from 1024px, without the inner scrolling box.
+- TPPT Checker: from 1440px the agenda and sessions are on the left and the result, questionnaire, outcome and PDF export in a sticky right column.
+- From 2400px the app sits in a centred 2240px frame on a tinted background and the root font size is 112.5%.
+- Cross-reference links keep the text's weight with a light underline, and print as plain text.
 
 ### Fixed
 - Multi-word everyday queries such as "wife travel" or "hospital donation" used to return nothing unless the exact phrase appeared in the text.
@@ -50,6 +65,10 @@ Versions are internal application-release labels; they are independent of the pr
 - The TPPT PDF report printed the larger-event answer under the opposite question ("Stand-alone event?"); the screen and the PDF now share one set of question texts. A TPPT chunk that fails to load shows a reload message instead of a blank app.
 - Quiz answer icons were white on white, the results badge had no background, and the question-count slider had no label.
 - The Historical Declarations API clamps the page size, matches search text literally, ignores whitespace-only text, and returns 404 for malformed ids.
+- Every page load downloaded the 1.8 MB `tppt-pdfmake` chunk, and an installed app reloaded offline showed a blank page, because Rollup's shared CommonJS helper landed in that lazy chunk. It now has its own `commonjs-helpers` chunk (`vite.config.ts`); the entry bundle no longer imports any `tppt-*` chunk.
+- The app named Inter but never loaded it, so readers saw Helvetica or Arial depending on their system.
+- The header toolbar ran off-screen between 768px and 959px, hiding Q&A, Aa and Print.
+- Four sidebar buttons combined full width with a left margin and overflowed the sidebar by 8px.
 
 ---
 

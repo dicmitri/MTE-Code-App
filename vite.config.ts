@@ -24,7 +24,12 @@ export default defineConfig(() => {
         workbox: {
           navigateFallbackDenylist: [/^\/admin/],
           maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
-          globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest,pdf,csv}'],
+          // The Latin subset of the bundled Inter font is precached so text keeps its typeface
+          // offline; other subsets load on demand and fall back to system fonts offline.
+          globPatterns: [
+            '**/*.{js,css,html,ico,png,svg,webmanifest,pdf,csv}',
+            '**/inter-latin-wght-*.woff2',
+          ],
           globIgnores: [
             '**/TPPTContent-*.js',
             '**/tppt-*.js',
@@ -77,6 +82,9 @@ export default defineConfig(() => {
       rollupOptions: {
         output: {
           manualChunks(id) {
+            // Rollup's shared CommonJS interop helper gets its own chunk. Otherwise it lands in
+            // the lazy tppt-pdfmake chunk and every page downloads pdfmake to use it.
+            if (id.includes('commonjsHelpers')) return 'commonjs-helpers';
             if (!id.includes('node_modules')) return undefined;
             if (id.includes('pdfmake')) return 'tppt-pdfmake';
             if (id.includes('pdfjs-dist')) return 'tppt-pdfjs';

@@ -136,6 +136,8 @@ export const Sidebar = ({
   recentHistory = [],
   searchResponse = null,
   onOpenDefinition,
+  onPreviewResult,
+  canPreviewResult,
 }) => {
   // True while the active *section* is Transparency, independent of whether a search is
   // active -- it decides both the search scope and which parts of the non-search tree show.
@@ -285,19 +287,21 @@ export const Sidebar = ({
 
   return (
     <aside
+      aria-label="Navigation"
       className={`
-        w-80 bg-white border-r border-gray-200 flex flex-col h-full shrink-0 shadow-sm z-40
+        w-80 2xl:w-[22.5rem] bg-white border-r border-gray-200 flex flex-col h-full shrink-0 shadow-sm z-40
         fixed inset-y-0 left-0 transition-transform duration-300
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        md:translate-x-0 md:sticky md:top-0
+        lg:translate-x-0 lg:sticky lg:top-0
       `}
     >
-      {/* Top section: close button + home + search */}
-      <div className="p-8 pr-12 pt-10 pb-4 relative">
+      {/* Top section: close button + home + search. Below 1024px the sidebar is a slide-in
+          menu, so the search box starts under the close button. */}
+      <div className="px-4 pt-16 pb-2 lg:pt-6 relative">
         <button
           type="button"
           onClick={() => setSidebarOpen(false)}
-          className="md:hidden absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 bg-gray-50 rounded-lg"
+          className="lg:hidden absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 bg-gray-50 rounded-lg"
           aria-label="Close navigation"
         >
           <AppIcon name="X" size={20} />
@@ -311,7 +315,7 @@ export const Sidebar = ({
         />
 
         {/* Search bar */}
-        <div className="relative mb-6 px-2">
+        <div className="relative mb-4">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
             <AppIcon name="Search" size={16} />
           </div>
@@ -345,7 +349,7 @@ export const Sidebar = ({
 
         {/* Recent search chips */}
         {!searchTerm && recentSearches.length > 0 && (
-          <div className="mb-6 px-2 no-print animate-fade-in">
+          <div className="mb-4 px-1 no-print animate-fade-in">
             <div className="flex items-center justify-between mb-2 px-0.5">
               <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
                 <AppIcon name="Clock" size={10} /> Recent Searches
@@ -395,7 +399,7 @@ export const Sidebar = ({
 
       {/* Scrollable navigation area */}
       <nav
-        className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4"
+        className="flex-1 overflow-y-auto custom-scrollbar px-3 py-4 space-y-4"
         style={{
           paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 2rem)',
         }}
@@ -428,6 +432,8 @@ export const Sidebar = ({
               debug={debug}
               onSelect={handleSelectResult}
               onSearch={setSearchTerm}
+              onPreview={onPreviewResult}
+              canPreview={canPreviewResult}
             />
           </>
         ) : (
@@ -444,6 +450,7 @@ export const Sidebar = ({
                   {bookmarks.map((b) => (
                     <button
                       key={`bm-${b.key || b.id}`}
+                      title={b.title}
                       onClick={() => {
                         if (b.section === 'transparency' && b.documentId) {
                           onNavigateTransparencySection(b.documentId, b.chapterId, b.id);
@@ -452,12 +459,12 @@ export const Sidebar = ({
                         }
                         setSidebarOpen(false);
                       }}
-                      className="w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 text-purple-700 hover:bg-purple-50 hover:text-purple-900 border border-transparent hover:border-purple-200"
+                      className="w-full group text-left px-3 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 text-purple-700 hover:bg-purple-50 hover:text-purple-900 border border-transparent hover:border-purple-200"
                     >
                       <span className="shrink-0 text-purple-400">
                         <AppIcon name="Bookmark" size={16} />
                       </span>
-                      <span className="truncate flex-1 font-medium text-xs">
+                      <span className="line-clamp-2 flex-1 font-medium text-xs">
                         {b.title}
                       </span>
                     </button>
@@ -490,12 +497,13 @@ export const Sidebar = ({
                       {items.map((item) => (
                         <button
                           key={item.id}
+                          title={item.title}
                           onClick={() => {
                             onNavigateChapter(item.id);
                             setSidebarOpen(false);
                             window.scrollTo(0, 0);
                           }}
-                          className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ${
+                          className={`w-full group text-left px-3 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ${
                             activeSection === 'code' && activeId === item.id
                               ? 'bg-[#7654A1] text-white shadow-md'
                               : 'text-gray-600 hover:bg-gray-50'
@@ -511,7 +519,7 @@ export const Sidebar = ({
                             <AppIcon name={item.icon} size={18} />
                           </span>
 
-                          <span className="truncate flex-1">{item.title}</span>
+                          <span className="line-clamp-3 flex-1">{item.title}</span>
                         </button>
                       ))}
                     </div>
@@ -535,14 +543,14 @@ export const Sidebar = ({
                   onNavigateTransparency();
                   setSidebarOpen(false);
                 }}
-                className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ml-2 ${
+                className={`w-[calc(100%-0.5rem)] group text-left px-3 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ml-2 ${
                   activeSection === 'transparency' && !activeDocumentId
                     ? 'bg-[#007A86] text-white shadow-md'
                     : 'text-gray-600 hover:bg-gray-50'
                 }`}
               >
                 <AppIcon name="Eye" size={17} />
-                <span className="truncate flex-1">Transparency Home</span>
+                <span className="line-clamp-2 flex-1">Transparency Home</span>
               </button>
 
               <button
@@ -551,14 +559,14 @@ export const Sidebar = ({
                   onNavigateTransparencyDocument(HISTORICAL_DECLARATIONS_DOCUMENT_ID);
                   setSidebarOpen(false);
                 }}
-                className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ml-2 mb-2 ${
+                className={`w-[calc(100%-0.5rem)] group text-left px-3 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ml-2 mb-2 ${
                   activeSection === 'transparency' && activeDocumentId === HISTORICAL_DECLARATIONS_DOCUMENT_ID
                     ? 'bg-[#7654A1] text-white shadow-md'
                     : 'text-gray-600 hover:bg-gray-50'
                 }`}
               >
                 <AppIcon name="Search" size={17} />
-                <span className="truncate flex-1">Historical Declarations</span>
+                <span className="line-clamp-2 flex-1">Historical Declarations</span>
               </button>
 
               {TRANSPARENCY_DOCUMENTS.map((document) => (
@@ -576,7 +584,7 @@ export const Sidebar = ({
                         onNavigateTransparencyDocument(document.id);
                         setSidebarOpen(false);
                       }}
-                      className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ${
+                      className={`w-full group text-left px-3 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ${
                         activeSection === 'transparency'
                           && activeDocumentId === document.id
                           && activeId === 'home'
@@ -594,11 +602,12 @@ export const Sidebar = ({
                       <button
                         key={item.id}
                         type="button"
+                        title={item.title}
                         onClick={() => {
                           onNavigateTransparencyUnit(document.id, item.id);
                           setSidebarOpen(false);
                         }}
-                        className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ${
+                        className={`w-full group text-left px-3 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ${
                           activeSection === 'transparency'
                             && activeDocumentId === document.id
                             && activeId === item.id
@@ -609,7 +618,7 @@ export const Sidebar = ({
                         <span className="shrink-0">
                           <AppIcon name={item.icon || 'FileText'} size={16} />
                         </span>
-                        <span className="truncate flex-1">{item.title}</span>
+                        <span className="line-clamp-3 flex-1">{item.title}</span>
                       </button>
                     ))}
                   </div>
@@ -630,7 +639,7 @@ export const Sidebar = ({
                   onNavigateTrees();
                   setSidebarOpen(false);
                 }}
-                className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ml-2 ${
+                className={`w-[calc(100%-0.5rem)] group text-left px-3 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ml-2 ${
                   activeSection === 'trees'
                     ? 'bg-amber-600 text-white shadow-md'
                     : 'text-gray-600 hover:bg-gray-50'
@@ -639,7 +648,7 @@ export const Sidebar = ({
                 <span className={`shrink-0 ${activeSection === 'trees' ? 'text-amber-200' : 'text-gray-400'}`}>
                   <AppIcon name="GitBranch" size={18} />
                 </span>
-                <span className="truncate flex-1">Browse Decision Trees</span>
+                <span className="line-clamp-2 flex-1">Browse Decision Trees</span>
               </button>
             </CollapsibleGroup>
 
@@ -658,12 +667,13 @@ export const Sidebar = ({
                   <button
                     key={item.id}
                     type="button"
+                    title={item.title}
                     onClick={() => {
                       onNavigateChapter(item.id);
                       setSidebarOpen(false);
                       window.scrollTo(0, 0);
                     }}
-                    className={`w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ml-2 ${
+                    className={`w-[calc(100%-0.5rem)] group text-left px-3 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ml-2 ${
                       isActive
                         ? 'bg-[#7654A1] text-white shadow-md'
                         : 'text-gray-600 hover:bg-gray-50'
@@ -672,7 +682,7 @@ export const Sidebar = ({
                     <span className={`shrink-0 ${isActive ? 'text-white' : 'text-gray-400'}`}>
                       <AppIcon name={item.icon} size={18} />
                     </span>
-                    <span className="truncate flex-1">{item.title}</span>
+                    <span className="line-clamp-3 flex-1">{item.title}</span>
                   </button>
                 );
               })}
@@ -691,6 +701,7 @@ export const Sidebar = ({
                   {recentHistory.map((h) => (
                     <button
                       key={`history-${h.timestamp}`}
+                      title={h.title}
                       onClick={() => {
                         if (h.section === 'transparency' && h.documentId) {
                           onNavigateTransparencyUnit(h.documentId, h.id);
@@ -700,12 +711,12 @@ export const Sidebar = ({
                         setSidebarOpen(false);
                         window.scrollTo(0, 0);
                       }}
-                      className="w-full group text-left px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 border border-transparent hover:border-slate-200"
+                      className="w-full group text-left px-3 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 border border-transparent hover:border-slate-200"
                     >
                       <span className="shrink-0 text-slate-400">
                         <AppIcon name={h.icon || 'BookOpen'} size={16} />
                       </span>
-                      <span className="truncate flex-1 font-medium text-xs">
+                      <span className="line-clamp-2 flex-1 font-medium text-xs">
                         {h.title}
                       </span>
                     </button>

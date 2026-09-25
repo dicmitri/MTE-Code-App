@@ -53,7 +53,7 @@ export const QuizConfig = ({ onStart }) => {
   }, [selectedQuestionCount, questionLimit]);
 
   return (
-    <div className="max-w-2xl mx-auto p-4 sm:p-8 animate-fade-in pb-24">
+    <div className="max-w-2xl lg:max-w-6xl mx-auto p-4 sm:p-8 animate-fade-in pb-24">
       <div className="text-center mb-10">
         <div className="bg-pink-50 text-pink-600 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm">
           <AppIcon name="BookOpen" size={32} />
@@ -62,83 +62,89 @@ export const QuizConfig = ({ onStart }) => {
         <p className="text-gray-500 text-lg">Test your understanding of the Code of Ethical Business Practice.</p>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-8">
-        <div className="p-6 border-b border-gray-100 bg-gray-50/50">
-          <h3 className="text-lg font-bold text-gray-900 flex items-center">
-            <AppIcon name="List" size={20} className="mr-2 text-gray-400" />
-            1. Select Chapters
-          </h3>
-          <p className="text-sm text-gray-500 mt-1">Choose the topics you want to be tested on.</p>
-        </div>
+      {/* From 1024px the chapters fill a grid and the settings sit beside them, so the whole
+          setup fits without a scrolling box. */}
+      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-8 lg:items-start">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-8 lg:mb-0">
+          <div className="p-6 border-b border-gray-100 bg-gray-50/50">
+            <h3 className="text-lg font-bold text-gray-900 flex items-center">
+              <AppIcon name="List" size={20} className="mr-2 text-gray-400" />
+              1. Select Chapters
+            </h3>
+            <p className="text-sm text-gray-500 mt-1">Choose the topics you want to be tested on.</p>
+          </div>
         
-        <div className="p-4 flex flex-col gap-2 max-h-[40vh] overflow-y-auto">
-          {availableChapters.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">No questions available.</div>
-          ) : (
-            availableChapters.map(ch => (
-              <label 
-                key={ch.id} 
-                className={`flex items-start p-4 rounded-xl border cursor-pointer transition-all ${
-                  selectedChapters.includes(ch.id) 
-                  ? 'border-pink-500 bg-pink-50/30' 
-                  : 'border-gray-200 hover:bg-gray-50'
-                }`}
-              >
-                <div className="flex-1">
-                  <div className="font-medium text-gray-900">{ch.title}</div>
-                  <div className="text-xs text-gray-500 mt-1">{ch.questionCount} question{ch.questionCount !== 1 ? 's' : ''} available</div>
-                </div>
-                <div className="ml-4 flex h-full items-center">
-                  <input
-                    type="checkbox"
-                    className="w-5 h-5 text-pink-600 rounded focus:ring-pink-500 cursor-pointer"
-                    checked={selectedChapters.includes(ch.id)}
-                    onChange={() => handleToggleChapter(ch.id)}
-                  />
-                </div>
-              </label>
-            ))
-          )}
-        </div>
-      </div>
-
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-8">
-        <div className="p-6 border-b border-gray-100 bg-gray-50/50">
-          <h3 className="text-lg font-bold text-gray-900 flex items-center">
-            <AppIcon name="HelpCircle" size={20} className="mr-2 text-gray-400" />
-            2. Number of Questions
-          </h3>
-        </div>
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-4">
-            <label htmlFor="quiz-question-count" className="text-gray-600 font-medium">How many questions?</label>
-            <span className="text-2xl font-bold text-pink-600">{questionLimit}</span>
-          </div>
-          <input
-            id="quiz-question-count"
-            type="range"
-            min="1"
-            max={selectedQuestionCount || 1}
-            value={questionLimit}
-            onChange={(e) => setQuestionLimit(parseInt(e.target.value))}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-pink-600"
-            disabled={selectedQuestionCount === 0}
-          />
-          <div className="flex justify-between text-xs text-gray-400 mt-2">
-            <span>1</span>
-            <span>Max ({selectedQuestionCount})</span>
+          <div className="p-4 grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-2 max-h-[40vh] overflow-y-auto lg:max-h-none lg:overflow-visible">
+            {availableChapters.length === 0 ? (
+              <div className="text-center py-8 text-gray-500">No questions available.</div>
+            ) : (
+              availableChapters.map(ch => (
+                <label 
+                  key={ch.id} 
+                  className={`flex items-start p-4 rounded-xl border cursor-pointer transition-all ${
+                    selectedChapters.includes(ch.id) 
+                    ? 'border-pink-500 bg-pink-50/30' 
+                    : 'border-gray-200 hover:bg-gray-50'
+                  }`}
+                >
+                  <div className="flex-1">
+                    <div className="font-medium text-gray-900">{ch.title}</div>
+                    <div className="text-xs text-gray-500 mt-1">{ch.questionCount} question{ch.questionCount !== 1 ? 's' : ''} available</div>
+                  </div>
+                  <div className="ml-4 flex h-full items-center">
+                    <input
+                      type="checkbox"
+                      className="w-5 h-5 text-pink-600 rounded focus:ring-pink-500 cursor-pointer"
+                      checked={selectedChapters.includes(ch.id)}
+                      onChange={() => handleToggleChapter(ch.id)}
+                    />
+                  </div>
+                </label>
+              ))
+            )}
           </div>
         </div>
-      </div>
 
-      <button
-        onClick={handleStart}
-        disabled={selectedChapters.length === 0 || selectedQuestionCount === 0}
-        className="w-full py-4 bg-pink-600 hover:bg-pink-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold rounded-xl text-lg flex items-center justify-center transition-colors shadow-sm"
-      >
-        Start Quiz
-        <AppIcon name="ArrowRight" size={20} className="ml-2" />
-      </button>
+        <div className="lg:sticky lg:top-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-8 lg:mb-6">
+            <div className="p-6 border-b border-gray-100 bg-gray-50/50">
+              <h3 className="text-lg font-bold text-gray-900 flex items-center">
+                <AppIcon name="HelpCircle" size={20} className="mr-2 text-gray-400" />
+                2. Number of Questions
+              </h3>
+            </div>
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-4">
+                <label htmlFor="quiz-question-count" className="text-gray-600 font-medium">How many questions?</label>
+                <span className="text-2xl font-bold text-pink-600">{questionLimit}</span>
+              </div>
+              <input
+                id="quiz-question-count"
+                type="range"
+                min="1"
+                max={selectedQuestionCount || 1}
+                value={questionLimit}
+                onChange={(e) => setQuestionLimit(parseInt(e.target.value))}
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-pink-600"
+                disabled={selectedQuestionCount === 0}
+              />
+              <div className="flex justify-between text-xs text-gray-400 mt-2">
+                <span>1</span>
+                <span>Max ({selectedQuestionCount})</span>
+              </div>
+            </div>
+          </div>
+
+          <button
+            onClick={handleStart}
+            disabled={selectedChapters.length === 0 || selectedQuestionCount === 0}
+            className="w-full py-4 bg-pink-600 hover:bg-pink-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold rounded-xl text-lg flex items-center justify-center transition-colors shadow-sm"
+          >
+            Start Quiz
+            <AppIcon name="ArrowRight" size={20} className="ml-2" />
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

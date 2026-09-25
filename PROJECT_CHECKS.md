@@ -37,15 +37,23 @@ Data validation passed.
 60 quiz questions
 199 phrasebook groups
 1 Transparency document, 7 reader units, 19 sections, 11 Q&As
+66 cross-references linked
+2 notes (not errors):
+- Code chapter "ch1" sections[4]: "section 3 of Chapter 2": Chapter 2 has no section 3; linked to the chapter.
+- Code chapter "ch1" sections[5]: "section 3 of Chapter 2": Chapter 2 has no section 3; linked to the chapter.
 ```
 
 The totals may increase when content is intentionally added. The important line is `Data validation passed.`
+
+Notes do not fail the check. A note means the text refers to a section that does not exist, so the app links the reference to its chapter instead. Compare the wording with the published source before changing any Code text.
 
 The Code is stored as one chapter per file in `src/data/code/`, while standalone
 Transparency publications live under `src/data/transparency/`. This command
 checks that every file listed in `src/data/codeOrder.js` exists, that its chapter
 ID matches its filename, and that publication, section, resource, tree, and quiz
 references remain valid. It also checks that the search phrasebook (`src/data/search/phrasebook.json`) is well formed, that source phrases are unique after punctuation is normalized, and that no phrase consists only of stopwords. These phrasebook checks do not depend on the current Code wording.
+
+It also checks cross-references. References such as "Chapter 4" or "Section 3 of Chapter 4" become links when the text is displayed, and every decision-tree result's Reference opens the provision it cites. A reference or citation that matches no chapter, annex, section or Q&A is an error.
 
 If validation fails, the output identifies the file and item involved. For example:
 

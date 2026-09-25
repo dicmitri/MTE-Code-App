@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { AppIcon } from './AppIcons';
 
-export const TableOfContents = ({ sections, showSummary }) => {
+export const TableOfContents = ({ sections, showSummary, collapsed = false, onExpand }) => {
   const [activeSection, setActiveSection] = useState(null);
 
   useEffect(() => {
@@ -28,6 +29,29 @@ export const TableOfContents = ({ sections, showSummary }) => {
 
   // If there's only 1 section and no summary, a TOC is useless
   if (!sections || (sections.length < 2 && !showSummary)) return null;
+
+  // While the side panel shows a definition or preview, the list shrinks to one line naming
+  // the section being read; selecting it closes the panel and brings the list back.
+  if (collapsed) {
+    const currentTitle = activeSection === 'summary-top' || (!activeSection && showSummary)
+      ? 'Summary'
+      : sections.find((s) => s.computedId === activeSection)?.title || sections[0]?.title;
+
+    return (
+      <div className="font-sans no-print mb-5">
+        <h2 className="text-[10px] font-bold text-[#007A86] uppercase tracking-widest">On This Page</h2>
+        <button
+          type="button"
+          onClick={onExpand}
+          className="mt-1.5 flex max-w-full items-center gap-1 text-left text-xs text-gray-600 hover:text-gray-900 transition-colors"
+          title="Close the side panel and show all sections"
+        >
+          <AppIcon name="ChevronRight" size={12} className="shrink-0" />
+          <span className="line-clamp-1">{currentTitle}</span>
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4 font-sans no-print opacity-0 animate-fade-in" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>

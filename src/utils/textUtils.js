@@ -162,6 +162,8 @@ export const processTextWithTerms = (htmlContent, glossaryMap, linkedTerms = new
     }).join('');
 };
 
+// `linkReferences` optionally turns references such as "Chapter 4" into links (see
+// crossReferences.js). It runs before glossary linking, which leaves text inside links alone.
 export const processReaderHtml = (
     htmlContent,
     {
@@ -170,14 +172,16 @@ export const processReaderHtml = (
         glossaryMap = null,
         enableGlossary = true,
         linkedTerms,
+        linkReferences = null,
     } = {},
 ) => {
     if (!htmlContent) return '';
     if (query && highlight) return highlightSearchTerm(htmlContent, query);
+    const withReferences = linkReferences ? linkReferences(htmlContent) : htmlContent;
     if (enableGlossary && glossaryMap) {
-        return processTextWithTerms(htmlContent, glossaryMap, linkedTerms);
+        return processTextWithTerms(withReferences, glossaryMap, linkedTerms);
     }
-    return htmlContent;
+    return withReferences;
 };
 
 // Splits the Glossary chapter's raw HTML into its definition blocks without a DOM: each

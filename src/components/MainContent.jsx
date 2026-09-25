@@ -20,6 +20,11 @@ export const MainContent = ({
   scrollRef,
   bookmarksControls,
   onNavigateTree,
+  referenceContext,
+  onOpenReference,
+  contextItem,
+  onCloseContext,
+  onOpenContextTarget,
 }) => {
   const renderRelatedTrees = (content) => {
     if (!onNavigateTree) return null;
@@ -75,6 +80,11 @@ export const MainContent = ({
       citationSourceTitle="MedTech Europe Code of Ethical Business Practice"
       citationMarkdownLabel="MedTech Europe Code"
       onNavigateTree={onNavigateTree}
+      referenceContext={referenceContext}
+      onOpenReference={onOpenReference}
+      contextItem={contextItem}
+      onCloseContext={onCloseContext}
+      onOpenContextTarget={onOpenContextTarget}
     />
   );
 };

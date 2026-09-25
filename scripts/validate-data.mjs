@@ -3,6 +3,11 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 import { generateSectionId } from '../src/utils/textUtils.js';
+import {
+  createReferenceIndex,
+  findCrossReferences,
+  resolveTreeReference,
+} from '../src/utils/crossReferences.js';
 import { tokenizeAllWithOffsets, tokenizeWords } from '../src/utils/searchText.js';
 import { loadSplitCodeData } from './lib/code-content.mjs';
 import { loadTransparencyData } from './lib/transparency-content.mjs';
@@ -172,6 +177,69 @@ function validateSearchPhrasebook(phrasebook, errors) {
   return phrasebook.groups.length;
 }
 
+// References such as "Chapter 4" or "Section 3 of Chapter 4" become links when the text is
+// displayed. A reference to something that does not exist is an error (a typo in the text or a
+// numbering the linker does not know). One whose section is missing still links to its chapter
+// and is reported as a note, because the published text itself says so.
+function validateCrossReferences({ chapters, transparencyDocuments, trees }, errors, warnings) {
+  const isWellFormed = (unit) => isNonEmptyString(unit?.id) && Array.isArray(unit.sections);
+  const codeChapters = chapters.filter((chapter) => isWellFormed(chapter) && chapter.part !== 'website');
+  const documents = transparencyDocuments
+    .filter((document) => isNonEmptyString(document?.id) && Array.isArray(document.units))
+    .map((document) => ({ ...document, units: document.units.filter(isWellFormed) }));
+  const index = createReferenceIndex({ codeChapters, transparencyDocuments: documents });
+  let linked = 0;
+
+  const check = (html, context, path) => {
+    if (!isNonEmptyString(html)) return;
+    for (const reference of findCrossReferences(html, { index, context })) {
+      if (reference.status === 'linked') linked += 1;
+      if (reference.status === 'fallback') {
+        linked += 1;
+        warnings.push(`${path}: "${reference.text}": ${reference.note}.`);
+      }
+      if (reference.status === 'unresolved') {
+        errors.push(`${path}: "${reference.text}" does not match anything (${reference.note}).`);
+      }
+    }
+  };
+  const checkUnit = (unit, context, unitPath) => {
+    unit.sections.forEach((section, sectionIndex) => {
+      const sectionPath = `${unitPath} sections[${sectionIndex}]`;
+      check(section?.legalText, context, sectionPath);
+      asArray(section?.qas).forEach((qa, qaIndex) => {
+        check(qa?.q, context, `${sectionPath} qas[${qaIndex}] q`);
+        check(qa?.a, context, `${sectionPath} qas[${qaIndex}] a`);
+      });
+    });
+  };
+
+  codeChapters.forEach((chapter) => {
+    checkUnit(chapter, { publication: 'code', unitId: chapter.id }, `Code chapter "${chapter.id}"`);
+  });
+  documents.forEach((document) => {
+    document.units.forEach((unit) => {
+      checkUnit(
+        unit,
+        { publication: 'transparency', documentId: document.id, unitId: unit.id },
+        `Transparency "${document.id}" unit "${unit.id}"`,
+      );
+    });
+  });
+  trees.forEach((tree, treeIndex) => {
+    asArray(tree?.nodes).forEach((node, nodeIndex) => {
+      if (!isNonEmptyString(node?.reference)) return;
+      if (!resolveTreeReference(node.reference, index)) {
+        errors.push(
+          `treeData.json trees[${treeIndex}] nodes[${nodeIndex}]: reference "${node.reference}" does not match a Code chapter, annex, section or Q&A.`,
+        );
+      }
+    });
+  });
+
+  return linked;
+}
+
 function asArray(value) {
   if (value === null || value === undefined) return [];
   return Array.isArray(value) ? value : [value];
@@ -201,6 +269,7 @@ export function validateProjectData({
   searchPhrasebook,
 }) {
   const errors = [];
+  const warnings = [];
   const chapters = Array.isArray(codeData?.chapters) ? codeData.chapters : [];
   const trees = Array.isArray(treeData?.trees) ? treeData.trees : [];
   const questions = Array.isArray(quizData) ? quizData : [];
@@ -546,8 +615,15 @@ export function validateProjectData({
     ? 0
     : validateSearchPhrasebook(searchPhrasebook, errors);
 
+  const crossReferences = validateCrossReferences(
+    { chapters, transparencyDocuments, trees },
+    errors,
+    warnings,
+  );
+
   return {
     errors,
+    warnings,
     stats: {
       chapters: chapters.length,
       sections: sectionCount,
@@ -560,6 +636,7 @@ export function validateProjectData({
       transparencySections: transparencySectionCount,
       transparencyQas: transparencyQaCount,
       phrasebookGroups,
+      crossReferences,
     },
   };
 }
@@ -597,10 +674,17 @@ export function validateCurrentProject() {
   return result;
 }
 
-function printReport({ errors, stats }) {
+function printNotes(warnings = []) {
+  if (warnings.length === 0) return;
+  console.log(`${warnings.length} note${warnings.length === 1 ? '' : 's'} (not errors):`);
+  warnings.forEach((warning) => console.log(`- ${warning}`));
+}
+
+function printReport({ errors, warnings, stats }) {
   if (errors.length > 0) {
     console.error(`Data validation failed with ${errors.length} error${errors.length === 1 ? '' : 's'}:`);
     errors.forEach((error) => console.error(`- ${error}`));
+    printNotes(warnings);
     return;
   }
 
@@ -615,6 +699,8 @@ function printReport({ errors, stats }) {
     + `${stats.transparencySections} sections, `
     + `${stats.transparencyQas} Q&As`,
   );
+  console.log(`${stats.crossReferences} cross-references linked`);
+  printNotes(warnings);
 }
 
 const isDirectRun = process.argv[1]

@@ -33,5 +33,9 @@ export const useReaderSettings = () => {
     setReaderLine: setSetting('line'),
     readerSpace: settings.space,
     setReaderSpace: setSetting('space'),
+    readerLineLength: settings.measure,
+    setReaderLineLength: setSetting('measure'),
+    readerSidePanel: settings.panel,
+    setReaderSidePanel: setSetting('panel'),
   };
 };

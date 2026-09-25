@@ -2,15 +2,18 @@
 @source "./data/code/*.json";
 @source "./data/transparency/**/*.json";
 
-:root {
-  /* UI FONT: "Business Standard"
-           Clean, neutral, professional. Used by banks and enterprise software. */
-  --font-ui: "Inter", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+@theme {
+  /* Tailwind's font-sans utility uses the same typeface as the rest of the app. */
+  --font-sans: "Inter Variable", "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
 
-  /* LEGAL FONT: "Screen Serif"
-           Georgia is the gold standard for readable serif text on screens.
-           It looks serious but not archaic. */
-  --font-legal: "Inter", Georgia, "Times New Roman", Times, serif;
+:root {
+  /* UI FONT: Inter, loaded from the bundled @fontsource-variable/inter package (see main.jsx).
+           Clean, neutral, professional. The fallbacks only show while it loads. */
+  --font-ui: "Inter Variable", "Inter", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+
+  /* LEGAL FONT: legal text uses the same Inter face; Georgia is the fallback. */
+  --font-legal: "Inter Variable", "Inter", Georgia, "Times New Roman", Times, serif;
 
   /* COLORS */
   --color-purple: #7654A1;
@@ -23,6 +26,24 @@
   --reader-font-size: 1.05rem;
   --reader-line-height: 1.6;
   --reader-paragraph-spacing: 0.9rem;
+
+  /* READER LINE LENGTH: the text column is this many times the reader font size wide, so it
+     keeps about 85 characters per line whatever text size is chosen in the Aa panel. */
+  --reader-line-length: 40;
+  --reader-measure: calc(var(--reader-font-size) * var(--reader-line-length));
+}
+
+/* Very large screens (about 27-inch QHD and up at 100% scaling): the whole interface grows
+   by an eighth so text keeps a comfortable size, and the app sits in a centred frame (see
+   App.jsx). Browser zoom still applies on top of this. */
+@media (min-width: 2400px) {
+  html {
+    font-size: 112.5%;
+  }
+
+  body {
+    background-color: #eef1f5;
+  }
 }
 
 .sr-only {
@@ -84,6 +105,18 @@
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 0.15em;
+}
+
+/* References to other chapters, sections and Q&As ("Chapter 4") are linked where they appear;
+   they keep the text's weight so a paragraph with several references stays calm. */
+.reader-content a.cross-reference {
+  font-weight: inherit;
+  text-decoration-color: rgb(0 153 167 / 0.45);
+}
+
+.reader-content a.cross-reference:hover {
+  color: #7654a1;
+  text-decoration-color: currentColor;
 }
 
 .transparency-reader .reader-content table {
@@ -158,6 +191,11 @@
     display: none !important;
   }
 
+  .reader-content a.cross-reference {
+    color: inherit;
+    text-decoration: none;
+  }
+
   .transparency-reader .reader-content table {
     display: table;
     overflow: visible;
@@ -216,6 +254,14 @@ body {
 
 .custom-scrollbar:hover::-webkit-scrollbar-thumb {
   background: #94a3b8;
+}
+
+/* Firefox has no ::-webkit-scrollbar, so give it the same thin, light scrollbar. */
+@supports not selector(::-webkit-scrollbar) {
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+  }
 }
 
 @keyframes fadeIn {

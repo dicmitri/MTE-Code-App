@@ -5,9 +5,17 @@ import { DEFAULT_READER_SETTINGS } from '../src/config/readerSettings.js';
 import { normalizeReaderSettings } from '../src/utils/readerSettingsUtils.js';
 
 test('keeps saved reader settings that match offered options', () => {
-  const saved = { size: '1.25rem', line: '1.80', space: '1rem' };
+  const saved = { size: '1.25rem', line: '1.80', space: '1rem', measure: '52', panel: 'off' };
 
   assert.deepEqual(normalizeReaderSettings(saved), saved);
+});
+
+test('adds the line length and side panel defaults to settings saved before they existed', () => {
+  assert.deepEqual(
+    normalizeReaderSettings({ size: '1.25rem', line: '1.80', space: '1rem' }),
+    { size: '1.25rem', line: '1.80', space: '1rem', measure: '40', panel: 'on' },
+  );
+  assert.equal(normalizeReaderSettings({ measure: '999; width: 0' }).measure, DEFAULT_READER_SETTINGS.measure);
 });
 
 test('falls back to defaults for missing, unknown, or unexpected values', () => {

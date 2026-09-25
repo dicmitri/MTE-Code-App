@@ -4,10 +4,11 @@ import { AppIcon } from './AppIcons';
 import { SECTIONS } from '../config/sections';
 
 export const HubPage = ({ onSelectSection }) => (
-  <div className="animate-fade-in py-10 px-4 max-w-5xl mx-auto overflow-y-auto h-full custom-scrollbar pb-24">
-    <div className="text-center mb-16">
+  <div className="animate-fade-in py-10 lg:py-8 px-4 max-w-5xl xl:max-w-6xl mx-auto overflow-y-auto h-full custom-scrollbar pb-24">
+    {/* A smaller heading on laptops and desktops keeps the section cards on the first screen. */}
+    <div className="text-center mb-16 lg:mb-8">
       <div className="scale-90 sm:scale-100 origin-center flex justify-center">
-        <Logo size={144} className="mx-auto mb-8" centerImage={true} />
+        <Logo size={null} className="mx-auto mb-8 lg:mb-5 h-36 lg:h-24 aspect-[26/5] max-w-full" centerImage={true} />
       </div>
       <h1 className="text-4xl font-bold text-gray-900 mb-4 tracking-tight">
         The MedTech Europe Code of Ethical Business Practice
@@ -17,12 +18,12 @@ export const HubPage = ({ onSelectSection }) => (
       </p>
     </div>
 
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-3xl mx-auto">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 xl:gap-6 max-w-3xl xl:max-w-none mx-auto">
       {SECTIONS.filter(s => s.available).map((section) => (
         <button
           key={section.id}
           onClick={() => onSelectSection(section.id)}
-          className="hub-card group bg-white p-8 rounded-2xl border border-gray-200 shadow-sm text-left transition-all flex flex-col h-full active:scale-[0.97] relative overflow-hidden"
+          className="hub-card group bg-white p-8 xl:p-7 rounded-2xl border border-gray-200 shadow-sm text-left transition-all flex flex-col h-full active:scale-[0.97] relative overflow-hidden"
         >
           {/* Accent bar */}
           <div

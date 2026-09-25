@@ -515,16 +515,17 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
 
   return (
     <div className="flex-1 h-full overflow-y-auto bg-gray-50/50 custom-scrollbar pb-24">
-      {/* Top Banner and Navigation */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-6 pb-2">
+      {/* Top Banner and Navigation. From 1440px the page is two columns: the agenda and sessions on
+          the left, and the result on the right, where it stays in view while sessions are edited. */}
+      <div className="max-w-4xl min-[1440px]:max-w-[92rem] mx-auto px-4 sm:px-6 pt-6 pb-2 min-[1440px]:grid min-[1440px]:grid-cols-2 min-[1440px]:gap-x-8 min-[1440px]:items-start">
         <button
           onClick={onGoHome}
-          className="flex items-center gap-1.5 text-xs font-bold text-gray-400 hover:text-[#634488] transition-colors mb-6 cursor-pointer"
+          className="flex items-center gap-1.5 text-xs font-bold text-gray-400 hover:text-[#634488] transition-colors mb-6 cursor-pointer min-[1440px]:col-span-2 min-[1440px]:justify-self-start"
         >
           ← Back to Home Hub
         </button>
 
-        <div className="flex items-center gap-4 mb-8">
+        <div className="flex items-center gap-4 mb-8 min-[1440px]:col-span-2">
           <div className="p-3.5 rounded-2xl bg-[#634488]/10 text-[#634488] border border-[#634488]/20 shadow-sm shrink-0">
             <AppIcon name="Calculator" size={32} />
           </div>
@@ -537,7 +538,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
         </div>
 
         {/* Disclaimer */}
-        <div className="bg-amber-50/80 backdrop-blur-sm border border-amber-200/60 p-5 rounded-2xl flex items-start gap-4 text-amber-800 shadow-sm mb-8">
+        <div className="bg-amber-50/80 backdrop-blur-sm border border-amber-200/60 p-5 rounded-2xl flex items-start gap-4 text-amber-800 shadow-sm mb-8 min-[1440px]:col-start-1">
           <div className="text-amber-600 shrink-0 mt-0.5">
             <AppIcon name="AlertCircle" size={20} />
           </div>
@@ -548,7 +549,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
         </div>
 
         {/* Input Ingestion Form */}
-        <div className="bg-white/95 backdrop-blur-sm border border-slate-100/80 shadow-sm rounded-2xl p-6 sm:p-8 mb-8 relative overflow-hidden">
+        <div className="bg-white/95 backdrop-blur-sm border border-slate-100/80 shadow-sm rounded-2xl p-6 sm:p-8 mb-8 relative overflow-hidden min-[1440px]:col-start-1">
           <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#634488]" />
           
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
@@ -618,7 +619,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
         </div>
 
         {/* Quick Rules Banner */}
-        <div className="bg-[#634488]/5 p-4 rounded-2xl border border-[#634488]/10 flex flex-col sm:flex-row sm:items-center gap-3 w-full mb-8">
+        <div className="bg-[#634488]/5 p-4 rounded-2xl border border-[#634488]/10 flex flex-col sm:flex-row sm:items-center gap-3 w-full mb-8 min-[1440px]:col-start-1">
           <div className="flex items-center gap-2 text-[#634488] font-bold text-xs shrink-0">
             <AppIcon name="Info" size={14} /> Evaluation Rules:
           </div>
@@ -629,7 +630,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
         </div>
 
         {/* Review Sessions area */}
-        <div className="flex flex-col gap-6" id="review-sessions-header">
+        <div className="flex flex-col gap-6 min-[1440px]:col-start-1" id="review-sessions-header">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-lg font-bold text-gray-900">Step 2: Review Sessions & Calculate</h2>
@@ -780,9 +781,22 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
             </div>
           )}
 
+        </div>
+
+        <div className="min-[1440px]:col-start-2 min-[1440px]:row-start-3 min-[1440px]:row-span-4 min-[1440px]:sticky min-[1440px]:top-6 min-[1440px]:self-start min-[1440px]:max-h-[calc(100dvh-8rem)] min-[1440px]:overflow-y-auto custom-scrollbar">
+          {!result && (
+            <div className="hidden min-[1440px]:flex flex-col items-center justify-center text-center border border-dashed border-gray-200 bg-white/60 rounded-2xl p-10 text-gray-400">
+              <div className="mb-3 text-gray-300">
+                <AppIcon name="Calculator" size={28} />
+              </div>
+              <p className="font-bold text-sm text-gray-600">Your result will appear here</p>
+              <p className="text-xs mt-1 max-w-xs font-light leading-relaxed">Import the agenda, review the sessions and select Calculate Eligibility.</p>
+            </div>
+          )}
+
           {/* Results Summary and Questionnaire */}
           {result && (
-            <div className="mt-6 flex flex-col gap-6 w-full animate-fade-in">
+            <div className="mt-6 min-[1440px]:mt-0 flex flex-col gap-6 w-full animate-fade-in">
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Total Duration */}
@@ -968,28 +982,28 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
 
             </div>
           )}
-        </div>
 
-        {/* PDF Export Button */}
-        {finalOutcome && (
-          <div className="mt-10 flex justify-center pb-12 animate-fade-in">
-             <button
-               ref={exportTriggerRef}
-               onClick={() => {
-                 const suggestion = getSuggestedEventName(inputText);
-                 setEventNameInput(suggestion);
-                 setExportError(null);
-                 clearExportDownloadUrl();
-                 preparePdfExport();
-                 setShowExportModal(true);
-               }}
-               className="flex items-center justify-center gap-2.5 px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white rounded-2xl font-bold text-base transition-all shadow-md hover:shadow-lg active:scale-[0.98] cursor-pointer"
-             >
-               <AppIcon name="Download" size={20} />
-               Export Assessment to PDF
-             </button>
-          </div>
-        )}
+          {/* PDF Export Button */}
+          {finalOutcome && (
+            <div className="mt-10 min-[1440px]:mt-6 flex justify-center pb-12 animate-fade-in">
+               <button
+                 ref={exportTriggerRef}
+                 onClick={() => {
+                   const suggestion = getSuggestedEventName(inputText);
+                   setEventNameInput(suggestion);
+                   setExportError(null);
+                   clearExportDownloadUrl();
+                   preparePdfExport();
+                   setShowExportModal(true);
+                 }}
+                 className="flex items-center justify-center gap-2.5 px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white rounded-2xl font-bold text-base transition-all shadow-md hover:shadow-lg active:scale-[0.98] cursor-pointer"
+               >
+                 <AppIcon name="Download" size={20} />
+                 Export Assessment to PDF
+               </button>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Parse Warning Modal */}

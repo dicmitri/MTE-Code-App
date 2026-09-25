@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+// Inter is bundled with the app (no third-party font request) so every reader sees the same
+// typeface, including offline. The italic file covers <em> in the Code text.
+import '@fontsource-variable/inter';
+import '@fontsource-variable/inter/wght-italic.css';
 import './index.css';
 import { registerSW } from 'virtual:pwa-register';
 

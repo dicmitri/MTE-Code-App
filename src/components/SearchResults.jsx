@@ -132,19 +132,21 @@ const usedExpansionsOrCorrections = (response) => (
 );
 
 const ResultRow = ({
-  hit, rank, isStale, debug, onSelect,
+  hit, rank, isStale, debug, onSelect, onPreview,
 }) => {
   const badge = TYPE_BADGES[hit.type] || DEFAULT_BADGE;
   const matchedLine = (hit.matched || []).map(formatMatchedEntry).filter(Boolean).join(' · ');
   const snippetNodes = renderSnippetText(hit.snippet);
 
   return (
-    <li>
+    <li className="relative">
       <button
         type="button"
         disabled={isStale}
         onClick={() => onSelect(hit, rank)}
-        className="w-full text-left px-3 py-2.5 rounded-xl border border-gray-100 hover:border-[#0099A7]/50 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-wait"
+        className={`w-full text-left px-3 py-2.5 rounded-xl border border-gray-100 hover:border-[#0099A7]/50 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-wait ${
+          onPreview ? 'pr-9' : ''
+        }`}
       >
         <div className="flex items-center gap-2 mb-1 min-w-0">
           <span className={`inline-flex items-center gap-1 shrink-0 px-1.5 py-0.5 rounded-md text-[10px] font-bold ${badge.className}`}>
@@ -172,6 +174,20 @@ const ResultRow = ({
           </div>
         )}
       </button>
+      {/* A sibling of the result button (buttons cannot be nested): shows the result in the
+          side panel without leaving the page. */}
+      {onPreview && (
+        <button
+          type="button"
+          disabled={isStale}
+          onClick={(event) => onPreview(hit, event.currentTarget)}
+          className="absolute top-2 right-2 p-1 rounded-md text-gray-400 hover:text-[#007A86] hover:bg-cyan-50 focus-visible:outline-2 focus-visible:outline-[#0099A7] transition-colors disabled:opacity-50"
+          aria-label={`Preview “${hit.title}” beside the text`}
+          title="Preview beside the text"
+        >
+          <AppIcon name="Eye" size={14} />
+        </button>
+      )}
     </li>
   );
 };
@@ -189,8 +205,11 @@ export const SearchResults = ({
   debug = false,
   onSelect,
   onSearch,
+  onPreview,
+  canPreview,
 }) => {
   if (!response) return null;
+  const previewFor = (hit) => (onPreview && (!canPreview || canPreview(hit)) ? onPreview : undefined);
 
   const filteredResults = response.results.filter((hit) => typeFilter.has(hit.type));
   const appResults = response.appResults || [];
@@ -273,6 +292,7 @@ export const SearchResults = ({
                 isStale={isStale}
                 debug={debug}
                 onSelect={onSelect}
+                onPreview={previewFor(hit)}
               />
             ))}
           </ul>
@@ -293,6 +313,7 @@ export const SearchResults = ({
                 isStale={isStale}
                 debug={debug}
                 onSelect={onSelect}
+                onPreview={previewFor(hit)}
               />
             ))}
           </ul>

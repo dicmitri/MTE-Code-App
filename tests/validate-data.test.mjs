@@ -93,7 +93,29 @@ test('accepts a structurally valid project fixture', () => {
     transparencySections: 1,
     transparencyQas: 1,
     phrasebookGroups: 2,
+    crossReferences: 0,
   });
+  assert.deepEqual(result.warnings, []);
+});
+
+test('links cross-references and reports ones that lead nowhere', () => {
+  const fixture = makeValidFixture();
+  fixture.codeData.chapters.push({
+    id: 'ch1',
+    part: 'part1',
+    title: 'Events',
+    icon: '1',
+    sections: [{ title: '1. Venues', legalText: '<p>Venue rules.</p>', qas: [] }],
+  });
+  fixture.codeData.chapters[0].sections[0].legalText = '<p>See Chapter 1, Section 2 and Chapter 9.</p>';
+  fixture.treeData.trees[0].nodes[1].reference = 'Chapter 7 — Missing';
+
+  const result = validateProjectData(fixture);
+  assert.equal(result.stats.crossReferences, 1);
+  assert.ok(result.errors.some((error) => error.includes('"Chapter 9" does not match anything')));
+  assert.ok(result.errors.some((error) => error.includes('reference "Chapter 7 — Missing" does not match')));
+  // Chapter 1 exists but has no section 2: not an error, but a note.
+  assert.ok(result.warnings.some((warning) => warning.includes('Chapter 1 has no section 2')));
 });
 
 test('reports a broken tree target with its location', () => {

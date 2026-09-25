@@ -21,8 +21,23 @@ export const READER_PARAGRAPH_SPACINGS = Object.freeze([
   { label: '+', name: 'Relaxed', value: '1rem' },
 ]);
 
+// The text column is this many times the text size wide (--reader-line-length in index.css).
+export const READER_LINE_LENGTHS = Object.freeze([
+  { label: 'Comfortable', name: 'Comfortable', value: '40' },
+  { label: 'Wide', name: 'Wide', value: '52' },
+]);
+
+// Wide screens show definitions and reference previews beside the text; "Off" keeps the
+// pop-up for definitions and opens references directly.
+export const READER_SIDE_PANEL_OPTIONS = Object.freeze([
+  { label: 'On', name: 'On', value: 'on' },
+  { label: 'Off', name: 'Off', value: 'off' },
+]);
+
 export const DEFAULT_READER_SETTINGS = Object.freeze({
   size: '1rem',
   line: '1.65',
   space: '0.75rem',
+  measure: '40',
+  panel: 'on',
 });

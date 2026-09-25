@@ -4,17 +4,17 @@ import { AppIcon } from './AppIcons';
 import { Logo } from './Logo';
 
 export const LandingPage = ({ onSelectChapter }) => (
-    <div className="animate-fade-in py-10 px-4 max-w-6xl mx-auto overflow-y-auto h-full custom-scrollbar pb-24">
-        <div className="text-center mb-16">
+    <div className="animate-fade-in py-10 lg:py-8 px-4 max-w-6xl 2xl:max-w-7xl mx-auto overflow-y-auto h-full custom-scrollbar pb-24">
+        <div className="text-center mb-16 lg:mb-10">
             <div className="scale-90 sm:scale-100 origin-center flex justify-center">
-                <Logo size={144} className="mx-auto mb-8" centerImage={true} />
+                <Logo size={null} className="mx-auto mb-8 lg:mb-5 h-36 lg:h-24 aspect-[26/5] max-w-full" centerImage={true} />
             </div>
             <h1 className="text-4xl font-bold text-gray-900 mb-4 tracking-tight">The MedTech Europe Code of Ethical Business Practice</h1>
             <p className="text-xl text-gray-500 max-w-2xl mx-auto font-light leading-relaxed">
                 Code text: September 2024.
             </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
             {CODE_CHAPTERS.map((item) => (
                 <button 
                     key={item.id}

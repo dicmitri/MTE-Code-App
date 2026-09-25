@@ -40,9 +40,10 @@ The app is built using **React**, **Vite**, and **Cloudflare Workers**. All the 
 | File | Role |
 |---|---|
 | `AppIcons.jsx` | Centralized icon registry (uses `lucide-react`) |
-| `DecisionTree.jsx` | Interactive step-by-step decision tree |
+| `ContextPanel.jsx` | Side panel beside the reader text on wide screens: shows one definition or reference preview at a time |
+| `DecisionTree.jsx` | Interactive step-by-step decision tree; on wide screens the answers are listed beside the question, and a result's cited provision can be previewed in place |
 | `DefinitionPopup.jsx` | Glossary term tooltip popup |
-| `DocumentReader.jsx` | Shared legal-document reader used by the Code and Transparency publications |
+| `DocumentReader.jsx` | Shared legal-document reader used by the Code and Transparency publications. Caps the line length (`--reader-measure`) and holds the right-hand column ("On This Page" and the side panel) |
 | `FullTextSection.jsx` | Renders a single legal text section with citation/link menu, bookmark, copy-text, and related-tree actions |
 | `Header.jsx` | Top bar with section-aware toolbar (Summary, Full Text, Q&A, Reader, Print) |
 | `Highlight.jsx` | Wraps matched words in highlight marks during search |
@@ -57,7 +58,7 @@ The app is built using **React**, **Vite**, and **Cloudflare Workers**. All the 
 | `quiz/QuizSession.jsx` | The interactive gameplay screen for answering questions |
 | `SearchResults.jsx` | Ranked search results: type badges, snippets, "Matched:" lines, and the expansion and spelling notes |
 | `Sidebar.jsx` | Collapsible navigation sidebar with the search box, ranked search results, bookmarks, and history |
-| `TableOfContents.jsx` | Sticky "On This Page" minimap |
+| `TableOfContents.jsx` | Sticky "On This Page" minimap; shrinks to one line while the side panel is open |
 | `TPPTContent.tsx` | TPPT Checker UI: agenda ingestion (PDF/Word/text), session card editor, compliance threshold visualization, and PDF report export. Lazy-loaded via `React.lazy()`. Parser logic lives in `src/utils/tpptParser.js` |
 | `TransparencyContent.jsx` | Transparency landing/document controller and local Annex I resource wiring |
 | `TransparencyLandingPage.jsx` | Transparency publication cards and document-unit overview |
@@ -71,6 +72,7 @@ The app is built using **React**, **Vite**, and **Cloudflare Workers**. All the 
 | File | Role |
 |---|---|
 | `utils/bookmarkUtils.js` | Normalizes namespaced Code and Transparency bookmark records |
+| `utils/crossReferences.js` | Finds references such as "Chapter 4" or "Section 3 of Chapter 4" in reader text, resolves them to chapters, sections and Q&As, links them when the text is displayed, and resolves decision-tree citations. Also used by `npm run validate:data` |
 | `utils/csvUtils.js` | Parses the bundled Annex I CSV for its non-normative preview |
 | `utils/htmlTextUtils.js` | Extracts normalized visible text from legal HTML for search and copy utilities |
 | `utils/routeEffects.js` | Cancels/version-controls delayed anchor scrolling and section highlighting across route changes |
@@ -175,12 +177,12 @@ The sidebar uses a hierarchical, fully collapsible group structure:
 
 ### 🌳 Decision Trees
 Interactive compliance decision guides that let users step through real-world compliance scenarios:
-- **Interactive Mode:** Question-by-question flow with contextual help text, path breadcrumb trail, go-back/reset controls, and color-coded outcomes (✅ Compliant, ❌ Non-Compliant, ⚠️ Conditional, ⚖️ Consult Legal).
+- **Interactive Mode:** Question-by-question flow with contextual help text, path breadcrumb trail, go-back/reset controls, and color-coded outcomes (✅ Compliant, ❌ Non-Compliant, ⚠️ Conditional, ⚖️ Consult Legal). From 1280px the answers are listed beside the question, and any earlier answer can be changed from there. A result's Reference opens the cited provision in place, with a link to it in the Code.
 - **Full Tree Visualization:** A flowchart rendering of the entire decision tree, with a legend and highlighted-path support.
 - **Cross-linking:** Code chapters that have related decision trees show an inline amber callout with a direct link. Clicking it switches the user from the Code section to the relevant tree.
 
 ### 📚 Glossary & Definitions
-The Code glossary is shared by the Code and Transparency publication readers. Whenever a defined term appears in legal text or official Q&A questions and answers, the existing words become interactive links; clicking one opens a `DefinitionPopup` with the glossary definition. This instrumentation adds no visible wording and does not alter the approved publication text. The Knowledge Quiz remains a separate testing interface and does not apply glossary instrumentation.
+The Code glossary is shared by the Code and Transparency publication readers. Whenever a defined term appears in legal text or official Q&A questions and answers, the existing words become interactive links; clicking one opens a `DefinitionPopup` with the glossary definition. On wide screens (from 1440px at the default text size) the definition appears in the side panel beside the text instead (`ContextPanel`), unless the reader turns the side panel off in the `Aa` panel. This instrumentation adds no visible wording and does not alter the approved publication text. The Knowledge Quiz remains a separate testing interface and does not apply glossary instrumentation.
 
 ### 📑 Reading Utilities
 To facilitate heavy professional reference usage, the app includes several quality-of-life tools:
@@ -189,7 +191,9 @@ To facilitate heavy professional reference usage, the app includes several quali
 - **Q&A Fast-Jump Badges:** Section titles with associated Q&As feature a `💬 Q&A` badge that smooth-scrolls directly to the guidance notes for that provision.
 - **Multi-Format Citation and Link Dropdown:** A `[Cite/Link]` popover offering Formal Citations (including section title and current access date), Markdown links, and Direct URL links with confirmation toast notifications.
 - **Next/Prev Navigation:** Large footer buttons at the bottom of every reader unit allow for linear reading without returning to the sidebar.
-- **Reader Settings:** An `Aa` button in the header opens a panel to customize font size, line spacing, and paragraph spacing.
+- **Reader Settings:** An `Aa` button in the header opens a panel to customize font size, line spacing, paragraph spacing, line length (Comfortable or Wide) and the side panel (On or Off).
+- **Comfortable Line Length:** The text column is 40 times the chosen text size wide (about 85 characters per line), and the text and "On This Page" are centred together as one group.
+- **Cross-References:** References such as "Chapter 4" or "Section 3 of Chapter 4" become links when the text is displayed. On wide screens they preview in the side panel; elsewhere they open the referenced section. `npm run validate:data` reports any reference that does not resolve.
 
 ### 🖨️ Print & Export Mode
 The app features an optimized Print Mode. By pressing the **Print** icon in the header (or pressing `Ctrl+P`), the `index.css` `@media print` query strips away the Sidebar, Header, and interactive elements. It presents a clean, high-contrast, black-and-white view of the legal text — perfect for generating PDFs. Transparency printing includes every publication Q&A even when Q&As are hidden on screen; the non-normative Annex I CSV preview and interactive source/download controls are omitted.
@@ -569,6 +573,8 @@ Tailwind has a built-in color palette. If you want to change a blue button to a 
 If you need to change the **font family** or the background color of the entire website, look in:
 👉 **`src/index.css`**
 
+The Inter typeface is bundled with the app from the `@fontsource-variable/inter` package (imported in `src/main.jsx`), so it needs no third-party font request and works offline. Its Latin files are precached by the service worker (see `vite.config.ts`).
+
 ---
 
 ## 🖼️ 7. How to Edit Logos and Icons
@@ -591,8 +597,8 @@ This file uses a library called `lucide-react`. If you want to change an icon, y
 
 | Shortcut | Action |
 |---|---|
-| `/` | Focus the search bar |
-| `Escape` | Clear the search bar while the search field is focused |
+| `/` | Focus the search bar (opens the menu first on phones and tablets) |
+| `Escape` | Clear the search bar while the search field is focused; close the side panel while it has focus |
 | `Ctrl+P` / `Cmd+P` | Open print mode |
 
 ---
@@ -607,6 +613,7 @@ This file uses a library called `lucide-react`. If you want to change an icon, y
 | `@tailwindcss/vite` | ^4.1.14 | Tailwind CSS integration |
 | `tailwindcss` | ^4.1.14 | Utility-first CSS framework |
 | `lucide-react` | ^0.546.0 | Icon library |
+| `@fontsource-variable/inter` | ^5.3.0 | Self-hosted Inter typeface |
 | `dompurify` | ^3.3.3 | HTML sanitizer (prevents XSS in legal text) |
 | `motion` | ^12.23.24 | Animation library |
 | `vite-plugin-pwa` | ^1.2.0 | Service worker generation for offline support |

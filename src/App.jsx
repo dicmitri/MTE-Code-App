@@ -1,5 +1,6 @@
-import React, { Suspense, lazy, useState, useEffect, useRef } from 'react';
+import React, { Suspense, lazy, useState, useEffect, useMemo, useRef } from 'react';
 import { FULL_CODE_DATA } from './data/codeData';
+import { REFERENCE_INDEX } from './data/referenceIndex';
 import { DefinitionPopup } from './components/DefinitionPopup';
 import { extractGlossaryMap, generateSectionId } from './utils/textUtils';
 import { useDebounce } from './hooks/useDebounce';
@@ -10,6 +11,7 @@ import { useAppRouting } from './hooks/useAppRouting';
 import { useBookmarks } from './hooks/useBookmarks';
 import { useRecentHistory } from './hooks/useRecentHistory';
 import { useReaderSettings } from './hooks/useReaderSettings';
+import { useSidePanelFits } from './hooks/useSidePanelFits';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { MainContent } from './components/MainContent';
@@ -20,6 +22,14 @@ import { QuizContent } from './components/quiz/QuizContent';
 import { TransparencyContent } from './components/TransparencyContent';
 import { SectionLoadError } from './components/SectionLoadError';
 import { getTransparencyUnit } from './data/transparency/transparencyData';
+import {
+  describeReferenceTarget,
+  findReferenceTarget,
+  getReferenceAnchor,
+  getReferenceHref,
+  getReferenceTarget,
+  referenceKey,
+} from './utils/crossReferences';
 
 const TPPTContent = lazy(() =>
   import('./components/TPPTContent')
@@ -61,13 +71,20 @@ const App = () => {
     setReaderLine,
     readerSpace,
     setReaderSpace,
+    readerLineLength,
+    setReaderLineLength,
+    readerSidePanel,
+    setReaderSidePanel,
   } = useReaderSettings();
   const [glossaryMap, setGlossaryMap] = useState({});
   const [activeDefinition, setActiveDefinition] = useState(null);
+  // The side panel beside the reader text: one definition or reference preview at a time.
+  const [contextItem, setContextItem] = useState(null);
+  const contextOpenerRef = useRef(null);
   const scrollRef = useRef(null);
 
   // Custom Hooks
-  useKeyboardShortcuts(setSearchTerm);
+  useKeyboardShortcuts(setSearchTerm, setSidebarOpen);
   const { installPromptEvent, isIos, showIosPrompt, setShowIosPrompt, handleInstallClick } = usePWAInstall();
   const {
     navigateHome,
@@ -109,19 +126,147 @@ const App = () => {
     }
   }, [activeId, activeSection, activeDocumentId, addHistory]);
 
-  const handleTermClick = (termKey) => {
-    const entry = glossaryMap[termKey];
-    if (entry) {
-      setActiveDefinition({ term: entry.term, definition: entry.definition });
+  const readerMode = (activeSection === 'code' && activeId !== 'home')
+    || (activeSection === 'transparency' && Boolean(activeDocumentId) && activeId !== 'home');
+  const sidePanelFits = useSidePanelFits(readerSize, readerLineLength);
+  const sidePanelEnabled = readerMode && readerSidePanel === 'on' && sidePanelFits;
+
+  // A new page starts with the side panel closed.
+  useEffect(() => {
+    setContextItem(null);
+    contextOpenerRef.current = null;
+  }, [activeSection, activeId, activeDocumentId]);
+
+  const openContextItem = (item, opener) => {
+    contextOpenerRef.current = opener instanceof HTMLElement ? opener : document.activeElement;
+    setContextItem(item);
+  };
+
+  // Closing returns focus to the term or link that opened the panel.
+  const closeContextItem = () => {
+    setContextItem(null);
+    const opener = contextOpenerRef.current;
+    contextOpenerRef.current = null;
+    if (opener instanceof HTMLElement && opener.isConnected) {
+      window.requestAnimationFrame(() => opener.focus());
     }
   };
+
+  const navigateToReference = (target) => {
+    const anchor = getReferenceAnchor(target);
+    if (target.publication === 'code') {
+      if (anchor) navigateCodeSection(target.unitId, anchor);
+      else navigateChapter(target.unitId);
+    } else if (anchor) {
+      navigateTransparencySection(target.documentId, target.unitId, anchor);
+    } else {
+      navigateTransparencyUnit(target.documentId, target.unitId);
+    }
+  };
+
+  const openContextTarget = (target) => {
+    setContextItem(null);
+    contextOpenerRef.current = null;
+    navigateToReference(target);
+  };
+
+  const glossaryTarget = getReferenceTarget(REFERENCE_INDEX, 'code:glossary');
+
+  const buildDefinitionItem = (entry) => ({
+    key: `definition:${entry.id}`,
+    label: 'Definition',
+    title: entry.term,
+    html: entry.definition,
+    ...(glossaryTarget && {
+      target: glossaryTarget,
+      href: getReferenceHref(glossaryTarget),
+      actionLabel: 'Open the Glossary',
+    }),
+  });
+
+  const buildReferenceItem = (target) => ({
+    key: referenceKey(target),
+    ...describeReferenceTarget(target),
+    // Long provisions are cut to a preview; the link below opens the full text.
+    clamp: target.kind !== 'qa',
+    target,
+    href: getReferenceHref(target),
+  });
+
+  const handleTermClick = (termKey, opener) => {
+    const entry = glossaryMap[termKey];
+    if (!entry) return;
+    if (sidePanelEnabled) {
+      openContextItem(buildDefinitionItem(entry), opener);
+      return;
+    }
+    setActiveDefinition({ term: entry.term, definition: entry.definition });
+  };
+
+  // References in the text preview in the side panel when it fits, and open directly otherwise.
+  const handleOpenReference = (key, opener) => {
+    const target = getReferenceTarget(REFERENCE_INDEX, key);
+    if (!target) return;
+    if (sidePanelEnabled) openContextItem(buildReferenceItem(target), opener);
+    else navigateToReference(target);
+  };
+
+  const findSearchResultTarget = (hit) => {
+    const target = hit?.target || {};
+    if (target.kind === 'code-section') {
+      return findReferenceTarget(REFERENCE_INDEX, { publication: 'code', unitId: target.chapterId, anchor: target.anchor });
+    }
+    if (target.kind === 'transparency-section') {
+      return findReferenceTarget(REFERENCE_INDEX, {
+        publication: 'transparency',
+        documentId: target.documentId,
+        unitId: target.unitId,
+        anchor: target.anchor,
+      });
+    }
+    if (target.kind === 'chapter') {
+      return findReferenceTarget(REFERENCE_INDEX, { publication: 'code', unitId: target.chapterId });
+    }
+    return null;
+  };
+
+  const canPreviewSearchResult = (hit) => (
+    hit?.target?.kind === 'definition'
+      ? Boolean(glossaryMap[hit.target.termId])
+      : Boolean(findSearchResultTarget(hit))
+  );
+
+  const handlePreviewSearchResult = (hit, opener) => {
+    if (hit?.target?.kind === 'definition') {
+      const entry = glossaryMap[hit.target.termId];
+      if (entry) openContextItem(buildDefinitionItem(entry), opener);
+      return;
+    }
+    const target = findSearchResultTarget(hit);
+    if (target) openContextItem(buildReferenceItem(target), opener);
+  };
+
+  // Cross-reference links need to know which page they sit on (a page never links to itself).
+  const referenceContext = useMemo(() => {
+    if (activeSection === 'code') {
+      return { index: REFERENCE_INDEX, context: { publication: 'code', unitId: activeId } };
+    }
+    if (activeSection === 'transparency' && activeDocumentId) {
+      return {
+        index: REFERENCE_INDEX,
+        context: { publication: 'transparency', documentId: activeDocumentId, unitId: activeId },
+      };
+    }
+    return null;
+  }, [activeSection, activeId, activeDocumentId]);
 
   useEffect(() => {
     const root = document.documentElement;
     root.style.setProperty('--reader-font-size', readerSize);
     root.style.setProperty('--reader-line-height', readerLine);
     root.style.setProperty('--reader-paragraph-spacing', readerSpace);
-  }, [readerSize, readerLine, readerSpace]);
+    root.style.setProperty('--reader-line-length', readerLineLength);
+  }, [readerSize, readerLine, readerSpace, readerLineLength]);
 
   const activeContent = activeSection === 'transparency'
     ? getTransparencyUnit(activeDocumentId, activeId)
@@ -163,7 +308,8 @@ const App = () => {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] overflow-hidden print:h-auto print:overflow-visible">
+    // From 2400px the app sits in a centred frame so the sidebar stays next to the content.
+    <div className="flex flex-col h-[100dvh] overflow-hidden print:h-auto print:overflow-visible min-[2400px]:max-w-[2240px] min-[2400px]:mx-auto min-[2400px]:bg-white min-[2400px]:border-x min-[2400px]:border-slate-200 print:max-w-none print:border-0">
       <DefinitionPopup
         term={activeDefinition?.term}
         definition={activeDefinition?.definition}
@@ -190,10 +336,11 @@ const App = () => {
         setReaderLine={setReaderLine}
         readerSpace={readerSpace}
         setReaderSpace={setReaderSpace}
-        readerMode={
-          (activeSection === 'code' && activeId !== 'home')
-          || (activeSection === 'transparency' && Boolean(activeDocumentId) && activeId !== 'home')
-        }
+        readerLineLength={readerLineLength}
+        setReaderLineLength={setReaderLineLength}
+        readerSidePanel={readerSidePanel}
+        setReaderSidePanel={setReaderSidePanel}
+        readerMode={readerMode}
         showSummaryControl={activeSection === 'code'}
         showFullTextControl={activeSection === 'code'}
         showQAControl={Boolean(
@@ -230,11 +377,13 @@ const App = () => {
           recentHistory={history}
           searchResponse={searchResponse}
           onOpenDefinition={handleTermClick}
+          onPreviewResult={sidePanelEnabled ? handlePreviewSearchResult : undefined}
+          canPreviewResult={canPreviewSearchResult}
         />
 
         {sidebarOpen && (
           <div
-            className="fixed inset-0 bg-black/30 z-30 md:hidden backdrop-blur-sm"
+            className="fixed inset-0 bg-black/30 z-30 lg:hidden backdrop-blur-sm"
             onClick={() => setSidebarOpen(false)}
           ></div>
         )}
@@ -258,6 +407,11 @@ const App = () => {
             scrollRef={scrollRef}
             bookmarksControls={{ toggleBookmark, isBookmarked }}
             onNavigateTree={handleNavigateTree}
+            referenceContext={referenceContext}
+            onOpenReference={handleOpenReference}
+            contextItem={sidePanelEnabled ? contextItem : null}
+            onCloseContext={closeContextItem}
+            onOpenContextTarget={openContextTarget}
           />
         ) : activeSection === 'transparency' ? (
           <TransparencyContent
@@ -274,6 +428,11 @@ const App = () => {
             handleTermClick={handleTermClick}
             scrollRef={scrollRef}
             bookmarksControls={{ toggleBookmark, isBookmarked }}
+            referenceContext={referenceContext}
+            onOpenReference={handleOpenReference}
+            contextItem={sidePanelEnabled ? contextItem : null}
+            onCloseContext={closeContextItem}
+            onOpenContextTarget={openContextTarget}
           />
         ) : activeSection === 'quiz' ? (
           <QuizContent
@@ -298,6 +457,7 @@ const App = () => {
             activeId={activeId}
             setActiveId={handleTreeChange}
             scrollRef={scrollRef}
+            onOpenReference={navigateToReference}
           />
         )}
       </div>

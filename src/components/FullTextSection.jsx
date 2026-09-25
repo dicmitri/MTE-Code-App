@@ -7,6 +7,7 @@ import { AppIcon } from './AppIcons';
 import { getTreesBySection } from '../data/treeData';
 import { buildCodeSectionPath } from '../utils/routeUtils';
 import { resolveResourceLinks } from '../utils/resourceUtils';
+import { isPlainLinkClick, linkCrossReferences } from '../utils/crossReferences';
 
 const EMPTY_RESOURCE_LINKS = Object.freeze({});
 
@@ -29,7 +30,9 @@ export const FullTextSection = ({
     resourceLinks = EMPTY_RESOURCE_LINKS,
     supplement = null,
     printAllQA = false,
-    onNavigateTree
+    onNavigateTree,
+    referenceContext = null,
+    onOpenReference,
 }) => {
     // A glossary term is linked only where it first appears in the section: the legal
     // text and then each Q&A, in reading order, share one set of linked terms.
@@ -38,12 +41,17 @@ export const FullTextSection = ({
     const { legalTextMarkup, processedQas } = useMemo(() => {
         const linkedTerms = new Set();
         const enableGlossary = !id.includes('glossary');
+        // References such as "Chapter 4" become links to the chapter, section or Q&A they name.
+        const linkReferences = referenceContext
+            ? (html) => linkCrossReferences(html, referenceContext)
+            : null;
         const processedHtml = processReaderHtml(resolveResourceLinks(section.legalText, resourceLinks), {
             query,
             highlight: Boolean(query),
             glossaryMap,
             enableGlossary,
             linkedTerms,
+            linkReferences,
         });
         const processingOptions = {
             query,
@@ -51,6 +59,7 @@ export const FullTextSection = ({
             glossaryMap,
             enableGlossary,
             linkedTerms,
+            linkReferences,
         };
 
         return {
@@ -66,7 +75,7 @@ export const FullTextSection = ({
                 };
             }),
         };
-    }, [section.legalText, section.qas, resourceLinks, query, glossaryMap, id]);
+    }, [section.legalText, section.qas, resourceLinks, query, glossaryMap, id, referenceContext]);
 
     const [copyFeedback, setCopyFeedback] = useState(null);
     const [citeMenuOpen, setCiteMenuOpen] = useState(false);
@@ -210,12 +219,22 @@ export const FullTextSection = ({
     const openGlossaryTerm = (target) => {
         const termNode = target.closest?.('.glossary-term');
         if (!termNode) return false;
-        onTermClick?.(termNode.getAttribute('data-term'));
+        onTermClick?.(termNode.getAttribute('data-term'), termNode);
+        return true;
+    };
+
+    // A plain click on a reference opens it in the app (a preview on wide screens); modified
+    // clicks keep the browser's behaviour, such as opening a new tab.
+    const openCrossReference = (event) => {
+        const link = event.target.closest?.('a.cross-reference');
+        if (!link || !onOpenReference || !isPlainLinkClick(event)) return false;
+        event.preventDefault();
+        onOpenReference(link.getAttribute('data-reference'), link);
         return true;
     };
 
     const handleClick = (e) => {
-        if (openGlossaryTerm(e.target)) e.stopPropagation();
+        if (openGlossaryTerm(e.target) || openCrossReference(e)) e.stopPropagation();
     };
 
     // Glossary terms are role="button" spans so they wrap with the text; give them a
@@ -243,7 +262,9 @@ export const FullTextSection = ({
 
     return (
         <div id={id} className="mb-8 scroll-mt-24" onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} onClick={handleClick}>
-            <div className={`group flex flex-col gap-2 mb-3 mt-6 sm:flex-row sm:items-baseline ${section.title ? 'sm:justify-between' : 'sm:justify-end print:hidden'}`}>
+            {/* The actions sit beside the title when both fit and wrap under it otherwise, so a
+                long title keeps the full column width. */}
+            <div className={`group flex flex-wrap items-baseline gap-x-4 gap-y-2 mb-3 mt-6 ${section.title ? 'justify-between' : 'justify-end print:hidden'}`}>
                 {section.title && (
                     <h2 className="min-w-0 text-xl font-bold text-gray-800 flex items-center flex-wrap gap-2">
                         <Highlight text={section.title} query={query} />
@@ -264,7 +285,7 @@ export const FullTextSection = ({
                         )}
                     </h2>
                 )}
-                <div className="flex flex-wrap gap-x-2 gap-y-1 shrink-0 sm:ml-4 sm:justify-end print:hidden">
+                <div className="flex flex-wrap gap-x-2 gap-y-1 shrink-0 sm:ml-auto sm:justify-end print:hidden">
                         {bookmarksControls && (
                             <button
                                 type="button"

@@ -58,6 +58,11 @@ export const TransparencyContent = ({
   handleTermClick,
   scrollRef,
   bookmarksControls,
+  referenceContext,
+  onOpenReference,
+  contextItem,
+  onCloseContext,
+  onOpenContextTarget,
 }) => {
   if (!activeDocumentId) {
     return (
@@ -157,6 +162,11 @@ export const TransparencyContent = ({
       printAllQA
       sourceDocumentUrl={sourceDocumentUrl}
       readerClassName="transparency-reader"
+      referenceContext={referenceContext}
+      onOpenReference={onOpenReference}
+      contextItem={contextItem}
+      onCloseContext={onCloseContext}
+      onOpenContextTarget={onOpenContextTarget}
     />
   );
 };

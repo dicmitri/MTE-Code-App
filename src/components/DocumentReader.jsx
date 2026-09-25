@@ -4,6 +4,7 @@ import { AppIcon } from './AppIcons';
 import { Highlight } from './Highlight';
 import { FullTextSection } from './FullTextSection';
 import { TableOfContents } from './TableOfContents';
+import { ContextPanel } from './ContextPanel';
 import { highlightSearchTerm } from '../utils/textUtils';
 import { calculateScrollProgress } from '../utils/scrollProgressUtils';
 
@@ -44,6 +45,11 @@ export const DocumentReader = ({
   sourceDocumentUrl,
   readerClassName = '',
   onNavigateTree,
+  referenceContext = null,
+  onOpenReference,
+  contextItem = null,
+  onCloseContext,
+  onOpenContextTarget,
 }) => {
   const currentIndex = items.findIndex((item) => item.id === activeId);
   const previousItem = currentIndex > 0 ? items[currentIndex - 1] : null;
@@ -51,6 +57,14 @@ export const DocumentReader = ({
     ? items[currentIndex + 1]
     : null;
   const hasSummary = Boolean(activeContent?.summary);
+  const sections = activeContent?.sections || [];
+  // Mirrors TableOfContents: a list is only worth showing for two or more entries.
+  const hasContentsList = showFullText
+    && sections.length > 0
+    && (sections.length >= 2 || (showSummary && hasSummary));
+  // The right-hand column only exists when it has something to show, so one-section pages
+  // centre their text instead of leaving an empty column.
+  const hasSideColumn = hasContentsList || Boolean(contextItem);
 
   const progressBarRef = React.useRef(null);
   const scrollFrameRef = React.useRef(null);
@@ -115,8 +129,11 @@ export const DocumentReader = ({
       )}
 
       {activeId === homeId ? renderLanding() : (
-        <div className="flex flex-col xl:flex-row max-w-[95rem] mx-auto pb-24 pt-4 md:pt-6">
-          <div className="flex-1 min-w-0 px-4 md:px-10 max-w-5xl mx-auto w-full">
+        // The text column and the right-hand column are centred as one group, so spare width
+        // is shared evenly on both sides instead of collecting on the right.
+        <div className="flex justify-center gap-14 px-4 md:px-10 pb-24 pt-4 md:pt-6 print:block print:px-0">
+          {/* Lines stop at about 85 characters (see --reader-measure in index.css). */}
+          <div className="min-w-0 w-full max-w-[var(--reader-measure)] print:max-w-none">
             <div
               id="summary-top"
               className="no-print mb-6 flex items-center text-xs font-bold text-[#007A86] uppercase tracking-widest gap-2 scroll-mt-24"
@@ -194,6 +211,8 @@ export const DocumentReader = ({
                     supplement={renderSectionSupplement?.(section)}
                     printAllQA={printAllQA}
                     onNavigateTree={onNavigateTree}
+                    referenceContext={referenceContext}
+                    onOpenReference={onOpenReference}
                   />
                 ))}
               </div>
@@ -249,15 +268,29 @@ export const DocumentReader = ({
 
           </div>
 
-          {showFullText && activeContent?.sections?.length > 0 && (
-            <div className="hidden xl:block w-72 shrink-0 pr-8 pl-4 pt-10">
-              <div className="sticky top-10">
-                <TableOfContents
-                  sections={activeContent.sections}
-                  showSummary={showSummary && hasSummary}
-                />
+          {hasSideColumn && (
+            <aside
+              aria-label={contextItem ? 'Side panel' : 'On this page'}
+              className="hidden xl:block shrink-0 w-60 min-[1440px]:w-80 min-[1920px]:w-[23.75rem] pt-10 no-print"
+            >
+              <div className="sticky top-10 max-h-[calc(100dvh-9rem)] overflow-y-auto custom-scrollbar pb-4">
+                {hasContentsList && (
+                  <TableOfContents
+                    sections={sections}
+                    showSummary={showSummary && hasSummary}
+                    collapsed={Boolean(contextItem)}
+                    onExpand={onCloseContext}
+                  />
+                )}
+                {contextItem && (
+                  <ContextPanel
+                    item={contextItem}
+                    onClose={onCloseContext}
+                    onOpenTarget={onOpenContextTarget}
+                  />
+                )}
               </div>
-            </div>
+            </aside>
           )}
         </div>
       )}

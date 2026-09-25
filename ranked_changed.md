@@ -42,7 +42,7 @@ Prefer explicit labels, semantic controls, and keyboard access in existing workf
 ## Changes Requiring Evidence Before Implementation
 
 - Search analytics: the app emits `mte:search` browser events, but nothing collects them. Adding a collector needs a concrete reporting need and a privacy notice first.
-- New profile filters, checklists, exports, or cross-links require a concrete user need and maintained content model.
+- New profile filters, checklists or exports require a concrete user need and maintained content model. (Cross-reference links were added on 2026-09-25 at the product owner's request, with a maintained model: references are detected from the loaded titles in `src/utils/crossReferences.js` and checked by `npm run validate:data`.)
 - Component splitting should happen only when a file is being changed and extraction clearly reduces risk or duplication.
 
 ## Deliberately Deferred Structural Changes
@@ -67,14 +67,6 @@ Found by an automated repo audit (read-only pass: `npm install`, `npm run lint`,
 - `tsconfig.json` has no `strict`/`noImplicitAny`. Turning on strict mode will likely surface new type errors in `TPPTContent.tsx` that need fixing — plan it as its own pass, not a quick toggle.
 - Lower-priority `npm audit` findings (dompurify, vite, postcss, esbuild, nanoid, picomatch) are mostly dev-tooling-only exposure, not shipped to end users; revisit opportunistically via `npm audit fix` (non-breaking) rather than urgently.
 
-## Found While Rebuilding Search — 2026-09-24
-
-- The main entry bundle statically imports Rollup's CommonJS interop helper from the lazy `tppt-pdfmake` chunk (about 1.8 MB), because `manualChunks` in `vite.config.ts` let the shared `commonjsHelpers` module land in that chunk.
-  - Every first visit downloads pdfmake even if TPPT is never opened.
-  - The PWA precache deliberately ignores `tppt-*.js`, so an installed app reloaded offline shows a blank page. Reproduced with Playwright on the production preview: the service worker controlled the page, then an offline reload failed on `/assets/tppt-pdfmake-*.js`.
-  - Present on `main` before the search rewrite.
-  - Fix: give the helper its own chunk. Then confirm no `index-*.js` statically imports a `tppt-*` chunk and that the offline check in `PROJECT_CHECKS.md` passes.
-
 ## Verification Commands
 
 Run from the project root:
@@ -93,3 +85,11 @@ See `PROJECT_CHECKS.md` for detailed instructions and troubleshooting.
 - Glossary association inference remains lexical: punctuation can split an exclusion into a new clause (for example the Virtual Event definition's hybrid exclusion), and ordinary words such as procurement can link to a broad defined term. This can add noisy results even after a misleading phrasebook rule is removed. Verify any future negation/scoping fix with synthetic fixtures; do not add Code-specific exceptions or alter scoring constants to hide it.
 - Greedy multiword recognition and concept-union document frequency can displace useful literal results: a recognised phrasebook phrase is searched as one unit, not word by word. Since 2026-09-25 a multiword phrase is only recognised in a scope where the phrase or one of its targets occurs, so a target missing from one publication no longer empties that publication's results. A typed word that is in neither the text nor the phrasebook can still be spelling-corrected to an unrelated indexed word (for example "bonus" became "bones" while it was missing from the phrasebook).
 - The Disclosure CSV template's field names are not indexed: Annex I reader text contains only its download link. Phrasebook expansion cannot make those missing fields searchable. Any later indexing change should retain the CSV as the authoritative source and keep download-only fields distinct from reader passages.
+
+## Found While Rebalancing the Layout — 2026-09-25
+
+- `index.html` does not link `public/favicon.svg`, so browsers request `/favicon.ico`, get a 404 and show a default tab icon. Fix: add `<link rel="icon" href="/favicon.svg" type="image/svg+xml">` once the SVG is confirmed as the intended icon.
+- Chapter 1 cites "section 3 of Chapter 2" twice (Guests and Reasonable Hospitality), but Chapter 2 has two numbered sections. The links fall back to Chapter 2, and `npm run validate:data` prints them as notes. Check the wording against the published PDF before changing any Code text.
+- The Disclosure Guidelines' Chapter 3 numbers its sections 1, 2, 3, 4, 6, 5, 6 and cites "Section 3.3 Time of Publication", which matches no section title (the time-of-disclosure section is numbered 2). The linker leaves it unlinked. The data is pinned to the source by `npm run verify:disclosure-guidelines`, so confirm against the PDF before treating it as an error.
+- The reader's Previous/Next titles combine `block` with `line-clamp-2`; `block` overrides the clamp's display value, so a very long title is not clamped. Low risk: current titles are short.
+- Layout widths were measured with a throwaway Playwright script (15 screens at 10 window sizes from 390px to 3440px: characters per line, empty space on each side, cut-off sidebar labels, clipped toolbar buttons). Repeat that kind of check when changing layout widths or breakpoints; targets are about 70–90 characters per line and balanced margins from 1440px.

@@ -30,7 +30,7 @@ export const TreeLandingPage = ({ onSelectTree }) => {
   }, {});
 
   return (
-    <div className="animate-fade-in py-10 px-4 max-w-5xl mx-auto overflow-y-auto h-full custom-scrollbar pb-24">
+    <div className="animate-fade-in py-10 px-4 max-w-5xl xl:max-w-6xl mx-auto overflow-y-auto h-full custom-scrollbar pb-24">
       <div className="text-center mb-8">
         <div className="inline-flex p-4 rounded-2xl bg-amber-50 mb-6">
           <AppIcon name="GitBranch" size={48} className="text-amber-600" />
@@ -84,7 +84,7 @@ export const TreeLandingPage = ({ onSelectTree }) => {
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
               {trees.map((tree) => (
                 <button
                   key={tree.id}

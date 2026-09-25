@@ -7,7 +7,7 @@ import { TreeVisualization } from './TreeVisualization';
  * TreeContent — main content area for the Decision Trees section.
  * Manages routing between the tree landing page, interactive tree, and visualization.
  */
-export const TreeContent = ({ activeId, setActiveId, scrollRef }) => {
+export const TreeContent = ({ activeId, setActiveId, scrollRef, onOpenReference }) => {
   const [showVisualization, setShowVisualization] = useState(false);
   const localRef = useRef(null);
   const ref = scrollRef || localRef;
@@ -52,7 +52,7 @@ export const TreeContent = ({ activeId, setActiveId, scrollRef }) => {
   // Interactive tree
   return (
     <main ref={ref} className="flex-1 overflow-y-auto bg-white custom-scrollbar h-full">
-      <div className="max-w-3xl mx-auto px-4 pt-4 pb-2">
+      <div className="max-w-3xl xl:max-w-[69rem] mx-auto px-4 pt-4 pb-2">
         <button
           onClick={handleBackToLanding}
           className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600 transition-colors mb-2"
@@ -63,6 +63,7 @@ export const TreeContent = ({ activeId, setActiveId, scrollRef }) => {
       <DecisionTree
         treeId={activeId}
         onShowVisualization={() => setShowVisualization(true)}
+        onOpenReference={onOpenReference}
       />
     </main>
   );
