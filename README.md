@@ -31,6 +31,7 @@ The app is built using **React**, **Vite**, and **Cloudflare Workers**. All the 
  ├── PROJECT_CHECKS.md # Plain-language validation and testing guide
  ├── ROUTING.md      # URL formats, compatibility rules, and route checks
  ├── AGENTS.md       # AI Agent instructions and global Project Map
+ ├── CLAUDE.md       # Claude Code entry point; imports AGENTS.md
  └── wrangler.toml   # Cloudflare Worker configuration
 ```
 
