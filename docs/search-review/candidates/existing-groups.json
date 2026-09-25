@@ -1,0 +1,590 @@
+[
+  {
+    "index": 0,
+    "disposition": "refine",
+    "rationale": "Arrangement may be informal; agreement and contract can be legally distinct.",
+    "replacement": [
+      {
+        "same": [
+          "agreement",
+          "contract"
+        ]
+      },
+      {
+        "from": [
+          "informal arrangement"
+        ],
+        "to": [
+          "arrangement"
+        ]
+      }
+    ]
+  },
+  {
+    "index": 1,
+    "disposition": "refine",
+    "rationale": "Consultant is a person while consulting and consultancy name services.",
+    "replacement": [
+      {
+        "same": [
+          "consulting",
+          "consultancy"
+        ]
+      },
+      {
+        "from": [
+          "consultant"
+        ],
+        "to": [
+          "adviser"
+        ]
+      }
+    ]
+  },
+  {
+    "index": 2,
+    "disposition": "refine",
+    "rationale": "Pay is a verb; payment, remuneration and compensation differ in scope.",
+    "replacement": [
+      {
+        "same": [
+          "remuneration",
+          "compensation"
+        ]
+      }
+    ]
+  },
+  {
+    "index": 3,
+    "disposition": "keep",
+    "rationale": "US and UK spelling variants are interchangeable."
+  },
+  {
+    "index": 4,
+    "disposition": "keep",
+    "rationale": "US and UK spelling variants are interchangeable."
+  },
+  {
+    "index": 5,
+    "disposition": "keep",
+    "rationale": "General breach, violation and infringement are close in compliance prose."
+  },
+  {
+    "index": 6,
+    "disposition": "keep",
+    "rationale": "US and UK spelling variants are interchangeable."
+  },
+  {
+    "index": 7,
+    "disposition": "refine",
+    "rationale": "Surgeon and GP are narrower than physician; clinician and healthcare professional are broader."
+  },
+  {
+    "index": 8,
+    "disposition": "refine",
+    "rationale": "A pharmacist or dentist is a healthcare professional but not necessarily a clinician."
+  },
+  {
+    "index": 9,
+    "disposition": "refine",
+    "rationale": "These professions are distinct; specialist and clinician are not universal equivalents."
+  },
+  {
+    "index": 10,
+    "disposition": "refine",
+    "rationale": "Care team can contain non-professionals; keep role phrases separately precise."
+  },
+  {
+    "index": 11,
+    "disposition": "refine",
+    "rationale": "A lab can be a commercial company rather than a healthcare organisation."
+  },
+  {
+    "index": 12,
+    "disposition": "refine",
+    "rationale": "These facilities can be healthcare organisations; remove generic institution expansion."
+  },
+  {
+    "index": 13,
+    "disposition": "keep",
+    "rationale": "Patient advocacy bodies are narrower instances of patient organisations."
+  },
+  {
+    "index": 14,
+    "disposition": "refine",
+    "rationale": "Romantic partners, spouses and companions differ; guest is contextual, not a synonym."
+  },
+  {
+    "index": 15,
+    "disposition": "refine",
+    "rationale": "Children and relatives are family, but guest status is contextual."
+  },
+  {
+    "index": 16,
+    "disposition": "refine",
+    "rationale": "An unmarried partner is not a spouse; partner is the appropriate broader term."
+  },
+  {
+    "index": 17,
+    "disposition": "refine",
+    "rationale": "Congress and symposium are conference forms; workshop and course are training formats."
+  },
+  {
+    "index": 18,
+    "disposition": "refine",
+    "rationale": "A trade show or expo is an exhibition, which need not be a conference."
+  },
+  {
+    "index": 19,
+    "disposition": "refine",
+    "rationale": "Webinar and online meeting are virtual, but a livestream need not be a meeting."
+  },
+  {
+    "index": 20,
+    "disposition": "refine",
+    "rationale": "A roadshow and launch are not necessarily conferences."
+  },
+  {
+    "index": 21,
+    "disposition": "refine",
+    "rationale": "Mixer and networking event are social gatherings; generic event adds noise."
+  },
+  {
+    "index": 22,
+    "disposition": "refine",
+    "rationale": "Exhibit space and stand can map to booth; generic display adds noise."
+  },
+  {
+    "index": 23,
+    "disposition": "refine",
+    "rationale": "Promotional and information stands may map to booth; pop-up stand is ambiguous retail language."
+  },
+  {
+    "index": 24,
+    "disposition": "refine",
+    "rationale": "Airline and plane are not airfare; retain ticket fare phrases only."
+  },
+  {
+    "index": 25,
+    "disposition": "refine",
+    "rationale": "Rail and taxi are modes; mileage is a cost measure, not transportation."
+  },
+  {
+    "index": 26,
+    "disposition": "refine",
+    "rationale": "Upgrade alone is ambiguous; specific class phrases can reach air travel."
+  },
+  {
+    "index": 27,
+    "disposition": "keep",
+    "rationale": "Layover, stopover and connecting flight are specific kinds of travel."
+  },
+  {
+    "index": 28,
+    "disposition": "keep",
+    "rationale": "Hotel room and overnight lodging are accommodation."
+  },
+  {
+    "index": 29,
+    "disposition": "refine",
+    "rationale": "Lodge and inn can be accommodation; hotel should not be imposed on all."
+  },
+  {
+    "index": 30,
+    "disposition": "refine",
+    "rationale": "Meals, drinks and catering differ; alcohol is not a meal."
+  },
+  {
+    "index": 31,
+    "disposition": "refine",
+    "rationale": "Appetizers and snacks are refreshments; buffet may be a full meal."
+  },
+  {
+    "index": 32,
+    "disposition": "refine",
+    "rationale": "Cash bar is customer-paid; all are bar service, not necessarily hospitality support."
+  },
+  {
+    "index": 33,
+    "disposition": "refine",
+    "rationale": "Golf and skiing are sports; concert and theatre are entertainment; avoid a shared social event target."
+  },
+  {
+    "index": 34,
+    "disposition": "refine",
+    "rationale": "Tour and celebration are ambiguous; nightclub and casino are leisure venues."
+  },
+  {
+    "index": 35,
+    "disposition": "refine",
+    "rationale": "Group activity alone may be professional; excursion or team building is clearer."
+  },
+  {
+    "index": 36,
+    "disposition": "refine",
+    "rationale": "Honorarium and speaker fee are remuneration; per diem and allowance are expenses."
+  },
+  {
+    "index": 37,
+    "disposition": "refine",
+    "rationale": "Refund and reimbursement differ from expense claim; payout is broad."
+  },
+  {
+    "index": 38,
+    "disposition": "remove",
+    "rationale": "Bonus and advance payment are different from fee and one another; bare bonus is ambiguous."
+  },
+  {
+    "index": 39,
+    "disposition": "refine",
+    "rationale": "Free of charge is not the same as in-kind support.",
+    "replacement": [
+      {
+        "from": [
+          "complimentary",
+          "at no cost",
+          "no charge",
+          "gratis"
+        ],
+        "to": [
+          "free of charge"
+        ]
+      }
+    ]
+  },
+  {
+    "index": 40,
+    "disposition": "refine",
+    "rationale": "Gift cards and vouchers are cash equivalents; merchandise is broad, not necessarily a gift."
+  },
+  {
+    "index": 41,
+    "disposition": "refine",
+    "rationale": "Thank-you gifts are gifts; branded items may be promotional without being gifts."
+  },
+  {
+    "index": 42,
+    "disposition": "refine",
+    "rationale": "A bribe or kickback is an inducement; sweetener and backhander are context-sensitive."
+  },
+  {
+    "index": 43,
+    "disposition": "refine",
+    "rationale": "Payoff may be a bribe but illicit and secret payments need not be inducements."
+  },
+  {
+    "index": 44,
+    "disposition": "refine",
+    "rationale": "Charity is an organisation or activity; donate is a verb; separate donation and philanthropic phrases."
+  },
+  {
+    "index": 45,
+    "disposition": "refine",
+    "rationale": "Fundraising is not itself a donation; charitable giving is."
+  },
+  {
+    "index": 46,
+    "disposition": "refine",
+    "rationale": "Financial support is broader than grant or sponsorship; the two must stay separate.",
+    "replacement": [
+      {
+        "from": [
+          "sponsor",
+          "sponsoring"
+        ],
+        "to": [
+          "sponsorship"
+        ]
+      },
+      {
+        "from": [
+          "financial support"
+        ],
+        "to": [
+          "funding"
+        ]
+      }
+    ]
+  },
+  {
+    "index": 47,
+    "disposition": "refine",
+    "rationale": "An adviser may consult; an advisory board is a body, not a consultant."
+  },
+  {
+    "index": 48,
+    "disposition": "refine",
+    "rationale": "Speaker and lecturer are faculty; speaking is an activity."
+  },
+  {
+    "index": 49,
+    "disposition": "refine",
+    "rationale": "Moderator/chairperson can be faculty; emcee and MC may only host."
+  },
+  {
+    "index": 50,
+    "disposition": "refine",
+    "rationale": "Study/trial can be research; survey or investigation need not be clinical research."
+  },
+  {
+    "index": 51,
+    "disposition": "refine",
+    "rationale": "Questionnaire and data collection are methods, not necessarily clinical research."
+  },
+  {
+    "index": 52,
+    "disposition": "refine",
+    "rationale": "Trial product can mean an evaluation item; free sample is a sample."
+  },
+  {
+    "index": 53,
+    "disposition": "keep",
+    "rationale": "A demo unit is a demonstration product."
+  },
+  {
+    "index": 54,
+    "disposition": "refine",
+    "rationale": "A loan is an ownership arrangement; evaluation is a purpose and must stay distinct.",
+    "replacement": [
+      {
+        "from": [
+          "test unit",
+          "evaluation unit",
+          "try before you buy"
+        ],
+        "to": [
+          "evaluation product"
+        ]
+      },
+      {
+        "from": [
+          "loaner",
+          "loan equipment",
+          "on loan"
+        ],
+        "to": [
+          "loan",
+          "loaned equipment"
+        ]
+      }
+    ]
+  },
+  {
+    "index": 55,
+    "disposition": "keep",
+    "rationale": "Medical textbooks and anatomical models are educational items."
+  },
+  {
+    "index": 56,
+    "disposition": "refine",
+    "rationale": "Several listed objects may be personal gifts; distinguish practice items from generic merchandise."
+  },
+  {
+    "index": 57,
+    "disposition": "refine",
+    "rationale": "Publishing is an action; disclosure is the content or act. Transparency is broader."
+  },
+  {
+    "index": 58,
+    "disposition": "refine",
+    "rationale": "Public register and database are publication channels, not disclosures themselves."
+  },
+  {
+    "index": 59,
+    "disposition": "refine",
+    "rationale": "Whistleblowing reports concerns; complaint is a procedural filing; breach is an outcome.",
+    "replacement": [
+      {
+        "from": [
+          "grievance",
+          "formal grievance"
+        ],
+        "to": [
+          "complaint"
+        ]
+      },
+      {
+        "from": [
+          "whistleblowing"
+        ],
+        "to": [
+          "reporting misconduct"
+        ]
+      }
+    ]
+  },
+  {
+    "index": 60,
+    "disposition": "refine",
+    "rationale": "Dispute, objection and concern are not automatically formal complaints."
+  },
+  {
+    "index": 61,
+    "disposition": "refine",
+    "rationale": "Suspension and expulsion are sanctions; a fine is not listed here and penalty is broader."
+  },
+  {
+    "index": 62,
+    "disposition": "refine",
+    "rationale": "Warning letter and reprimand may be sanctions; blacklist and ban need more context."
+  },
+  {
+    "index": 63,
+    "disposition": "refine",
+    "rationale": "Reseller/dealer are distributors; agent and representative are intermediaries, not always distributors."
+  },
+  {
+    "index": 64,
+    "disposition": "refine",
+    "rationale": "Broker is an intermediary; representative office is an organisational location."
+  },
+  {
+    "index": 65,
+    "disposition": "refine",
+    "rationale": "A patent is intellectual property; a licence fee is not necessarily a royalty.",
+    "replacement": [
+      {
+        "from": [
+          "patent",
+          "invention"
+        ],
+        "to": [
+          "intellectual property"
+        ]
+      },
+      {
+        "from": [
+          "licence fee",
+          "license fee"
+        ],
+        "to": [
+          "licensing payment"
+        ]
+      }
+    ]
+  },
+  {
+    "index": 66,
+    "disposition": "refine",
+    "rationale": "Copyright and trademark are intellectual property, not royalty payments."
+  },
+  {
+    "index": 67,
+    "disposition": "refine",
+    "rationale": "Manager can be superior; employer is the organisation, not the manager."
+  },
+  {
+    "index": 68,
+    "disposition": "refine",
+    "rationale": "Resort is a venue; destination is a geographic location, not necessarily a venue."
+  },
+  {
+    "index": 69,
+    "disposition": "keep",
+    "rationale": "These are places that can serve as venues."
+  },
+  {
+    "index": 70,
+    "disposition": "refine",
+    "rationale": "Hybrid combines in-person and virtual participation; digital/remote events can be virtual.",
+    "replacement": [
+      {
+        "from": [
+          "digital event",
+          "remote event"
+        ],
+        "to": [
+          "virtual event",
+          "online event"
+        ]
+      }
+    ]
+  },
+  {
+    "index": 71,
+    "disposition": "keep",
+    "rationale": "These are specific kinds of fees."
+  },
+  {
+    "index": 72,
+    "disposition": "refine",
+    "rationale": "Scholarships and bursaries can be educational grants but grant is broader."
+  },
+  {
+    "index": 73,
+    "disposition": "keep",
+    "rationale": "Named training variants are training or education."
+  },
+  {
+    "index": 74,
+    "disposition": "refine",
+    "rationale": "A phone call is not a virtual event; conference calls can be meetings."
+  },
+  {
+    "index": 75,
+    "disposition": "refine",
+    "rationale": "Welcome/delegate bags can be gifts, but their content determines item type."
+  },
+  {
+    "index": 76,
+    "disposition": "remove",
+    "rationale": "Live demonstration is an activity; demonstration product is a physical item.",
+    "replacement": [
+      {
+        "from": [
+          "product demonstration",
+          "live demonstration",
+          "product showcase"
+        ],
+        "to": [
+          "demonstration"
+        ]
+      }
+    ]
+  },
+  {
+    "index": 77,
+    "disposition": "refine",
+    "rationale": "An allowance is a payment for meals, not a meal or hospitality itself."
+  },
+  {
+    "index": 78,
+    "disposition": "refine",
+    "rationale": "Suite can be a room type without an upgrade; keep explicit upgrade phrases."
+  },
+  {
+    "index": 79,
+    "disposition": "refine",
+    "rationale": "Expenses are distinct from reimbursement; personal expenses may be ineligible."
+  },
+  {
+    "index": 80,
+    "disposition": "refine",
+    "rationale": "Misconduct/non-compliance may be a breach; complaint is an allegation process."
+  },
+  {
+    "index": 81,
+    "disposition": "refine",
+    "rationale": "Investigation outcome can exonerate; corrective action is not always a sanction."
+  },
+  {
+    "index": 82,
+    "disposition": "refine",
+    "rationale": "Go-between is an intermediary; fixer/facilitator have broader senses."
+  },
+  {
+    "index": 83,
+    "disposition": "refine",
+    "rationale": "Patent royalty is a royalty; usage rights are intellectual property rights, not payments."
+  },
+  {
+    "index": 84,
+    "disposition": "refine",
+    "rationale": "Supervisor and department head are superiors; senior management is a group, not employer."
+  },
+  {
+    "index": 85,
+    "disposition": "keep",
+    "rationale": "These buildings can serve as venues."
+  }
+]

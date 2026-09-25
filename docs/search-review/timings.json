@@ -1,0 +1,33 @@
+{
+  "base": "56b5f0ef982f413a10fd85d0c1c76b3070cad84a",
+  "method": "Three warmup rounds; nine measured rounds per stage; stage order rotated each round; query set of 111. Same local process and pinned documents. Timings vary by machine/load and are not a release threshold.",
+  "stages": [
+    {
+      "name": "original",
+      "buildSamples": 9,
+      "querySamples": 999,
+      "buildMedianMs": 16.27690000000007,
+      "buildP95Ms": 18.664299999999912,
+      "queryMedianMs": 0.08379999999988286,
+      "queryP95Ms": 0.644800000000032
+    },
+    {
+      "name": "fixes",
+      "buildSamples": 9,
+      "querySamples": 999,
+      "buildMedianMs": 17.273699999999963,
+      "buildP95Ms": 19.15139999999974,
+      "queryMedianMs": 0.07950000000028012,
+      "queryP95Ms": 0.5999000000001615
+    },
+    {
+      "name": "expanded",
+      "buildSamples": 9,
+      "querySamples": 999,
+      "buildMedianMs": 16.962099999999964,
+      "buildP95Ms": 19.784699999999702,
+      "queryMedianMs": 0.044599999999945794,
+      "queryP95Ms": 0.22019999999997708
+    }
+  ]
+}

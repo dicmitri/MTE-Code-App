@@ -202,6 +202,24 @@ test('reports phrasebook top-level structural errors', () => {
   assert.ok(errors.some((e) => e.includes('must have exactly one key "groups"')));
 });
 
+test('rejects corpus-independent duplicate sources and phrases made only of stopwords', () => {
+  const fixture = makeValidFixture();
+  fixture.searchPhrasebook = {
+    groups: [
+      { from: ['follow-up'], to: ['review'] },
+      { from: ['follow up'], to: ['check'] },
+      { same: ['at no', 'by the'] },
+      { same: ['well-being', 'well being'] },
+    ],
+  };
+  const errors = validateProjectData(fixture).errors;
+  assert.ok(errors.some((error) => error.includes('source phrase "follow up"')
+    && error.includes('after normalization')));
+  assert.ok(errors.some((error) => error.includes('same[0]') && error.includes('not only stopwords')));
+  assert.ok(errors.some((error) => error.includes('same[1]') && error.includes('not only stopwords')));
+  assert.ok(errors.some((error) => error.includes('duplicate phrase "well being"')));
+});
+
 test('does not report phrasebook errors when searchPhrasebook is undefined', () => {
   const fixture = makeValidFixture();
   fixture.searchPhrasebook = undefined;

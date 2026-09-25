@@ -17,7 +17,7 @@ This file records the current maintenance position of The Code App. It replaces 
 
 - `npm run validate:data` checks structural integrity of Code, tree, and quiz data, and the structure of the search phrasebook, without changing files.
 - `npm test` runs focused tests for route compatibility, TPPT rules, parser behavior, stable section IDs, validator behavior, and search (synthetic engine fixtures plus a content-independent self-retrieval check).
-- `npm run search:explain` and `npm run search:report` show how search interprets and ranks queries; they are informational and never fail.
+- `npm run search:explain` and `npm run search:report` show how search interprets and ranks queries; relevance scores are informational, while malformed command arguments or query files return errors.
 - `npm run check` runs validation, tests, TypeScript checks, and a production build.
 - `PROJECT_CHECKS.md` explains these commands and their output for non-technical maintainers.
 
@@ -87,3 +87,10 @@ npm run build
 ```
 
 See `PROJECT_CHECKS.md` for detailed instructions and troubleshooting.
+
+## Found While Expanding the Phrasebook — 2026-09-25
+
+- Glossary association inference remains lexical: punctuation can split an exclusion into a new clause (for example the Virtual Event definition's hybrid exclusion), and ordinary words such as procurement can link to a broad defined term. This can add noisy results even after a misleading phrasebook rule is removed. Verify any future negation/scoping fix with synthetic fixtures; do not add Code-specific exceptions or alter scoring constants to hide it.
+- Greedy multiword recognition and concept-union document frequency can displace useful literal results. The expansion removed/refined harmful source phrases; remaining source-query gaps are explicitly recorded in `docs/search-review/coverage.json`. Some query words can still be corrected to an unrelated indexed term.
+- The Disclosure CSV template's field names are not indexed: Annex I reader text contains only its download link. Phrasebook expansion cannot make those missing fields searchable. Any later indexing change should retain the CSV as the authoritative source and keep download-only fields distinct from reader passages.
+- Source-specific review metrics distinguish precision among returned top-five results from fixed five-slot precision. Narrowing `pen` to stationery improves the returned result's precision but supplies fewer results; the report preserves that fixed-slot trade-off rather than filling the list with category assumptions.

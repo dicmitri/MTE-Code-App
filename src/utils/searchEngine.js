@@ -60,6 +60,7 @@ const FIELD_NAMES = Object.keys(SEARCH_RANKING.fields);
 const MATCHED_FIELD_ORDER = ['title', 'body', 'context'];
 
 const EMPTY_SET = new Set();
+const compareText = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
 
 const collapseWhitespace = (value) => String(value || '').trim().replace(/\s+/g, ' ');
 
@@ -313,12 +314,22 @@ export const createSearchIndex = (documents, { phrasebook = { groups: [] }, glos
   const fullKeysOf = (text) => tokenizeAllWithOffsets(text)
     .map((token) => (token.content ? keyOf(token.word) : token.word));
 
-  // Resolved key/phrase -> human display text, for explanations. First source to claim a key
-  // wins (abbreviations, then Glossary links, then the phrasebook -- the same order they are
-  // derived in below).
+  // Resolved key/phrase -> human display text, for explanations. Abbreviations and Glossary
+  // links take precedence. When phrasebook spellings merge in this scope, the alphabetically
+  // first raw spelling wins regardless of the order of groups in the file.
   const displayText = new Map();
+  const phrasebookDisplayKeys = new Set();
   const registerDisplayText = (resolvedKey, humanText) => {
     if (resolvedKey && humanText && !displayText.has(resolvedKey)) displayText.set(resolvedKey, humanText);
+  };
+  const registerPhrasebookDisplayText = (resolvedKey, humanText) => {
+    if (!resolvedKey || !humanText) return;
+    if (!displayText.has(resolvedKey)) {
+      displayText.set(resolvedKey, humanText);
+      phrasebookDisplayKeys.add(resolvedKey);
+    } else if (phrasebookDisplayKeys.has(resolvedKey) && humanText < displayText.get(resolvedKey)) {
+      displayText.set(resolvedKey, humanText);
+    }
   };
 
   // 4. Abbreviations: every "Long Form (ABBR)" anywhere in the text, plus Glossary headwords.
@@ -381,32 +392,52 @@ export const createSearchIndex = (documents, { phrasebook = { groups: [] }, glos
   // 6. Phrasebook rules, compiled against this scope's vocabulary (a target like "spouse" is
   // resolved to how this scope actually spells it, e.g. "spouses").
   const rules = [];
+  const phrasebookSpellings = new Map();
+  const registerPhrase = (phrase) => {
+    const resolved = phraseKey(phrase);
+    if (!resolved) return '';
+    if (!phrasebookSpellings.has(resolved)) phrasebookSpellings.set(resolved, new Set());
+    phrasebookSpellings.get(resolved).add(phrase);
+    registerPhrasebookDisplayText(resolved, phrase);
+    return resolved;
+  };
   for (const group of parsePhrasebookGroups(phrasebook)) {
     if (group.kind === 'same') {
-      const validPhrases = group.phrases.filter((phrase) => phraseKey(phrase).length > 0);
+      const validPhrases = group.phrases.filter((phrase) => registerPhrase(phrase).length > 0);
       if (validPhrases.length < 2) continue;
       for (const phrase of validPhrases) {
         const to = validPhrases.filter((other) => other !== phrase).map((other) => phraseKey(other));
         if (to.length === 0) continue;
         const from = phraseKey(phrase);
         rules.push({ from, to, kind: 'same' });
-        registerDisplayText(from, phrase);
       }
     } else {
-      const validTo = group.to.filter((phrase) => phraseKey(phrase).length > 0);
+      const validTo = group.to.filter((phrase) => registerPhrase(phrase).length > 0);
       if (validTo.length === 0) continue;
       const resolvedTo = validTo.map((phrase) => phraseKey(phrase));
-      validTo.forEach((phrase) => registerDisplayText(phraseKey(phrase), phrase));
       for (const phrase of group.from) {
-        const from = phraseKey(phrase);
+        const from = registerPhrase(phrase);
         if (!from) continue;
         rules.push({ from, to: resolvedTo, kind: 'oneWay' });
-        registerDisplayText(from, phrase);
       }
     }
   }
-  // Content words only: a typo must never be "corrected" into a small word.
+  // Stable member order also makes equal-score ties independent of phrasebook group order.
+  rules.forEach((rule) => rule.to.sort(compareText));
+  rules.sort((a, b) => compareText(a.from, b.from)
+    || compareText(a.kind, b.kind)
+    || compareText(a.to.join('\u0000'), b.to.join('\u0000')));
+  const phrasebookStemCollisions = [...phrasebookSpellings]
+    .filter(([, spellings]) => spellings.size > 1)
+    .map(([key, spellings]) => ({ key, phrases: [...spellings].sort(compareText) }))
+    .sort((a, b) => compareText(a.key, b.key));
+  // Content words only: a typo must never be "corrected" into a small word. Components
+  // of multiword sources remain typo candidates, but only an entire one-word source makes a
+  // standalone word "known" and therefore ineligible for in-progress completion.
   const phrasebookWords = new Set(rules.flatMap((rule) => rule.from.split(' ').filter(isContentWord)));
+  const standalonePhrasebookWords = new Set(rules
+    .filter((rule) => !rule.from.includes(' '))
+    .map((rule) => rule.from));
 
   // Phrases a query can contain (phrasebook "from" phrases, abbreviation long forms), with the
   // number of small words before their first content word, for lining them up with the query.
@@ -454,6 +485,8 @@ export const createSearchIndex = (documents, { phrasebook = { groups: [] }, glos
     resolveWord,
     rules,
     phrasebookWords,
+    standalonePhrasebookWords,
+    phrasebookStemCollisions,
     glossaryLinks,
     equivalents,
     phraseCandidates,
@@ -552,7 +585,7 @@ function buildStandardConceptAt(ctx, i, index) {
         ? SEARCH_RANKING.weights.same
         : (wordInScope ? SEARCH_RANKING.weights.oneWayWhenWordInScope : SEARCH_RANKING.weights.oneWay);
       for (const to of candidateRule.to) {
-        if (!members.has(to)) {
+        if (!members.has(to) || members.get(to).weight < spanWeight * weightFactor) {
           members.set(to, {
             weight: spanWeight * weightFactor,
             source: 'phrasebook',
@@ -685,33 +718,34 @@ function planQuery(index, rawQuery) {
       const word = tokens[lastIndex];
       if (word.length >= SEARCH_RANKING.completion.minLength) {
         const key = keysInQuery[lastIndex];
-        const known = index.postings.has(key) || index.phrasebookWords.has(key);
+        const known = index.postings.has(key) || index.standalonePhrasebookWords.has(key);
         if (!known) completionConcept = buildCompletionConcept(word, index);
       }
-    }
-
-    if (segments.length === 1) {
-      phrase = {
-        full: fullKeys,
-        hasSmallWord: allTokens.some((token) => !token.content),
-        endsWithContentWord: allTokens[allTokens.length - 1].content,
-        altered: Boolean(completionConcept) || corrected.some((c) => c.source !== 'query'),
-      };
     }
 
     const ctx = {
       corrected, keysInQuery, fullKeys, fullWords, fullIndexOfContent,
     };
     let i = 0;
+    let usedCompletion = false;
     while (i < tokens.length) {
       if (completionConcept && i === lastIndex) {
         concepts.push(completionConcept);
+        usedCompletion = true;
         i += 1;
         continue;
       }
       const { length, concept } = buildStandardConceptAt(ctx, i, index);
       concepts.push(concept);
       i += length;
+    }
+    if (segments.length === 1) {
+      phrase = {
+        full: fullKeys,
+        hasSmallWord: allTokens.some((token) => !token.content),
+        endsWithContentWord: allTokens[allTokens.length - 1].content,
+        altered: usedCompletion || corrected.some((c) => c.source !== 'query'),
+      };
     }
   });
 

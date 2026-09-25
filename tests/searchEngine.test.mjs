@@ -409,6 +409,89 @@ test('completes the last unknown word while it is still being typed', () => {
   assert.equal(finishedWithSpace.results.length, 0, 'a trailing space means the word is finished, so completion must not apply');
 });
 
+test('multiword source components still complete alone, while full phrases and typos expand', () => {
+  const documents = [
+    makeDoc({ id: 'clinic', title: 'Clinic', fields: { title: 'Clinic', body: 'A clinic provides care.' } }),
+    makeDoc({ id: 'centrepiece', title: 'Centrepiece', fields: { title: 'Centrepiece', body: 'A centrepiece is displayed.' } }),
+  ];
+  const localIndex = createSearchIndex(documents, {
+    phrasebook: { groups: [{ from: ['medical centre'], to: ['clinic'] }] },
+    glossary: [], scope: 'fixture',
+  });
+
+  const partial = runSearch(localIndex, 'centre');
+  assert.equal(partial.concepts[0].members[0].source, 'completion');
+  assert.ok(partial.results.some((hit) => hit.id === 'centrepiece'));
+
+  const full = runSearch(localIndex, 'medical centre');
+  assert.deepEqual(full.concepts.map((concept) => concept.label), ['medical centre']);
+  assert.ok(full.results.some((hit) => hit.id === 'clinic'));
+
+  const typo = runSearch(localIndex, 'medical centree ');
+  assert.deepEqual(typo.concepts.map((concept) => concept.label), ['medical centree']);
+  assert.equal(typo.concepts[0].members[0].source, 'spelling');
+  assert.ok(typo.results.some((hit) => hit.id === 'clinic'));
+});
+
+test('a complete multiword source keeps its phrase suggestion and full-phrase highlighting', () => {
+  const documents = [
+    makeDoc({ id: 'free', title: 'Free', fields: { title: 'Free', body: 'Access is free.' } }),
+    makeDoc({ id: 'literal', title: 'Literal', fields: { title: 'Literal', body: 'Access is at no cost.' } }),
+    makeDoc({ id: 'costume', title: 'Costume', fields: { title: 'Costume', body: 'A costume is available.' } }),
+  ];
+  const localIndex = createSearchIndex(documents, {
+    phrasebook: { groups: [{ from: ['at no cost'], to: ['free'] }] },
+    glossary: [], scope: 'fixture',
+  });
+  const response = runSearch(localIndex, 'at no cost');
+  assert.deepEqual(response.concepts.map((concept) => concept.label), ['at no cost']);
+  assert.equal(response.phraseSuggestion, '"at no cost"');
+  assert.ok(response.results.some((hit) => hit.id === 'free'));
+  assert.ok(response.results.some((hit) => hit.id === 'literal'));
+  assert.ok(response.highlight.test('at no cost'));
+});
+
+test('a target reached by multiple rules keeps its strongest weight regardless of group order', () => {
+  const documents = [makeDoc({
+    id: 'bus', title: 'Bus', fields: { title: 'Bus', body: 'A bus carries passengers.' },
+  })];
+  const groups = [
+    { from: ['coach'], to: ['bus'] },
+    { same: ['coach', 'bus'] },
+  ];
+  for (const orderedGroups of [groups, [...groups].reverse()]) {
+    const localIndex = createSearchIndex(documents, {
+      phrasebook: { groups: orderedGroups }, glossary: [], scope: 'fixture',
+    });
+    const response = runSearch(localIndex, 'coach ');
+    const bus = response.concepts[0].members.find((member) => member.text === 'bus');
+    assert.equal(bus.weight, SEARCH_RANKING.weights.same);
+    assert.ok(response.results.some((hit) => hit.id === 'bus'));
+  }
+});
+
+test('reports scope-specific phrasebook stem collisions with stable display text', () => {
+  const documents = [
+    makeDoc({ id: 'cars', title: 'Cars', fields: { title: 'Cars', body: 'Cars and car travel.' } }),
+    makeDoc({ id: 'vehicle', title: 'Vehicle', fields: { title: 'Vehicle', body: 'A vehicle moves.' } }),
+  ];
+  const groups = [
+    { from: ['cars'], to: ['vehicle'] },
+    { from: ['car'], to: ['vehicles'] },
+  ];
+  for (const orderedGroups of [groups, [...groups].reverse()]) {
+    const localIndex = createSearchIndex(documents, {
+      phrasebook: { groups: orderedGroups }, glossary: [], scope: 'fixture',
+    });
+    assert.deepEqual(localIndex.phrasebookStemCollisions, [
+      { key: 'car', phrases: ['car', 'cars'] },
+      { key: 'vehicle', phrases: ['vehicle', 'vehicles'] },
+    ]);
+    const response = runSearch(localIndex, 'car ');
+    assert.equal(response.concepts[0].members.find((member) => member.source === 'phrasebook').text, 'vehicle');
+  }
+});
+
 test('splits results into an authoritative list and a smaller, separately cut-off app-content list', () => {
   const response = runSearch(index, 'doctor');
   assert.ok(response.results.every((hit) => hit.type !== 'summary'));

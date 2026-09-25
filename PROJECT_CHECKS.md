@@ -35,7 +35,7 @@ Data validation passed.
 23 chapters, 68 sections, 43 Q&As
 8 decision trees, 116 nodes
 60 quiz questions
-86 phrasebook groups
+208 phrasebook groups
 1 Transparency document, 7 reader units, 19 sections, 11 Q&As
 ```
 
@@ -45,7 +45,7 @@ The Code is stored as one chapter per file in `src/data/code/`, while standalone
 Transparency publications live under `src/data/transparency/`. This command
 checks that every file listed in `src/data/codeOrder.js` exists, that its chapter
 ID matches its filename, and that publication, section, resource, tree, and quiz
-references remain valid. It also checks that the search phrasebook (`src/data/search/phrasebook.json`) is well formed.
+references remain valid. It also checks that the search phrasebook (`src/data/search/phrasebook.json`) is well formed, that source phrases are unique after punctuation is normalized, and that no phrase consists only of stopwords. These phrasebook checks do not depend on the current Code wording.
 
 If validation fails, the output identifies the file and item involved. For example:
 
@@ -96,11 +96,28 @@ To see the top results for a list of everyday example searches, plus a check tha
 npm run search:report
 ```
 
-This is informational and never fails. It is useful after a Code update, to see that everyday searches still find sensible results.
+This is informational and does not fail because a search has no results. It is useful after a Code update, to see that everyday searches still find sensible results.
+
+To run your own queries, create a JSON file such as `search-queries.json` with this structure:
+
+```json
+[
+  { "scope": "code", "query": "doctor travel" },
+  { "scope": "transparency", "query": "currency" }
+]
+```
+
+Then run:
+
+```powershell
+npm run search:report -- --queries .\search-queries.json --json
+```
+
+`--queries` replaces the built-in example list. `--json` prints concepts and weights, the top results, unmatched terms, phrasebook stem collisions for each scope, and timings. You can use `--json` alone with the built-in queries, or omit it for the usual text report. The query file must contain an array of objects with only `scope` (`code` or `transparency`) and a non-empty `query`; malformed input produces an error.
 
 The self-check in `npm test` confirms that at least 95% of provisions, Q&As and definitions come back in the top 3 when searched by their own heading, question or term. If it fails after a content edit, keep the output and ask for technical help. Do not rename content just to make it pass.
 
-To update the search phrasebook, edit `src/data/search/phrasebook.json`, following the rules in `src/data/search/README.md` (general English only, never chapter, section or Q&A references), and run `npm run validate:data`.
+To update the search phrasebook, edit `src/data/search/phrasebook.json`, following the rules in `src/data/search/README.md` (general English only, never chapter, section or Q&A references), and run `npm run validate:data`. Compare contextual and ambiguity queries in both scopes as described in the phrasebook guide; the pinned editorial review is in `docs/search-review/README.md`.
 
 ## Revised Word-to-App Code Check
 

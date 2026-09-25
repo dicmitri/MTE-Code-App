@@ -1,0 +1,2487 @@
+{
+  "groups": [
+    {
+      "group": {
+        "from": [
+          "general practitioner",
+          "family doctor",
+          "gp"
+        ],
+        "to": [
+          "physician",
+          "medical practitioner",
+          "healthcare professional"
+        ]
+      },
+      "rationale": "These are narrower physician roles.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "glossary",
+          "section": "Definitions"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "general practitioner"
+        }
+      ],
+      "contrasts": [
+        "A nurse is not a physician."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "surgeon",
+          "consultant surgeon"
+        ],
+        "to": [
+          "physician",
+          "healthcare professional"
+        ]
+      },
+      "rationale": "Surgeons are physicians and healthcare professionals.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "glossary",
+          "section": "Definitions"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "surgeon"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "dentist",
+          "pharmacist",
+          "nurse",
+          "physiotherapist"
+        ],
+        "to": [
+          "healthcare professional"
+        ]
+      },
+      "rationale": "Each is a healthcare profession, without implying physician status.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "glossary",
+          "section": "Definitions"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "dentist"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "optometrist",
+          "podiatrist",
+          "chiropractor",
+          "psychologist",
+          "psychiatrist",
+          "radiologist",
+          "anaesthetist",
+          "anesthetist"
+        ],
+        "to": [
+          "healthcare professional"
+        ]
+      },
+      "rationale": "These are narrower professional roles.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "glossary",
+          "section": "Definitions"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "optometrist"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "hospital",
+          "clinic",
+          "university hospital",
+          "outpatient clinic"
+        ],
+        "to": [
+          "healthcare organisation"
+        ]
+      },
+      "rationale": "These facilities are normally healthcare organisations.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "scope",
+          "section": "1. Applicability of the Code"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "hospital"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "medical centre",
+          "medical center",
+          "health centre",
+          "health center",
+          "gp practice"
+        ],
+        "to": [
+          "healthcare organisation"
+        ]
+      },
+      "rationale": "These describe healthcare providers or facilities.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "scope",
+          "section": "1. Applicability of the Code"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "medical centre"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "patient group",
+          "patient association",
+          "patient advocacy group",
+          "patient charity"
+        ],
+        "to": [
+          "patient organisation"
+        ]
+      },
+      "rationale": "These are ordinary kinds of patient organisation.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch4",
+          "section": "1. General Principles"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "patient group"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "wife",
+          "husband",
+          "fiance",
+          "fiancee"
+        ],
+        "to": [
+          "spouse",
+          "partner"
+        ]
+      },
+      "rationale": "These name spouses or close partners without assuming guest status.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "3. Guests"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "wife"
+        }
+      ],
+      "contrasts": [
+        "A spouse attending professionally is not merely a guest."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "girlfriend",
+          "boyfriend",
+          "life partner",
+          "unmarried partner"
+        ],
+        "to": [
+          "partner"
+        ]
+      },
+      "rationale": "These are narrower descriptions of a partner.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "3. Guests"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "girlfriend"
+        }
+      ],
+      "contrasts": [
+        "An unmarried partner is not a spouse."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "plus one",
+          "accompanying person"
+        ],
+        "to": [
+          "guest"
+        ]
+      },
+      "rationale": "These commonly name a person's guest at an event.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "3. Guests"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "plus one"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "children",
+          "kids",
+          "family member",
+          "relative"
+        ],
+        "to": [
+          "family"
+        ]
+      },
+      "rationale": "Each is a family relationship.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "3. Guests"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "children"
+        }
+      ],
+      "contrasts": [
+        "Family status does not alone imply guest status."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "congress",
+          "convention",
+          "summit",
+          "symposium"
+        ],
+        "to": [
+          "conference"
+        ]
+      },
+      "rationale": "These are forms of professional conference.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch2",
+          "section": "1. Third Party Organised Educational Conferences"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "congress"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "seminar",
+          "workshop",
+          "masterclass"
+        ],
+        "to": [
+          "training",
+          "education"
+        ]
+      },
+      "rationale": "These are common formats for instruction or education.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch3",
+          "section": "2. Product and Procedure Training and Educational Events"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "seminar"
+        }
+      ],
+      "contrasts": [
+        "Not every seminar is a conference."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "trade show",
+          "expo"
+        ],
+        "to": [
+          "exhibition"
+        ]
+      },
+      "rationale": "These are commercial exhibitions.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch2",
+          "section": "1. Third Party Organised Educational Conferences"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "trade show"
+        }
+      ],
+      "contrasts": [
+        "An exhibition need not be a conference."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "webinar",
+          "online seminar"
+        ],
+        "to": [
+          "virtual event",
+          "online event"
+        ]
+      },
+      "rationale": "A webinar is a virtual educational event.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "7. Virtual Events"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "webinar"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "video call",
+          "online meeting",
+          "virtual meeting"
+        ],
+        "to": [
+          "remote meeting"
+        ]
+      },
+      "rationale": "These describe meetings conducted remotely.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "7. Virtual Events"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "video call"
+        }
+      ],
+      "contrasts": [
+        "A video call need not be an event."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "digital event",
+          "remote event"
+        ],
+        "to": [
+          "virtual event",
+          "online event"
+        ]
+      },
+      "rationale": "Remote events occur virtually.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "7. Virtual Events"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "digital event"
+        }
+      ],
+      "contrasts": [
+        "Hybrid events also have an in-person part."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "hybrid event",
+          "hybrid conference"
+        ],
+        "to": [
+          "in-person event",
+          "virtual event"
+        ]
+      },
+      "rationale": "A hybrid event combines physical and virtual attendance; both concepts may help retrieval.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "1. Event Programme"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "hybrid event"
+        }
+      ],
+      "contrasts": [
+        "Hybrid is not a synonym for virtual."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "networking event",
+          "mixer",
+          "get together"
+        ],
+        "to": [
+          "social event"
+        ]
+      },
+      "rationale": "These are normally social gatherings.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "6. Transparency"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "networking event"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "exhibition stand",
+          "exhibit space",
+          "display stand",
+          "promotional stand"
+        ],
+        "to": [
+          "booth"
+        ]
+      },
+      "rationale": "These are booth or stand space for product display.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch2",
+          "section": "1. Third Party Organised Educational Conferences"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "exhibition stand"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "plane ticket",
+          "flight ticket",
+          "air ticket",
+          "airfare"
+        ],
+        "to": [
+          "air travel",
+          "flight"
+        ]
+      },
+      "rationale": "These name the cost or ticket for a flight.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "5. Travel"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "plane ticket"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "train ticket",
+          "rail fare",
+          "taxi fare",
+          "car hire",
+          "rental car"
+        ],
+        "to": [
+          "travel",
+          "transport"
+        ]
+      },
+      "rationale": "These are specific travel or transport expenses.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "5. Travel"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "train ticket"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "business class",
+          "economy class",
+          "first class",
+          "flight upgrade"
+        ],
+        "to": [
+          "air travel",
+          "flight"
+        ]
+      },
+      "rationale": "These are flight cabin classes or changes.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "5. Travel"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "business class"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "layover",
+          "connecting flight",
+          "stopover"
+        ],
+        "to": [
+          "flight",
+          "travel"
+        ]
+      },
+      "rationale": "These are narrower air travel concepts.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "5. Travel"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "layover"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "hotel room",
+          "lodging",
+          "overnight stay",
+          "room night"
+        ],
+        "to": [
+          "accommodation"
+        ]
+      },
+      "rationale": "These describe overnight accommodation.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "4. Reasonable Hospitality"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "hotel room"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "guest house",
+          "inn",
+          "motel",
+          "lodge"
+        ],
+        "to": [
+          "accommodation"
+        ]
+      },
+      "rationale": "These are types of lodging.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "4. Reasonable Hospitality"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "guest house"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "dinner",
+          "lunch",
+          "breakfast"
+        ],
+        "to": [
+          "meal"
+        ]
+      },
+      "rationale": "These are meals.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "4. Reasonable Hospitality"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "dinner"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "snacks",
+          "coffee break",
+          "canapes",
+          "appetizer",
+          "appetiser"
+        ],
+        "to": [
+          "refreshments"
+        ]
+      },
+      "rationale": "These are light food or drink offered as refreshments.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "4. Reasonable Hospitality"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "snacks"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "wine",
+          "alcohol",
+          "cocktail"
+        ],
+        "to": [
+          "drinks",
+          "beverages"
+        ]
+      },
+      "rationale": "These are alcoholic drinks, not meals.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "4. Reasonable Hospitality"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "wine"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "golf",
+          "skiing",
+          "sightseeing",
+          "spa visit"
+        ],
+        "to": [
+          "leisure",
+          "recreation"
+        ]
+      },
+      "rationale": "These are leisure activities.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "1. Event Programme"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "golf"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "theatre",
+          "concert",
+          "nightclub",
+          "casino"
+        ],
+        "to": [
+          "entertainment"
+        ]
+      },
+      "rationale": "These are entertainment venues or activities.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "1. Event Programme"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "theatre"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "team building",
+          "team building activity",
+          "leisure excursion"
+        ],
+        "to": [
+          "recreation",
+          "social activity"
+        ]
+      },
+      "rationale": "These are commonly recreational group activities.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "1. Event Programme"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "team building"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "holiday resort",
+          "ski resort",
+          "beach resort"
+        ],
+        "to": [
+          "tourist destination",
+          "holiday destination"
+        ]
+      },
+      "rationale": "These are vacation-oriented locations.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "2. Event Location and Venue"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "holiday resort"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "conference centre",
+          "conference center",
+          "meeting room",
+          "function room"
+        ],
+        "to": [
+          "venue"
+        ]
+      },
+      "rationale": "These are places where an event can be held.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "2. Event Location and Venue"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "conference centre"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "convention centre",
+          "convention center",
+          "exhibition centre",
+          "exhibition center"
+        ],
+        "to": [
+          "venue"
+        ]
+      },
+      "rationale": "These are event venues.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "2. Event Location and Venue"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "convention centre"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "speaker",
+          "lecturer",
+          "keynote speaker",
+          "panellist",
+          "panelist"
+        ],
+        "to": [
+          "faculty"
+        ]
+      },
+      "rationale": "These are active speaking roles at an event.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "annex6",
+          "section": "Description"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "speaker"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "moderator",
+          "session chair",
+          "panel chair"
+        ],
+        "to": [
+          "faculty"
+        ]
+      },
+      "rationale": "These are active session leadership roles.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "annex6",
+          "section": "Description"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "moderator"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "poster presenter",
+          "abstract presenter"
+        ],
+        "to": [
+          "delegate"
+        ]
+      },
+      "rationale": "These roles are treated as attendees for the attendance distinction.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "annex6",
+          "section": "Description"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "poster presenter"
+        }
+      ],
+      "contrasts": [
+        "Presenter does not always mean faculty."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "course fee",
+          "registration fee",
+          "enrollment fee",
+          "enrolment fee"
+        ],
+        "to": [
+          "fee"
+        ]
+      },
+      "rationale": "These are specific attendance charges.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch2",
+          "section": "2. Third Party Organised Procedure Training"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "course fee"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "product training",
+          "technical training",
+          "in service training"
+        ],
+        "to": [
+          "training"
+        ]
+      },
+      "rationale": "These are forms of instruction.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch3",
+          "section": "2. Product and Procedure Training and Educational Events"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "product training"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "hands-on training",
+          "practical training",
+          "skills lab"
+        ],
+        "to": [
+          "training",
+          "education"
+        ]
+      },
+      "rationale": "These narrower formats entail active practice.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "annex7",
+          "section": "Criteria for TPPT Determination"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "hands-on training"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "simulation training",
+          "cadaver lab",
+          "wet lab"
+        ],
+        "to": [
+          "practical training"
+        ]
+      },
+      "rationale": "These are practical learning methods.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "annex7",
+          "section": "Criteria for TPPT Determination"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "simulation training"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "clinical procedure",
+          "surgical technique",
+          "operating technique"
+        ],
+        "to": [
+          "procedure"
+        ]
+      },
+      "rationale": "These are specific medical procedures.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "annex7",
+          "section": "The Criteria Applicable to Third Party Organised Procedure Trainings (Effective as of 3rd September 2018)"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "clinical procedure"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "same": [
+          "program",
+          "programme"
+        ]
+      },
+      "rationale": "Spelling variants.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "1. Event Programme"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "program"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "same": [
+          "catalog",
+          "catalogue"
+        ]
+      },
+      "rationale": "Spelling variants.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch2",
+          "section": "1. Third Party Organised Educational Conferences"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "catalog"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "same": [
+          "jewellery",
+          "jewelry"
+        ]
+      },
+      "rationale": "Spelling variants.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch8",
+          "section": ""
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "jewellery"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "same": [
+          "advisor",
+          "adviser"
+        ]
+      },
+      "rationale": "Spelling variants for the same role.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch5",
+          "section": "1. General Principles"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "advisor"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "same": [
+          "organization",
+          "organisation"
+        ]
+      },
+      "rationale": "Spelling variants.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch4",
+          "section": "1. General Principles"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "organization"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "same": [
+          "license",
+          "licence"
+        ]
+      },
+      "rationale": "Spelling variants for the noun.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch7",
+          "section": ""
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "license"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "same": [
+          "authorize",
+          "authorise"
+        ]
+      },
+      "rationale": "Spelling variants.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch6",
+          "section": "1. Member Company-Initiated Research"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "authorize"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "same": [
+          "itemize",
+          "itemise"
+        ]
+      },
+      "rationale": "Spelling variants.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch4",
+          "section": "3. Educational Grants"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "itemize"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "speaker fee",
+          "speaking fee",
+          "honorarium"
+        ],
+        "to": [
+          "remuneration",
+          "compensation"
+        ]
+      },
+      "rationale": "These are payment for services.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch5",
+          "section": "3. Compensation and Fair Market Value"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "speaker fee"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "per diem",
+          "daily allowance",
+          "meal allowance",
+          "subsistence allowance"
+        ],
+        "to": [
+          "expenses",
+          "allowance"
+        ]
+      },
+      "rationale": "These are allowances for expenses, not service fees.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch5",
+          "section": "3. Compensation and Fair Market Value"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "per diem"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "expense claim",
+          "out of pocket expenses"
+        ],
+        "to": [
+          "expenses",
+          "reimbursement"
+        ]
+      },
+      "rationale": "These relate to reimbursement of incurred costs.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "5. Travel"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "expense claim"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "refund",
+          "reimburse"
+        ],
+        "to": [
+          "reimbursement"
+        ]
+      },
+      "rationale": "These are everyday ways of describing repayment.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "5. Travel"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "refund"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "advance payment",
+          "upfront payment",
+          "cash advance"
+        ],
+        "to": [
+          "payment in advance"
+        ]
+      },
+      "rationale": "These concern payment before the expense or service occurs.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch1",
+          "section": "5. Travel"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "advance payment"
+        }
+      ],
+      "contrasts": [
+        "An advance is not necessarily a fee."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "complimentary",
+          "at no cost",
+          "no charge",
+          "gratis"
+        ],
+        "to": [
+          "free of charge"
+        ]
+      },
+      "rationale": "These mean provided without charge.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch9",
+          "section": "1. General Principles"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "complimentary"
+        }
+      ],
+      "contrasts": [
+        "Free does not imply in-kind."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "noncash support",
+          "non-cash support",
+          "goods instead of cash"
+        ],
+        "to": [
+          "in kind",
+          "non-monetary"
+        ]
+      },
+      "rationale": "These describe contributions other than money.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "annex2",
+          "section": "What is an In-Kind Educational Grant?"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "noncash support"
+        }
+      ],
+      "contrasts": [
+        "Not all free items are in-kind grants."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "free sample"
+        ],
+        "to": [
+          "sample"
+        ]
+      },
+      "rationale": "A free sample remains a sample.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch9",
+          "section": "3. Samples"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "free sample"
+        }
+      ],
+      "contrasts": [
+        "Sample is not automatically a demonstration product."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "demo unit",
+          "demonstration unit",
+          "product mock-up"
+        ],
+        "to": [
+          "demonstration product"
+        ]
+      },
+      "rationale": "These are physical examples for demonstration.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch9",
+          "section": "2. Demonstration Products (Demos)"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "demo unit"
+        }
+      ],
+      "contrasts": [
+        "A live demonstration is an activity."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "product demonstration",
+          "live demonstration",
+          "product showcase"
+        ],
+        "to": [
+          "demonstration"
+        ]
+      },
+      "rationale": "These name an activity, not necessarily a supplied product.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch9",
+          "section": "2. Demonstration Products (Demos)"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "product demonstration"
+        }
+      ],
+      "contrasts": [
+        "A live demonstration does not imply a demonstration product."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "test unit",
+          "evaluation unit",
+          "trial equipment"
+        ],
+        "to": [
+          "evaluation product"
+        ]
+      },
+      "rationale": "These are products used for evaluation.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch6",
+          "section": "2. Member Company Post-Market Product Evaluation"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "test unit"
+        }
+      ],
+      "contrasts": [
+        "A product loan is a different arrangement."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "loaner",
+          "loan equipment",
+          "on loan"
+        ],
+        "to": [
+          "loaned goods",
+          "loan"
+        ]
+      },
+      "rationale": "These describe temporary transfer with return expected.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "annex2",
+          "section": "Value of In Kind Contributions"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "loaner"
+        }
+      ],
+      "contrasts": [
+        "A loan is not automatically an evaluation."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "trial product"
+        ],
+        "to": [
+          "evaluation product"
+        ]
+      },
+      "rationale": "In a product evaluation context, a trial unit is an evaluation product.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch6",
+          "section": "2. Member Company Post-Market Product Evaluation"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "trial product"
+        }
+      ],
+      "contrasts": [
+        "Trial product may also denote a sample; use with care."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "medical textbook",
+          "anatomical model"
+        ],
+        "to": [
+          "educational item"
+        ]
+      },
+      "rationale": "These are specific educational objects.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch8",
+          "section": ""
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "medical textbook"
+        }
+      ],
+      "contrasts": [
+        "A generic gift is not necessarily educational."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "stationery",
+          "diary",
+          "calendar",
+          "computer accessory"
+        ],
+        "to": [
+          "promotional item"
+        ]
+      },
+      "rationale": "These can be modest business promotional items.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch8",
+          "section": ""
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "stationery"
+        }
+      ],
+      "contrasts": [
+        "Eligibility depends on context and value."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "gift card",
+          "voucher"
+        ],
+        "to": [
+          "cash equivalent"
+        ]
+      },
+      "rationale": "These can function as cash substitutes.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch8",
+          "section": ""
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "gift card"
+        }
+      ],
+      "contrasts": [
+        "A cash equivalent is not a permitted promotional item."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "bribe",
+          "kickback",
+          "payoff"
+        ],
+        "to": [
+          "inducement",
+          "improper advantage"
+        ]
+      },
+      "rationale": "These are improper financial incentives.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch4",
+          "section": "1. General Principles"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "bribe"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "secret payment",
+          "illicit payment"
+        ],
+        "to": [
+          "improper payment"
+        ]
+      },
+      "rationale": "These name payments whose propriety is in question.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "intro",
+          "section": "Key Legislation"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "secret payment"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "charitable giving",
+          "philanthropic donation"
+        ],
+        "to": [
+          "donation",
+          "charitable donation"
+        ]
+      },
+      "rationale": "These describe donations for charity.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch4",
+          "section": "2. Charitable Donations"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "charitable giving"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "fundraiser",
+          "fundraising event"
+        ],
+        "to": [
+          "charitable activity"
+        ]
+      },
+      "rationale": "These are activities to raise money for charity.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch4",
+          "section": "2. Charitable Donations"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "fundraiser"
+        }
+      ],
+      "contrasts": [
+        "A fundraiser is not itself a donation."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "sponsor",
+          "sponsoring",
+          "commercial sponsor"
+        ],
+        "to": [
+          "sponsorship"
+        ]
+      },
+      "rationale": "These refer to commercial sponsorship.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch4",
+          "section": "3. Educational Grants"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "sponsor"
+        }
+      ],
+      "contrasts": [
+        "A sponsorship is not a grant."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "educational funding",
+          "education grant"
+        ],
+        "to": [
+          "educational grant"
+        ]
+      },
+      "rationale": "These refer to funding for education.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch4",
+          "section": "3. Educational Grants"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "educational funding"
+        }
+      ],
+      "contrasts": [
+        "Commercial sponsorship may offer consideration."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "scholarship",
+          "bursary"
+        ],
+        "to": [
+          "educational grant",
+          "funding"
+        ]
+      },
+      "rationale": "These are funding awards for education.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch4",
+          "section": "3. Educational Grants"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "scholarship"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "research funding",
+          "study grant"
+        ],
+        "to": [
+          "research grant"
+        ]
+      },
+      "rationale": "These identify grants for research.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch6",
+          "section": "3. Third Party-Initiated Research: Research Grants"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "research funding"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "grant application",
+          "funding request"
+        ],
+        "to": [
+          "grant request"
+        ]
+      },
+      "rationale": "These are applications for grant support.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch4",
+          "section": "1. General Principles"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "grant application"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "charity hospital",
+          "non-profit hospital"
+        ],
+        "to": [
+          "charitable organisation"
+        ]
+      },
+      "rationale": "These describe charitable hospital organisations.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch4",
+          "section": "2. Charitable Donations"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "charity hospital"
+        }
+      ],
+      "contrasts": [
+        "Not every hospital has charitable purposes."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "hospital running costs",
+          "operating costs",
+          "routine costs"
+        ],
+        "to": [
+          "overheads"
+        ]
+      },
+      "rationale": "These are ordinary costs of operating an organisation.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch4",
+          "section": "3. Educational Grants"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "hospital running costs"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "selection criteria",
+          "eligibility criteria"
+        ],
+        "to": [
+          "criteria"
+        ]
+      },
+      "rationale": "These are conditions used to select recipients.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch4",
+          "section": "3. Educational Grants"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "selection criteria"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "procurement process",
+          "tender process",
+          "public tender"
+        ],
+        "to": [
+          "public procurement"
+        ]
+      },
+      "rationale": "These are established purchasing processes.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch4",
+          "section": "3. Educational Grants"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "procurement process"
+        }
+      ],
+      "contrasts": [
+        "Procurement support is commercial rather than a grant."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "bid request",
+          "tender request"
+        ],
+        "to": [
+          "procurement request"
+        ]
+      },
+      "rationale": "These are requests in purchasing competitions.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch4",
+          "section": "3. Educational Grants"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "bid request"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "purchase order",
+          "order form"
+        ],
+        "to": [
+          "commercial agreement"
+        ]
+      },
+      "rationale": "These document commercial purchasing commitments.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch4",
+          "section": "3. Educational Grants"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "purchase order"
+        }
+      ],
+      "contrasts": [
+        "A purchase order need not replace a full agreement."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "advisory panel",
+          "expert panel"
+        ],
+        "to": [
+          "advisory board"
+        ]
+      },
+      "rationale": "These are groups convened for expert advice.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch5",
+          "section": "1. General Principles"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "advisory panel"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "subject matter expert",
+          "technical adviser"
+        ],
+        "to": [
+          "consultant",
+          "expert"
+        ]
+      },
+      "rationale": "These are specialised advisory roles.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch5",
+          "section": "2. Criteria for genuine Consulting Arrangements with Healthcare Professionals and Healthcare Organisations"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "subject matter expert"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "business justification",
+          "business case"
+        ],
+        "to": [
+          "business need"
+        ]
+      },
+      "rationale": "These describe the rationale for engaging services.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch5",
+          "section": "2. Criteria for genuine Consulting Arrangements with Healthcare Professionals and Healthcare Organisations"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "business justification"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "market rate",
+          "going rate",
+          "arms length rate"
+        ],
+        "to": [
+          "fair market value"
+        ]
+      },
+      "rationale": "These approximate an independent market price.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "ch5",
+          "section": "3. Compensation and Fair Market Value"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "market rate"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "price estimate",
+          "cost estimate"
+        ],
+        "to": [
+          "valuation"
+        ]
+      },
+      "rationale": "These are estimates of economic value.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "annex2",
+          "section": "Value of In Kind Contributions"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "price estimate"
+        }
+      ],
+      "contrasts": [
+        "An estimate is not the final recorded value."
+      ]
+    },
+    {
+      "group": {
+        "from": [
+          "book value",
+          "carrying value"
+        ],
+        "to": [
+          "accounting value"
+        ]
+      },
+      "rationale": "These describe recorded asset values.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "annex2",
+          "section": "Value of In Kind Contributions"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "book value"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "rental equivalent",
+          "equivalent rent"
+        ],
+        "to": [
+          "rental value"
+        ]
+      },
+      "rationale": "These describe an imputed rental cost.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "annex2",
+          "section": "Value of In Kind Contributions"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "rental equivalent"
+        }
+      ],
+      "contrasts": []
+    },
+    {
+      "group": {
+        "from": [
+          "shipping costs",
+          "delivery costs",
+          "freight costs"
+        ],
+        "to": [
+          "logistics costs"
+        ]
+      },
+      "rationale": "These are narrow logistics expenses.",
+      "sources": [
+        {
+          "scope": "code",
+          "unit": "annex2",
+          "section": "Value of In Kind Contributions"
+        }
+      ],
+      "queries": [
+        {
+          "scope": "code",
+          "query": "shipping costs"
+        }
+      ],
+      "contrasts": []
+    }
+  ]
+}

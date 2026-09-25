@@ -1,10 +1,12 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
+import { tmpdir } from 'node:os';
 
-import { formatExplain, parseArgs } from '../scripts/search-tools.mjs';
+import { formatExplain, parseArgs, parseReportQueries } from '../scripts/search-tools.mjs';
 
 // These checks are content-independent: the unit tests below use a hand-built fixture rather
 // than the live Code/Transparency content, and the two spawned-process checks assert only that
@@ -57,7 +59,31 @@ test('parseArgs rejects a missing query', () => {
 });
 
 test('parseArgs rejects extra arguments after "report"', () => {
-  assert.throws(() => parseArgs(['report', 'extra']), /takes no arguments/);
+  assert.throws(() => parseArgs(['report', 'extra']), /Unknown report argument/);
+});
+
+test('parseArgs accepts report query files and JSON output and rejects malformed options', () => {
+  assert.deepEqual(parseArgs(['report', '--queries', 'queries.json', '--json']), {
+    command: 'report', queriesPath: 'queries.json', json: true,
+  });
+  assert.deepEqual(parseArgs(['report', '--json', '--queries=queries.json']), {
+    command: 'report', queriesPath: 'queries.json', json: true,
+  });
+  assert.throws(() => parseArgs(['report', '--queries']), /Missing JSON path/);
+  assert.throws(() => parseArgs(['report', '--queries', '--json']), /Missing JSON path/);
+  assert.throws(() => parseArgs(['report', '--queries=a.json', '--queries=b.json']), /Duplicate --queries/);
+  assert.throws(() => parseArgs(['report', '--json', '--json']), /Duplicate --json/);
+});
+
+test('parseReportQueries validates shape, scope and nonempty queries', () => {
+  assert.deepEqual(parseReportQueries([{ scope: 'code', query: 'travel' }]), [
+    { scope: 'code', query: 'travel' },
+  ]);
+  assert.throws(() => parseReportQueries({ code: ['travel'] }), /JSON array/);
+  assert.throws(() => parseReportQueries([null]), /only "scope" and "query"/);
+  assert.throws(() => parseReportQueries([{ scope: 'code', query: 'travel', typo: true }]), /only "scope" and "query"/);
+  assert.throws(() => parseReportQueries([{ scope: 'wrong', query: 'travel' }]), /invalid scope/);
+  assert.throws(() => parseReportQueries([{ scope: 'code', query: '  ' }]), /non-empty string/);
 });
 
 // ---------------------------------------------------------------------------------------------
@@ -206,4 +232,67 @@ test('spawning with no arguments exits 1 and prints usage', () => {
 
   assert.equal(result.status, 1);
   assert.match(`${result.stdout}${result.stderr}`, /Usage/);
+});
+
+test('bare report keeps its existing plain-text summary', () => {
+  const result = spawnSync(process.execPath, [SCRIPT_PATH, 'report'], {
+    cwd: PROJECT_ROOT, encoding: 'utf8',
+  });
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /^Search report \(informational only/);
+  assert.match(result.stdout, /Scope: code/);
+  assert.match(result.stdout, /Scope: transparency/);
+  assert.match(result.stdout, /Self-retrieval/);
+  assert.doesNotMatch(result.stdout, /"stemCollisions"/);
+});
+
+test('report --queries --json emits query interpretation, result and collision diagnostics', () => {
+  const directory = mkdtempSync(resolve(tmpdir(), 'search-report-test-'));
+  try {
+    const path = resolve(directory, 'queries.json');
+    writeFileSync(path, JSON.stringify([
+      { scope: 'code', query: 'unfamiliar phrase' },
+      { scope: 'transparency', query: 'disclosure' },
+    ]));
+    const result = spawnSync(process.execPath, [SCRIPT_PATH, 'report', '--queries', path, '--json'], {
+      cwd: PROJECT_ROOT, encoding: 'utf8',
+    });
+    assert.equal(result.status, 0, result.stderr);
+    const report = JSON.parse(result.stdout);
+    assert.deepEqual(report.queries.map(({ scope, query }) => ({ scope, query })), [
+      { scope: 'code', query: 'unfamiliar phrase' },
+      { scope: 'transparency', query: 'disclosure' },
+    ]);
+    for (const query of report.queries) {
+      assert.ok(Array.isArray(query.concepts));
+      assert.ok(Array.isArray(query.unmatchedTerms));
+      assert.ok(Array.isArray(query.topResults));
+      assert.equal(typeof query.queryTimeMs, 'number');
+    }
+    assert.deepEqual(report.stemCollisions.map(({ scope }) => scope), ['code', 'transparency']);
+    assert.equal(typeof report.timing.buildTimeMs, 'number');
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+test('report rejects missing, invalid JSON and malformed query files with a nonzero exit', () => {
+  const directory = mkdtempSync(resolve(tmpdir(), 'search-report-invalid-'));
+  try {
+    const path = resolve(directory, 'queries.json');
+    const invoke = (file) => spawnSync(process.execPath, [SCRIPT_PATH, 'report', '--queries', file, '--json'], {
+      cwd: PROJECT_ROOT, encoding: 'utf8',
+    });
+    assert.match(invoke(resolve(directory, 'missing.json')).stderr, /Could not read query file/);
+    writeFileSync(path, '{');
+    const invalidJson = invoke(path);
+    assert.equal(invalidJson.status, 1);
+    assert.match(invalidJson.stderr, /Invalid JSON in query file/);
+    writeFileSync(path, JSON.stringify([{ scope: 'code', query: '' }]));
+    const invalidQuery = invoke(path);
+    assert.equal(invalidQuery.status, 1);
+    assert.match(invalidQuery.stderr, /non-empty string/);
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
 });

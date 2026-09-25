@@ -1,0 +1,233 @@
+{
+  "sourcePinned": "56b5f0ef982f413a10fd85d0c1c76b3070cad84a",
+  "note": "Editorial binary judgments for the union of top-five results across original, fixes, and expanded stages, for retained baseline queries only. Judgments assess passage text, including explicit exclusions; they do not establish passage quality or exhaustiveness.",
+  "queries": [
+    {
+      "query": "wife travel",
+      "scope": "code",
+      "judgments": {
+        "code/ch1-3-guests": {"relevant": true, "reason": "The provision expressly bars paying or arranging travel and other expenses for HCP guests."},
+        "code/ch1-3-guests-qa-1": {"relevant": true, "reason": "The answer explains when arranging a guest's travel is prohibited and says the HCP must bear sole responsibility."}
+      }
+    },
+    {
+      "query": "spouse travel",
+      "scope": "code",
+      "judgments": {
+        "code/ch1-3-guests": {"relevant": true, "reason": "The provision expressly bars paying or arranging travel and other expenses for HCP guests, including a spouse."},
+        "code/ch1-3-guests-qa-1": {"relevant": true, "reason": "The answer explains when arranging a guest's travel is prohibited and says the HCP must bear sole responsibility."}
+      }
+    },
+    {
+      "query": "doctor congress travel",
+      "scope": "code",
+      "judgments": {
+        "code/ch1-5-travel": {"relevant": true, "reason": "This gives the Code's direct rules for paying or reimbursing HCP travel, including air-class limits."},
+        "code/ch3-4-sales-promotional-and-other-business-meetings-qa-1": {"relevant": true, "reason": "It addresses when a company may pay an HCP's travel to a company event, a related travel-support scenario."},
+        "code/ch2-1-third-party-organised-educational-conferences-qa-4": {"relevant": true, "reason": "It directly addresses conference-speaker support and allows travel or accommodation payments under the stated arrangement."},
+        "code/ch1-5-travel-qa-1": {"relevant": true, "reason": "It explains how HCP travel expenses may be paid or reimbursed, although it focuses on advance payments."},
+        "code/ch1-3-guests": {"relevant": false, "reason": "The passage concerns expenses for an HCP's guest, not the doctor's own congress travel."}
+      }
+    },
+    {
+      "query": "educational grant hospital",
+      "scope": "code",
+      "judgments": {
+        "code/ch4-3-educational-grants-qa-2": {"relevant": true, "reason": "It answers whether a small healthcare organisation can receive an Educational Grant supporting HCP participation."},
+        "code/ch4-3-educational-grants": {"relevant": true, "reason": "It sets the core requirements for Educational Grants, including purpose, agreement, verification, and disclosure."},
+        "code/ch4-3-educational-grants-qa-3": {"relevant": true, "reason": "It expressly discusses grants with a specific hospital or department as a criterion and the associated beneficiary-identification risk."},
+        "code/annex2-what-is-an-in-kind-educational-grant": {"relevant": true, "reason": "It defines an in-kind grant as non-cash support to an HCO for an event or educational programme."},
+        "code/definition/scholarships-and-fellowships": {"relevant": true, "reason": "It defines Educational Grants to HCOs for scholarships and fellowships, relevant to the grant-to-organisation part of the query."}
+      }
+    },
+    {
+      "query": "hospital donation",
+      "scope": "code",
+      "judgments": {
+        "code/ch4-2-charitable-donations-qa-1": {"relevant": true, "reason": "It directly answers whether a charitable donation may support a hospital's general running and explains the restriction."},
+        "code/ch4-2-charitable-donations": {"relevant": true, "reason": "It sets who may receive charitable donations and limits the company's control over their use."},
+        "code/ch4-3-educational-grants-qa-3": {"relevant": true, "reason": "It explains the distinct route of an Educational Grant earmarked for a hospital or department, helping distinguish that support from a charitable donation."},
+        "code/ch4-3-educational-grants-qa-6": {"relevant": false, "reason": "The passage concerns educational support requested through public procurement, not donations to hospitals."},
+        "code/definition/samples": {"relevant": false, "reason": "The passage defines free product samples and does not address donations or hospital funding."}
+      }
+    },
+    {
+      "query": "free booth",
+      "scope": "code",
+      "judgments": {
+        "code/ch2-1-third-party-organised-educational-conferences": {"relevant": true, "reason": "It explicitly allows purchasing booth space as promotional activity at eligible third-party conferences."},
+        "code/ch2-1-third-party-organised-educational-conferences-qa-2": {"relevant": true, "reason": "It gives the permitted activities at a conference booth, directly addressing booth use."},
+        "code/ch4-3-educational-grants-qa-1": {"relevant": true, "reason": "It distinguishes booth-space consideration in commercial sponsorship from an Educational Grant, clarifying whether booth support is free."},
+        "code/ch2-1-third-party-organised-educational-conferences-qa-3": {"relevant": false, "reason": "Its title mentions renting booth space, but the answer concerns conference vetting and disguised HCP-attendance support, not whether booth access is free."},
+        "code/ch4-2-charitable-donations": {"relevant": true, "reason": "It explicitly distinguishes booth leasing as normal marketing activity from charitable donations, although it does not set a price."},
+        "code/annex2-what-is-an-in-kind-educational-grant": {"relevant": false, "reason": "The passage defines non-cash educational support but does not discuss booth space or its price."},
+        "code/ch1-3-guests-qa-2": {"relevant": false, "reason": "The passage says guests should not take part in hospitality at industry booths; it does not explain booth pricing or free booth access."},
+        "code/definition/samples": {"relevant": false, "reason": "The passage defines free product samples and does not concern conference booths."},
+        "code/definition/demonstration-products-demos": {"relevant": false, "reason": "The passage defines demonstration products and does not concern conference booths."},
+        "code/definition/evaluation-products": {"relevant": false, "reason": "The passage defines evaluation products and does not concern conference booths."}
+      }
+    },
+    {
+      "query": "paying a speaker",
+      "scope": "code",
+      "judgments": {
+        "code/ch2-1-third-party-organised-educational-conferences-qa-4": {"relevant": true, "reason": "It directly allows travel, accommodation, and registration payments for satellite-symposium speakers under a consulting agreement."},
+        "code/ch2-2-third-party-organised-procedure-training-qa-3": {"relevant": true, "reason": "It expressly contemplates paying speakers through compliant Consulting or Speaker Agreements."},
+        "code/ch4-2-charitable-donations-qa-3": {"relevant": true, "reason": "It explicitly prohibits routing a professional fee for speaking or consultancy to the HCP's chosen charity instead."},
+        "code/ch5-3-compensation-and-fair-market-value": {"relevant": true, "reason": "It sets the compensation and Fair Market Value rule for HCPs engaged as consultants."},
+        "code/ch5-2-criteria-for-genuine-consulting-arrangements-with-healthcare-professionals-and-healthcare-organisations": {"relevant": true, "reason": "It states the criteria that must be met before engaging and paying a consultant, including a prior legitimate business need."},
+        "code/ch5-1-general-principles": {"relevant": true, "reason": "It expressly permits reasonable remuneration for HCP services, subject to the Code's consulting rules."},
+        "code/ch3-3-company-events-taking-place-in-the-context-of-third-party-organised-educational-events": {"relevant": true, "reason": "It covers company events and fee-for-service arrangements, including Advisory Boards and investigator meetings, in the conference context."}
+      }
+    },
+    {
+      "query": "honorarium",
+      "scope": "code",
+      "judgments": {
+        "code/ch2-1-third-party-organised-educational-conferences-qa-4": {"relevant": true, "reason": "It covers support for HCPs speaking at satellite symposia through consulting agreements and permitted travel-related payments."},
+        "code/ch5-3-compensation-and-fair-market-value": {"relevant": true, "reason": "It directly governs compensation paid to HCP consultants and requires Fair Market Value."},
+        "code/ch2-1-third-party-organised-educational-conferences-qa-3": {"relevant": false, "reason": "The answer concerns company attendance at conferences and CVS review, not speaker fees or honoraria."},
+        "code/ch1-6-transparency-qa-2": {"relevant": true, "reason": "It addresses remuneration for HCP services and says it must be commensurate with services and no greater than Fair Market Value."},
+        "code/ch2-2-third-party-organised-procedure-training": {"relevant": true, "reason": "It governs direct financial support for HCPs at procedure-training sessions, a related paid-event arrangement, though it does not set an honorarium amount."}
+      }
+    },
+    {
+      "query": "consultacy agrrement",
+      "scope": "code",
+      "judgments": {
+        "code/definition/consulting-arrangement": {"relevant": true, "reason": "It defines Consulting Arrangements and lists speaking, teaching, research, and other example services."},
+        "code/ch2-1-third-party-organised-educational-conferences-qa-4": {"relevant": true, "reason": "It explicitly requires a consulting agreement for HCPs speaking at satellite symposia."},
+        "code/ch5-2-criteria-for-genuine-consulting-arrangements-with-healthcare-professionals-and-healthcare-organisations": {"relevant": true, "reason": "It gives the criteria for genuine consulting arrangements, directly addressing what makes an agreement compliant."},
+        "code/annex6-direct-support-to-hcp-participation-in-events": {"relevant": true, "reason": "Its event-support matrix marks settings where direct HCP support is allowed only with a consulting agreement."},
+        "code/ch5-3-compensation-and-fair-market-value": {"relevant": true, "reason": "It sets the Fair Market Value compensation rule that applies to consulting arrangements."}
+      }
+    },
+    {
+      "query": "business class",
+      "scope": "code",
+      "judgments": {
+        "code/ch1-5-travel": {"relevant": true, "reason": "It directly states when business class may be considered for air travel and that first class is never appropriate."},
+        "code/ch3-4-sales-promotional-and-other-business-meetings-qa-1": {"relevant": false, "reason": "It addresses whether company-event travel may be paid, without stating any business-class rule."},
+        "code/ch2-1-third-party-organised-educational-conferences-qa-4": {"relevant": false, "reason": "It permits certain speaker travel payments but does not address travel class."},
+        "code/ch1-3-guests": {"relevant": false, "reason": "It prohibits guest expenses but does not address the class of an HCP's business travel."},
+        "code/ch4-3-educational-grants": {"relevant": false, "reason": "It sets Educational Grant requirements and does not address business-class travel."}
+      }
+    },
+    {
+      "query": "airfare",
+      "scope": "code",
+      "judgments": {
+        "code/ch1-5-travel": {"relevant": true, "reason": "It directly governs air travel reimbursement and the permitted travel class."},
+        "code/ch3-4-sales-promotional-and-other-business-meetings-qa-1": {"relevant": true, "reason": "It addresses whether a company may pay HCP travel and accommodation for a company event."},
+        "code/ch2-1-third-party-organised-educational-conferences-qa-4": {"relevant": true, "reason": "It expressly permits travel payments for certain conference speakers under consulting agreements."},
+        "code/ch1-3-guests": {"relevant": true, "reason": "It explicitly excludes paying or reimbursing travel for an HCP's guest, an important restriction on airfare support."},
+        "code/ch4-3-educational-grants": {"relevant": false, "reason": "The passage sets general grant requirements and does not explain airfare payment or reimbursement."}
+      }
+    },
+    {
+      "query": "flight",
+      "scope": "code",
+      "judgments": {
+        "code/ch1-5-travel": {"relevant": true, "reason": "It directly governs air travel and sets economy, standard, business-class, and first-class rules."},
+        "code/annex4-verification-documents": {"relevant": true, "reason": "It names flight or train tickets as travel proof for grants supporting event attendance."},
+        "code/ch3-3-company-events-taking-place-in-the-context-of-third-party-organised-educational-events": {"relevant": true, "reason": "It directly restricts support for HCP travel to company events held around third-party events."}
+      }
+    },
+    {
+      "query": "golf weekend",
+      "scope": "code",
+      "judgments": {
+        "code/ch3-2-product-and-procedure-training-and-educational-events-qa-1": {"relevant": true, "reason": "It explicitly says golf clubs and venues known for entertainment are inappropriate for training events."},
+        "code/definition/entertainment": {"relevant": true, "reason": "It explicitly classifies golf and other sporting or leisure arrangements as Entertainment."},
+        "code/ch1-1-event-programme-qa-2": {"relevant": true, "reason": "It directly rejects events at resorts centred on golf or other leisure facilities, with narrow venue exceptions."},
+        "code/ch1-6-transparency-qa-3": {"relevant": true, "reason": "It excludes company support for social events, relevant to a recreational weekend, although it does not name golf."},
+        "code/ch1-1-event-programme": {"relevant": true, "reason": "It prohibits organising or supporting sporting and leisure activities as event entertainment."},
+        "code/ch1-4-reasonable-hospitality": {"relevant": true, "reason": "It limits hospitality to the event purpose and official duration, and expressly distinguishes it from prohibited entertainment, which bears on a company-supported golf weekend."},
+        "code/ch4-2-charitable-donations": {"relevant": false, "reason": "The passage concerns charitable donations and eligible recipients, not golf or leisure activities."}
+      }
+    },
+    {
+      "query": "hcp gift",
+      "scope": "code",
+      "judgments": {
+        "code/ch8-section-0-qa-2": {"relevant": true, "reason": "It directly answers whether an HCP who declines a fee may receive a small gift instead."},
+        "code/ch8-section-0": {"relevant": true, "reason": "It sets the general prohibition and narrow exceptions for educational or promotional items given to HCPs."}
+      }
+    },
+    {
+      "query": "pen",
+      "scope": "code",
+      "judgments": {
+        "code/ch8-section-0": {"relevant": true, "reason": "It governs gifts and modest promotional items to HCPs, the policy area for a pen."},
+        "code/ch8-section-0-qa-2": {"relevant": false, "reason": "It concerns gifts offered instead of a declined professional fee and gives wine and flowers as examples, not ordinary stationery."},
+        "code/ch8-section-0-qa-1": {"relevant": true, "reason": "It explicitly identifies stationery as a potentially acceptable modest promotional item, subject to local limits."},
+        "code/ch1-6-transparency": {"relevant": true, "reason": "It exempts modest promotional items related to an HCP's practice or patient benefit from Employer Notification."},
+        "code/ch8-section-0-qa-3": {"relevant": false, "reason": "It gives examples of higher-value educational items such as textbooks and anatomical models, not pens."}
+      }
+    },
+    {
+      "query": "Q&A 31",
+      "scope": "code",
+      "judgments": {
+        "code/ch4-3-educational-grants-qa-3": {"relevant": true, "reason": "This is Q&A 31; its body discusses Educational Grants earmarked for a specific hospital or department."}
+      }
+    },
+    {
+      "query": "free sample",
+      "scope": "code",
+      "judgments": {
+        "code/ch9-3-samples": {"relevant": true, "reason": "It directly governs providing Samples at no charge and limits the number and duration of use."},
+        "code/definition/samples": {"relevant": true, "reason": "It defines Samples as products supplied free of charge and distinguishes them from other product categories."},
+        "code/ch9-1-general-principles": {"relevant": true, "reason": "It sets the general no-charge, purpose, disclosure, and recordkeeping rules for Samples and Demonstration Products."},
+        "code/annex2-exclusions": {"relevant": true, "reason": "It explicitly excludes Samples and Demonstration Products from in-kind Educational Grants, a relevant boundary for free samples."},
+        "code/ch8-section-0": {"relevant": false, "reason": "The passage concerns gifts and promotional items, not free product Samples governed by Chapter 9."}
+      }
+    },
+    {
+      "query": "bribe",
+      "scope": "code",
+      "judgments": {
+        "code/intro-key-legislation": {"relevant": true, "reason": "It explicitly lists Anti-corruption Laws among the laws particularly relevant to the medical technology industry."},
+        "code/ch5-1-general-principles": {"relevant": true, "reason": "It requires an independent process to identify, prevent, and mitigate bribery and corruption risks in consulting arrangements."},
+        "code/intro-aims-and-principles-of-the-code": {"relevant": true, "reason": "Its Principle of Separation prohibits influence through undue or improper advantages in HCP and HCO interactions."},
+        "code/ch10-section-0": {"relevant": true, "reason": "It requires anti-corruption controls, due diligence, and oversight for third-party intermediaries interacting with HCPs or HCOs."},
+        "code/ch4-1-general-principles": {"relevant": true, "reason": "It directly requires controls to identify and mitigate bribery and corruption risks in grants and charitable donations."},
+        "code/ch6-4-collaborative-research-qa-2": {"relevant": true, "reason": "It explicitly says research benefits must not go to individual HCPs and that research must not induce HCPs or decision-makers."},
+        "code/ch6-2-member-company-post-market-product-evaluation": {"relevant": true, "reason": "It limits evaluation products to a defined user-feedback purpose under contract, guarding against improper inducement through free products."},
+        "code/ch1-4-reasonable-hospitality": {"relevant": true, "reason": "It explicitly warns against hospitality being used to induce HCPs to purchase, prescribe, or recommend products."},
+        "code/ch5-2-criteria-for-genuine-consulting-arrangements-with-healthcare-professionals-and-healthcare-organisations": {"relevant": true, "reason": "Its genuine-need, selection, and service criteria help distinguish legitimate consulting from inducement."},
+        "code/ch9-1-general-principles": {"relevant": true, "reason": "It explicitly prohibits Samples or Demonstration Products from improperly rewarding, inducing, or encouraging HCPs or HCOs."}
+      }
+    },
+    {
+      "query": "currency",
+      "scope": "transparency",
+      "judgments": {
+        "transparency/disclosure-guidelines/dg-chapter-3-3-template-and-language-of-disclosure-qa-1": {"relevant": true, "reason": "It directly answers which currency to use when disclosing payments and how to document exchange rates."},
+        "transparency/disclosure-guidelines/dg-annex-3-structure": {"relevant": true, "reason": "The example Methodology Note structure explicitly includes currency for aggregated payments in different currencies."},
+        "transparency/disclosure-guidelines/dg-chapter-2-4-methodology": {"relevant": true, "reason": "It requires the Methodology Note to describe currency aspects relevant to disclosure."}
+      }
+    },
+    {
+      "query": "disclose payments",
+      "scope": "transparency",
+      "judgments": {
+        "transparency/disclosure-guidelines/dg-chapter-3-3-template-and-language-of-disclosure-qa-1": {"relevant": true, "reason": "It explains how paid amounts, including aggregated payments, should be represented in disclosures."},
+        "transparency/disclosure-guidelines/dg-chapter-2-1-general-obligation": {"relevant": true, "reason": "It directly requires documenting and disclosing Educational Grant payments to eligible HCOs."},
+        "transparency/disclosure-guidelines/dg-chapter-2-1-general-obligation-qa-1": {"relevant": true, "reason": "It explains which affiliate should disclose a particular Educational Grant payment."},
+        "transparency/disclosure-guidelines/dg-annex-3-structure": {"relevant": true, "reason": "The Methodology Note template includes disclosure scope and financial data and cash amounts of grants."},
+        "transparency/disclosure-guidelines/dg-annex-2-types-of-in-kind-educational-grant": {"relevant": false, "reason": "The passage classifies non-cash grant support and gives examples; it does not say how payments are disclosed."}
+      }
+    },
+    {
+      "query": "methodology note update",
+      "scope": "transparency",
+      "judgments": {
+        "transparency/disclosure-guidelines/dg-chapter-2-4-methodology-qa-1": {"relevant": true, "reason": "It directly says companies should assess whether an update is needed before each disclosure period ends."},
+        "transparency/disclosure-guidelines/dg-chapter-2-4-methodology": {"relevant": true, "reason": "It defines the required Methodology Note, its contents, and where it must be made available."},
+        "transparency/disclosure-guidelines/dg-annex-3-structure": {"relevant": true, "reason": "It provides the structure and topics for the Methodology Note, useful when updating one."},
+        "transparency/disclosure-guidelines/dg-chapter-3-3-template-and-language-of-disclosure-qa-1": {"relevant": false, "reason": "It addresses disclosure currency and exchange-rate records, not when or whether to update a Methodology Note."}
+      }
+    }
+  ]
+}

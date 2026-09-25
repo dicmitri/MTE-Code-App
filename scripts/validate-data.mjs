@@ -3,6 +3,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 import { generateSectionId } from '../src/utils/textUtils.js';
+import { tokenizeAllWithOffsets, tokenizeWords } from '../src/utils/searchText.js';
 import { loadSplitCodeData } from './lib/code-content.mjs';
 import { loadTransparencyData } from './lib/transparency-content.mjs';
 
@@ -29,18 +30,17 @@ function isNonEmptyString(value) {
 function findDuplicates(values) {
   const seen = new Set();
   const duplicates = new Set();
-
   for (const value of values) {
     if (seen.has(value)) duplicates.add(value);
     seen.add(value);
   }
-
   return [...duplicates];
 }
 
-function countWords(phrase) {
-  return phrase.split(/\s+/).length;
-}
+// Independent of either search corpus: hyphens, apostrophes and spaces have the same token
+// boundary for phrase matching. Stemming is deliberately excluded because it needs a corpus.
+const phraseSourceKey = (phrase) => tokenizeAllWithOffsets(phrase)
+  .map((token) => token.word).join(' ');
 
 function validatePhrasebookPhrase(phrase, path, errors) {
   if (typeof phrase !== 'string') {
@@ -58,9 +58,14 @@ function validatePhrasebookPhrase(phrase, path, errors) {
     return false;
   }
 
-  const words = countWords(phrase);
+  const words = tokenizeAllWithOffsets(phrase).length;
   if (words < 1 || words > 4) {
     errors.push(`${path}: must be 1 to 4 words.`);
+    return false;
+  }
+
+  if (tokenizeWords(phrase).length === 0) {
+    errors.push(`${path}: must contain at least one content word (not only stopwords).`);
     return false;
   }
 
@@ -70,14 +75,18 @@ function validatePhrasebookPhrase(phrase, path, errors) {
 // Checks a phrase list and returns its valid phrases, reporting format errors and repeats.
 function validatePhrasebookList(group, key, groupPath, errors) {
   const phrases = [];
+  const seen = new Map();
   group[key].forEach((phrase, phraseIndex) => {
     if (validatePhrasebookPhrase(phrase, `${groupPath} ${key}[${phraseIndex}]`, errors)) {
       phrases.push(phrase);
+      const normalized = phraseSourceKey(phrase);
+      if (seen.has(normalized)) {
+        errors.push(`${groupPath}: "${key}" contains duplicate phrase "${phrase}" (same source as "${seen.get(normalized)}").`);
+      } else {
+        seen.set(normalized, phrase);
+      }
     }
   });
-  for (const duplicate of findDuplicates(phrases)) {
-    errors.push(`${groupPath}: "${key}" contains duplicate phrase "${duplicate}".`);
-  }
   return phrases;
 }
 
@@ -98,6 +107,16 @@ function validateSearchPhrasebook(phrasebook, errors) {
 
   const fromGroupByPhrase = new Map();
   const samePhrases = new Set();
+  const sourceGroupByPhrase = new Map();
+  const checkSource = (phrase, groupIndex, groupPath) => {
+    const key = phraseSourceKey(phrase);
+    const prior = sourceGroupByPhrase.get(key);
+    if (prior && prior.groupIndex !== groupIndex) {
+      errors.push(`${groupPath}: source phrase "${phrase}" also appears in groups[${prior.groupIndex}] as "${prior.phrase}" after normalization.`);
+    } else if (!prior) {
+      sourceGroupByPhrase.set(key, { groupIndex, phrase });
+    }
+  };
 
   phrasebook.groups.forEach((group, groupIndex) => {
     const groupPath = `${phrasebookPath} groups[${groupIndex}]`;
@@ -115,10 +134,12 @@ function validateSearchPhrasebook(phrasebook, errors) {
         return;
       }
       for (const phrase of validatePhrasebookList(group, 'same', groupPath, errors)) {
-        if (samePhrases.has(phrase)) {
+        const key = phraseSourceKey(phrase);
+        if (samePhrases.has(key)) {
           errors.push(`${groupPath}: "same" phrase "${phrase}" appears in more than one "same" group.`);
         }
-        samePhrases.add(phrase);
+        samePhrases.add(key);
+        checkSource(phrase, groupIndex, groupPath);
       }
     } else if (keys === 'from,to') {
       if (!Array.isArray(group.from) || group.from.length === 0) {
@@ -132,12 +153,14 @@ function validateSearchPhrasebook(phrasebook, errors) {
       const fromPhrases = validatePhrasebookList(group, 'from', groupPath, errors);
       const toPhrases = validatePhrasebookList(group, 'to', groupPath, errors);
       for (const phrase of fromPhrases) {
-        if (fromGroupByPhrase.has(phrase)) {
-          errors.push(`${groupPath}: "from" phrase "${phrase}" also appears in groups[${fromGroupByPhrase.get(phrase)}].`);
+        const key = phraseSourceKey(phrase);
+        if (fromGroupByPhrase.has(key)) {
+          errors.push(`${groupPath}: "from" phrase "${phrase}" also appears in groups[${fromGroupByPhrase.get(key)}].`);
         } else {
-          fromGroupByPhrase.set(phrase, groupIndex);
+          fromGroupByPhrase.set(key, groupIndex);
         }
-        if (toPhrases.includes(phrase)) {
+        checkSource(phrase, groupIndex, groupPath);
+        if (toPhrases.some((target) => phraseSourceKey(target) === key)) {
           errors.push(`${groupPath}: "from" phrase "${phrase}" also appears in "to".`);
         }
       }

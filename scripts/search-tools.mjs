@@ -3,7 +3,7 @@
 // subcommands:
 //
 //   node scripts/search-tools.mjs explain "<query>" [--scope code|transparency] [--limit N]
-//   node scripts/search-tools.mjs report
+//   node scripts/search-tools.mjs report [--queries path.json] [--json]
 //
 // "explain" prints exactly how one query was understood (its concepts, spelling corrections,
 // and ranked hits) for one search scope. "report" runs a fixed list of everyday example queries
@@ -11,6 +11,7 @@
 // every authoritative document be found by searching its own wording?). Both commands are
 // read-only: they print plain text and never change a file.
 import { performance } from 'node:perf_hooks';
+import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -27,13 +28,15 @@ const DEFAULT_LIMIT = 10;
 const USAGE = [
   'Usage:',
   '  node scripts/search-tools.mjs explain "<query>" [--scope code|transparency] [--limit N]',
-  '  node scripts/search-tools.mjs report',
+  '  node scripts/search-tools.mjs report [--queries path.json] [--json]',
   '',
   'explain prints how one query is interpreted and ranked in a search scope',
   '(default scope: "code", default limit: 10 results).',
   '',
   'report runs a fixed list of everyday example queries against both scopes and prints a',
-  'short, informational summary. It never asserts anything about the content.',
+  'short, informational summary. --queries accepts a JSON array of {scope, query} objects;',
+  '--json prints machine-readable results and per-scope phrasebook stem collisions.',
+  'The report never asserts anything about the content.',
 ].join('\n');
 
 // -------------------------------------------------------------------------------------------
@@ -44,10 +47,31 @@ export function parseArgs(argv) {
   const command = args.shift();
 
   if (command === 'report') {
-    if (args.length > 0) {
-      throw new Error(`"report" takes no arguments (got "${args[0]}").`);
+    let queriesPath = null;
+    let json = false;
+    for (let i = 0; i < args.length; i += 1) {
+      const arg = args[i];
+      if (arg === '--json') {
+        if (json) throw new Error('Duplicate --json flag.');
+        json = true;
+      } else if (arg === '--queries' || arg.startsWith('--queries=')) {
+        if (queriesPath !== null) throw new Error('Duplicate --queries option.');
+        if (arg === '--queries') {
+          i += 1;
+          queriesPath = args[i];
+        } else {
+          queriesPath = arg.slice('--queries='.length);
+        }
+        if (!queriesPath || queriesPath.startsWith('--')) {
+          throw new Error('Missing JSON path after --queries.');
+        }
+      } else {
+        throw new Error(`Unknown report argument "${arg}".`);
+      }
     }
-    return { command: 'report' };
+    return queriesPath === null && !json
+      ? { command: 'report' }
+      : { command: 'report', queriesPath, json };
   }
 
   if (command === 'explain') {
@@ -90,6 +114,23 @@ export function parseArgs(argv) {
   }
 
   throw new Error(`Unknown command "${command ?? ''}". Expected "explain" or "report".`);
+}
+
+export function parseReportQueries(input) {
+  if (!Array.isArray(input)) throw new Error('Query file must contain a JSON array.');
+  return input.map((item, index) => {
+    if (!item || typeof item !== 'object' || Array.isArray(item)
+      || Object.keys(item).sort().join(',') !== 'query,scope') {
+      throw new Error(`Query ${index + 1} must be an object with only "scope" and "query".`);
+    }
+    if (!VALID_SCOPES.has(item.scope)) {
+      throw new Error(`Query ${index + 1} has invalid scope "${item.scope}".`);
+    }
+    if (typeof item.query !== 'string' || !item.query.trim()) {
+      throw new Error(`Query ${index + 1} must have a non-empty string "query".`);
+    }
+    return { scope: item.scope, query: item.query };
+  });
 }
 
 // -------------------------------------------------------------------------------------------
@@ -276,21 +317,29 @@ function selfRetrievalQuery(doc) {
 
 // Runs every example query and the self-retrieval check for both scopes, timing each runSearch
 // call. Not pure (it calls runSearch and reads the clock), but deterministic given `indexes`.
-export function buildReportData(indexes) {
+export function buildReportData(indexes, queryItems = null) {
   const queryTimesMs = [];
-  const scopes = [];
+  const scopes = Object.keys(indexes).map((scope) => ({ scope, queries: [] }));
   const zeroResultQueries = [];
+  const items = queryItems ?? Object.entries(REPORT_QUERIES)
+    .flatMap(([scope, queries]) => queries.map((query) => ({ scope, query })));
+  const queries = [];
 
-  for (const [scope, queries] of Object.entries(REPORT_QUERIES)) {
+  for (const { scope, query } of items) {
     const index = indexes[scope];
-    const queryReports = queries.map((query) => {
-      const start = performance.now();
-      const response = runSearch(index, query);
-      queryTimesMs.push(performance.now() - start);
-      if (response.results.length === 0) zeroResultQueries.push({ scope, query });
-      return { query, hits: response.results.slice(0, REPORT_TOP_N) };
-    });
-    scopes.push({ scope, queries: queryReports });
+    const start = performance.now();
+    const response = runSearch(index, query);
+    const queryTimeMs = performance.now() - start;
+    queryTimesMs.push(queryTimeMs);
+    if (response.results.length === 0) zeroResultQueries.push({ scope, query });
+    const queryReport = {
+      scope, query, hits: response.results.slice(0, REPORT_TOP_N),
+      concepts: response.concepts,
+      unmatchedTerms: response.concepts.filter((concept) => !concept.matched).map((concept) => concept.label),
+      queryTimeMs,
+    };
+    queries.push(queryReport);
+    scopes.find((entry) => entry.scope === scope).queries.push(queryReport);
   }
 
   const selfRetrieval = Object.entries(indexes).map(([scope, index]) => {
@@ -312,7 +361,37 @@ export function buildReportData(indexes) {
     : 0;
 
   return {
-    scopes, zeroResultQueries, selfRetrieval, averageQueryTimeMs, queryCount: queryTimesMs.length,
+    scopes, queries, zeroResultQueries, selfRetrieval, averageQueryTimeMs,
+    queryCount: queryTimesMs.length,
+    stemCollisions: Object.entries(indexes).map(([scope, index]) => ({
+      scope, collisions: index.phrasebookStemCollisions || [],
+    })),
+  };
+}
+
+export function toReportJson(reportData, { buildTimeMs = 0 } = {}) {
+  return {
+    queries: reportData.queries.map(({ scope, query, concepts, hits, unmatchedTerms, queryTimeMs }) => ({
+      scope,
+      query,
+      concepts,
+      unmatchedTerms,
+      topResults: hits.map((hit) => ({
+        id: hit.id, title: hit.title, type: hit.type, label: hit.label,
+        score: Number.isFinite(hit.score) ? hit.score : 'Infinity',
+        matched: hit.matched,
+      })),
+      queryTimeMs,
+    })),
+    stemCollisions: reportData.stemCollisions,
+    zeroResultQueries: reportData.zeroResultQueries,
+    selfRetrieval: reportData.selfRetrieval.map(({ scope, total, misses, rate }) => ({
+      scope, total, rate, misses: misses.map(({ id, title }) => ({ id, title })),
+    })),
+    timing: {
+      buildTimeMs, averageQueryTimeMs: reportData.averageQueryTimeMs,
+      queryCount: reportData.queryCount,
+    },
   };
 }
 
@@ -367,13 +446,33 @@ export function formatReport(reportData, options = {}) {
   return lines.join('\n');
 }
 
-function runReport() {
+function runReport({ queriesPath = null, json = false } = {}) {
+  let queries = null;
+  if (queriesPath !== null) {
+    let raw;
+    try {
+      raw = readFileSync(queriesPath, 'utf8');
+    } catch (error) {
+      throw new Error(`Could not read query file "${queriesPath}": ${error.message}`);
+    }
+    let parsed;
+    try {
+      parsed = JSON.parse(raw);
+    } catch (error) {
+      throw new Error(`Invalid JSON in query file "${queriesPath}": ${error.message}`);
+    }
+    queries = parseReportQueries(parsed);
+  }
   const buildStart = performance.now();
   const indexes = loadSearchIndexes(PROJECT_ROOT);
   const buildTimeMs = performance.now() - buildStart;
 
-  const reportData = buildReportData(indexes);
-  console.log(formatReport(reportData, { buildTimeMs }));
+  const reportData = buildReportData(indexes, queries);
+  if (json) {
+    console.log(JSON.stringify(toReportJson(reportData, { buildTimeMs }), null, 2));
+  } else {
+    console.log(formatReport(reportData, { buildTimeMs }));
+  }
 }
 
 // -------------------------------------------------------------------------------------------
@@ -395,7 +494,7 @@ export function main(argv = process.argv.slice(2)) {
     if (parsed.command === 'explain') {
       runExplain(parsed);
     } else {
-      runReport();
+      runReport(parsed);
     }
   } catch (error) {
     console.error(`search-tools could not run: ${error.message}`);

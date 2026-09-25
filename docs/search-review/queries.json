@@ -1,0 +1,968 @@
+{
+  "base": "56b5f0ef982f413a10fd85d0c1c76b3070cad84a",
+  "note": "One-time editorial acceptance queries; IDs describe this publication revision only. Expected passages identify direct answers, including explicit exclusions. Not a permanent content-bound test.",
+  "queries": [
+    {
+      "scope": "code",
+      "category": "retained",
+      "query": "wife travel",
+      "expectedIds": [
+        "code/ch1-3-guests",
+        "code/ch1-3-guests-qa-1",
+        "code/definition/guests"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "retained",
+      "query": "spouse travel",
+      "expectedIds": [
+        "code/ch1-3-guests",
+        "code/ch1-3-guests-qa-1",
+        "code/definition/guests"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "retained",
+      "query": "doctor congress travel",
+      "expectedIds": [
+        "code/ch2-1-third-party-organised-educational-conferences",
+        "code/ch1-5-travel"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "retained",
+      "query": "educational grant hospital",
+      "expectedIds": [
+        "code/ch4-3-educational-grants",
+        "code/ch4-3-educational-grants-qa-2"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "retained",
+      "query": "hospital donation",
+      "expectedIds": [
+        "code/ch4-2-charitable-donations",
+        "code/ch4-2-charitable-donations-qa-1",
+        "code/definition/charitable-donations"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "retained",
+      "query": "free booth",
+      "expectedIds": [
+        "code/ch2-1-third-party-organised-educational-conferences-qa-2",
+        "code/ch2-1-third-party-organised-educational-conferences"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "retained",
+      "query": "paying a speaker",
+      "expectedIds": [
+        "code/ch5-3-compensation-and-fair-market-value",
+        "code/ch5-1-general-principles"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "retained",
+      "query": "honorarium",
+      "expectedIds": [
+        "code/ch5-3-compensation-and-fair-market-value",
+        "code/ch5-1-general-principles"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "retained",
+      "query": "consultacy agrrement",
+      "expectedIds": [
+        "code/ch5-1-general-principles",
+        "code/ch5-2-criteria-for-genuine-consulting-arrangements-with-healthcare-professionals-and-healthcare-organisations",
+        "code/definition/consulting-arrangement"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "retained",
+      "query": "business class",
+      "expectedIds": [
+        "code/ch1-5-travel"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "retained",
+      "query": "airfare",
+      "expectedIds": [
+        "code/ch1-5-travel"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "retained",
+      "query": "flight",
+      "expectedIds": [
+        "code/ch1-5-travel"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "retained",
+      "query": "golf weekend",
+      "expectedIds": [
+        "code/ch1-1-event-programme-qa-2",
+        "code/ch1-2-event-location-and-venue",
+        "code/definition/entertainment"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "retained",
+      "query": "hcp gift",
+      "expectedIds": [
+        "code/ch8-section-0",
+        "code/ch8-section-0-qa-1"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "retained",
+      "query": "pen",
+      "expectedIds": [
+        "code/ch8-section-0",
+        "code/ch8-section-0-qa-1"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "retained",
+      "query": "Q&A 31",
+      "expectedIds": [
+        "code/ch4-3-educational-grants-qa-3"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "retained",
+      "query": "free sample",
+      "expectedIds": [
+        "code/ch9-3-samples",
+        "code/definition/samples",
+        "code/ch9-1-general-principles"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "retained",
+      "query": "bribe",
+      "expectedIds": [
+        "code/intro-aims-and-principles-of-the-code",
+        "code/ch5-1-general-principles",
+        "code/definition/fair-market-value-fmv"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "retained",
+      "query": "currency",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-3-3-template-and-language-of-disclosure-qa-1",
+        "transparency/disclosure-guidelines/dg-annex-3-structure"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "retained",
+      "query": "disclose payments",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-2-1-general-obligation",
+        "transparency/disclosure-guidelines/dg-chapter-2-2-aggregate-disclosure"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "retained",
+      "query": "methodology note update",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-2-4-methodology-qa-1"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "background check",
+      "expectedIds": [
+        "code/ch10-section-0"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "background checks on distributors",
+      "expectedIds": [
+        "code/ch10-section-0"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "screen a distributor",
+      "expectedIds": [
+        "code/ch10-section-0"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "supplier due diligence",
+      "expectedIds": [
+        "code/ch10-section-0"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "paper trail",
+      "expectedIds": [
+        "code/intro-aims-and-principles-of-the-code",
+        "code/ch10-section-0",
+        "code/annex4-verification-documents",
+        "code/ch5-2-criteria-for-genuine-consulting-arrangements-with-healthcare-professionals-and-healthcare-organisations"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "record keeping",
+      "expectedIds": [
+        "code/intro-aims-and-principles-of-the-code",
+        "code/ch10-section-0",
+        "code/annex4-verification-documents",
+        "code/ch5-2-criteria-for-genuine-consulting-arrangements-with-healthcare-professionals-and-healthcare-organisations"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "competitive bidding",
+      "expectedIds": [
+        "code/ch4-3-educational-grants-qa-6",
+        "code/ch4-1-general-principles"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "public tender",
+      "expectedIds": [
+        "code/ch4-3-educational-grants-qa-6",
+        "code/ch4-1-general-principles"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "going rate",
+      "expectedIds": [
+        "code/ch5-3-compensation-and-fair-market-value",
+        "code/definition/fair-market-value-fmv"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "market rate consulting",
+      "expectedIds": [
+        "code/ch5-3-compensation-and-fair-market-value",
+        "code/definition/fair-market-value-fmv"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "financial difficulties",
+      "expectedIds": [
+        "code/definition/financial-hardship",
+        "code/ch4-2-charitable-donations-qa-1"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "financial distress",
+      "expectedIds": [
+        "code/definition/financial-hardship",
+        "code/ch4-2-charitable-donations-qa-1"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "hospital running costs",
+      "expectedIds": [
+        "code/ch4-2-charitable-donations-qa-1"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "operating expenses hospital",
+      "expectedIds": [
+        "code/ch4-2-charitable-donations-qa-1"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "disaster relief",
+      "expectedIds": [
+        "code/ch4-2-charitable-donations-qa-2",
+        "code/ch4-2-charitable-donations"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "earthquake donation",
+      "expectedIds": [
+        "code/ch4-2-charitable-donations-qa-2",
+        "code/ch4-2-charitable-donations"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "charity instead of fee",
+      "expectedIds": [
+        "code/ch4-2-charitable-donations-qa-3",
+        "code/ch8-section-0-qa-2"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "waive speaker fee",
+      "expectedIds": [
+        "code/ch4-2-charitable-donations-qa-3",
+        "code/ch8-section-0-qa-2"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "non cash contribution",
+      "expectedIds": [
+        "code/annex2-what-is-an-in-kind-educational-grant",
+        "code/annex2-types-of-in-kind-educational-grant",
+        "code/annex2-value-of-in-kind-contributions"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "donated staff time",
+      "expectedIds": [
+        "code/annex2-what-is-an-in-kind-educational-grant",
+        "code/annex2-types-of-in-kind-educational-grant",
+        "code/annex2-value-of-in-kind-contributions"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "equipment depreciation",
+      "expectedIds": [
+        "code/annex2-what-is-an-in-kind-educational-grant",
+        "code/annex2-types-of-in-kind-educational-grant",
+        "code/annex2-value-of-in-kind-contributions"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "proof of spending",
+      "expectedIds": [
+        "code/annex4-verification-documents"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "proof of attendance",
+      "expectedIds": [
+        "code/annex4-verification-documents"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "expense receipts",
+      "expectedIds": [
+        "code/annex4-verification-documents"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "money not used correctly",
+      "expectedIds": [
+        "code/annex4-failure-to-comply"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "joint research",
+      "expectedIds": [
+        "code/ch6-4-collaborative-research",
+        "code/ch6-4-collaborative-research-qa-1"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "research partnership",
+      "expectedIds": [
+        "code/ch6-4-collaborative-research",
+        "code/ch6-4-collaborative-research-qa-1"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "product user feedback",
+      "expectedIds": [
+        "code/ch6-2-member-company-post-market-product-evaluation",
+        "code/definition/evaluation-products"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "post sale evaluation",
+      "expectedIds": [
+        "code/ch6-2-member-company-post-market-product-evaluation",
+        "code/definition/evaluation-products"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "licensing income",
+      "expectedIds": [
+        "code/ch7-section-0"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "intellectual property rights",
+      "expectedIds": [
+        "code/ch7-section-0"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "cash substitute",
+      "expectedIds": [
+        "code/ch8-section-0"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "raffle",
+      "expectedIds": [
+        "code/ch8-section-0"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "prize draw",
+      "expectedIds": [
+        "code/ch8-section-0"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "terminate distributor contract",
+      "expectedIds": [
+        "code/ch10-section-0"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "ongoing compliance checks",
+      "expectedIds": [
+        "code/ch10-section-0"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "remedial action",
+      "expectedIds": [
+        "code/ch10-section-0"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "file a grievance",
+      "expectedIds": [
+        "code/part2-2-complaint-handling-procedure",
+        "code/part2-3-dispute-resolution-principles-and-procedures"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "lodge a complaint",
+      "expectedIds": [
+        "code/part2-2-complaint-handling-procedure",
+        "code/part2-3-dispute-resolution-principles-and-procedures"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "settle a dispute",
+      "expectedIds": [
+        "code/part2-1-general-principles",
+        "code/part2-3-dispute-resolution-principles-and-procedures"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "amicable settlement",
+      "expectedIds": [
+        "code/part2-1-general-principles",
+        "code/part2-3-dispute-resolution-principles-and-procedures"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "challenge a decision",
+      "expectedIds": [
+        "code/part2-3-dispute-resolution-principles-and-procedures"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "appeal a decision",
+      "expectedIds": [
+        "code/part2-3-dispute-resolution-principles-and-procedures"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "anonymous complaint",
+      "expectedIds": [
+        "code/part2-3-dispute-resolution-principles-and-procedures"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "keep complaint confidential",
+      "expectedIds": [
+        "code/part2-2-complaint-handling-procedure"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "event timetable",
+      "expectedIds": [
+        "code/ch1-1-event-programme",
+        "code/ch1-2-event-location-and-venue",
+        "code/ch1-2-event-location-and-venue-qa-2"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "holiday season venue",
+      "expectedIds": [
+        "code/ch1-1-event-programme",
+        "code/ch1-2-event-location-and-venue",
+        "code/ch1-2-event-location-and-venue-qa-2"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "advance notice employer",
+      "expectedIds": [
+        "code/ch1-6-transparency",
+        "code/definition/employer-notification"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "surgical simulation",
+      "expectedIds": [
+        "code/annex7-criteria-for-tppt-determination"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "practical workshop",
+      "expectedIds": [
+        "code/annex7-criteria-for-tppt-determination"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "gap",
+      "query": "standalone course",
+      "expectedIds": [
+        "code/annex7-criteria-for-tppt-determination"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "contrast",
+      "query": "hybrid event",
+      "expectedIds": [
+        "code/definition/virtual-event",
+        "code/ch1-7-virtual-events"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "contrast",
+      "query": "factory tour",
+      "expectedIds": [
+        "code/ch3-1-general-principles"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "contrast",
+      "query": "live surgery demonstration",
+      "expectedIds": [
+        "code/annex7-criteria-for-tppt-determination"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "contrast",
+      "query": "samples clinical use",
+      "expectedIds": [
+        "code/ch9-3-samples",
+        "code/definition/samples"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "contrast",
+      "query": "commercial sponsorship grant",
+      "expectedIds": [
+        "code/ch4-3-educational-grants-qa-1",
+        "code/ch4-3-educational-grants-qa-7"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "contrast",
+      "query": "poster presenter",
+      "expectedIds": [
+        "code/ch6-3-third-party-initiated-research-research-grants-qa-1"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "contrast",
+      "query": "corrective action intermediary",
+      "expectedIds": [
+        "code/ch10-section-0"
+      ]
+    },
+    {
+      "scope": "code",
+      "category": "contrast",
+      "query": "\"in kind\"",
+      "expectedIds": [
+        "code/definition/in-kind",
+        "code/annex2-what-is-an-in-kind-educational-grant"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "publication deadline",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-3-2-time-of-disclosure"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "disclosure due date",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-3-2-time-of-disclosure"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "when to publish",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-3-2-time-of-disclosure"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "reporting year",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-3-1-reporting-period"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "annual reporting",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-3-1-reporting-period"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "combined amount",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-2-2-aggregate-disclosure"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "annual total recipient",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-2-2-aggregate-disclosure"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "itemised payments",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-2-2-aggregate-disclosure"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "which subsidiary reports",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-2-1-general-obligation-qa-1"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "overseas parent company",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-1-1-scope-qa-1"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "voluntary reporting",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-1-1-scope-qa-3"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "extra disclosures",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-1-1-scope-qa-3"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "duplicate reporting",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-1-2-applicability-of-these-disclosure-guidelines",
+        "transparency/disclosure-guidelines/dg-chapter-1-2-applicability-of-these-disclosure-guidelines-qa-1"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "where to publish",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-3-4-platform-of-disclosure"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "public access",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-3-4-platform-of-disclosure"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "broken disclosure link",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-3-4-platform-of-disclosure"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "correct published data",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-3-6-retention-and-modification-of-the-disclosures",
+        "transparency/disclosure-guidelines/dg-chapter-3-6-retention-and-modification-of-the-disclosures-qa-1"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "revised disclosure",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-3-6-retention-and-modification-of-the-disclosures",
+        "transparency/disclosure-guidelines/dg-chapter-3-6-retention-and-modification-of-the-disclosures-qa-1"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "how long online",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-3-6-retention-and-modification-of-the-disclosures"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "retention period",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-3-6-retention-and-modification-of-the-disclosures"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "calculation method",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-2-4-methodology",
+        "transparency/disclosure-guidelines/dg-annex-3-structure"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "currency conversion rate",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-chapter-3-3-template-and-language-of-disclosure-qa-1"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "withdraw consent",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-annex-3-structure"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "partial permission",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-annex-3-structure"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "cancelled grant",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-annex-3-structure"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "multi year agreement",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-annex-3-structure"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "non cash contribution",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-annex-2-what-is-an-in-kind-educational-grant",
+        "transparency/disclosure-guidelines/dg-annex-2-value-of-in-kind-contributions",
+        "transparency/disclosure-guidelines/dg-annex-2-types-of-in-kind-educational-grant"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "donated staff time",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-annex-2-what-is-an-in-kind-educational-grant",
+        "transparency/disclosure-guidelines/dg-annex-2-value-of-in-kind-contributions",
+        "transparency/disclosure-guidelines/dg-annex-2-types-of-in-kind-educational-grant"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "rental value",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-annex-2-what-is-an-in-kind-educational-grant",
+        "transparency/disclosure-guidelines/dg-annex-2-value-of-in-kind-contributions",
+        "transparency/disclosure-guidelines/dg-annex-2-types-of-in-kind-educational-grant"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "gap",
+      "query": "reporting spreadsheet",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-annex-1-section-0"
+      ]
+    },
+    {
+      "scope": "transparency",
+      "category": "contrast",
+      "query": "payment date publication date",
+      "expectedIds": [
+        "transparency/disclosure-guidelines/dg-annex-3-structure",
+        "transparency/disclosure-guidelines/dg-chapter-3-1-reporting-period",
+        "transparency/disclosure-guidelines/dg-chapter-3-2-time-of-disclosure"
+      ]
+    }
+  ]
+}

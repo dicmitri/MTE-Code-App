@@ -26,18 +26,12 @@ const { DefinitionPopup } = await popupModules.import(
 );
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const appSource = await readFile(
-  new URL('../src/App.jsx', import.meta.url),
-  'utf8',
-);
-const transparencyContentSource = await readFile(
-  new URL('../src/components/TransparencyContent.jsx', import.meta.url),
-  'utf8',
-);
-const fullTextSectionSource = await readFile(
-  new URL('../src/components/FullTextSection.jsx', import.meta.url),
-  'utf8',
-);
+// Source assertions use LF regardless of the platform's Git checkout line endings.
+const readSource = async (path) => (await readFile(new URL(path, import.meta.url), 'utf8'))
+  .replace(/\r\n?/g, '\n');
+const appSource = await readSource('../src/App.jsx');
+const transparencyContentSource = await readSource('../src/components/TransparencyContent.jsx');
+const fullTextSectionSource = await readSource('../src/components/FullTextSection.jsx');
 
 const GLOSSARY_TERM = /<span class="glossary-term[^"]*"[^>]*data-term="([^"]+)">([^<]*)<\/span>/g;
 const unlinkTerms = (html) => html.replace(GLOSSARY_TERM, '$2');
