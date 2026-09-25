@@ -202,6 +202,84 @@ test('names words that match nothing, unless there are no results at all', () =>
   assert.ok(withoutResults.includes('No results for'));
 });
 
+// A concept whose typed word is (or is not) in the text, plus phrasebook terms that are.
+const conceptFor = (label, typedWordFound, similarTerms) => ({
+  label,
+  quoted: false,
+  matched: typedWordFound || similarTerms.length > 0,
+  members: [
+    {
+      text: label, source: 'query', weight: 1, matched: typedWordFound,
+    },
+    ...similarTerms.map((text) => ({
+      text, source: 'phrasebook', weight: 0.7, matched: true,
+    })),
+  ],
+});
+
+test('says when a typed word is not in the Code and similar terms are shown instead', () => {
+  const html = render({
+    response: makeResponse({ concepts: [conceptFor('wife', false, ['spouse', 'Guests']), conceptFor('travel', true, [])] }),
+  });
+  assert.ok(html.includes('“wife” is not in the Code. Showing similar terms that may help: spouse, Guests.'));
+  assert.doesNotMatch(html, /Also searching/);
+});
+
+test('names several missing words, each with its similar terms', () => {
+  const html = render({
+    response: makeResponse({ concepts: [conceptFor('wife', false, ['spouse']), conceptFor('airfare', false, ['flight', 'air travel'])] }),
+  });
+  assert.ok(html.includes(
+    '“wife” and “airfare” are not in the Code. Showing similar terms that may help: spouse (for “wife”); flight, air travel (for “airfare”).',
+  ));
+});
+
+test('says "the Guidelines" in the Transparency scope', () => {
+  const html = render({
+    scope: 'transparency',
+    response: makeResponse({ scope: 'transparency', concepts: [conceptFor('doctor', false, ['healthcare professional'])] }),
+  });
+  assert.ok(html.includes('“doctor” is not in the Guidelines. Showing similar terms that may help: healthcare professional.'));
+});
+
+test('keeps "Also searching" for words that are in the text', () => {
+  const html = render({
+    response: makeResponse({ concepts: [conceptFor('hospital', true, ['Healthcare Organisations']), conceptFor('wife', false, ['spouse'])] }),
+  });
+  assert.ok(html.includes('Also searching: Healthcare Organisations (for “hospital”)'));
+  assert.ok(html.includes('“wife” is not in the Code.'));
+  assert.doesNotMatch(html, /spouse \(for “wife”\)/, 'a missing word is not repeated under "Also searching"');
+});
+
+test('offers the exact phrase as a one-click search and hides the generic quotes tip', () => {
+  const html = render({
+    response: makeResponse({ phraseSuggestion: '"in kind"', corrections: [{ from: 'agrrement', to: 'agreement' }] }),
+  });
+  assert.match(html, /Looking for the exact phrase\?/);
+  assert.match(html, /<button type="button"[^>]*>Search &quot;in kind&quot;<\/button>/);
+  assert.doesNotMatch(html, /Use &quot;quotes&quot; for exact wording\./);
+
+  const without = render({ response: makeResponse({ phraseSuggestion: null }) });
+  assert.doesNotMatch(without, /Looking for the exact phrase/);
+});
+
+test('the exact-phrase button runs the quoted search', () => {
+  let searched = null;
+  const tree = SearchResults({
+    response: makeResponse({ phraseSuggestion: '"in kind"' }),
+    onSelect: noop,
+    onSearch: (query) => { searched = query; },
+  });
+  const findButton = (node) => {
+    if (!node || typeof node !== 'object') return null;
+    if (Array.isArray(node)) return node.map(findButton).find(Boolean) || null;
+    if (node.type === 'button' && String(node.props.children).includes('Search "in kind"')) return node;
+    return findButton(node.props?.children);
+  };
+  findButton(tree).props.onClick();
+  assert.equal(searched, '"in kind"');
+});
+
 test('shows the tip only when an expansion or correction was used', () => {
   // React's server renderer escapes quotes in text nodes as &quot;.
   const withCorrection = render({

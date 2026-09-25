@@ -135,12 +135,16 @@ The search box sits at the top of the `Sidebar`. In the Code section, the Home H
   - a rare word used in exactly one Glossary definition links to that term (spouse → Guests);
   - a general-English phrasebook maps everyday words to formal ones (doctor → physician; wife → spouse).
 - **Explanation lines** above the results:
-  - what else was searched ("Also searching: spouse, partner, Guests (for “wife”)");
+  - a word that is not in the Code, and the similar terms searched instead ("“wife” is not in the Code. Showing similar terms that may help: spouse, partner, Guests.");
+  - what else was searched for a word that is in the Code ("Also searching: Healthcare Organisations, … (for “hospital”)");
   - spelling fixes ("Spelling: consultacy → consultancy");
   - words that matched nothing ("No match for “students”…");
   - a notice when no result contains all your words;
   - the tip `Use "quotes" for exact wording.`
-- **Shortcuts:** quoted text matches exactly with no expansions, "Q&A 31" shows that Q&A, typing a Glossary term shows its definition first, and the last word is completed while typing.
+- **Shortcuts:**
+  - quoted text is an exact phrase: every word in order, including small words such as "in", with no expansions. Plurals and other word forms still count, so `"educational grant"` also finds "Educational Grants", and `"in kind"` matches "In-Kind" but not "kinds of";
+  - when an unquoted phrase with small words appears in the text as typed, a one-click hint offers the exact-phrase search ("Looking for the exact phrase? Search "in kind"");
+  - "Q&A 31" shows that Q&A, typing a Glossary term shows its definition first, and the last word is completed while typing.
 - **Opening a result:**
   - a provision goes straight to its section;
   - a Q&A switches Q&As on and scrolls to it (each Q&A has its own link, e.g. `/code/ch4#ch4-3-educational-grants-qa-3`);

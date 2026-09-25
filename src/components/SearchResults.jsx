@@ -21,6 +21,11 @@ const APP_RESULTS_HEADING = {
   transparency: 'Publication details — not Guidelines text',
 };
 
+const SCOPE_NAMES = {
+  code: 'the Code',
+  transparency: 'the Guidelines',
+};
+
 const formatDebugNumber = (value) => (
   value === Infinity ? '∞' : Number(value ?? 0).toFixed(2)
 );
@@ -61,11 +66,44 @@ const expandedMembers = (concept) => (
   (concept?.members || []).filter((member) => member.matched && member.source !== 'query')
 );
 
+// The typed word or phrase itself appears nowhere in this scope, but similar terms do: "wife" is
+// not in the Code, yet "spouse" and "Guests" are.
+const isNotInScope = (concept) => (
+  !concept.quoted
+  && concept.members?.[0]?.source === 'query'
+  && concept.members[0].matched === false
+  && expandedMembers(concept).length > 0
+);
+
+const joinLabels = (labels) => (
+  labels.length > 1 ? `${labels.slice(0, -1).join(', ')} and ${labels[labels.length - 1]}` : labels[0]
+);
+
+const buildNotInScopeLine = (concepts, scope) => {
+  const missing = (concepts || []).filter(isNotInScope);
+  if (missing.length === 0) return null;
+  const fragments = [];
+  let remaining = MAX_INTERPRETATION_MEMBERS;
+  for (const concept of missing) {
+    if (remaining <= 0) break;
+    const texts = expandedMembers(concept).slice(0, remaining).map((member) => member.text);
+    remaining -= texts.length;
+    fragments.push(missing.length > 1 ? `${texts.join(', ')} (for “${concept.label}”)` : texts.join(', '));
+  }
+  const labels = joinLabels(missing.map((concept) => `“${concept.label}”`));
+  const verb = missing.length > 1 ? 'are' : 'is';
+  return `${labels} ${verb} not in ${SCOPE_NAMES[scope] || SCOPE_NAMES.code}. `
+    + `Showing similar terms that may help: ${fragments.join('; ')}.`;
+};
+
+// Extra terms searched alongside words that ARE in the text (words that are not get the line
+// above instead).
 const buildInterpretationLine = (concepts) => {
   const fragments = [];
   let remaining = MAX_INTERPRETATION_MEMBERS;
   for (const concept of concepts || []) {
     if (remaining <= 0) break;
+    if (isNotInScope(concept)) continue;
     const members = expandedMembers(concept);
     if (members.length === 0) continue;
     const texts = members.slice(0, remaining).map((member) => member.text);
@@ -150,6 +188,7 @@ export const SearchResults = ({
   isStale = false,
   debug = false,
   onSelect,
+  onSearch,
 }) => {
   if (!response) return null;
 
@@ -157,17 +196,25 @@ export const SearchResults = ({
   const appResults = response.appResults || [];
   const isZeroResults = filteredResults.length === 0 && appResults.length === 0;
 
+  const notInScopeLine = buildNotInScopeLine(response.concepts, scope);
   const interpretationLine = buildInterpretationLine(response.concepts);
   const spellingLine = buildSpellingLine(response.corrections);
   const unmatchedLine = isZeroResults ? null : buildUnmatchedLine(response.concepts);
   const showPartialCoverageNotice = response.results.length > 0 && !response.allTermsMatched;
-  const showTip = usedExpansionsOrCorrections(response);
+  const phraseSuggestion = typeof response.phraseSuggestion === 'string' ? response.phraseSuggestion : null;
+  const showTip = !phraseSuggestion && usedExpansionsOrCorrections(response);
 
   return (
     <div className="no-print space-y-3">
       <p className="text-xs text-gray-400">
         {`${filteredResults.length} result${filteredResults.length === 1 ? '' : 's'}`}
       </p>
+
+      {notInScopeLine && (
+        <p className="text-xs text-gray-600 bg-gray-50 border border-gray-200 rounded-lg px-2.5 py-1.5">
+          {notInScopeLine}
+        </p>
+      )}
 
       {interpretationLine && (
         <p className="text-xs text-gray-500">{interpretationLine}</p>
@@ -186,6 +233,19 @@ export const SearchResults = ({
       {showPartialCoverageNotice && (
         <p className="text-xs text-gray-600 bg-gray-50 border border-gray-200 rounded-lg px-2.5 py-1.5">
           No result contains all your words; showing closest matches.
+        </p>
+      )}
+
+      {phraseSuggestion && (
+        <p className="text-xs text-gray-500">
+          {'Looking for the exact phrase? '}
+          <button
+            type="button"
+            onClick={() => onSearch?.(phraseSuggestion)}
+            className="font-semibold text-[#007A86] underline underline-offset-2 hover:text-[#005f69]"
+          >
+            {`Search ${phraseSuggestion}`}
+          </button>
         </p>
       )}
 

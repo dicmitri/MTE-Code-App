@@ -41,7 +41,7 @@ Use this when a word is a lay, casual, or narrower way of describing something t
 { "from": ["doctor", "surgeon", "gp"], "to": ["physician", "healthcare professional", "clinician"] }
 ```
 
-**"Your word first":** if the word someone typed already appears in more than two places in the text being searched, the phrasebook's suggestions for that word count for less (0.3 instead of 0.7). Results containing the person's own word therefore stay on top, and the phrasebook only adds extra reach. You don't do anything to make this happen; the engine checks it automatically at search time.
+**"Your word first":** if the word someone typed already appears in more than two places in the text being searched (for a typed phrase: anywhere in the text), the phrasebook's suggestions for that word count for less (0.3 instead of 0.7). Results containing the person's own word therefore stay on top, and the phrasebook only adds extra reach. You don't do anything to make this happen; the engine checks it automatically at search time.
 
 ## Format rules
 
@@ -62,6 +62,7 @@ Use this when a word is a lay, casual, or narrower way of describing something t
 - Avoid `from` words that have a common, unrelated everyday meaning, since they create noisy, irrelevant matches — words like "event", "party", "board", "member", "chair", "company", "class", "charge", "stand", "meeting", "report", "present", "fair", "cover", "bill", "match", and "third" should not be used as bare `from` words (a phrase built around one of them, like "business class" or "advisory board", is fine, because it's specific rather than ambiguous).
 - Keep each group focused: roughly 10 phrases or fewer. The file doesn't need to cover every possible word, only common everyday ones.
 - Keep genuinely different things in separate groups, even when they are related. For example, a free sample, a demonstration unit and loaned evaluation equipment each have their own group.
+- Small words count inside a phrase. A `from` phrase such as "at no cost" is only used when someone types that whole phrase: typing "cost" on its own does not trigger it. Likewise, a `to` phrase such as "in kind" only matches the phrase "in kind" in the text, never the word "kind" on its own.
 
 ## How to add an entry
 

@@ -18,7 +18,9 @@ Versions are internal application-release labels; they are independent of the pr
   - Glossary links for rare words (spouse → Guests);
   - a general-English phrasebook (`src/data/search/phrasebook.json`, e.g. doctor → physician, wife → spouse), whose structure `npm run validate:data` now checks.
 - Added explained results: type badges, snippets, "Matched:" lines, and notes on expansions, spelling corrections, words that match nothing, and results without every word.
-- Added search shortcuts: quoted text matches exactly, "Q&A 31" shows that Q&A, a Glossary term shows its definition first, and the last word is completed while typing.
+- Added search shortcuts: quoted text matches as an exact phrase (every word in order, small words included, word forms still counting), "Q&A 31" shows that Q&A, a Glossary term shows its definition first, and the last word is completed while typing.
+- When a typed word is not in the Code (or the Guidelines), the results say so and list the similar terms searched instead: "“wife” is not in the Code. Showing similar terms that may help: spouse, partner, Guests."
+- Added a one-click exact-phrase hint when an unquoted phrase with small words, such as in kind, appears in the text as typed.
 - Gave every Code and Transparency Q&A its own deep link (e.g. `/code/ch4#ch4-3-educational-grants-qa-3`); opening one switches Q&As on and scrolls to it.
 - Added analytics-ready `mte:search` browser events (`settled`, `select`); nothing is sent or stored.
 - Added `?searchDebug=1` to show each result's score, coverage and proximity.
@@ -33,6 +35,8 @@ Versions are internal application-release labels; they are independent of the pr
 ### Fixed
 - Multi-word everyday queries such as "wife travel" or "hospital donation" used to return nothing unless the exact phrase appeared in the text.
 - The chapter summary is no longer re-sanitized on every re-render, which cleared any text selected in it.
+- Quoted searches ignored small words: "in kind" searched only "kind" and also matched "different kinds of". Phrases now keep their small words.
+- Phrasebook phrases with small words collapsed to a single everyday word, so plain queries picked up wrong expansions: "travel cost" also searched "free of charge" and "in kind", because "at no cost" had become "cost". A phrasebook phrase now applies only when typed as a phrase, and a typed phrase counts as present in the text when it appears anywhere.
 
 ---
 

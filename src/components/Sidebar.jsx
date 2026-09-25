@@ -421,6 +421,7 @@ export const Sidebar = ({
               isStale={isStale}
               debug={debug}
               onSelect={handleSelectResult}
+              onSearch={setSearchTerm}
             />
           </>
         ) : (
