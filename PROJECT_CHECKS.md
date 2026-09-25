@@ -35,7 +35,7 @@ Data validation passed.
 23 chapters, 68 sections, 43 Q&As
 8 decision trees, 116 nodes
 60 quiz questions
-208 phrasebook groups
+199 phrasebook groups
 1 Transparency document, 7 reader units, 19 sections, 11 Q&As
 ```
 
@@ -117,7 +117,7 @@ npm run search:report -- --queries .\search-queries.json --json
 
 The self-check in `npm test` confirms that at least 95% of provisions, Q&As and definitions come back in the top 3 when searched by their own heading, question or term. If it fails after a content edit, keep the output and ask for technical help. Do not rename content just to make it pass.
 
-To update the search phrasebook, edit `src/data/search/phrasebook.json`, following the rules in `src/data/search/README.md` (general English only, never chapter, section or Q&A references), and run `npm run validate:data`. Compare contextual and ambiguity queries in both scopes as described in the phrasebook guide; the pinned editorial review is in `docs/search-review/README.md`.
+To update the search phrasebook, edit `src/data/search/phrasebook.json`, following the rules in `src/data/search/README.md` (general English only, never chapter, section or Q&A references), and run `npm run validate:data`. Then try the changed words with `npm run search:explain`, in both the Code and the Disclosure Guidelines, as described in the phrasebook guide.
 
 ## Revised Word-to-App Code Check
 

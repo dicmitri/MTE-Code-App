@@ -439,6 +439,29 @@ export const createSearchIndex = (documents, { phrasebook = { groups: [] }, glos
     .filter((rule) => !rule.from.includes(' '))
     .map((rule) => rule.from));
 
+  // A multiword source is read as one phrase only where that can find something: the phrase
+  // itself, one of its targets, or an abbreviation or Glossary link of those (the same chain a
+  // concept follows) occurs in this scope. Otherwise its words are searched one by one, as if
+  // the rule were not there, so a target this publication never uses cannot hide results that
+  // the typed words would find.
+  const scopeView = { postings, docs, fieldNames: FIELD_NAMES };
+  const occursInScope = (key) => {
+    const member = makeMember(key, {});
+    return Boolean(member) && memberMatchesScope(scopeView, member);
+  };
+  const reachableKeys = (from) => {
+    const keys = new Set([from, ...rules.filter((rule) => rule.from === from).flatMap((rule) => rule.to)]);
+    for (let pass = 0; pass < 2; pass += 1) {
+      for (const key of [...keys]) {
+        for (const equivalent of equivalents.get(key) || []) keys.add(equivalent);
+        if (glossaryLinks.has(key)) keys.add(glossaryLinks.get(key));
+      }
+    }
+    return keys;
+  };
+  const ruleSources = [...new Set(rules.map((rule) => rule.from))]
+    .filter((from) => !from.includes(' ') || [...reachableKeys(from)].some(occursInScope));
+
   // Phrases a query can contain (phrasebook "from" phrases, abbreviation long forms), with the
   // number of small words before their first content word, for lining them up with the query.
   const toCandidate = (phrase, kind) => {
@@ -452,7 +475,7 @@ export const createSearchIndex = (documents, { phrasebook = { groups: [] }, glos
     };
   };
   const phraseCandidates = [
-    ...[...new Set(rules.map((rule) => rule.from))].map((from) => toCandidate(from, 'rule')),
+    ...ruleSources.map((from) => toCandidate(from, 'rule')),
     ...[...equivalents.keys()].filter((key) => key.includes(' ')).map((key) => toCandidate(key, 'longForm')),
   ];
 

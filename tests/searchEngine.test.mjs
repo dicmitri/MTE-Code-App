@@ -492,6 +492,28 @@ test('reports scope-specific phrasebook stem collisions with stable display text
   }
 });
 
+test('a multiword source is read as one phrase only where it can match something in the scope', () => {
+  const phrasebook = { groups: [{ from: ['payment breakdown'], to: ['itemised'] }] };
+  const payments = makeDoc({
+    id: 'payments', title: 'Payments', fields: { title: 'Payments', body: 'Each payment is recorded.' },
+  });
+
+  // No target in this scope: the words are searched one by one, as if the rule were absent.
+  const withoutTarget = createSearchIndex([payments], { phrasebook, glossary: [], scope: 'fixture' });
+  const fallback = runSearch(withoutTarget, 'payment breakdown ');
+  assert.deepEqual(fallback.concepts.map((concept) => concept.label), ['payment', 'breakdown']);
+  assert.ok(fallback.results.some((hit) => hit.id === 'payments'));
+
+  // With the target present, the phrase is still recognised and expanded.
+  const itemised = makeDoc({
+    id: 'itemised', title: 'Itemised', fields: { title: 'Itemised', body: 'Amounts are itemised per recipient.' },
+  });
+  const withTarget = createSearchIndex([payments, itemised], { phrasebook, glossary: [], scope: 'fixture' });
+  const expanded = runSearch(withTarget, 'payment breakdown ');
+  assert.deepEqual(expanded.concepts.map((concept) => concept.label), ['payment breakdown']);
+  assert.ok(expanded.results.some((hit) => hit.id === 'itemised'));
+});
+
 test('splits results into an authoritative list and a smaller, separately cut-off app-content list', () => {
   const response = runSearch(index, 'doctor');
   assert.ok(response.results.every((hit) => hit.type !== 'summary'));
