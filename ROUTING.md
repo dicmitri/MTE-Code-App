@@ -21,6 +21,17 @@ The routing system is intentionally small and does not use a third-party routing
 | Knowledge Quiz | `/quiz` | `https://medtecheurope-code.org/quiz` |
 | Shared Quiz | `/quiz#quiz?q=questionIds` | `https://medtecheurope-code.org/quiz#quiz?q=q1,q2` |
 | TPPT Checker | `/tppt` | `https://medtecheurope-code.org/tppt` |
+| Event support tool | `/event-support` | `http://127.0.0.1:8787/event-support` |
+| Internal CVS lookup demo | `/prototypes/cvs` | `http://127.0.0.1:8787/prototypes/cvs` |
+
+The CVS demo is not listed in the Home Hub and does not change decision-tree
+logic. Its searches and selections are transient and require an online Worker.
+See [the prototype guide](docs/cvs-prototype.md) for local setup and removal.
+
+The event-support tool is accessible from the Home Hub and persistent navigation.
+Its answers, agenda and CVS selection remain in memory for the current visit;
+question steps are not browser-history entries. Source links open a new tab so
+the assessment stays available. See [the tool guide](docs/event-support.md).
 
 Browser Back and Forward restore these app-level destinations. Individual steps inside a decision tree or an active Quiz are not separate history entries.
 

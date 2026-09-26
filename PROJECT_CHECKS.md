@@ -73,6 +73,12 @@ fail 0
 
 The number of tests may grow. The important value is `fail 0`.
 
+Event-support rules and source references are checked by `validate:data`. The
+tests cover all 32 Annex I cells and 16 Annex VI cells, national-audience CVS
+warnings, expense restrictions, TPPT qualification, incomplete answers and stale
+CVS requests. For focused checks, run `node --test tests/eventSupport.test.mjs tests/cvs.test.mjs tests/routeUtils.test.mjs`. Follow the manual checks in
+[`docs/event-support.md`](docs/event-support.md) before releasing that feature.
+
 The URL tests use the current project data. They confirm that every current Code chapter/section, Transparency document/unit/section, and decision tree has a working unique route, that representative section-ID generation rules remain stable, and that supported legacy link formats still resolve. If one fails after a content edit, do not rename IDs simply to make the test pass; keep the output and have the reported route reviewed.
 
 Automated checks cannot decide whether changing a public identifier was intentional. Read [`ROUTING.md`](ROUTING.md) before changing Code chapter IDs, Transparency document or unit IDs, tree IDs, section titles, navigation behavior, or hosting rules.

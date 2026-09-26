@@ -141,6 +141,7 @@ export const Sidebar = ({
   onNavigateChapter,
   onNavigateCodeSection,
   onNavigateTrees,
+  onNavigateEventSupport,
   onNavigateTransparency,
   onNavigateTransparencyDocument,
   onNavigateTransparencyUnit,
@@ -806,6 +807,8 @@ export const Sidebar = ({
             })}
           </CollapsibleGroup>
         )}
+
+        {!hasActiveSearch && <button type="button" onClick={() => { onNavigateEventSupport(); setSidebarOpen(false); }} className={`mx-4 flex items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold ${activeSection === 'event-support' ? 'bg-[#7654A1] text-white' : 'text-gray-600 hover:bg-gray-50'}`}><AppIcon name="ShieldCheck" size={18} /> Can I support this event?</button>}
 
         {/* Decision Trees section group */}
         {!hasActiveSearch && (

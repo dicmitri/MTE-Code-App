@@ -91,10 +91,11 @@ The app is organized into independently navigable **sections**, all accessible f
 - **The Code** — The full MedTech Europe Code of Ethical Business Practice reader.
 - **Transparency** — Standalone transparency publications, initially the Disclosure Guidelines.
 - **Decision Trees** — Interactive compliance decision guides based on the Code.
+- **Can I support this event?** — Guided assessment of a company's proposed event support, with separate Code and live CVS positions, conditions, source links, a printable summary and optional alternatives. See [the coverage and operating guide](docs/event-support.md).
 - **Knowledge Quiz** — A testing module that challenges users with randomized multiple-choice questions on selected chapters.
 - **TPPT Checker** — A compliance tool for evaluating whether a medical event qualifies as a Third Party Procedural Training meeting. Parses PDF/Word/text agendas, classifies sessions by type (Hands-on, Streaming, Case Study, etc.), checks the Code's practical-session thresholds, and exports a formatted PDF report.
 
-The currently active section is tracked via `activeSection` state in `App.jsx` (`null` = Home, `'code'`, `'transparency'`, `'trees'`, `'quiz'`, or `'tppt'`). Transparency also tracks its active standalone publication in `activeDocumentId`. The `SECTIONS` registry supplies Home Hub metadata; it is not a complete navigation or routing registry. Adding a new section (e.g. "Materials") requires:
+The currently active section is tracked via `activeSection` state in `App.jsx` (`null` = Home, `'code'`, `'transparency'`, `'trees'`, `'quiz'`, `'tppt'`, or `'event-support'`). Transparency also tracks its active standalone publication in `activeDocumentId`. The `SECTIONS` registry supplies Home Hub metadata; it is not a complete navigation or routing registry. Adding a new section (e.g. "Materials") requires:
 1. Adding an entry to `src/config/sections.js` using an icon registered in `src/components/AppIcons.jsx`.
 2. Creating the content component.
 3. Adding selection handling and a rendering branch in `App.jsx`.
@@ -112,6 +113,7 @@ The app uses readable browser-history routes without adding a routing dependency
 - `/transparency/disclosure-guidelines` opens the Disclosure Guidelines overview.
 - `/transparency/disclosure-guidelines/dg-chapter-1#section-id` opens an exact Disclosure Guidelines section.
 - `/trees/dt-ch1-event-location`, `/quiz`, and `/tppt` open the other tools.
+- `/event-support` opens the event-support assessment; `/prototypes/cvs` retains the internal lookup demo.
 
 `useAppRouting.js` keeps `App.jsx` state synchronized with these URLs and responds to browser Back/Forward navigation. Pure parsing and URL construction live in `utils/routeUtils.js`, configured with current content in `config/routes.js`. Previously shared root-hash links such as `/#ch1` and `/#ch1-2-event-location-and-venue` remain supported and are replaced with their canonical URL after loading. This compatibility behavior and every current Code chapter/section, Transparency document/unit/section, and decision-tree route are covered by `tests/routeUtils.test.mjs`.
 

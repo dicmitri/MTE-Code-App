@@ -3,6 +3,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 import { generateSectionId } from '../src/utils/textUtils.js';
+import { validateEventSupportData } from '../src/utils/eventSupportRules.js';
 import { loadSplitCodeData } from './lib/code-content.mjs';
 import { loadTransparencyData } from './lib/transparency-content.mjs';
 
@@ -430,13 +431,16 @@ function readJson(relativePath) {
 }
 
 export function validateCurrentProject() {
-  return validateProjectData({
-    codeData: loadSplitCodeData(PROJECT_ROOT),
+  const codeData = loadSplitCodeData(PROJECT_ROOT);
+  const result = validateProjectData({
+    codeData,
     treeData: readJson('src/data/treeData.json'),
     quizData: readJson('src/data/quizData.json'),
     transparencyData: loadTransparencyData(PROJECT_ROOT),
     iconSource: readFileSync(resolve(PROJECT_ROOT, 'src/components/AppIcons.jsx'), 'utf8'),
   });
+  result.errors.push(...validateEventSupportData(readJson('src/data/eventSupportRules.json'), codeData.chapters));
+  return result;
 }
 
 function printReport({ errors, stats }) {

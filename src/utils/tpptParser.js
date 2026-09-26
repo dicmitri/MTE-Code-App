@@ -618,6 +618,12 @@ export function calculateTpptEligibility(sessions) {
   let handsOn = 0;
   let practical = 0;
 
+  const valid = Array.isArray(sessions) && sessions.every((session) => session
+    && (typeof session.durationMinutes === 'number' || (typeof session.durationMinutes === 'string' && session.durationMinutes.trim() !== ''))
+    && Number.isFinite(Number(session.durationMinutes)) && Number(session.durationMinutes) >= 0
+    && ['Hands-on', 'Streaming', 'Case Study', 'General Educational', 'Other'].includes(session.type));
+  if (!valid) return { total: 0, handsOn: 0, practical: 0, passesAgenda: false, valid: false };
+
   sessions.forEach((session) => {
     const duration = Number(session.durationMinutes) || 0;
     total += duration;
@@ -637,7 +643,8 @@ export function calculateTpptEligibility(sessions) {
     total,
     handsOn,
     practical,
-    passesAgenda: meetsHandsOn && meetsPractical
+    passesAgenda: meetsHandsOn && meetsPractical,
+    valid: true
   };
 }
 

@@ -22,7 +22,7 @@ export default defineConfig(() => {
           'code-assets/annex-iii-map-september-2024.png',
         ],
         workbox: {
-          navigateFallbackDenylist: [/^\/admin/],
+          navigateFallbackDenylist: [/^\/admin/, /^\/api\//],
           maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
           globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest,pdf,csv}'],
           globIgnores: [
@@ -67,6 +67,8 @@ export default defineConfig(() => {
     server: {
       hmr: process.env.DISABLE_HMR !== 'true',
       proxy: {
+        // Local Worker owns the CVS API; the browser only uses same-origin URLs.
+        '/api/cvs': { target: 'http://127.0.0.1:8787' },
         '^/admin/?$': {
           target: 'http://localhost:3000',
           rewrite: () => '/admin/index.html'

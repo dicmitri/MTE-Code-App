@@ -8,6 +8,7 @@
  */
 
 import { handleHistoricalDeclarationsRequest } from './historical-declarations-api.js';
+import { handleCvsRequest } from './cvs-api.js';
 
 /**
  * Generate an HMAC-signed state token for CSRF protection.
@@ -153,6 +154,11 @@ export default {
       return handleHistoricalDeclarationsRequest(request, env);
     }
 
+    // Public CVS lookup for event support and the prototype; keep before SPA fallback.
+    if (url.pathname === '/api/cvs' || url.pathname.startsWith('/api/cvs/')) {
+      return handleCvsRequest(request);
+    }
+
     // 4. Fallback: Serve static assets
     // Ensure the Decap CMS admin interface is served correctly
     if (url.pathname === '/admin' || url.pathname === '/admin/') {
@@ -162,7 +168,9 @@ export default {
     // For any other SPA route, serve the main index.html
     let assetReq = request;
     if (!url.pathname.includes('.')) {
-      assetReq = new Request(new URL('/index.html', request.url), request);
+      // ASSETS canonicalizes /index.html with a redirect to /. Fetch the
+      // root document internally so the browser retains its SPA deep link.
+      assetReq = new Request(new URL('/', request.url), request);
     }
 
     return env.ASSETS.fetch(assetReq);

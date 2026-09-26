@@ -9,6 +9,8 @@ import { loadSplitCodeData } from '../scripts/lib/code-content.mjs';
 import { loadTransparencyData } from '../scripts/lib/transparency-content.mjs';
 import {
   buildChapterPath,
+  buildCvsPrototypePath,
+  buildEventSupportPath,
   buildCodeSectionPath,
   buildHistoricalDeclarationsPath,
   buildQuizPath,
@@ -59,6 +61,25 @@ test('keeps Transparency document data optional for existing route consumers', (
   assert.equal(legacyParser('/code/ch1', '').canonicalUrl, '/code/ch1');
   assert.equal(legacyParser('/trees', '').canonicalUrl, '/trees');
   assert.equal(legacyParser('/transparency/disclosure-guidelines', '').canonicalUrl, '/transparency');
+});
+
+test('event support has a canonical route without affecting old routes or anchors', () => {
+  assert.equal(buildEventSupportPath(), '/event-support');
+  assert.deepEqual(parseAppLocation('/event-support/', '#ch1'), {
+    activeSection: 'event-support', activeId: 'home', anchor: null, canonicalUrl: '/event-support',
+  });
+  assert.equal(parseAppLocation('/event-support/unknown', '').activeSection, null);
+  assert.equal(parseAppLocation('/', '#ch1').canonicalUrl, '/code/ch1');
+});
+
+test('isolates the CVS demo route while preserving ordinary routing and legacy links', () => {
+  assert.deepEqual(parseAppLocation(buildCvsPrototypePath(), '#ch1'), {
+    activeSection: 'cvs-prototype', activeId: 'home', anchor: null, canonicalUrl: '/prototypes/cvs',
+  });
+  assert.equal(parseAppLocation('/prototypes/cvs/', '').activeSection, 'cvs-prototype');
+  assert.equal(parseAppLocation('/prototypes/unknown', '').activeSection, null);
+  assert.equal(parseAppLocation('/', '#ch1').activeSection, 'code');
+  assert.equal(parseAppLocation('/trees', '').activeSection, 'trees');
 });
 
 test('round-trips every Transparency document and unit route', () => {

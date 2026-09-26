@@ -67,6 +67,14 @@ Found by an automated repo audit (read-only pass: `npm install`, `npm run lint`,
 - `tsconfig.json` has no `strict`/`noImplicitAny`. Turning on strict mode will likely surface new type errors in `TPPTContent.tsx` that need fixing — plan it as its own pass, not a quick toggle.
 - Lower-priority `npm audit` findings (dompurify, vite, postcss, esbuild, nanoid, picomatch) are mostly dev-tooling-only exposure, not shipped to end users; revisit opportunistically via `npm audit fix` (non-breaking) rather than urgently.
 
+## Event-support fixes — 2026-09-26
+
+- **Resolved — Annex I conference direct-sponsorship outcomes.** The national and international results in `dt-annex1-cvs-scope` now state the direct delegate/main-programme faculty prohibition clearly and keep permission separate from CVS. The event-support evaluator tests all 32 Annex I cells independently. Existing node IDs are preserved.
+- **Resolved — invalid TPPT durations (A06).** The shared calculator rejects negative/non-finite/invalid durations and unknown session categories. The existing TPPT UI blocks invalid final results and exports; the new event tool uses the same calculation and adds qualitative qualification checks.
+- **Resolved — Windows glossary assertion (A09).** The test normalises CRLF before checking the exact glossary prop wiring. The assertions retain their original requirements. The full project check passes on Windows.
+
+These fixes are part of `codex/event-support`; see [the tool's coverage and verification guide](docs/event-support.md). The separate TPPT PDF-report wording issue (A07) remains open; the new tool uses browser printing rather than that report.
+
 ## Verification Commands
 
 Run from the project root:

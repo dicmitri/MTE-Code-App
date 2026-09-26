@@ -24,6 +24,9 @@ const TPPTContent = lazy(() =>
   }))
 );
 
+const CvsPrototype = lazy(() => import('./components/CvsPrototype'));
+const EventSupportContent = lazy(() => import('./components/EventSupportContent'));
+
 if (typeof FULL_CODE_DATA !== 'undefined') {
   FULL_CODE_DATA.forEach(chapter => {
     chapter.sections.forEach((section, idx) => {
@@ -55,6 +58,7 @@ const App = () => {
   const { installPromptEvent, isIos, showIosPrompt, setShowIosPrompt, handleInstallClick } = usePWAInstall();
   const {
     navigateHome,
+    navigateEventSupport,
     navigateCodeHome,
     navigateChapter,
     navigateCodeSection,
@@ -116,6 +120,7 @@ const App = () => {
   const handleSectionSelect = (sectionId) => {
     setSidebarOpen(false);
     if (sectionId === 'code') navigateCodeHome();
+    if (sectionId === 'event-support') navigateEventSupport();
     if (sectionId === 'trees') navigateTreesHome();
     if (sectionId === 'quiz') navigateQuiz();
     if (sectionId === 'tppt') navigateTppt();
@@ -200,6 +205,7 @@ const App = () => {
           onNavigateChapter={navigateChapter}
           onNavigateCodeSection={navigateCodeSection}
           onNavigateTrees={navigateTreesHome}
+          onNavigateEventSupport={navigateEventSupport}
           onNavigateTransparency={navigateTransparencyHome}
           onNavigateTransparencyDocument={navigateTransparencyDocument}
           onNavigateTransparencyUnit={navigateTransparencyUnit}
@@ -229,6 +235,14 @@ const App = () => {
           <main ref={scrollRef} className="flex-1 overflow-y-auto bg-white custom-scrollbar h-full">
             <HubPage onSelectSection={handleSectionSelect} />
           </main>
+        ) : activeSection === 'event-support' ? (
+          <Suspense fallback={<main className="flex-1 p-8 text-slate-500">Loading event support...</main>}>
+            <EventSupportContent onGoHome={handleGoHome} scrollRef={scrollRef} />
+          </Suspense>
+        ) : activeSection === 'cvs-prototype' ? (
+          <Suspense fallback={<main className="flex-1 p-8 text-slate-500">Loading CVS prototype...</main>}>
+            <CvsPrototype onGoHome={handleGoHome} scrollRef={scrollRef} />
+          </Suspense>
         ) : activeSection === 'code' ? (
           <MainContent
             activeId={activeId}

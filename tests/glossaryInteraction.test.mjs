@@ -14,7 +14,7 @@ const appSource = await readFile(
 const transparencyContentSource = await readFile(
   new URL('../src/components/TransparencyContent.jsx', import.meta.url),
   'utf8',
-);
+).then((source) => source.replace(/\r\n/g, '\n'));
 const fullTextSectionSource = await readFile(
   new URL('../src/components/FullTextSection.jsx', import.meta.url),
   'utf8',

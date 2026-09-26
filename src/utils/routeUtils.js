@@ -71,6 +71,14 @@ export function buildTpptPath() {
   return '/tppt';
 }
 
+export function buildCvsPrototypePath() {
+  return '/prototypes/cvs';
+}
+
+export function buildEventSupportPath() {
+  return '/event-support';
+}
+
 export function buildTransparencyHomePath() {
   return '/transparency';
 }
@@ -187,6 +195,14 @@ export function createRouteUtils(chapters, trees, transparencyDocuments = []) {
 
     if (normalizedPath === '/') {
       return resolveLegacyHash(hash) || createRoute(null, 'home', buildHomePath());
+    }
+
+    if (normalizedPath === buildCvsPrototypePath()) {
+      return createRoute('cvs-prototype', 'home', buildCvsPrototypePath());
+    }
+
+    if (normalizedPath === buildEventSupportPath()) {
+      return createRoute('event-support', 'home', buildEventSupportPath());
     }
 
     if (segments[0] === 'code') {

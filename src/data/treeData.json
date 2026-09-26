@@ -841,7 +841,7 @@
           "id": "res_na",
           "type": "result",
           "outcome": "not-applicable",
-          "text": "Not Applicable / Out of Scope",
+          "text": "Not applicable to this Annex I support scenario. This does not by itself establish that the interaction is outside the Code's scope.",
           "reference": "Annex I"
         },
         {
@@ -862,15 +862,15 @@
         {
           "id": "res_sponsorship_national",
           "type": "result",
-          "outcome": "not-required",
-          "text": "CVS decission not required, direct support generally not permitted, but please check the Direct Sponsorship decission tree",
+          "outcome": "non-compliant",
+          "text": "Not allowed. Direct sponsorship of HCP delegates or faculty in the main programme of this third-party educational conference is prohibited. A CVS assessment does not make this support permissible. Assess procedure training or company satellite/booth services under their separate rules.",
           "reference": "Annex I — Direct Sponsorship"
         },
         {
           "id": "res_sponsorship_international",
           "type": "result",
-          "outcome": "conditional",
-          "text": "CVS decission REQUIRED, direct support generally NOT permitted, but please check the Direct Sponsorship decission tree",
+          "outcome": "non-compliant",
+          "text": "Not allowed. Direct sponsorship of HCP delegates or faculty in the main programme of this third-party educational conference is prohibited. A positive CVS assessment does not make this support permissible. Assess procedure training or company satellite/booth services under their separate rules.",
           "reference": "Annex I — Direct Sponsorship"
         }
       ]
