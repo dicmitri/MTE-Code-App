@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useState, useEffect, useMemo, useRef } from 'react';
+import React, { Suspense, lazy, useState, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { FULL_CODE_DATA } from './data/codeData';
 import { REFERENCE_INDEX } from './data/referenceIndex';
 import { DefinitionPopup } from './components/DefinitionPopup';
@@ -12,6 +12,7 @@ import { useBookmarks } from './hooks/useBookmarks';
 import { useRecentHistory } from './hooks/useRecentHistory';
 import { useReaderSettings } from './hooks/useReaderSettings';
 import { useSidePanelFits } from './hooks/useSidePanelFits';
+import { usePaneWidths } from './hooks/usePaneWidths';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { MainContent } from './components/MainContent';
@@ -22,6 +23,7 @@ import { QuizContent } from './components/quiz/QuizContent';
 import { TransparencyContent } from './components/TransparencyContent';
 import { SectionLoadError } from './components/SectionLoadError';
 import { getTransparencyUnit } from './data/transparency/transparencyData';
+import { getReaderMeasure } from './config/readerSettings';
 import {
   describeReferenceTarget,
   findReferenceTarget,
@@ -76,6 +78,7 @@ const App = () => {
     readerSidePanel,
     setReaderSidePanel,
   } = useReaderSettings();
+  const paneWidths = usePaneWidths();
   const [glossaryMap, setGlossaryMap] = useState({});
   const [activeDefinition, setActiveDefinition] = useState(null);
   // The side panel beside the reader text: one definition or reference preview at a time.
@@ -128,7 +131,7 @@ const App = () => {
 
   const readerMode = (activeSection === 'code' && activeId !== 'home')
     || (activeSection === 'transparency' && Boolean(activeDocumentId) && activeId !== 'home');
-  const sidePanelFits = useSidePanelFits(readerSize, readerLineLength);
+  const sidePanelFits = useSidePanelFits();
   const sidePanelEnabled = readerMode && readerSidePanel === 'on' && sidePanelFits;
 
   // A new page starts with the side panel closed.
@@ -187,8 +190,6 @@ const App = () => {
   const buildReferenceItem = (target) => ({
     key: referenceKey(target),
     ...describeReferenceTarget(target),
-    // Long provisions are cut to a preview; the link below opens the full text.
-    clamp: target.kind !== 'qa',
     target,
     href: getReferenceHref(target),
   });
@@ -260,13 +261,23 @@ const App = () => {
     return null;
   }, [activeSection, activeId, activeDocumentId]);
 
-  useEffect(() => {
+  // Applied before the first paint, so saved reading settings don't make the text jump.
+  useLayoutEffect(() => {
     const root = document.documentElement;
     root.style.setProperty('--reader-font-size', readerSize);
     root.style.setProperty('--reader-line-height', readerLine);
     root.style.setProperty('--reader-paragraph-spacing', readerSpace);
-    root.style.setProperty('--reader-line-length', readerLineLength);
+    root.style.setProperty('--reader-measure', getReaderMeasure(readerLineLength));
   }, [readerSize, readerLine, readerSpace, readerLineLength]);
+
+  const sidePane = sidePanelEnabled
+    ? {
+      item: contextItem,
+      onClose: closeContextItem,
+      onOpenTarget: openContextTarget,
+      resize: paneWidths.sidePane,
+    }
+    : null;
 
   const activeContent = activeSection === 'transparency'
     ? getTransparencyUnit(activeDocumentId, activeId)
@@ -308,8 +319,7 @@ const App = () => {
   };
 
   return (
-    // From 2400px the app sits in a centred frame so the sidebar stays next to the content.
-    <div className="flex flex-col h-[100dvh] overflow-hidden print:h-auto print:overflow-visible min-[2400px]:max-w-[2240px] min-[2400px]:mx-auto min-[2400px]:bg-white min-[2400px]:border-x min-[2400px]:border-slate-200 print:max-w-none print:border-0">
+    <div className="flex flex-col h-[100dvh] overflow-hidden print:h-auto print:overflow-visible">
       <DefinitionPopup
         term={activeDefinition?.term}
         definition={activeDefinition?.definition}
@@ -379,6 +389,7 @@ const App = () => {
           onOpenDefinition={handleTermClick}
           onPreviewResult={sidePanelEnabled ? handlePreviewSearchResult : undefined}
           canPreviewResult={canPreviewSearchResult}
+          resize={paneWidths.sidebar}
         />
 
         {sidebarOpen && (
@@ -409,9 +420,7 @@ const App = () => {
             onNavigateTree={handleNavigateTree}
             referenceContext={referenceContext}
             onOpenReference={handleOpenReference}
-            contextItem={sidePanelEnabled ? contextItem : null}
-            onCloseContext={closeContextItem}
-            onOpenContextTarget={openContextTarget}
+            sidePane={sidePane}
           />
         ) : activeSection === 'transparency' ? (
           <TransparencyContent
@@ -430,9 +439,7 @@ const App = () => {
             bookmarksControls={{ toggleBookmark, isBookmarked }}
             referenceContext={referenceContext}
             onOpenReference={handleOpenReference}
-            contextItem={sidePanelEnabled ? contextItem : null}
-            onCloseContext={closeContextItem}
-            onOpenContextTarget={openContextTarget}
+            sidePane={sidePane}
           />
         ) : activeSection === 'quiz' ? (
           <QuizContent

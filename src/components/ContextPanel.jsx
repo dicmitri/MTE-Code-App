@@ -4,11 +4,11 @@ import { AppIcon } from './AppIcons';
 import { isPlainLinkClick } from '../utils/crossReferences';
 
 /**
- * ContextPanel — the side panel beside the reader text on wide screens. It shows one item at a
- * time (a definition, or a preview of a referenced chapter, section or Q&A) and only opens when
- * the reader asks for it.
+ * ContextPanel — shown in the side panel beside the reader text on wide screens. It shows one
+ * item at a time (a definition, or a referenced chapter, section or Q&A in full) and only opens
+ * when the reader asks for it. The side panel scrolls on its own, so nothing is cut short.
  *
- * item: { key, label, title, location?, html, clamp?, href?, target?, actionLabel? }
+ * item: { key, label, title, location?, html, href?, target?, actionLabel? }
  */
 export const ContextPanel = ({ item, onClose, onOpenTarget }) => {
   const headingRef = useRef(null);
@@ -59,24 +59,9 @@ export const ContextPanel = ({ item, onClose, onOpenTarget }) => {
       {item.location && (
         <p className="px-4 mt-0.5 text-[11px] font-medium text-gray-500">{item.location}</p>
       )}
-      <div
-        className={`relative px-4 pt-2 pb-4 text-sm leading-relaxed text-gray-700 context-panel-body ${
-          item.clamp ? 'max-h-80 overflow-hidden' : ''
-        }`}
-      >
-        <div
-          className="space-y-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:mt-1 [&_strong]:font-semibold [&_strong]:text-gray-900 [&_img]:rounded-md"
-          dangerouslySetInnerHTML={markup}
-        />
-        {item.clamp && (
-          <div
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-white/0"
-            aria-hidden="true"
-          />
-        )}
-      </div>
+      {/* Above the text, so it stays at hand when the text is long. */}
       {item.target && item.actionLabel && (
-        <div className="border-t border-gray-100 px-4 py-2.5">
+        <p className="px-4 mt-2">
           <a
             href={item.href}
             onClick={(event) => {
@@ -89,8 +74,12 @@ export const ContextPanel = ({ item, onClose, onOpenTarget }) => {
             {item.actionLabel}
             <AppIcon name="ArrowRight" size={12} />
           </a>
-        </div>
+        </p>
       )}
+      <div
+        className="mt-2 border-t border-gray-100 px-4 pt-3 pb-4 text-sm leading-relaxed text-gray-700 space-y-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:mt-1 [&_strong]:font-semibold [&_strong]:text-gray-900 [&_img]:rounded-md"
+        dangerouslySetInnerHTML={markup}
+      />
     </section>
   );
 };

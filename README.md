@@ -40,10 +40,10 @@ The app is built using **React**, **Vite**, and **Cloudflare Workers**. All the 
 | File | Role |
 |---|---|
 | `AppIcons.jsx` | Centralized icon registry (uses `lucide-react`) |
-| `ContextPanel.jsx` | Side panel beside the reader text on wide screens: shows one definition or reference preview at a time |
+| `ContextPanel.jsx` | Shown in the side panel beside the reader text on wide screens: one definition, or one referenced chapter, section or Q&A in full, at a time |
 | `DecisionTree.jsx` | Interactive step-by-step decision tree; on wide screens the answers are listed beside the question, and a result's cited provision can be previewed in place |
 | `DefinitionPopup.jsx` | Glossary term tooltip popup |
-| `DocumentReader.jsx` | Shared legal-document reader used by the Code and Transparency publications. Caps the line length (`--reader-measure`) and holds the right-hand column ("On This Page" and the side panel) |
+| `DocumentReader.jsx` | Shared legal-document reader used by the Code and Transparency publications. Centres the text in the reading area and caps its line length (`--reader-measure`); from 1280px the side panel ("On This Page" and `ContextPanel`) is docked to the right edge of the window and can be resized |
 | `FullTextSection.jsx` | Renders a single legal text section with citation/link menu, bookmark, copy-text, and related-tree actions |
 | `Header.jsx` | Top bar with section-aware toolbar (Summary, Full Text, Q&A, Reader, Print) |
 | `Highlight.jsx` | Wraps matched words in highlight marks during search |
@@ -56,9 +56,10 @@ The app is built using **React**, **Vite**, and **Cloudflare Workers**. All the 
 | `quiz/QuizConfig.jsx` | Setup screen for selecting quiz chapters and question count |
 | `quiz/QuizResults.jsx` | Displays quiz score, review of incorrect answers, and share link |
 | `quiz/QuizSession.jsx` | The interactive gameplay screen for answering questions |
+| `ResizeHandle.jsx` | Draggable edge of a docked pane (the sidebar and the side panel): pointer, arrow keys, Home/End, double-click to restore the default width |
 | `SearchResults.jsx` | Ranked search results: type badges, snippets, "Matched:" lines, and the expansion and spelling notes |
-| `Sidebar.jsx` | Collapsible navigation sidebar with the search box, ranked search results, bookmarks, and history |
-| `TableOfContents.jsx` | Sticky "On This Page" minimap; shrinks to one line while the side panel is open |
+| `Sidebar.jsx` | Navigation sidebar with the search box, ranked search results, bookmarks, and history; docked and resizable from 1024px, a slide-in menu below |
+| `TableOfContents.jsx` | "On This Page" list in the side panel; shrinks to one line while a definition or preview is open |
 | `TPPTContent.tsx` | TPPT Checker UI: agenda ingestion (PDF/Word/text), session card editor, compliance threshold visualization, and PDF report export. Lazy-loaded via `React.lazy()`. Parser logic lives in `src/utils/tpptParser.js` |
 | `TransparencyContent.jsx` | Transparency landing/document controller and local Annex I resource wiring |
 | `TransparencyLandingPage.jsx` | Transparency publication cards and document-unit overview |
@@ -182,17 +183,18 @@ Interactive compliance decision guides that let users step through real-world co
 - **Cross-linking:** Code chapters that have related decision trees show an inline amber callout with a direct link. Clicking it switches the user from the Code section to the relevant tree.
 
 ### 📚 Glossary & Definitions
-The Code glossary is shared by the Code and Transparency publication readers. Whenever a defined term appears in legal text or official Q&A questions and answers, the existing words become interactive links; clicking one opens a `DefinitionPopup` with the glossary definition. On wide screens (from 1440px at the default text size) the definition appears in the side panel beside the text instead (`ContextPanel`), unless the reader turns the side panel off in the `Aa` panel. This instrumentation adds no visible wording and does not alter the approved publication text. The Knowledge Quiz remains a separate testing interface and does not apply glossary instrumentation.
+The Code glossary is shared by the Code and Transparency publication readers. Whenever a defined term appears in legal text or official Q&A questions and answers, the existing words become interactive links; clicking one opens a `DefinitionPopup` with the glossary definition. On wide screens (from 1280px) the definition appears in the side panel beside the text instead (`ContextPanel`), unless the reader turns the side panel off in the `Aa` panel. This instrumentation adds no visible wording and does not alter the approved publication text. The Knowledge Quiz remains a separate testing interface and does not apply glossary instrumentation.
 
 ### 📑 Reading Utilities
 To facilitate heavy professional reference usage, the app includes several quality-of-life tools:
-- **Table of Contents (On This Page):** A sticky, scroll-tracking minimap located on the right side of the screen on desktop displays.
+- **Table of Contents (On This Page):** A scroll-tracking list of the page's sections at the top of the side panel on wide screens.
 - **Reading Progress Line:** A sticky top progress bar that smoothly tracks scrolling completion down long legal chapters.
 - **Q&A Fast-Jump Badges:** Section titles with associated Q&As feature a `💬 Q&A` badge that smooth-scrolls directly to the guidance notes for that provision.
 - **Multi-Format Citation and Link Dropdown:** A `[Cite/Link]` popover offering Formal Citations (including section title and current access date), Markdown links, and Direct URL links with confirmation toast notifications.
 - **Next/Prev Navigation:** Large footer buttons at the bottom of every reader unit allow for linear reading without returning to the sidebar.
-- **Reader Settings:** An `Aa` button in the header opens a panel to customize font size, line spacing, paragraph spacing, line length (Comfortable or Wide) and the side panel (On or Off).
-- **Comfortable Line Length:** The text column is 40 times the chosen text size wide (about 85 characters per line), and the text and "On This Page" are centred together as one group.
+- **Reader Settings:** An `Aa` button in the header opens a panel to customize font size, line spacing, paragraph spacing, line length (Narrow, Standard or Full) and the side panel (On or Off).
+- **Line Length:** The text is centred in the reading area and stops at 40 (Narrow) or 52 (Standard, the default) times the chosen text size, about 80 or 105 characters per line; Full fills the space between the panes.
+- **Resizable Panes:** From 1024px the sidebar is docked to the left edge of the window and, on Code and Transparency pages from 1280px, the side panel to the right edge. Drag a pane's inner edge to widen or narrow it, or focus the edge and use the arrow keys; double-click it to restore the default width. Widths are remembered, and the text always keeps at least 30rem.
 - **Cross-References:** References such as "Chapter 4" or "Section 3 of Chapter 4" become links when the text is displayed. On wide screens they preview in the side panel; elsewhere they open the referenced section. `npm run validate:data` reports any reference that does not resolve.
 
 ### 🖨️ Print & Export Mode
@@ -598,7 +600,8 @@ This file uses a library called `lucide-react`. If you want to change an icon, y
 | Shortcut | Action |
 |---|---|
 | `/` | Focus the search bar (opens the menu first on phones and tablets) |
-| `Escape` | Clear the search bar while the search field is focused; close the side panel while it has focus |
+| `Escape` | Clear the search bar while the search field is focused; close the side panel while it has focus; cancel a pane resize while dragging |
+| `←` / `→` | Resize the focused pane edge (`Shift` for bigger steps; `Home` / `End` for the narrowest and widest) |
 | `Ctrl+P` / `Cmd+P` | Open print mode |
 
 ---

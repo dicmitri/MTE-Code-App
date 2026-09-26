@@ -24,7 +24,11 @@ export function normalizeReaderSettings(value) {
       READER_PARAGRAPH_SPACINGS,
       DEFAULT_READER_SETTINGS.space,
     ),
-    measure: pickOption(settings.measure, READER_LINE_LENGTHS, DEFAULT_READER_SETTINGS.measure),
+    lineLength: pickOption(
+      settings.lineLength,
+      READER_LINE_LENGTHS,
+      DEFAULT_READER_SETTINGS.lineLength,
+    ),
     panel: pickOption(settings.panel, READER_SIDE_PANEL_OPTIONS, DEFAULT_READER_SETTINGS.panel),
   };
 }

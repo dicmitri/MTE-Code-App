@@ -186,7 +186,7 @@ export const Header = ({
                     { heading: 'Line length', options: READER_LINE_LENGTHS, value: readerLineLength, onChange: setReaderLineLength },
                     {
                       heading: 'Side panel',
-                      note: 'Definitions and previews beside the text on wide screens',
+                      note: 'Contents, definitions and references beside the text on wide screens',
                       options: READER_SIDE_PANEL_OPTIONS,
                       value: readerSidePanel,
                       onChange: setReaderSidePanel,

@@ -65,7 +65,7 @@ export const TransparencyDocumentLandingPage = ({
   sourcePdfUrl,
   onBack,
 }) => (
-  <div className="animate-fade-in py-10 px-4 max-w-6xl mx-auto pb-24">
+  <div className="animate-fade-in py-10 px-4 max-w-6xl 3xl:max-w-[96rem] mx-auto pb-24">
     <div className="mb-12">
       <button
         type="button"
@@ -99,7 +99,7 @@ export const TransparencyDocumentLandingPage = ({
       </div>
     </div>
 
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 gap-5">
       {units.map((unit) => (
         <button
           key={unit.id}

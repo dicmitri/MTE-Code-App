@@ -139,7 +139,7 @@ export const DecisionTree = ({ treeId, onShowVisualization, onOpenReference }) =
   return (
     // From 1280px the answers sit in a column beside the question, so the question stays in
     // the same place as you answer.
-    <div className="animate-fade-in py-10 px-4 max-w-3xl xl:max-w-[69rem] mx-auto xl:grid xl:grid-cols-[minmax(0,1fr)_18rem] xl:gap-12 xl:items-start">
+    <div className="animate-fade-in py-10 px-4 max-w-3xl xl:max-w-[69rem] 3xl:max-w-[80rem] mx-auto xl:grid xl:grid-cols-[minmax(0,1fr)_18rem] 3xl:grid-cols-[minmax(0,1fr)_22rem] xl:gap-12 xl:items-start">
       <div className="min-w-0">
         {/* Tree header */}
         <div className="mb-8">

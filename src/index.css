@@ -5,6 +5,10 @@
 @theme {
   /* Tailwind's font-sans utility uses the same typeface as the rest of the app. */
   --font-sans: "Inter Variable", "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  /* Very large screens: 2400px at the default text size. A named breakpoint, so its rules come
+     after the sm to 2xl ones (an arbitrary min-[2400px] variant would lose to them). */
+  --breakpoint-3xl: 150rem;
 }
 
 :root {
@@ -27,23 +31,35 @@
   --reader-line-height: 1.6;
   --reader-paragraph-spacing: 0.9rem;
 
-  /* READER LINE LENGTH: the text column is this many times the reader font size wide, so it
-     keeps about 85 characters per line whatever text size is chosen in the Aa panel. */
-  --reader-line-length: 40;
-  --reader-measure: calc(var(--reader-font-size) * var(--reader-line-length));
+  /* READER LINE LENGTH: the widest the text column gets, as a multiple of the reader font size
+     so lines keep their length whatever text size is chosen. App.jsx sets it from the "Line
+     length" choice in the Aa panel ("none" for Full, which fills the space between the panes). */
+  --reader-measure: calc(var(--reader-font-size) * 52);
+
+  /* PANE WIDTHS. From 1024px the sidebar is docked to the left edge of the window, and from
+     1280px the reader's side panel to the right edge. Dragging a pane's inner edge
+     (ResizeHandle.jsx) sets --sidebar-width or --side-pane-width on <html> (usePaneWidths.js);
+     until then they follow the window width. --sidebar-size and --side-pane-size keep each pane
+     between its narrowest and widest and always leave the text at least 30rem. */
+  --sidebar-width: clamp(20rem, 18.75vw, 30rem);
+  --side-pane-width: clamp(18rem, 22vw, 40rem);
+  --sidebar-size: clamp(16rem, var(--sidebar-width), min(32vw, 40rem));
+  --side-pane-size: clamp(16rem, var(--side-pane-width), min(40vw, 60rem, 100vw - var(--sidebar-size) - 30rem));
 }
 
-/* Very large screens (about 27-inch QHD and up at 100% scaling): the whole interface grows
-   by an eighth so text keeps a comfortable size, and the app sits in a centred frame (see
-   App.jsx). Browser zoom still applies on top of this. */
-@media (min-width: 2400px) {
+/* Very large screens (Tailwind's 3xl, about 27-inch QHD and up at 100% scaling): the whole
+   interface grows by an eighth so text keeps a comfortable size. Browser zoom still applies. */
+@media (min-width: 150rem) {
   html {
     font-size: 112.5%;
   }
+}
 
-  body {
-    background-color: #eef1f5;
-  }
+/* While a pane's edge is dragged, keep the resize cursor everywhere and don't select text. */
+.pane-resizing,
+.pane-resizing * {
+  cursor: col-resize !important;
+  user-select: none !important;
 }
 
 .sr-only {

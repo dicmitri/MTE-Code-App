@@ -234,7 +234,7 @@ export const HistoricalDeclarationsContent = ({ onNavigateTransparencyHome }) =>
 
   return (
     <main className="flex-1 overflow-y-auto bg-slate-50/60 custom-scrollbar h-full">
-      <div className="animate-fade-in py-10 px-4 max-w-6xl mx-auto pb-24">
+      <div className="animate-fade-in py-10 px-4 max-w-6xl 3xl:max-w-[96rem] mx-auto pb-24">
         <button
           type="button"
           onClick={onNavigateTransparencyHome}

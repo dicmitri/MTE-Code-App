@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { AppIcon } from './AppIcons';
 import { SearchResults } from './SearchResults';
+import { ResizeHandle } from './ResizeHandle';
 import { CODE_CHAPTERS, WEBSITE_CHAPTERS, updateSearchStatus } from '../data/codeData';
 import {
   TRANSPARENCY_DOCUMENTS,
@@ -138,6 +139,7 @@ export const Sidebar = ({
   onOpenDefinition,
   onPreviewResult,
   canPreviewResult,
+  resize,
 }) => {
   // True while the active *section* is Transparency, independent of whether a search is
   // active -- it decides both the search scope and which parts of the non-search tree show.
@@ -286,10 +288,13 @@ export const Sidebar = ({
   };
 
   return (
+    // From 1024px the sidebar is docked to the left edge and can be resized by dragging its
+    // right edge; below that it is a slide-in menu.
     <aside
+      id="sidebar"
       aria-label="Navigation"
       className={`
-        w-80 2xl:w-[22.5rem] bg-white border-r border-gray-200 flex flex-col h-full shrink-0 shadow-sm z-40
+        w-80 lg:w-[var(--sidebar-size)] bg-white border-r border-gray-200 flex flex-col h-full shrink-0 shadow-sm z-40
         fixed inset-y-0 left-0 transition-transform duration-300
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         lg:translate-x-0 lg:sticky lg:top-0
@@ -746,6 +751,14 @@ export const Sidebar = ({
           </button>
         </div>
       </nav>
+
+      <ResizeHandle
+        edge="right"
+        label="Resize the navigation"
+        controls="sidebar"
+        resize={resize}
+        className="hidden lg:block"
+      />
     </aside>
   );
 };

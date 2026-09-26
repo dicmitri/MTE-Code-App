@@ -4,7 +4,7 @@ import { AppIcon } from './AppIcons';
 import { SECTIONS } from '../config/sections';
 
 export const HubPage = ({ onSelectSection }) => (
-  <div className="animate-fade-in py-10 lg:py-8 px-4 max-w-5xl xl:max-w-6xl mx-auto overflow-y-auto h-full custom-scrollbar pb-24">
+  <div className="animate-fade-in py-10 lg:py-8 px-4 max-w-5xl xl:max-w-6xl 3xl:max-w-[110rem] mx-auto overflow-y-auto h-full custom-scrollbar pb-24">
     {/* A smaller heading on laptops and desktops keeps the section cards on the first screen. */}
     <div className="text-center mb-16 lg:mb-8">
       <div className="scale-90 sm:scale-100 origin-center flex justify-center">
@@ -18,7 +18,7 @@ export const HubPage = ({ onSelectSection }) => (
       </p>
     </div>
 
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 xl:gap-6 max-w-3xl xl:max-w-none mx-auto">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-5 gap-8 xl:gap-6 max-w-3xl xl:max-w-none mx-auto">
       {SECTIONS.filter(s => s.available).map((section) => (
         <button
           key={section.id}

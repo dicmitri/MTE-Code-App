@@ -4,7 +4,7 @@ import { AppIcon } from './AppIcons';
 import { Logo } from './Logo';
 
 export const LandingPage = ({ onSelectChapter }) => (
-    <div className="animate-fade-in py-10 lg:py-8 px-4 max-w-6xl 2xl:max-w-7xl mx-auto overflow-y-auto h-full custom-scrollbar pb-24">
+    <div className="animate-fade-in py-10 lg:py-8 px-4 max-w-6xl 2xl:max-w-7xl 3xl:max-w-[110rem] mx-auto overflow-y-auto h-full custom-scrollbar pb-24">
         <div className="text-center mb-16 lg:mb-10">
             <div className="scale-90 sm:scale-100 origin-center flex justify-center">
                 <Logo size={null} className="mx-auto mb-8 lg:mb-5 h-36 lg:h-24 aspect-[26/5] max-w-full" centerImage={true} />
@@ -14,7 +14,7 @@ export const LandingPage = ({ onSelectChapter }) => (
                 Code text: September 2024.
             </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-6">
             {CODE_CHAPTERS.map((item) => (
                 <button 
                     key={item.id}

@@ -60,9 +60,7 @@ export const TransparencyContent = ({
   bookmarksControls,
   referenceContext,
   onOpenReference,
-  contextItem,
-  onCloseContext,
-  onOpenContextTarget,
+  sidePane,
 }) => {
   if (!activeDocumentId) {
     return (
@@ -164,9 +162,7 @@ export const TransparencyContent = ({
       readerClassName="transparency-reader"
       referenceContext={referenceContext}
       onOpenReference={onOpenReference}
-      contextItem={contextItem}
-      onCloseContext={onCloseContext}
-      onOpenContextTarget={onOpenContextTarget}
+      sidePane={sidePane}
     />
   );
 };

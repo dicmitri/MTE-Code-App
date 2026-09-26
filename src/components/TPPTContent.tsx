@@ -517,7 +517,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
     <div className="flex-1 h-full overflow-y-auto bg-gray-50/50 custom-scrollbar pb-24">
       {/* Top Banner and Navigation. From 1440px the page is two columns: the agenda and sessions on
           the left, and the result on the right, where it stays in view while sessions are edited. */}
-      <div className="max-w-4xl min-[1440px]:max-w-[92rem] mx-auto px-4 sm:px-6 pt-6 pb-2 min-[1440px]:grid min-[1440px]:grid-cols-2 min-[1440px]:gap-x-8 min-[1440px]:items-start">
+      <div className="max-w-4xl min-[1440px]:max-w-[92rem] 3xl:max-w-[110rem] mx-auto px-4 sm:px-6 pt-6 pb-2 min-[1440px]:grid min-[1440px]:grid-cols-2 min-[1440px]:gap-x-8 min-[1440px]:items-start">
         <button
           onClick={onGoHome}
           className="flex items-center gap-1.5 text-xs font-bold text-gray-400 hover:text-[#634488] transition-colors mb-6 cursor-pointer min-[1440px]:col-span-2 min-[1440px]:justify-self-start"

@@ -22,9 +22,7 @@ export const MainContent = ({
   onNavigateTree,
   referenceContext,
   onOpenReference,
-  contextItem,
-  onCloseContext,
-  onOpenContextTarget,
+  sidePane,
 }) => {
   const renderRelatedTrees = (content) => {
     if (!onNavigateTree) return null;
@@ -82,9 +80,7 @@ export const MainContent = ({
       onNavigateTree={onNavigateTree}
       referenceContext={referenceContext}
       onOpenReference={onOpenReference}
-      contextItem={contextItem}
-      onCloseContext={onCloseContext}
-      onOpenContextTarget={onOpenContextTarget}
+      sidePane={sidePane}
     />
   );
 };

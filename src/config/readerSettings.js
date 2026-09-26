@@ -21,14 +21,16 @@ export const READER_PARAGRAPH_SPACINGS = Object.freeze([
   { label: '+', name: 'Relaxed', value: '1rem' },
 ]);
 
-// The text column is this many times the text size wide (--reader-line-length in index.css).
+// The widest the text column gets, as a multiple of the text size (--reader-measure in
+// index.css): about 80 and 105 characters per line. "Full" fills the space between the panes.
 export const READER_LINE_LENGTHS = Object.freeze([
-  { label: 'Comfortable', name: 'Comfortable', value: '40' },
-  { label: 'Wide', name: 'Wide', value: '52' },
+  { label: 'Narrow', name: 'Narrow', value: 'narrow', measure: 40 },
+  { label: 'Standard', name: 'Standard', value: 'standard', measure: 52 },
+  { label: 'Full', name: 'Full width', value: 'full', measure: null },
 ]);
 
-// Wide screens show definitions and reference previews beside the text; "Off" keeps the
-// pop-up for definitions and opens references directly.
+// Wide screens show a panel beside the text with the page's contents, definitions and
+// reference previews; "Off" keeps the pop-up for definitions and opens references directly.
 export const READER_SIDE_PANEL_OPTIONS = Object.freeze([
   { label: 'On', name: 'On', value: 'on' },
   { label: 'Off', name: 'Off', value: 'off' },
@@ -38,6 +40,11 @@ export const DEFAULT_READER_SETTINGS = Object.freeze({
   size: '1rem',
   line: '1.65',
   space: '0.75rem',
-  measure: '40',
+  lineLength: 'standard',
   panel: 'on',
 });
+
+export const getReaderMeasure = (lineLength) => {
+  const option = READER_LINE_LENGTHS.find(({ value }) => value === lineLength);
+  return option?.measure ? `calc(var(--reader-font-size) * ${option.measure})` : 'none';
+};
