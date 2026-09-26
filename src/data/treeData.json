@@ -779,15 +779,15 @@
           "options": [
             {
               "label": "IN MTE Area: National (delegates are local HCPs only)",
-              "next": "res_sponsorship_national"
+              "next": "res_not_allowed"
             },
             {
               "label": "IN MTE Area: International (delegates from >=2 MTE area countries)",
-              "next": "res_sponsorship_international"
+              "next": "res_not_allowed"
             },
             {
               "label": "OUTSIDE MTE Area: International (MTE area HCPs attend)",
-              "next": "res_sponsorship_international"
+              "next": "res_not_allowed"
             },
             {
               "label": "OUTSIDE MTE Area: International (No MTE area HCPs attend)",
@@ -799,14 +799,14 @@
           "id": "res_national_grant",
           "type": "result",
           "outcome": "not-required",
-          "text": "CVS decission not required, but the Chapter 1, General Criteria for Events still applies. CVS and companies apply the same criteria, the only difference is who makes the asessment",
+          "text": "No CVS decision is required, but the Code and local laws and regulations still apply, including Chapter 1 (General Criteria for Events). The company assesses the Event against the same criteria that CVS would use.",
           "reference": "Annex I — National Events"
         },
         {
           "id": "res_subject_to_cvs",
           "type": "result",
           "outcome": "conditional",
-          "text": "This event is SUBJECT TO CVS DECISION. The Member Company must check the Conference Vetting System.",
+          "text": "Subject to CVS decision. The company may provide this support only after the Event receives a positive CVS decision.",
           "reference": "Annex I — International Events"
         },
         {
@@ -827,7 +827,7 @@
           "id": "res_not_allowed",
           "type": "result",
           "outcome": "non-compliant",
-          "text": "Not allowed. Direct sponsorship of HCPs registered and practising in the MedTech Europe Geographic Area is prohibited.",
+          "text": "Not allowed. Annex I does not allow direct sponsorship of HCPs registered and practising in the MedTech Europe Geographic Area, whether as Delegates or as Faculty in the main programme, and a positive CVS decision does not change this. The company can support the Event through an Educational Grant instead. Procedure trainings and the company's own satellite symposium or booth have their own rules.",
           "reference": "Annex I — Direct Sponsorship"
         },
         {
@@ -841,7 +841,7 @@
           "id": "res_na",
           "type": "result",
           "outcome": "not-applicable",
-          "text": "Not Applicable / Out of Scope",
+          "text": "Annex I marks this N/A: when no HCPs from the MedTech Europe Geographic Area attend an Event held outside the Area, the Code does not apply to this support, unless the recipient is a Healthcare Organisation located in the Area (Annex I, footnote 5).",
           "reference": "Annex I"
         },
         {
@@ -854,24 +854,10 @@
               "next": "q_loc_sponsorship"
             },
             {
-              "label": "Speaker/Faculty in the main programm",
+              "label": "Speaker/Faculty in the main programme",
               "next": "q_loc_sponsorship"
             }
           ]
-        },
-        {
-          "id": "res_sponsorship_national",
-          "type": "result",
-          "outcome": "not-required",
-          "text": "CVS decission not required, direct support generally not permitted, but please check the Direct Sponsorship decission tree",
-          "reference": "Annex I — Direct Sponsorship"
-        },
-        {
-          "id": "res_sponsorship_international",
-          "type": "result",
-          "outcome": "conditional",
-          "text": "CVS decission REQUIRED, direct support generally NOT permitted, but please check the Direct Sponsorship decission tree",
-          "reference": "Annex I — Direct Sponsorship"
         }
       ]
     },
