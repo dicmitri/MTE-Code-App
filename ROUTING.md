@@ -23,8 +23,11 @@ The routing system is intentionally small and does not use a third-party routing
 | Knowledge Quiz | `/quiz` | `https://medtecheurope-code.org/quiz` |
 | Shared Quiz | `/quiz#quiz?q=questionIds` | `https://medtecheurope-code.org/quiz#quiz?q=q1,q2` |
 | TPPT Checker | `/tppt` | `https://medtecheurope-code.org/tppt` |
+| Event support checker | `/event-support` | `https://medtecheurope-code.org/event-support` |
 
-Browser Back and Forward restore these app-level destinations. Individual steps inside a decision tree or an active Quiz are not separate history entries.
+Browser Back and Forward restore these app-level destinations. Individual steps inside a decision tree, an active Quiz or the event support checker are not separate history entries. The checker keeps its answers only while it is open, so its links to the Code open in a new tab.
+
+The Worker answers `/api/cvs/*` (the checker's live CVS lookup) itself, before the app-shell fallback, like the other `/api/*` endpoints.
 
 Scrolling through a Code chapter or Transparency reader unit does not continuously
 change the address bar. Section anchors are used for direct links without

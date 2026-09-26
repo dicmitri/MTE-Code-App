@@ -82,6 +82,8 @@ fail 0
 
 The number of tests may grow. The important value is `fail 0`.
 
+The event support checker's tests (`tests/eventSupport.test.mjs`) cover every cell of Annex I and Annex VI and walk every path through the checker's questions, checking that each answer is consistent and fully worded. The CVS tests (`tests/cvs.test.mjs`) use saved examples of the CVS pages and never contact CVS. If a checker test fails after a wording edit in `src/data/eventSupportRules.json`, check the message named in the output. See [`docs/event-support.md`](docs/event-support.md) for the manual checks before a release.
+
 The URL tests use the current project data. They confirm that every current Code chapter/section, Transparency document/unit/section, and decision tree has a working unique route, that representative section-ID generation rules remain stable, and that supported legacy link formats still resolve. If one fails after a content edit, do not rename IDs simply to make the test pass; keep the output and have the reported route reviewed.
 
 Automated checks cannot decide whether changing a public identifier was intentional. Read [`ROUTING.md`](ROUTING.md) before changing Code chapter IDs, Transparency document or unit IDs, tree IDs, section titles, navigation behavior, or hosting rules.
@@ -222,7 +224,7 @@ also confirm its emitted asset appears in `dist/sw.js`.
 - After editing files in `src/data`, run `npm run validate:data`.
 - After editing `src/data/search/phrasebook.json`, run `npm run validate:data`.
 - After editing Disclosure Guidelines data or sources, also run `npm run verify:disclosure-guidelines`.
-- After changing TPPT or other tested logic, run `npm test`.
+- After changing TPPT, the event support checker or other tested logic, run `npm test`. The checker's wording is in `src/data/eventSupportRules.json`, so `npm run validate:data` also checks it, including every “Chapter N, Section N”, “Annex N” and “Q&A N” it cites.
 - Before a release or deployment, run `npm run check`.
 - Documentation-only edits normally do not require every check, but running them is safe.
 

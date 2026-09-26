@@ -96,3 +96,11 @@ See `PROJECT_CHECKS.md` for detailed instructions and troubleshooting.
 ## Found While Making the Panes Resizable — 2026-09-26
 
 - The Knowledge Quiz and TPPT Checker render their scrolling area as a `<div>`, so those pages have no `main` landmark (the other sections use `<main>`). Screen-reader users cannot jump straight to their content. Fix: make the root element of `QuizContent.jsx` and `TPPTContent.tsx` a `<main>`, and check that no other `main` is nested inside.
+
+## Found While Porting the Event Support Checker — 2026-09-26
+
+- The checker's live CVS lookup reads the HTML of the public CVS site (run by IQVIA for Ethical MedTech); it is not a published API. `cvs-parser.js` fails visibly when the pages change. Supplier permission and production traffic limits should be settled before relying on the lookup in production; without it the checker still answers, and marks a needed CVS decision as unconfirmed.
+- `docs/event-support.md` lists eight interpretations the checker applies (for example Events in Mecomed countries, and a Not Compliant decision where Annex I needs none). They follow from the Code but need a content owner's confirmation.
+- The live CVS status list has “Not assessed - Out Of Scope” but no “Not assessed - National event”. The checker keeps both labels as the requested exemptions from its national-audience warning; drop the second only if the product owner agrees.
+- The `dt-annex1-cvs-scope` decision tree and the checker now cover the same Annex I cells. Keep them consistent when either changes, or decide whether the tree is still needed.
+- Resolved on 2026-09-26: the TPPT calculator accepted negative or blank durations, and the Annex I tree answered direct sponsorship as “CVS decision required”.

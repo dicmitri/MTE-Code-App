@@ -10,6 +10,12 @@ Versions are internal application-release labels; they are independent of the pr
 ## [Unreleased]
 
 ### Added
+- Added the “Can I support this event?” checker (`/event-support`, Home Hub and the sidebar's Decision Trees group). It was built on the `codex/event-support` branch, which was cut from a `main` 22 commits old; it is ported onto current `main` and rebuilt against the Code:
+  - All wording (questions, conditions, reasons, outcomes), the Annex I and Annex VI tables with their verbatim cell text, the sources and the CVS status labels are in `src/data/eventSupportRules.json`. The evaluator (`src/utils/eventSupportRules.js`) returns message and source IDs; `src/utils/eventSupportQuestions.js` asks only questions that can change the result; `src/utils/eventSupportCvs.js` reads CVS statuses. Validation moved from the client bundle to `scripts/validate-data.mjs`, which also checks every “Chapter N, Section N”, “Annex N” and “Q&A N” in the wording.
+  - Glossary terms and Code references in the checker are linked like the reader's, and preview in the side panel from 1280px or in the definition dialog below; the Code opens in a new tab so the answers are kept (`linkedTextEvents.js` now holds the handlers shared with `FullTextSection.jsx`; `DefinitionPopup` takes an optional `action` link).
+  - The Worker answers `/api/cvs/search` and `/api/cvs/events/:emtId` (`cvs-api.js`, `cvs-adapter.js`, `cvs-parser.js`) by reading the public CVS site; `scripts/check-cvs-live.mjs` checks it against a running Worker. The `/prototypes/cvs` demo page and the `wrangler.toml` `run_worker_first` entry from the branch were not ported.
+  - Logic aligned with the Code: Mecomed countries are in the MedTech Europe Geographic Area (only the CVS vetting differs); hybrid Events follow the in-person rules; Virtual Events need no CVS decision and allow no direct support of attendance; binding negative and missing CVS decisions stop the support; grants may not go to travel agencies or individuals, but a travel agency may be paid on the recipient's behalf; identifiable grant beneficiaries rule a grant out; a procedure training that does not qualify is assessed as a conference; answering “No” to a Code requirement changes the outcome. See `docs/event-support.md`, which also lists the interpretations for a content owner to confirm.
+  - `tests/eventSupport.test.mjs` covers all 32 Annex I and 16 Annex VI cells and walks every path through the questions checking each answer's consistency; `tests/cvs.test.mjs` runs the CVS modules in the Workers runtime against fixtures.
 - Added a deterministic, in-browser search engine with no new dependencies. It indexes every Code provision, official Q&A and Glossary definition (and each Transparency provision and Q&A) and ranks them with BM25F, coverage and proximity.
 - Everyday wording now finds the Code's formal wording:
   - word forms (plurals, -ing, -ed), checked against the current text;
@@ -59,6 +65,9 @@ Versions are internal application-release labels; they are independent of the pr
 - Cross-reference links keep the text's weight with a light underline, and print as plain text.
 
 ### Fixed
+- The TPPT calculator accepted negative or blank durations and unknown session types, which skewed the percentages; it now refuses them (`valid: false`) and the TPPT Checker asks for a correction instead of showing a result.
+- The Annex I decision tree answered direct sponsorship of HCPs as “CVS decision required, direct support generally not permitted”. Annex I says “Not allowed”, whatever CVS decides; the answers now lead to that result, and the tree's result texts were corrected.
+- The service worker no longer answers browser navigations to `/api/*` with the app shell.
 - Multi-word everyday queries such as "wife travel" or "hospital donation" used to return nothing unless the exact phrase appeared in the text.
 - The chapter summary is no longer re-sanitized on every re-render, which cleared any text selected in it.
 - Quoted searches ignored small words: "in kind" searched only "kind" and also matched "different kinds of". Phrases now keep their small words.

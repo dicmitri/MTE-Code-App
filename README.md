@@ -60,6 +60,10 @@ The app is built using **React**, **Vite**, and **Cloudflare Workers**. All the 
 | `SearchResults.jsx` | Ranked search results: type badges, snippets, "Matched:" lines, and the expansion and spelling notes |
 | `Sidebar.jsx` | Navigation sidebar with the search box, ranked search results, bookmarks, and history; docked and resizable from 1024px, a slide-in menu below |
 | `TableOfContents.jsx` | "On This Page" list in the side panel; shrinks to one line while a definition or preview is open |
+| `EventSupportContent.jsx` | “Can I support this event?” checker: steps, answer, alternatives and side panel. Lazy-loaded. Rules in `src/data/eventSupportRules.json` and `src/utils/eventSupportRules.js`; see [`docs/event-support.md`](docs/event-support.md) |
+| `EventSupportResult.jsx` | The checker's answer: outcome, reasons, CVS position, costs, conditions and sources |
+| `EventSupportAgenda.jsx` | Agenda import and session editor for the checker's procedure-training questions (uses the TPPT parser) |
+| `CvsEventLookup.jsx` | Search for an Event in CVS and show its live status, through the Worker's `/api/cvs` endpoints |
 | `TPPTContent.tsx` | TPPT Checker UI: agenda ingestion (PDF/Word/text), session card editor, compliance threshold visualization, and PDF report export. Lazy-loaded via `React.lazy()`. Parser logic lives in `src/utils/tpptParser.js` |
 | `TransparencyContent.jsx` | Transparency landing/document controller and local Annex I resource wiring |
 | `TransparencyLandingPage.jsx` | Transparency publication cards and document-unit overview |
@@ -84,6 +88,12 @@ The app is built using **React**, **Vite**, and **Cloudflare Workers**. All the 
 | `utils/searchText.js` | Search text primitives: normalization, tokens with offsets, stopwords, bounded edit distance, and word forms checked against the current text |
 | `utils/textUtils.js` | Text processing, search highlighting, glossary extraction, ID generation |
 | `utils/resourceUtils.js` | Resolves approved local `resource:` links without changing their visible text |
+| `utils/eventSupportQuestions.js` | Which questions the event support checker asks, in order, for the answers so far |
+| `utils/eventSupportRules.js` | The event support checker's evaluator, conditions and answer updates; returns message IDs whose wording is in `eventSupportRules.json` |
+| `utils/eventSupportCvs.js` | Reads CVS status labels; the national-audience precaution |
+| `utils/eventSupportText.js` | Links glossary terms and Code references in the checker's plain-text wording |
+| `utils/linkedTextEvents.js` | Click and key handling for glossary terms and reference links, shared by the readers and the checker |
+| `utils/cvsLookupClient.js` | Browser client for the CVS lookup: one current request, stale responses ignored |
 | `utils/tpptParser.js` | TPPT agenda parsing engine — session detection, type classification, capitalization normalization, eligibility calculation. Single source of truth used by both `TPPTContent.tsx` and `scratch/analyze_agendas.js` |
 | `utils/tpptExtraction.js` | PDF text extraction using `pdfjs-dist` coordinate-based line detection |
 
@@ -102,9 +112,10 @@ The app is organized into independently navigable **sections**, all accessible f
 - **Transparency** — Standalone transparency publications, initially the Disclosure Guidelines.
 - **Decision Trees** — Interactive compliance decision guides based on the Code.
 - **Knowledge Quiz** — A testing module that challenges users with randomized multiple-choice questions on selected chapters.
+- **Can I support this event?** — Checks one planned form of support (an Educational Grant, booth, payment to an HCP, meal, item, donation and more) against the Code, with a live CVS check for third-party Events, its conditions and sources, and a comparison of other options. See [`docs/event-support.md`](docs/event-support.md).
 - **TPPT Checker** — A compliance tool for evaluating whether a medical event qualifies as a Third Party Procedural Training meeting. Parses PDF/Word/text agendas, classifies sessions by type (Hands-on, Streaming, Case Study, etc.), checks the Code's practical-session thresholds, and exports a formatted PDF report.
 
-The currently active section is tracked via `activeSection` state in `App.jsx` (`null` = Home, `'code'`, `'transparency'`, `'trees'`, `'quiz'`, or `'tppt'`). Transparency also tracks its active standalone publication in `activeDocumentId`. The `SECTIONS` registry supplies Home Hub metadata; it is not a complete navigation or routing registry. Adding a new section (e.g. "Materials") requires:
+The currently active section is tracked via `activeSection` state in `App.jsx` (`null` = Home, `'code'`, `'transparency'`, `'trees'`, `'quiz'`, `'tppt'`, or `'event-support'`). Transparency also tracks its active standalone publication in `activeDocumentId`. The `SECTIONS` registry supplies Home Hub metadata; it is not a complete navigation or routing registry. Adding a new section (e.g. "Materials") requires:
 1. Adding an entry to `src/config/sections.js` using an icon registered in `src/components/AppIcons.jsx`.
 2. Creating the content component.
 3. Adding selection handling and a rendering branch in `App.jsx`.
@@ -121,7 +132,7 @@ The app uses readable browser-history routes without adding a routing dependency
 - `/transparency` opens the Transparency index.
 - `/transparency/disclosure-guidelines` opens the Disclosure Guidelines overview.
 - `/transparency/disclosure-guidelines/dg-chapter-1#section-id` opens an exact Disclosure Guidelines section.
-- `/trees/dt-ch1-event-location`, `/quiz`, and `/tppt` open the other tools.
+- `/trees/dt-ch1-event-location`, `/quiz`, `/tppt` and `/event-support` open the other tools.
 
 `useAppRouting.js` keeps `App.jsx` state synchronized with these URLs and responds to browser Back/Forward navigation. Pure parsing and URL construction live in `utils/routeUtils.js`, configured with current content in `config/routes.js`. Previously shared root-hash links such as `/#ch1` and `/#ch1-2-event-location-and-venue` remain supported and are replaced with their canonical URL after loading. This compatibility behavior and every current Code chapter/section, Transparency document/unit/section, and decision-tree route are covered by `tests/routeUtils.test.mjs`.
 
