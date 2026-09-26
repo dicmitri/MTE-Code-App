@@ -96,3 +96,7 @@ See `PROJECT_CHECKS.md` for detailed instructions and troubleshooting.
 ## Found While Making the Panes Resizable — 2026-09-26
 
 - The Knowledge Quiz and TPPT Checker render their scrolling area as a `<div>`, so those pages have no `main` landmark (the other sections use `<main>`). Screen-reader users cannot jump straight to their content. Fix: make the root element of `QuizContent.jsx` and `TPPTContent.tsx` a `<main>`, and check that no other `main` is nested inside.
+
+## Found While Making References Expandable — 2026-09-26
+
+- References and defined terms in the text shown in the side panel are plain text, so a reader cannot follow a reference from inside an expanded chapter. Linking them needs a way back first: the panel shows one item at a time, and opening another would lose the rows the reader had expanded.

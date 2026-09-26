@@ -29,9 +29,11 @@ const ResultReference = ({ reference, onOpenReference }) => {
   const [open, setOpen] = useState(false);
   const panelId = useId();
   const preview = target ? describeReferenceTarget(target) : null;
+  // A chapter without a summary previews its first section.
+  const previewHtml = preview?.html || preview?.sections?.[0]?.html || '';
   const previewMarkup = useMemo(
-    () => ({ __html: DOMPurify.sanitize(preview?.html || '') }),
-    [preview?.html],
+    () => ({ __html: DOMPurify.sanitize(previewHtml) }),
+    [previewHtml],
   );
 
   return (
