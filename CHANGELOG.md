@@ -65,6 +65,7 @@ Versions are internal application-release labels; they are independent of the pr
 - Cross-reference links keep the text's weight with a light underline, and print as plain text.
 
 ### Fixed
+- On Cloudflare, every CVS search in the event support checker failed with “CVS could not serve the requested page”. The Worker's requests to CVS set `cf.cacheTtl`, which makes Cloudflare cache the page and drop its `Set-Cookie`, so the search POST had no session and CVS redirected it to its login page. Local runtimes ignore `cf`, so the tests and `wrangler dev` passed. The requests now carry no `cf` cache options, and `tests/cvs.test.mjs` checks that.
 - The TPPT calculator accepted negative or blank durations and unknown session types, which skewed the percentages; it now refuses them (`valid: false`) and the TPPT Checker asks for a correction instead of showing a result.
 - The Annex I decision tree answered direct sponsorship of HCPs as “CVS decision required, direct support generally not permitted”. Annex I says “Not allowed”, whatever CVS decides; the answers now lead to that result, and the tree's result texts were corrected.
 - The service worker no longer answers browser navigations to `/api/*` with the app shell.

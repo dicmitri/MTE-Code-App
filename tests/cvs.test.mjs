@@ -25,7 +25,7 @@ export default { async fetch(request) {
   const calls = [];
   const replies = [...(input.replies || [])];
   const adapter = createCvsAdapter({ timeoutMs: input.timeoutMs || 20000, fetchImpl: async (url, init) => {
-    calls.push({ url, method: init.method || 'GET', body: init.body?.toString(), headers: init.headers, redirect: init.redirect });
+    calls.push({ url, method: init.method || 'GET', body: init.body?.toString(), headers: init.headers, redirect: init.redirect, cf: init.cf });
     const reply = replies.shift();
     if (!reply) throw new Error('Unexpected upstream call');
     if (reply.fail) throw new TypeError('Mock network failure');
@@ -186,6 +186,9 @@ test('CVS performs exactly GET + POST with request-scoped token/cookies and CVS 
   assert.equal(calls[1].headers['Content-Type'], 'application/x-www-form-urlencoded');
   assert.equal(calls[0].redirect, 'manual');
   assert.match(calls[0].headers['User-Agent'], /MTE-Code-App/);
+  // A cf cache TTL makes Cloudflare drop Set-Cookie, leaving the POST without a session.
+  // Local runtimes ignore cf, so only this check catches it before deployment.
+  assert.deepEqual(calls.map((call) => call.cf), [undefined, undefined]);
   assert.equal(JSON.stringify(data).includes('fixture-'), false);
   assert.ok(Number.isFinite(Date.parse(data.retrievedAt)));
 });
@@ -211,6 +214,7 @@ test('CVS uses one live detail request with no search session', async () => {
   assert.deepEqual(data.status, { raw: 'Compliant' });
   assert.equal(calls.length, 1);
   assert.equal(calls[0].headers.Cookie, undefined);
+  assert.equal(calls[0].cf, undefined);
 });
 
 test('CVS reports unavailable, timeout, malformed and missing-token responses as technical errors', async () => {

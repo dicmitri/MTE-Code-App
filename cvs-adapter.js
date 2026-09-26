@@ -66,11 +66,13 @@ async function withSession(operation, fetchImpl, timeoutMs) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   const getHtml = async (url, init = {}) => {
+    // No cf cache options: with cf.cacheTtl Cloudflare caches the page and drops its
+    // Set-Cookie, so the search POST has no session and CVS redirects it to its login.
+    // CVS pages are sent as "no-cache, private" with cookies, which Cloudflare never caches.
     const response = await fetchImpl(url, {
       ...init, signal: controller.signal, redirect: 'manual',
       headers: { Accept: 'text/html', 'User-Agent': 'MTE-Code-App-CVS-Lookup/1.0',
         'Cache-Control': 'no-cache, no-store', ...init.headers },
-      cf: { cacheTtl: 0, cacheEverything: false },
     });
     if (!response.ok) {
       await response.body?.cancel();

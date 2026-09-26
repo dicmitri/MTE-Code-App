@@ -124,6 +124,10 @@ one GET and one POST; a selection is one GET; there are no retries, crawls or ca
 fetches the selected Event’s status again before showing or printing an answer, and a late
 response cannot replace a newer selection.
 
+The requests to CVS carry no Cloudflare `cf` cache options. With `cf.cacheTtl`, Cloudflare caches
+the page and drops its `Set-Cookie`, so the search POST arrives without a session and CVS
+redirects it to its login page. `wrangler dev` ignores `cf`, so only `tests/cvs.test.mjs` catches it.
+
 This reads HTML that CVS does not publish as an API, so a change to the CVS site stops the
 lookup (the parser fails visibly rather than guessing). Supplier permission and production
 traffic limits should be settled before relying on it in production.
