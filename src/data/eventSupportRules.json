@@ -1,1368 +1,925 @@
 {
-  "version": "2026-09-26.1",
+  "version": "2026-09-26.2",
   "codeVersion": "September 2024",
-  "geographyReviewedAt": "2026-09-26",
-  "geographySource": "annex3",
-  "listedCountries": [
-    "Austria",
-    "Belgium",
-    "Bulgaria",
-    "Croatia",
-    "Cyprus",
-    "Czech Republic",
-    "Denmark",
-    "Estonia",
-    "Finland",
-    "France",
-    "Germany",
-    "Greece",
-    "Hungary",
-    "Iceland",
-    "Ireland",
-    "Israel",
-    "Italy",
-    "Latvia",
-    "Liechtenstein",
-    "Lithuania",
-    "Luxembourg",
-    "Malta",
-    "Netherlands",
-    "Norway",
-    "Poland",
-    "Portugal",
-    "Romania",
-    "Slovakia",
-    "Slovenia",
-    "Spain",
-    "Sweden",
-    "Switzerland",
-    "Turkey",
-    "United Kingdom"
-  ],
-  "cvsExemptionStatuses": [
-    "Not assessed - Out of scope",
-    "Not assessed - National event"
-  ],
   "sources": {
-    "scope": {
-      "chapter": "scope",
-      "section": 0
-    },
-    "geography": {
-      "chapter": "annex3",
-      "section": 0
-    },
-    "annex1": {
-      "chapter": "annex1",
-      "section": 0
-    },
-    "footnotes": {
-      "chapter": "annex1",
-      "section": 1
-    },
-    "annex6": {
-      "chapter": "annex6",
-      "section": 0
-    },
-    "roles": {
-      "chapter": "annex6",
-      "section": 1
-    },
-    "classification": {
-      "chapter": "annex6",
-      "section": 2
-    },
-    "tppt": {
-      "chapter": "annex7",
-      "section": 1
-    },
-    "conference": {
-      "chapter": "ch2",
-      "section": 1
-    },
-    "training": {
-      "chapter": "ch2",
-      "section": 2
-    },
-    "company": {
-      "chapter": "ch3",
-      "section": 0
-    },
-    "companyTraining": {
-      "chapter": "ch3",
-      "section": 1
-    },
-    "overlap": {
-      "chapter": "ch3",
-      "section": 2
-    },
-    "business": {
-      "chapter": "ch3",
-      "section": 3
-    },
-    "grants": {
-      "chapter": "ch4",
-      "section": 0
-    },
-    "educationalGrants": {
-      "chapter": "ch4",
-      "section": 2
-    },
-    "donations": {
-      "chapter": "ch4",
-      "section": 1
-    },
-    "consulting": {
-      "chapter": "ch5",
-      "section": 1
-    },
-    "fees": {
-      "chapter": "ch5",
-      "section": 2
-    },
-    "consultingDisclosure": {
-      "chapter": "ch5",
-      "section": 3
-    },
-    "programme": {
-      "chapter": "ch1",
-      "section": 1
-    },
-    "venue": {
-      "chapter": "ch1",
-      "section": 2
-    },
-    "guests": {
-      "chapter": "ch1",
-      "section": 3
-    },
-    "hospitality": {
-      "chapter": "ch1",
-      "section": 4
-    },
-    "travel": {
-      "chapter": "ch1",
-      "section": 5
-    },
-    "transparency": {
-      "chapter": "ch1",
-      "section": 6
-    },
-    "virtual": {
-      "chapter": "ch1",
-      "section": 7
-    },
-    "items": {
-      "chapter": "ch8",
-      "section": 0
-    },
-    "demos": {
-      "chapter": "ch9",
-      "section": 0
-    },
-    "demoUse": {
-      "chapter": "ch9",
-      "section": 1
-    },
-    "samples": {
-      "chapter": "ch9",
-      "section": 2
-    },
-    "intermediaries": {
-      "chapter": "ch10",
-      "section": 0
-    },
-    "research": {
-      "chapter": "ch6",
-      "section": 0
-    },
-    "royalties": {
-      "chapter": "ch7",
-      "section": 0
-    },
-    "tpptOperational": {
+    "scope": { "chapter": "scope", "section": 0 },
+    "transposition": { "chapter": "scope", "section": 1 },
+    "cvs": { "chapter": "admin", "section": 1 },
+    "annex1": { "chapter": "annex1", "section": 0 },
+    "annex1Footnotes": { "chapter": "annex1", "section": 1 },
+    "geography": { "chapter": "annex3", "section": 0 },
+    "verification": { "chapter": "annex4", "section": 0 },
+    "annex6": { "chapter": "annex6", "section": 0 },
+    "annex6Definitions": { "chapter": "annex6", "section": 1 },
+    "annex6Guidance": { "chapter": "annex6", "section": 2 },
+    "tpptCriteria": { "chapter": "annex7", "section": 1 },
+    "eventsGeneral": { "chapter": "ch1", "section": 0 },
+    "programme": { "chapter": "ch1", "section": 1 },
+    "venue": { "chapter": "ch1", "section": 2 },
+    "guests": { "chapter": "ch1", "section": 3 },
+    "hospitality": { "chapter": "ch1", "section": 4 },
+    "travel": { "chapter": "ch1", "section": 5 },
+    "transparency": { "chapter": "ch1", "section": 6 },
+    "virtualEvents": { "chapter": "ch1", "section": 7 },
+    "conferences": { "chapter": "ch2", "section": 1 },
+    "tppt": { "chapter": "ch2", "section": 2 },
+    "companyEvents": { "chapter": "ch3", "section": 0 },
+    "companyTraining": { "chapter": "ch3", "section": 1 },
+    "companyAtTpoe": { "chapter": "ch3", "section": 2 },
+    "businessMeetings": { "chapter": "ch3", "section": 3 },
+    "grantsGeneral": { "chapter": "ch4", "section": 0 },
+    "donations": { "chapter": "ch4", "section": 1 },
+    "educationalGrants": { "chapter": "ch4", "section": 2 },
+    "consulting": { "chapter": "ch5", "section": 0 },
+    "consultingCriteria": { "chapter": "ch5", "section": 1 },
+    "consultingFees": { "chapter": "ch5", "section": 2 },
+    "consultingDisclosure": { "chapter": "ch5", "section": 3 },
+    "research": { "chapter": "ch6", "section": 0 },
+    "royalties": { "chapter": "ch7", "section": 0 },
+    "items": { "chapter": "ch8", "section": 0 },
+    "demosGeneral": { "chapter": "ch9", "section": 0 },
+    "demos": { "chapter": "ch9", "section": 1 },
+    "samples": { "chapter": "ch9", "section": 2 },
+    "intermediaries": { "chapter": "ch10", "section": 0 },
+    "glossary": { "chapter": "glossary", "section": 0 },
+    "tpptGuidance": {
       "url": "https://www.ethicalmedtech.eu/conference-vetting-system/third-party-procedure-training/",
-      "label": "Current CVS procedure-training guidance (checked 26 September 2026)"
+      "label": "CVS guidance: Third Party Procedure Trainings"
+    },
+    "virtualGuidance": {
+      "url": "https://www.ethicalmedtech.eu/wp-content/uploads/2020/10/20201006_guidance_virtual_events.pdf",
+      "label": "MedTech Europe Virtual Events Guidance (Code Committee, 6 October 2020)"
+    },
+    "cvsGuidance": {
+      "url": "https://www.ethicalmedtech.eu/wp-content/uploads/2025/01/CVS-2.0-Training_Slides_deck-v3.0-incl-2025-features-to-upload.pdf",
+      "label": "CVS 2.0 training (January 2025): scope, statuses and submission"
     }
   },
+  "cvsStatuses": {
+    "exempt": ["Not assessed - Out of scope", "Not assessed - National event"],
+    "positive": ["Compliant"],
+    "negative": ["Not Compliant", "Not Pre-cleared"],
+    "notAssessed": ["Not assessed - Late Submission", "Not assessed - Insufficient information"],
+    "preCleared": ["Pre-Cleared"],
+    "pending": [
+      "To be reviewed",
+      "Under Review",
+      "Waiting for information",
+      "Under Correction Notice",
+      "Under Appeal",
+      "Event submitted",
+      "Event to be reviewed",
+      "Event under review",
+      "Request for information"
+    ]
+  },
+  "activityGroups": [
+    { "id": "event", "label": "Support for an Event" },
+    { "id": "other", "label": "Other interactions with HCPs and HCOs" }
+  ],
   "activities": [
     {
       "id": "grant-running",
-      "label": "Give a grant for the event's general running",
-      "description": "Funding or in-kind support for genuine medical education.",
-      "group": "grant",
-      "sources": [
-        "annex1",
-        "educationalGrants"
-      ]
+      "group": "event",
+      "label": "Give an Educational Grant for the Event’s general running",
+      "description": "Funding or In Kind support to the organising Healthcare Organisation.",
+      "eventTypes": ["conference", "tppt"],
+      "sources": ["annex1", "educationalGrants"]
     },
     {
       "id": "grant-attendance",
-      "label": "Fund HCP attendance through an educational grant",
-      "description": "The recipient organisation selects beneficiaries independently.",
-      "group": "grant",
-      "sources": [
-        "annex1",
-        "educationalGrants"
-      ]
+      "group": "event",
+      "label": "Give an Educational Grant that funds HCPs’ attendance",
+      "description": "The Healthcare Organisation receiving the grant chooses the HCPs who benefit.",
+      "eventTypes": ["conference", "tppt"],
+      "sources": ["annex1", "educationalGrants"]
     },
     {
       "id": "grant-faculty",
-      "label": "Give a grant supporting the event's faculty",
-      "description": "Support to the organiser, rather than paying main-programme faculty directly.",
-      "group": "grant",
-      "sources": [
-        "annex1",
-        "educationalGrants"
-      ]
-    },
-    {
-      "id": "satellite",
-      "label": "Hire a satellite symposium speaker",
-      "description": "Genuine speaker services under a consulting agreement.",
-      "group": "consulting",
-      "sources": [
-        "annex1",
-        "overlap",
-        "consulting"
-      ]
-    },
-    {
-      "id": "company-attendance",
-      "label": "Send company representatives",
-      "description": "Company staff attend the event without funding HCP attendance.",
-      "group": "staff",
-      "sources": [
-        "annex1",
-        "conference"
-      ]
+      "group": "event",
+      "label": "Give an Educational Grant that funds the Faculty",
+      "description": "The organiser selects and pays its speakers, chairs and moderators.",
+      "eventTypes": ["conference", "tppt"],
+      "sources": ["annex1", "educationalGrants"]
     },
     {
       "id": "booth",
-      "label": "Buy a booth, advertising or a symposium package",
-      "description": "Commercial support with defined services in return.",
-      "group": "commercial",
-      "sources": [
-        "annex1",
-        "conference"
-      ]
+      "group": "event",
+      "label": "Buy booth space, advertising or a satellite symposium",
+      "description": "A commercial package from the organiser, with something in return.",
+      "eventTypes": ["conference"],
+      "sources": ["annex1", "conferences"]
+    },
+    {
+      "id": "satellite",
+      "group": "event",
+      "label": "Pay an HCP to speak at the company’s satellite symposium or booth",
+      "description": "A consulting agreement for speaker services at the company’s own session.",
+      "eventTypes": ["conference"],
+      "sources": ["annex1", "annex6", "companyAtTpoe", "consultingCriteria"]
+    },
+    {
+      "id": "company-attendance",
+      "group": "event",
+      "label": "Send company employees to attend",
+      "description": "Company representatives attend the Event themselves.",
+      "eventTypes": ["conference", "tppt"],
+      "sources": ["annex1", "conferences"]
     },
     {
       "id": "direct-delegate",
-      "label": "Pay an HCP's costs as a delegate or trainee",
-      "description": "Includes registration, travel, accommodation and other attendance costs.",
-      "group": "direct",
-      "sources": [
-        "annex1",
-        "annex6"
-      ]
+      "group": "event",
+      "label": "Pay an HCP’s costs to attend as a Delegate",
+      "description": "Registration, travel, accommodation or meals for an HCP who attends without speaking.",
+      "eventTypes": ["conference", "tppt", "company-training", "company-business"],
+      "sources": ["annex1", "annex6"]
     },
     {
       "id": "direct-faculty",
-      "label": "Pay an HCP who provides services",
-      "description": "Main-programme faculty, booth speakers or company meeting consultants.",
-      "group": "consulting",
-      "sources": [
-        "annex1",
-        "annex6",
-        "consulting"
-      ]
-    },
-    {
-      "id": "company-meeting",
-      "label": "Organise a company meeting or training",
-      "description": "Product/procedure education, business meetings or fee-for-service meetings.",
-      "group": "company",
-      "sources": [
-        "company",
-        "annex6"
-      ]
-    },
-    {
-      "id": "hospitality",
-      "label": "Provide a meal at a business or scientific meeting",
-      "description": "Includes a meeting held around a congress; no blanket invitations.",
-      "group": "meal",
-      "sources": [
-        "hospitality",
-        "overlap"
-      ]
+      "group": "event",
+      "label": "Pay an HCP to speak, chair or provide services",
+      "description": "A fee or expenses for Faculty, or for an HCP’s services at a Company Event.",
+      "eventTypes": ["conference", "tppt", "company-training", "company-business", "company-services"],
+      "sources": ["annex1", "annex6", "consultingCriteria"]
     },
     {
       "id": "in-kind",
-      "label": "Support an event organised by individual HCPs",
-      "description": "Supplier payments or products where there is no recipient legal entity.",
-      "group": "in-kind",
-      "sources": [
-        "training"
-      ]
+      "group": "event",
+      "label": "Support an Event organised by individual HCPs",
+      "description": "No legal entity, such as a Healthcare Organisation or PCO, organises it.",
+      "eventTypes": ["conference", "tppt"],
+      "sources": ["tppt"]
+    },
+    {
+      "id": "meal",
+      "group": "event",
+      "label": "Pay for a meal with HCPs at a meeting",
+      "description": "Lunch or dinner at a business or scientific meeting, including during a congress.",
+      "eventTypes": [],
+      "sources": ["hospitality", "companyAtTpoe"]
     },
     {
       "id": "items",
-      "label": "Provide an educational or promotional item",
-      "description": "Also covers prizes, gifts and appreciation items at an event.",
-      "group": "items",
-      "sources": [
-        "items"
-      ]
+      "group": "other",
+      "label": "Give an educational or promotional item",
+      "description": "Including prizes in a competition at an Event.",
+      "eventTypes": [],
+      "sources": ["items"]
     },
     {
       "id": "demos",
-      "label": "Provide demonstration products or samples",
-      "description": "Free products for training, demonstration or familiarisation.",
-      "group": "demos",
-      "sources": [
-        "demos",
-        "demoUse",
-        "samples"
-      ]
+      "group": "other",
+      "label": "Provide Demonstration Products or Samples",
+      "description": "Free-of-charge products for training, demonstration or familiarisation.",
+      "eventTypes": [],
+      "sources": ["demosGeneral"]
     },
     {
       "id": "proctorship",
-      "label": "Support a proctorship or preceptorship",
-      "description": "Supervised clinical learning on healthcare organisation premises.",
-      "group": "consulting",
-      "sources": [
-        "training",
-        "consulting"
-      ]
+      "group": "other",
+      "label": "Fund a Proctorship or Preceptorship",
+      "description": "Clinician-to-clinician training, usually on hospital premises.",
+      "eventTypes": [],
+      "sources": ["tppt", "glossary", "consultingCriteria"]
     },
     {
       "id": "donation",
-      "label": "Support a charitable or fundraising event",
-      "description": "Assess the recipient and charitable purpose separately from education.",
-      "group": "handoff",
-      "sources": [
-        "donations",
-        "programme"
-      ]
+      "group": "other",
+      "label": "Make a Charitable Donation or support a fundraiser",
+      "description": "Including tickets for a charity’s fundraising dinner or event.",
+      "eventTypes": [],
+      "sources": ["donations", "grantsGeneral"]
     },
     {
       "id": "research",
-      "label": "Provide research funding or a royalty arrangement",
-      "description": "Requires the dedicated research or royalty provisions.",
-      "group": "handoff",
-      "sources": [
-        "research",
-        "royalties"
-      ]
+      "group": "other",
+      "label": "Fund research or agree royalties",
+      "description": "Not event support: other chapters of the Code apply.",
+      "eventTypes": [],
+      "sources": ["research", "royalties"]
     }
   ],
+  "annex1Columns": [
+    "a national Event, whose Delegates are local HCPs only",
+    "an international Event in the MedTech Europe Geographic Area, with Delegates from at least two of its countries",
+    "an Event outside the Area attended by HCPs registered and practising in the Area",
+    "an Event outside the Area that no HCPs from the Area attend, as speakers or Delegates"
+  ],
   "conferenceMatrix": {
+    "grant-running": ["conditional:none", "conditional:required", "conditional:none", "outside:none"],
+    "grant-attendance": ["conditional:none", "conditional:required", "conditional:required", "na:none"],
+    "grant-faculty": ["conditional:none", "conditional:required", "conditional:none", "na:none"],
+    "satellite": ["conditional:none", "conditional:required", "conditional:none", "na:none"],
+    "company-attendance": ["review:internal", "review:internal", "review:internal", "review:internal"],
+    "booth": ["conditional:none", "conditional:required", "conditional:none", "review:internal"],
+    "direct-delegate": ["prohibited:none", "prohibited:none", "prohibited:none", "na:none"],
+    "direct-faculty": ["prohibited:none", "prohibited:none", "prohibited:none", "na:none"]
+  },
+  "annex1Text": {
     "grant-running": [
-      "conditional:none",
-      "conditional:required",
-      "conditional:none",
-      "outside:none"
+      "CVS approval not required but the Code and local laws and regulations still apply",
+      "Subject to CVS decision",
+      "Allowed. Not subject to CVS decision",
+      "Out of scope of the application of the Code"
     ],
     "grant-attendance": [
-      "conditional:none",
-      "conditional:required",
-      "conditional:required",
-      "na:none"
+      "CVS approval not required but the Code and local laws and regulations still apply",
+      "Subject to CVS decision",
+      "Subject to CVS decision",
+      "N/A"
     ],
     "grant-faculty": [
-      "conditional:none",
-      "conditional:required",
-      "conditional:none",
-      "na:none"
+      "CVS approval not required but the Code and local laws and regulations still apply",
+      "Subject to CVS decision",
+      "Allowed. Not subject to CVS decision",
+      "N/A"
     ],
     "satellite": [
-      "conditional:none",
-      "conditional:required",
-      "conditional:none",
-      "na:none"
+      "CVS approval not required but the Code and local laws and regulations still apply",
+      "Subject to CVS decision",
+      "Allowed. Not subject to CVS decision",
+      "N/A"
     ],
     "company-attendance": [
-      "review:internal",
-      "review:internal",
-      "review:internal",
-      "review:internal"
+      "Member Company prior internal review against Code principles required",
+      "Member Company prior internal review against Code principles required",
+      "Member Company prior internal review against Code principles required",
+      "Member Company prior internal review against Code principles required"
     ],
     "booth": [
-      "conditional:none",
-      "conditional:required",
-      "conditional:none",
-      "review:internal"
+      "CVS approval not required but the Code and local laws and regulations still apply",
+      "Subject to CVS decision",
+      "Allowed. Not subject to CVS decision",
+      "Member Company prior internal review against Code principles required"
     ],
-    "direct-delegate": [
-      "prohibited:none",
-      "prohibited:none",
-      "prohibited:none",
-      "na:none"
-    ],
-    "direct-faculty": [
-      "prohibited:none",
-      "prohibited:none",
-      "prohibited:none",
-      "na:none"
-    ]
+    "direct-delegate": ["Not allowed", "Not allowed", "Not allowed", "N/A"],
+    "direct-faculty": ["Not allowed", "Not allowed", "Not allowed", "N/A"]
+  },
+  "annex6Settings": {
+    "conference": "the main Event or independent scientific programme of a Third Party Organised Educational Conference",
+    "satellite": "a satellite symposium at a Third Party Organised Educational Conference",
+    "booth": "a booth at a Third Party Organised Educational Conference",
+    "tppt": "a Third Party Organised Procedure Training meeting",
+    "company-training": "a Product and Procedure Training and Education Event not taking place at or about the same time as a Third Party Organised Educational Event",
+    "company-training-overlap": "a Product and Procedure Training and Education Event taking place at or about the same time as a Third Party Organised Educational Event",
+    "company-business": "a Sales, Promotional and Other Business Meeting not taking place at or about the same time as a Third Party Organised Educational Event",
+    "company-business-overlap": "a Sales, Promotional and Other Business Meeting taking place at or about the same time as a Third Party Organised Educational Event"
   },
   "directSupportMatrix": {
-    "conference": {
-      "faculty": "prohibited",
-      "delegate": "prohibited"
-    },
-    "satellite": {
-      "faculty": "conditional",
-      "delegate": "prohibited"
-    },
-    "booth": {
-      "faculty": "conditional",
-      "delegate": "prohibited"
-    },
-    "tppt": {
-      "faculty": "conditional",
-      "delegate": "conditional"
-    },
-    "company-training": {
-      "faculty": "conditional",
-      "delegate": "conditional"
-    },
-    "company-training-overlap": {
-      "faculty": "conditional",
-      "delegate": "prohibited"
-    },
+    "conference": { "faculty": "prohibited", "delegate": "prohibited" },
+    "satellite": { "faculty": "conditional", "delegate": "prohibited" },
+    "booth": { "faculty": "conditional", "delegate": "prohibited" },
+    "tppt": { "faculty": "conditional", "delegate": "conditional" },
+    "company-training": { "faculty": "conditional", "delegate": "conditional" },
+    "company-training-overlap": { "faculty": "conditional", "delegate": "prohibited" },
+    "company-business": { "faculty": "conditional", "delegate": "equipment-exception" },
+    "company-business-overlap": { "faculty": "conditional", "delegate": "prohibited" }
+  },
+  "annex6Text": {
+    "conference": { "faculty": "Not allowed", "delegate": "Not allowed" },
+    "satellite": { "faculty": "Allowed (consulting agreement required)", "delegate": "Not allowed" },
+    "booth": { "faculty": "Allowed (consulting agreement required)", "delegate": "Not allowed" },
+    "tppt": { "faculty": "Allowed", "delegate": "Allowed" },
+    "company-training": { "faculty": "Allowed", "delegate": "Allowed" },
+    "company-training-overlap": { "faculty": "Allowed", "delegate": "Not allowed" },
     "company-business": {
-      "faculty": "conditional",
-      "delegate": "equipment-exception"
+      "faculty": "Allowed (consulting agreement required)",
+      "delegate": "Not allowed (except for demonstration of non-portable equipment)"
     },
-    "company-business-overlap": {
-      "faculty": "conditional",
-      "delegate": "prohibited"
+    "company-business-overlap": { "faculty": "Allowed", "delegate": "Not allowed" }
+  },
+  "questions": {
+    "member": {
+      "type": "choice",
+      "label": "Is the company a MedTech Europe Member Company, or an affiliate of one, and is the interaction linked at least in part to Medical Technologies?",
+      "help": "The Code applies to Member Companies and their affiliated companies, for interactions linked even in part to Medical Technologies. A new Member Company must stop direct sponsorship of HCPs from the date its membership is ratified.",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "eventType": {
+      "type": "choice",
+      "label": "What kind of Event is it?",
+      "help": "An Event that is open to any HCP, where a third party chooses who attends or HCPs choose themselves, that has CME accreditation or covers more than a few products points to a Third Party Organised Educational Event. A single sponsor, or an agenda set by the company, points to a Company Event (Annex VI).",
+      "options": [
+        ["conference", "Third Party Organised Educational Conference, such as a congress organised by a medical society, a hospital or a PCO"],
+        ["tppt", "Third Party Organised Procedure Training: a hands-on course on clinical procedures"],
+        ["company-training", "Company Event: Product and Procedure Training and Education Event"],
+        ["company-business", "Company Event: Sales, Promotional and Other Business Meeting"],
+        ["company-services", "Company Event where HCPs provide services, such as an advisory board or a clinical investigator meeting"],
+        ["unknown", "I’m not sure"]
+      ]
+    },
+    "facultyRole": {
+      "type": "choice",
+      "label": "What will the HCP do at the conference?",
+      "help": "Faculty are podium speakers, moderators and chairs who present during the Event. Poster and abstract presenters are Delegates, not Faculty.",
+      "options": [
+        ["main", "Speak, chair or moderate in the conference’s own programme"],
+        ["satellite", "Speak at the company’s satellite symposium or at its booth"],
+        ["poster", "Present a poster or an abstract"],
+        ["unknown", "I don’t know"]
+      ]
+    },
+    "format": {
+      "type": "choice",
+      "label": "How will HCPs take part in the Event?",
+      "help": "A Virtual Event is one that HCP Delegates attend only remotely. Broadcasting the sessions of an in-person Event does not make it a Virtual Event: a hybrid Event follows all the rules for in-person Events.",
+      "options": [
+        ["in-person", "In person"],
+        ["hybrid", "In person, with sessions also broadcast online (hybrid)"],
+        ["virtual", "Online only (a Virtual Event)"],
+        ["unknown", "I don’t know"]
+      ]
+    },
+    "eventArea": {
+      "type": "choice",
+      "label": "Where does the Event take place?",
+      "help": "Annex III lists the countries of the MedTech Europe Geographic Area: the European Economic Area and the countries where MedTech Europe has national associations, including the countries covered by Mecomed.",
+      "options": [
+        ["in", "In the MedTech Europe Geographic Area"],
+        ["mecomed", "In a country covered by Mecomed (part of the Area)"],
+        ["out", "Outside the MedTech Europe Geographic Area"],
+        ["unknown", "I don’t know"]
+      ]
+    },
+    "audience": {
+      "type": "choice",
+      "label": "Where do the Event’s HCP Delegates come from?",
+      "help": "Count the audience: HCPs attending as Delegates, including poster and abstract presenters, but not the Faculty. If you answer that all Delegates are local, the checker still compares your answer with the Event’s record in CVS.",
+      "options": [
+        ["local", "Only from the country where the Event takes place"],
+        ["international", "From at least two countries of the MedTech Europe Geographic Area"],
+        ["other", "Another mix, such as local HCPs and HCPs from outside the Area"],
+        ["unknown", "I don’t know"]
+      ]
+    },
+    "areaAttendance": {
+      "type": "choice",
+      "label": "Will any HCPs registered and practising in the MedTech Europe Geographic Area take part, as speakers or Delegates?",
+      "help": "The Code applies to interactions with HCPs from the Area wherever the Event takes place. Annex I treats Events held outside the Area differently depending on whether HCPs from the Area attend.",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "beneficiariesInArea": {
+      "type": "choice",
+      "label": "Will the grant fund the attendance of HCPs registered and practising in the MedTech Europe Geographic Area?",
+      "help": "For an Event held outside the Area, a grant that funds HCPs’ attendance needs a CVS decision only when HCPs from the Area benefit from it (Annex I, footnote 3).",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "recipientInArea": {
+      "type": "choice",
+      "label": "Is the organisation receiving the support located in the MedTech Europe Geographic Area?",
+      "help": "The Code applies to interactions with Healthcare Organisations located in the Area, wherever the Event takes place (Annex I, footnote 5).",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "supportedHcpInArea": {
+      "type": "choice",
+      "label": "Is the HCP the company would pay registered and practising in the MedTech Europe Geographic Area?",
+      "help": "For an Event held outside the Area, or online, the Code applies to what the company pays HCPs from the Area.",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "overlap": {
+      "type": "choice",
+      "label": "Does the company’s meeting take place during, around, or at the same time and in the same approximate location as a Third Party Organised Educational Event?",
+      "help": "Chapter 3, Section 3 limits what the company may pay when it holds its own meeting at or around a congress, for example because the HCPs are there anyway.",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "recipient": {
+      "type": "choice",
+      "label": "Who would receive the grant?",
+      "help": "Educational Grants are given to Healthcare Organisations. Funds earmarked for education can also go to a Professional Conference Organiser (PCO), and all the rules for Educational Grants then apply (Q&A 35).",
+      "options": [
+        ["hco", "A Healthcare Organisation, such as a hospital, university or medical society"],
+        ["pco", "A Professional Conference Organiser (PCO)"],
+        ["patient", "A patient organisation"],
+        ["agency", "A travel agency"],
+        ["individual", "An individual HCP"],
+        ["unknown", "I don’t know"]
+      ]
+    },
+    "paymentRoute": {
+      "type": "choice",
+      "label": "Where would the money go?",
+      "help": "Grants are paid directly to the recipient organisation, in its name. The company may instead pay a travel agency for travel, accommodation or registration on behalf of the recipient Healthcare Organisation or PCO (Chapter 4, Section 3).",
+      "options": [
+        ["recipient", "To the recipient organisation, in its name"],
+        ["agency", "Partly to a travel agency, paying travel, accommodation or registration on the recipient’s behalf"],
+        ["personal", "To a personal bank account"],
+        ["unknown", "I don’t know"]
+      ]
+    },
+    "packageMixed": {
+      "type": "choice",
+      "label": "Would the company receive anything in return, such as booth space, advertising or access to participants?",
+      "help": "An Educational Grant is given without any consideration for the company. A public note thanking the providers of grants is not consideration (Q&A 29).",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "packageEducation": {
+      "type": "choice",
+      "label": "Does the package also include funding for education, such as HCPs’ attendance or the Event’s general running?",
+      "help": "Commercial sponsorship involves something in return; an Educational Grant does not. The two must be kept apart and checked separately (Q&A 29).",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "expenses": {
+      "type": "multi",
+      "label": "What would the company pay for?",
+      "help": "Select each cost. Each one is assessed separately.",
+      "options": [
+        ["fee", "A fee for services"],
+        ["registration", "Registration fee"],
+        ["travel", "Travel"],
+        ["accommodation", "Accommodation"],
+        ["meals", "Meals"]
+      ]
+    },
+    "accessRequired": {
+      "type": "choice",
+      "label": "Does the HCP need to register for the conference to reach the satellite symposium or booth?",
+      "help": "The registration fee may be paid only if access depends on it, and then only for the days needed where possible, for example a one-day registration.",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "grantCoversAttendance": {
+      "type": "choice",
+      "label": "Is the HCP already benefiting from an Educational Grant that covers their attendance at the conference?",
+      "help": "The company may pay flights and accommodation only if no Educational Grant already covers the HCP’s attendance (Chapter 3, Section 3).",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "incrementalCosts": {
+      "type": "choice",
+      "label": "Would any of these costs relate to the HCP’s attendance at the third-party Event itself, such as its registration, its hospitality, or extra travel or nights?",
+      "help": "The company may pay only the agreed remuneration and expenses for the services at its own meeting. It may allow flexible travel arrangements if they cost nothing extra.",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "nonPortable": {
+      "type": "choice",
+      "label": "Is travel or accommodation needed so that the HCPs can see a demonstration of non-portable equipment?",
+      "help": "Otherwise the company may not pay travel or accommodation for a Sales, Promotional and Other Business Meeting (Chapter 3, Section 4).",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "handsOnChanged": {
+      "type": "choice",
+      "label": "Has the participants’ practical, hands-on part of the training been cancelled or moved online?",
+      "help": "If so, the Event no longer qualifies as a Third Party Organised Procedure Training (Chapter 2, Section 2).",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "sessions": {
+      "type": "agenda",
+      "label": "Check the programme times",
+      "help": "Paste or import the agenda, then check the type and length of every session, including breaks. Practical sessions must make up more than half of the programme and hands-on sessions at least one third (Annex VII).",
+      "options": []
+    },
+    "procedureSkills": {
+      "type": "choice",
+      "label": "Is the programme focused on acquiring skills in specific clinical procedures, rather than on products or Medical Technologies?",
+      "help": "Annex VII: the programme must be focused on acquiring specific medical skills relevant to certain medical procedures.",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "streamingFollowed": {
+      "type": "choice",
+      "label": "Are the streamed or live-surgery demonstrations followed immediately by related hands-on sessions for the participants?",
+      "help": "CVS guidance counts streaming and live-surgery demonstrations as practical sessions only when related hands-on sessions follow immediately.",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "clinicalVenue": {
+      "type": "choice",
+      "label": "Will most of the training take place in a clinical environment, or in a room set up to simulate the procedures?",
+      "help": "For example a hospital, a cath lab, or a room equipped for training on cadavers, skin models or synthetic bones (Annex VII).",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "standalone": {
+      "type": "choice",
+      "label": "Is the training a stand-alone Event, not organised in connection with, next to or at the same time as a larger conference?",
+      "help": "Training organised in connection with a larger Third Party Organised Educational Conference does not qualify (Annex VII).",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "activeStations": {
+      "type": "choice",
+      "label": "Will every participant practise actively, with in principle no more than four participants per station (eight when human cadavers are used)?",
+      "help": "Annex VII: all attendees take part actively in hands-on sessions.",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "inKindType": {
+      "type": "multi",
+      "label": "What would the company provide?",
+      "help": "Financial support may never be transferred to an individual HCP’s bank account (Q&A 20).",
+      "options": [
+        ["products", "A loan of multiple-use Medical Technologies, or single-use Demonstration Products"],
+        ["invoices", "Direct payment of catering or venue rental invoices"],
+        ["speakers", "Speakers engaged under consulting agreements"],
+        ["money", "Money paid to the organisers"]
+      ]
+    },
+    "identifiableAttendance": {
+      "type": "choice",
+      "label": "Would the company pay for or arrange the attendance of specific HCPs, such as their registration, travel or accommodation?",
+      "help": "In Kind support must not get round the ban on paying for identifiable HCPs to attend third-party conferences (Q&A 14 and Q&A 20).",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "mealGrantHospitality": {
+      "type": "choice",
+      "label": "Are any of the invited HCPs already benefiting from an Educational Grant that covers their hospitality at the congress?",
+      "help": "The Code asks companies to pay special attention to this (Chapter 3, Section 3).",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "demoKind": {
+      "type": "choice",
+      "label": "What would the company provide?",
+      "help": "Demonstration Products are not for clinical use. Samples let HCPs become familiar with a product in clinical use.",
+      "options": [
+        ["demo", "Demonstration Products: mock-ups for training or for showing patients"],
+        ["sample", "Samples, for HCPs to become familiar with the product in clinical use"],
+        ["unknown", "I don’t know"]
+      ]
+    },
+    "demoClinicalUse": {
+      "type": "choice",
+      "label": "Will the Demonstration Products be used in patient care, sold or passed on?",
+      "help": "Demonstration Products are not intended for clinical use, nor for sale or other transfer (Chapter 9, Section 2).",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "proctorshipSetting": {
+      "type": "choice",
+      "label": "Is it clinician-to-clinician training that takes place on a Healthcare Organisation’s premises?",
+      "help": "Proctorships and Preceptorships are not Third Party Organised Procedure Training and do not need CVS approval (Q&A 19).",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "donationRecipient": {
+      "type": "choice",
+      "label": "Who would receive the donation?",
+      "help": "Charitable Donations may be made only to bona fide charities or other non-profit bodies whose main purposes are charitable or philanthropic (Chapter 4, Section 2).",
+      "options": [
+        ["charity", "A charitable organisation or other non-profit body whose main purposes are charitable"],
+        ["hco", "A hospital or other Healthcare Organisation"],
+        ["hcp-charity", "A charity chosen by an HCP"],
+        ["unknown", "I don’t know"]
+      ]
+    },
+    "fundraiserHcps": {
+      "type": "choice",
+      "label": "Would the company invite HCPs to a fundraising event at its expense, or suggest HCPs for the organiser to invite?",
+      "help": "The company may use its tickets for its own employees or return them to the organiser (Chapter 4, Section 2).",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "interactionInArea": {
+      "type": "choice",
+      "label": "Will this take place in the MedTech Europe Geographic Area, or involve HCPs or Healthcare Organisations registered, practising or located there?",
+      "help": "The Code applies to interactions with HCPs and Healthcare Organisations in the Area wherever they take place, and to activities in the Area whoever takes part (Annex III lists the countries).",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
+    },
+    "intermediary": {
+      "type": "choice",
+      "label": "Will a Third Party Intermediary, such as a distributor or sales agent, deal with the HCPs or Healthcare Organisations on the company’s behalf?",
+      "help": "The company may be liable for what Third Party Intermediaries do in connection with its products (Chapter 10).",
+      "options": [["yes", "Yes"], ["no", "No"], ["unknown", "I don’t know"]]
     }
   },
   "conditions": [
     {
+      "id": "localRules",
+      "label": "National laws, regulations and professional codes of conduct allow the support, including those of the country where the HCP practises.",
+      "sources": ["eventsGeneral", "conferences"],
+      "appliesTo": ["all"],
+      "failure": "prohibited"
+    },
+    {
       "id": "programme",
-      "label": "The programme is relevant, educational/business purpose is genuine, and the schedule meets the applicable requirements",
-      "source": "programme",
-      "groups": [
-        "event"
-      ],
-      "failure": "review"
+      "label": "The programme relates directly to the specialty or practice of the HCPs attending, or is relevant enough to justify their attendance. It is available in good time, has a clear schedule without gaps (for an in-person Event, at least 6 hours for a full day or 3 hours for a half day, including breaks) and identifies the Faculty. For a Third Party Organised Educational Event, the agenda is under the organiser’s sole control.",
+      "sources": ["programme"],
+      "appliesTo": ["eventSupport"],
+      "coveredByCvs": true,
+      "failure": "prohibited"
     },
     {
       "id": "venue",
-      "label": "Location, season, access, venue and accommodation satisfy the Code criteria",
-      "source": "venue",
-      "groups": [
-        "event"
-      ],
-      "failure": "review"
+      "label": "The location and venue are not the main attraction of the Event: they are not luxury, tourist or Entertainment venues, they are central for most participants and easy to reach, they are in or near a recognised scientific or business centre, and the Event is not held during the tourist season there.",
+      "sources": ["venue"],
+      "appliesTo": ["inPersonEvent"],
+      "coveredByCvs": true,
+      "failure": "prohibited"
     },
     {
       "id": "noEntertainment",
-      "label": "The company does not fund entertainment, social events or guests, or arrange guest expenses",
-      "source": "guests",
-      "groups": [
-        "event"
-      ],
+      "label": "The company does not organise, pay for or otherwise support Entertainment or social events. At a Third Party Organised Educational Event, any Entertainment is outside the educational programme and paid for separately by the HCPs.",
+      "sources": ["programme", "transparency"],
+      "appliesTo": ["eventSupport"],
+      "coveredByCvs": true,
       "failure": "prohibited"
     },
     {
-      "id": "localRules",
-      "label": "Applicable local laws, professional codes and company requirements have been checked",
-      "source": "scope",
-      "groups": [
-        "all"
-      ],
+      "id": "noGuests",
+      "label": "The company does not pay for or arrange meals, travel, accommodation or other expenses of Guests.",
+      "sources": ["guests"],
+      "appliesTo": ["eventSupport", "meal"],
+      "failure": "prohibited"
+    },
+    {
+      "id": "hospitality",
+      "label": "Hospitality is reasonable for the location and subordinate in time and focus to the purpose of the Event, meets the rules of the country where the HCP practises, is offered only to HCPs attending in person (no home delivery), and does not include top-category or luxury hotels or nights beyond the official duration of the Event.",
+      "sources": ["hospitality"],
+      "appliesTo": ["hospitality"],
+      "failure": "prohibited"
+    },
+    {
+      "id": "travel",
+      "label": "Travel is reasonable and actual: economy or standard class (business class can be considered for flights over 5 hours including connections, first class never), paid to the supplier or reimbursed against receipts after the Event, with no cash advance to the HCP and no stay beyond the official duration of the Event.",
+      "sources": ["travel"],
+      "appliesTo": ["travel"],
+      "failure": "prohibited"
+    },
+    {
+      "id": "employerNotification",
+      "label": "Employer Notification is made in writing before the Event, or before the services begin. Where national law sets its own notification, approval or disclosure requirements, those are met instead.",
+      "sources": ["transparency", "consultingDisclosure"],
+      "appliesTo": ["employerNotification"],
+      "failure": "prohibited"
+    },
+    {
+      "id": "fundingRequest",
+      "label": "The support responds to a written request from the recipient organisation, or to a documented company initiative, describing the purpose and scope, the recipient and its legal status and, where relevant, a budget. Nothing is provided until both parties have signed a written agreement.",
+      "sources": ["grantsGeneral"],
+      "appliesTo": ["funding"],
+      "failure": "prohibited"
+    },
+    {
+      "id": "fundingDecision",
+      "label": "An independent decision-making process, using criteria that are not sales-oriented, approves the support after a documented evaluation of the recipient and the risks. The company’s sales or commercial function does not decide on it.",
+      "sources": ["grantsGeneral"],
+      "appliesTo": ["funding"],
+      "failure": "prohibited"
+    },
+    {
+      "id": "fundingNoLink",
+      "label": "The support is not linked in any way to past, present or future purchase, lease, recommendation, prescription or use of the company’s products or services.",
+      "sources": ["grantsGeneral"],
+      "appliesTo": ["funding"],
+      "failure": "prohibited"
+    },
+    {
+      "id": "grantPurpose",
+      "label": "The grant agreement states the intended educational purpose and gives the company the right to verify that the funds are used for it. The company will publicly disclose the grant in accordance with the Disclosure Guidelines.",
+      "sources": ["educationalGrants", "verification"],
+      "appliesTo": ["grant"],
+      "failure": "prohibited"
+    },
+    {
+      "id": "grantSelection",
+      "label": "The receiving organisation alone selects the HCPs who benefit, and the agreement says so. The company does not ask for their names before the agreement is signed and the selection is complete, and any criteria it gives do not make individual HCPs identifiable.",
+      "sources": ["educationalGrants"],
+      "appliesTo": ["grantAttendance"],
+      "failure": "prohibited"
+    },
+    {
+      "id": "grantOrganiser",
+      "label": "The organiser alone is responsible for the programme content, the selection of Faculty and the payment of any Faculty honoraria, and the agreement says so. The company recommends speakers or comments on the programme only if expressly asked.",
+      "sources": ["educationalGrants"],
+      "appliesTo": ["grantOrganiser"],
+      "failure": "prohibited"
+    },
+    {
+      "id": "pcoFunds",
+      "label": "The PCO manages the funds in line with the Code. If it selects the HCPs who benefit, it has the experience and expertise to do so, and the contract includes specific compliance criteria and gives the company the right to monitor and audit.",
+      "sources": ["educationalGrants"],
+      "appliesTo": ["pco"],
+      "failure": "prohibited"
+    },
+    {
+      "id": "travelAgency",
+      "label": "The company has carried out prior due diligence on the travel agency arrangement. The contracts set compliance criteria for the recipient’s use of the agency and allow effective monitoring, and the agency is not a company function or company-owned entity.",
+      "sources": ["educationalGrants"],
+      "appliesTo": ["travelAgency"],
+      "failure": "prohibited"
+    },
+    {
+      "id": "commercialAgreement",
+      "label": "A written commercial agreement records the package and its price, and the price reflects what the company receives in return.",
+      "sources": ["educationalGrants", "conferences"],
+      "appliesTo": ["commercial"],
       "failure": "review"
     },
     {
-      "id": "transparency",
-      "label": "Required employer notifications, approvals and disclosures will be completed before support/services",
-      "source": "transparency",
-      "groups": [
-        "event",
-        "consulting"
-      ],
-      "failure": "conditional"
-    },
-    {
-      "id": "grantAgreement",
-      "label": "A written request or documented initiative, recipient due diligence, purpose/budget and signed agreement are in place",
-      "source": "grants",
-      "groups": [
-        "grant"
-      ],
-      "failure": "conditional"
-    },
-    {
-      "id": "grantIndependent",
-      "label": "The grant decision is independent of sales and the recipient independently selects HCP beneficiaries without company direction",
-      "source": "educationalGrants",
-      "groups": [
-        "grant"
-      ],
-      "failure": "prohibited"
-    },
-    {
-      "id": "grantUse",
-      "label": "Funds are restricted to genuine medical education; use will be verified and applicable educational-grant disclosure completed",
-      "source": "educationalGrants",
-      "groups": [
-        "grant"
-      ],
-      "failure": "conditional"
-    },
-    {
-      "id": "consultingNeed",
-      "label": "Services meet a documented legitimate need; the expert is selected for qualifications, with no sales inducement",
-      "source": "consulting",
-      "groups": [
-        "consulting"
-      ],
-      "failure": "prohibited"
-    },
-    {
-      "id": "consultingAgreement",
-      "label": "A signed consulting agreement defines the actual services, fair-market-value fees, expenses and disclosures",
-      "source": "fees",
-      "groups": [
-        "consulting"
-      ],
-      "failure": "conditional"
-    },
-    {
-      "id": "commercialTerms",
-      "label": "Commercial services and price are documented, professional and distinct from educational funding or disguised HCP support",
-      "source": "conference",
-      "groups": [
-        "commercial"
-      ],
+      "id": "commercialImage",
+      "label": "The promotional activity projects a professional image: the booth mainly displays the company’s Medical Technologies, related services and literature, other activities are limited and reasonable, and in principle only soft drinks and snacks are served. Any satellite symposium covers subjects consistent with the overall content of the conference.",
+      "sources": ["conferences"],
+      "appliesTo": ["commercial"],
       "failure": "review"
     },
     {
       "id": "staffReview",
-      "label": "The company has reviewed attendance internally against Code principles, including perception and registration fees",
-      "source": "conference",
-      "groups": [
-        "staff"
-      ],
+      "label": "The company has reviewed in advance whether attending is appropriate under the Code’s principles, in particular image and perception, and has checked that registration fees for company attendees are not disguised support for HCPs, for example fees well above those paid by other Delegates.",
+      "sources": ["conferences"],
+      "appliesTo": ["staff"],
       "failure": "review"
     },
     {
-      "id": "companyPurpose",
-      "label": "The company controls the event, its content serves the stated legitimate purpose, and trainers/experts are qualified",
-      "source": "companyTraining",
-      "groups": [
-        "company"
-      ],
+      "id": "consultingNeed",
+      "label": "A Legitimate Business Need for the services was identified before the HCP was selected. The HCP is selected for their qualifications, expertise and experience, not for the business they generate; no more consultants are engaged than the need requires; and the engagement is not an inducement to buy, recommend or use the company’s products.",
+      "sources": ["consulting", "consultingCriteria"],
+      "appliesTo": ["consulting"],
+      "failure": "prohibited"
+    },
+    {
+      "id": "consultingAgreement",
+      "label": "A written agreement, signed before the services begin, sets out the services, the basis for compensation and the expenses that can be claimed. The fee is reasonable, reflects Fair Market Value and respects any local limits.",
+      "sources": ["consultingCriteria", "consultingFees"],
+      "appliesTo": ["consulting"],
+      "failure": "prohibited"
+    },
+    {
+      "id": "trainingProgramme",
+      "label": "The Event directly concerns the company’s Medical Technologies, therapies or related services. The programme is rigorous from a scientific or educational point of view, mostly educational rather than sales-driven, made available in good time with the company’s name, and fills full days (or a half day, with nothing non-educational organised for the rest of the day). The trainers have the right expertise.",
+      "sources": ["companyTraining"],
+      "appliesTo": ["companyTraining"],
+      "failure": "prohibited"
+    },
+    {
+      "id": "companyVenue",
+      "label": "The country chosen is where at least some of the participants live: if they come mainly from one country the Event is held there, and if they come mainly from Europe it is held in Europe.",
+      "sources": ["companyTraining"],
+      "appliesTo": ["companyVenue"],
       "failure": "review"
     },
     {
-      "id": "hospitalityRules",
-      "label": "Hospitality is modest, subordinate to the meeting, within local limits, and excludes luxury lodging and home delivery",
-      "source": "hospitality",
-      "groups": [
-        "meal",
-        "expenses"
-      ],
-      "failure": "prohibited"
-    },
-    {
-      "id": "travelRules",
-      "label": "Travel/expenses are reasonable, actual and limited to attendance/services; no first class, unjustified extended stays or prospective cash advances",
-      "source": "travel",
-      "groups": [
-        "expenses"
-      ],
-      "failure": "prohibited"
+      "id": "businessMeeting",
+      "label": "The meeting is to discuss the features and benefits of Medical Technologies or related services, contract negotiations or sales terms, and takes place at or close to the HCPs’ place of business.",
+      "sources": ["businessMeetings"],
+      "appliesTo": ["companyBusiness"],
+      "failure": "review"
     },
     {
       "id": "mealPurpose",
-      "label": "The meal supports a legitimate meeting with a small selected group; it is not a social event or blanket congress invitation",
-      "source": "overlap",
-      "groups": [
-        "meal"
-      ],
+      "label": "The meal is part of a meeting with a legitimate business or scientific purpose and is clearly subordinate to it. Only a small number of selected HCPs are invited, never all the participants of the congress, and the hospitality meets local laws and Chapter 1.",
+      "sources": ["companyAtTpoe"],
+      "appliesTo": ["mealAtTpoe"],
       "failure": "prohibited"
     },
     {
-      "id": "itemRules",
-      "label": "The item has a genuine educational/practice/patient purpose, is not cash, personal-use, requested by an HCP, a life-event gift or an inducement",
-      "source": "items",
-      "groups": [
-        "items"
-      ],
+      "id": "itemPurpose",
+      "label": "The item relates to the HCP’s practice, benefits patients or serves a genuine educational function. It is not cash or a cash equivalent, not mainly for personal use, not given because an HCP asked for it, not given to mark a life event such as a birthday or wedding, and not a reward or incentive to use the company’s products.",
+      "sources": ["items"],
+      "appliesTo": ["items"],
       "failure": "prohibited"
     },
     {
       "id": "itemValue",
-      "label": "It is modest within local limits, or a recorded occasional higher-value educational item for an HCO meeting Chapter 8 conditions",
-      "source": "items",
-      "groups": [
-        "items"
-      ],
+      "label": "The item is modest in value and within the limits set by national rules and the national association’s guidelines, or it is an occasional educational item of greater value for a Healthcare Organisation that benefits patients, relates to the company’s therapeutic areas, is not part of the organisation’s normal overheads and is recorded.",
+      "sources": ["items"],
+      "appliesTo": ["items"],
+      "failure": "prohibited"
+    },
+    {
+      "id": "productRecords",
+      "label": "The products are not a reward or inducement. The no-charge basis and other conditions are recorded and disclosed to the recipient by the time of supply, with proof of delivery and, for multiple-use products, proof of return.",
+      "sources": ["demosGeneral", "demos"],
+      "appliesTo": ["products"],
+      "failure": "prohibited"
+    },
+    {
+      "id": "sampleLimits",
+      "label": "The quantity of single-use Samples, or the time multiple-use Samples stay with the HCP, is no more than reasonably needed to gain experience with them. The company keeps title to multiple-use Samples and has a process to remove them promptly afterwards.",
+      "sources": ["samples"],
+      "appliesTo": ["samples"],
+      "failure": "prohibited"
+    },
+    {
+      "id": "donationUse",
+      "label": "The company has no control over the final use of the donation beyond general restrictions ensuring it is used for charitable or philanthropic purposes.",
+      "sources": ["donations"],
+      "appliesTo": ["donation"],
+      "failure": "prohibited"
+    },
+    {
+      "id": "inKindRisks",
+      "label": "The company has assessed the risks of supporting an Event that no legal entity organises, and will manage them carefully.",
+      "sources": ["tppt"],
+      "appliesTo": ["inKind"],
       "failure": "review"
     },
     {
-      "id": "demoRules",
-      "label": "No-charge terms, delivery records, reasonable quantities and return/title controls for multiple-use products are documented",
-      "source": "demos",
-      "groups": [
-        "demos"
-      ],
-      "failure": "conditional"
-    },
-    {
-      "id": "intermediaryRules",
-      "label": "The intermediary has risk-based due diligence, Code obligations, training and ongoing oversight",
-      "source": "intermediaries",
-      "groups": [
-        "intermediary"
-      ],
+      "id": "intermediaryControls",
+      "label": "The Third Party Intermediary has passed risk-based due diligence, is trained, and is bound by a contract that requires it to comply with the Code and allows audits and early termination; the company oversees its activities.",
+      "sources": ["intermediaries"],
+      "appliesTo": ["intermediary"],
       "failure": "review"
     }
   ],
-  "questions": {
-    "companyApplies": {
-      "id": "companyApplies",
-      "label": "Is this a medical-technology interaction subject to the MedTech Europe Code?",
-      "options": [
-        [
-          "yes",
-          "Yes"
-        ],
-        [
-          "no",
-          "No"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "For member companies and relevant affiliates. If applicability or a membership transition is uncertain, select “I don’t know”.",
-      "type": "choice"
-    },
-    "supportStage": {
-      "id": "supportStage",
-      "label": "What stage is the proposed support at?",
-      "options": [
-        [
-          "planning",
-          "Planning or a commitment subject to conditions"
-        ],
-        [
-          "providing",
-          "Signing off or providing the support"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "A conditional planning arrangement and actually providing funds or benefits are different stages.",
-      "type": "choice"
-    },
-    "eventType": {
-      "id": "eventType",
-      "label": "What kind of event or arrangement is this?",
-      "options": [
-        [
-          "conference",
-          "Third-party educational conference"
-        ],
-        [
-          "tppt",
-          "Third-party procedure training"
-        ],
-        [
-          "company-training",
-          "Company product/procedure training or education"
-        ],
-        [
-          "company-business",
-          "Company sales, promotional or business meeting"
-        ],
-        [
-          "company-consulting",
-          "Company advisory board or investigator/services meeting"
-        ],
-        [
-          "exhibition",
-          "Purely promotional exhibition without educational sessions"
-        ],
-        [
-          "proctorship",
-          "Proctorship or preceptorship"
-        ],
-        [
-          "unknown",
-          "I’m not sure"
-        ]
-      ],
-      "help": "Check who initiates and controls the agenda, who selects attendees, and the actual purpose. CME accreditation or a single sponsor is an indication, not a conclusive test.",
-      "type": "choice"
-    },
-    "format": {
-      "id": "format",
-      "label": "How will the relevant participation take place?",
-      "options": [
-        [
-          "in-person",
-          "In person"
-        ],
-        [
-          "virtual",
-          "Virtual"
-        ],
-        [
-          "hybrid",
-          "Hybrid"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "For a hybrid event, assess each participation component separately.",
-      "type": "choice"
-    },
-    "eventArea": {
-      "id": "eventArea",
-      "label": "Where does the event take place?",
-      "options": [
-        [
-          "in",
-          "In the listed MedTech Europe countries"
-        ],
-        [
-          "mecomed",
-          "In a country covered by Mecomed"
-        ],
-        [
-          "out",
-          "Outside both areas"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "Annex III lists {countries} and countries covered by Mecomed. Mecomed arrangements require review against the applicable association guidance.",
-      "type": "choice"
-    },
-    "hcpArea": {
-      "id": "hcpArea",
-      "label": "Where are the relevant HCPs registered/practising?",
-      "options": [
-        [
-          "in",
-          "At least one in the listed MedTech Europe countries"
-        ],
-        [
-          "mecomed",
-          "Mecomed area only"
-        ],
-        [
-          "out",
-          "Outside both areas only"
-        ],
-        [
-          "none",
-          "No HCP interaction"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "Include relevant speakers, delegates and beneficiaries, not just people whose costs the company proposes to pay.",
-      "type": "choice"
-    },
-    "hcoArea": {
-      "id": "hcoArea",
-      "label": "Where is the relevant recipient or interacting HCO based?",
-      "options": [
-        [
-          "in",
-          "In the listed MedTech Europe countries"
-        ],
-        [
-          "mecomed",
-          "Mecomed area"
-        ],
-        [
-          "out",
-          "Outside both areas"
-        ],
-        [
-          "none",
-          "No HCO interaction"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "An HCO in the Code area can bring an interaction into scope even when the event and delegates are elsewhere.",
-      "type": "choice"
-    },
-    "crossBorder": {
-      "id": "crossBorder",
-      "label": "Will HCP delegates from different countries attend?",
-      "options": [
-        [
-          "yes",
-          "Yes"
-        ],
-        [
-          "no",
-          "No"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "Count passive delegates, including poster/abstract presenters. International faculty alone do not determine the delegate audience. A “No” answer will still be checked against a matching CVS record.",
-      "type": "choice"
-    },
-    "recipient": {
-      "id": "recipient",
-      "label": "Who receives the support?",
-      "options": [
-        [
-          "hco",
-          "Healthcare organisation"
-        ],
-        [
-          "pco",
-          "Professional congress organiser"
-        ],
-        [
-          "individual",
-          "Individual HCP organiser without a legal entity"
-        ],
-        [
-          "other",
-          "Other entity / travel agency"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "",
-      "type": "choice"
-    },
-    "paymentRoute": {
-      "id": "paymentRoute",
-      "label": "Where will payment go?",
-      "options": [
-        [
-          "organisation",
-          "To the recipient organisation"
-        ],
-        [
-          "supplier",
-          "Directly to a supplier under the arrangement"
-        ],
-        [
-          "personal",
-          "To an individual organiser’s personal bank account"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "",
-      "type": "choice"
-    },
-    "packageMixed": {
-      "id": "packageMixed",
-      "label": "Does the support package mix educational funding with commercial services?",
-      "options": [
-        [
-          "yes",
-          "Yes"
-        ],
-        [
-          "no",
-          "No"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "",
-      "type": "choice"
-    },
-    "identifiedBeneficiary": {
-      "id": "identifiedBeneficiary",
-      "label": "Does the company know or effectively determine the individual HCP beneficiaries?",
-      "options": [
-        [
-          "yes",
-          "Yes"
-        ],
-        [
-          "no",
-          "No"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "Includes a one-person HCO or selection criteria so narrow that beneficiaries are identifiable.",
-      "type": "choice"
-    },
-    "intermediary": {
-      "id": "intermediary",
-      "label": "Will an intermediary act for the company in HCP/HCO interactions?",
-      "options": [
-        [
-          "yes",
-          "Yes"
-        ],
-        [
-          "no",
-          "No"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "",
-      "type": "choice"
-    },
-    "twoAreaCountries": {
-      "id": "twoAreaCountries",
-      "label": "Are delegates coming from at least two MedTech Europe-area countries?",
-      "options": [
-        [
-          "yes",
-          "Yes"
-        ],
-        [
-          "no",
-          "No"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "",
-      "type": "choice"
-    },
-    "localDelegates": {
-      "id": "localDelegates",
-      "label": "Are all HCP delegates local to the event’s host country?",
-      "options": [
-        [
-          "yes",
-          "Yes"
-        ],
-        [
-          "no",
-          "No"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "",
-      "type": "choice"
-    },
-    "handsOnChanged": {
-      "id": "handsOnChanged",
-      "label": "Has the practical hands-on part been cancelled or made virtual?",
-      "options": [
-        [
-          "yes",
-          "Yes"
-        ],
-        [
-          "no",
-          "No"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "",
-      "type": "choice"
-    },
-    "sessions": {
-      "id": "sessions",
-      "label": "Check the programme durations",
-      "options": [],
-      "help": "Import or enter the agenda, then review every classification and duration.",
-      "type": "agenda"
-    },
-    "procedureSkills": {
-      "id": "procedureSkills",
-      "label": "Does the programme develop specific clinical procedure skills, rather than focus on products?",
-      "options": [
-        [
-          "yes",
-          "Yes"
-        ],
-        [
-          "no",
-          "No"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "",
-      "type": "choice"
-    },
-    "streamingFollowed": {
-      "id": "streamingFollowed",
-      "label": "Are streamed/live-surgery demonstrations followed immediately by related hands-on participation?",
-      "options": [
-        [
-          "yes",
-          "Yes"
-        ],
-        [
-          "no",
-          "No"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "Current CVS training guidance requires active practice when treating these demonstrations as practical sessions.",
-      "type": "choice"
-    },
-    "clinicalVenue": {
-      "id": "clinicalVenue",
-      "label": "Is the majority of training in a clinical or suitably equipped simulation environment?",
-      "options": [
-        [
-          "yes",
-          "Yes"
-        ],
-        [
-          "no",
-          "No"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "",
-      "type": "choice"
-    },
-    "standalone": {
-      "id": "standalone",
-      "label": "Is this a stand-alone training, rather than attached to a larger conference?",
-      "options": [
-        [
-          "yes",
-          "Yes"
-        ],
-        [
-          "no",
-          "No"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "",
-      "type": "choice"
-    },
-    "activeStations": {
-      "id": "activeStations",
-      "label": "Do all participants practise actively with appropriate station sizes?",
-      "options": [
-        [
-          "yes",
-          "Yes"
-        ],
-        [
-          "no",
-          "No"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "In principle at most four participants per station, or eight when human cadavers are used. Programme size alone is not decisive.",
-      "type": "choice"
-    },
-    "overlap": {
-      "id": "overlap",
-      "label": "Is this during or around a third-party educational event in the same approximate location?",
-      "options": [
-        [
-          "yes",
-          "Yes"
-        ],
-        [
-          "no",
-          "No"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "Consider both timing and location, including meetings arranged for convenience around a congress.",
-      "type": "choice"
-    },
-    "nonPortable": {
-      "id": "nonPortable",
-      "label": "Is travel/accommodation necessary to demonstrate non-portable equipment?",
-      "options": [
-        [
-          "yes",
-          "Yes"
-        ],
-        [
-          "no",
-          "No"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "",
-      "type": "choice"
-    },
-    "areaBeneficiaries": {
-      "id": "areaBeneficiaries",
-      "label": "Will this grant benefit attendance of an HCP from the MedTech Europe area?",
-      "options": [
-        [
-          "yes",
-          "Yes"
-        ],
-        [
-          "no",
-          "No"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "Annex I footnote 3 concerns HCPs benefiting from an educational grant.",
-      "type": "choice"
-    },
-    "expenses": {
-      "id": "expenses",
-      "label": "Which costs does the company propose to cover?",
-      "options": [
-        [
-          "registration",
-          "Registration/access"
-        ],
-        [
-          "travel",
-          "Travel"
-        ],
-        [
-          "accommodation",
-          "Accommodation"
-        ],
-        [
-          "fee",
-          "Professional fee"
-        ],
-        [
-          "meals",
-          "Meals"
-        ]
-      ],
-      "help": "Select each proposed payment; each receives its own assessment.",
-      "type": "multi"
-    },
-    "accessRequired": {
-      "id": "accessRequired",
-      "label": "Is registration required for access to the contracted speaker services?",
-      "options": [
-        [
-          "yes",
-          "Yes"
-        ],
-        [
-          "no",
-          "No"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "Use a one-day or prorated registration where possible.",
-      "type": "choice"
-    },
-    "grantAlreadyCovers": {
-      "id": "grantAlreadyCovers",
-      "label": "Does an educational grant already cover the HCP’s attendance or hospitality?",
-      "options": [
-        [
-          "yes",
-          "Yes"
-        ],
-        [
-          "no",
-          "No"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "",
-      "type": "choice"
-    },
-    "incrementalCongressCosts": {
-      "id": "incrementalCongressCosts",
-      "label": "Would this pay any incremental costs of attendance at the third-party event?",
-      "options": [
-        [
-          "yes",
-          "Yes"
-        ],
-        [
-          "no",
-          "No"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "",
-      "type": "choice"
-    },
-    "role": {
-      "id": "role",
-      "label": "What is the HCP’s actual role?",
-      "options": [
-        [
-          "delegate",
-          "Passive delegate or trainee"
-        ],
-        [
-          "poster",
-          "Poster/abstract presenter"
-        ],
-        [
-          "main-faculty",
-          "Third-party main-programme faculty"
-        ],
-        [
-          "satellite",
-          "Contracted company satellite symposium speaker"
-        ],
-        [
-          "booth",
-          "Contracted booth speaker"
-        ],
-        [
-          "company-faculty",
-          "Company speaker, adviser or investigator providing services"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "Faculty provide actual services requiring preparation. A poster or abstract presenter remains a delegate.",
-      "type": "choice"
-    },
-    "identifiableAttendance": {
-      "id": "identifiableAttendance",
-      "label": "Does this directly arrange or fund identifiable HCP conference attendance?",
-      "options": [
-        [
-          "yes",
-          "Yes"
-        ],
-        [
-          "no",
-          "No"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "",
-      "type": "choice"
-    },
-    "demoKind": {
-      "id": "demoKind",
-      "label": "What products will be provided?",
-      "options": [
-        [
-          "demo",
-          "Demonstration products / mock-ups"
-        ],
-        [
-          "sample",
-          "Samples for clinical familiarisation"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "",
-      "type": "choice"
-    },
-    "clinicalUse": {
-      "id": "clinicalUse",
-      "label": "Will they be used in patient care?",
-      "options": [
-        [
-          "yes",
-          "Yes"
-        ],
-        [
-          "no",
-          "No"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "",
-      "type": "choice"
-    },
-    "onHcoPremises": {
-      "id": "onHcoPremises",
-      "label": "Is this genuine supervised clinical learning on HCO premises?",
-      "options": [
-        [
-          "yes",
-          "Yes"
-        ],
-        [
-          "no",
-          "No"
-        ],
-        [
-          "unknown",
-          "I don’t know"
-        ]
-      ],
-      "help": "",
-      "type": "choice"
-    }
+  "outcomes": {
+    "not-permitted": "Not permitted",
+    "not-permitted-as-proposed": "Not permitted as proposed",
+    "outside": "Outside the Code’s scope",
+    "handoff": "Covered by other chapters of the Code",
+    "cvs-needed": "Needs a positive CVS decision",
+    "more-info": "More information needed",
+    "review": "Needs internal review",
+    "permitted": "Permitted if the conditions below are met",
+    "permitted-confirmed": "Permitted: every condition below is confirmed"
+  },
+  "expenseStates": {
+    "allowed": "Permitted",
+    "not-allowed": "Not permitted",
+    "check": "Needs checking"
+  },
+  "messages": {
+    "outcomeIntro": "This is the Code’s position on the proposal as described. It is not company approval: internal review and local requirements still apply.",
+    "notMember": "The Code applies to Member Companies of MedTech Europe and their affiliated companies, for interactions linked at least in part to Medical Technologies. A national association’s code or other rules may still apply.",
+    "outsideArea": "The Code does not apply: the activity takes place outside the MedTech Europe Geographic Area and does not involve HCPs or Healthcare Organisations registered, practising or located there (Annex I, footnote 5). Other laws and codes may still apply.",
+    "outsideSupportedHcp": "The Code does not apply to paying an HCP who is not registered and practising in the MedTech Europe Geographic Area, for an Event held outside the Area. Other laws and codes may still apply.",
+    "research": "Research funding and royalties are not event support. Chapter 6 (Research) and Chapter 7 (Royalties) set their own requirements.",
+    "annex1Cell": "For {column}, Annex I says: “{text}”.",
+    "annex6Cell": "For {role} at {setting}, Annex VI says: “{text}”.",
+    "audienceUnclassified": "Annex I does not classify this audience, which is neither local HCPs only nor Delegates from at least two countries of the Area. Ask CVS whether the Event is within its scope before relying on either position.",
+    "mecomedCvs": "The Event takes place in a country covered by Mecomed, which is part of the MedTech Europe Geographic Area, so the Code applies. For Events in Mecomed countries, CVS refers companies to Mecomed’s guidelines: check which vetting applies before providing this support.",
+    "directSponsorshipBan": "The Code does not allow direct sponsorship of HCPs to attend a Third Party Organised Educational Conference, whether as Delegates or as Faculty in its programme (Chapter 2, Annex I and Annex VI). A positive CVS decision does not change this. The company can support the Event through an Educational Grant instead, or engage speakers for its own satellite symposium or booth.",
+    "posterIsDelegate": "Poster and abstract presenters are Delegates, not Faculty (Annex VI).",
+    "recipientInAreaApplies": "The Code applies because the recipient organisation is located in the MedTech Europe Geographic Area (Annex I, footnote 5).",
+    "noAreaHcpsNoCvs": "No CVS decision is needed, because no HCPs from the Area attend.",
+    "beneficiariesNotInArea": "The grant does not fund the attendance of HCPs from the Area, so no CVS decision is needed for it (Annex I, footnote 3).",
+    "beneficiariesInArea": "For an Event held outside the Area, a grant that funds the attendance of HCPs registered and practising in the Area needs a positive CVS decision (Annex I, footnote 3).",
+    "companyAttendanceReview": "Annex I requires the company to review its attendance internally against the Code’s principles before attending, whatever the Event’s CVS status (Q&A 16).",
+    "boothOutsideReview": "When no HCPs from the MedTech Europe Geographic Area take part, Annex I requires the company’s prior internal review of booths and advertising against the Code’s principles.",
+    "grantPackageSplit": "An Educational Grant cannot give the company anything in return. Put the booth, advertising or other commercial elements in a separate commercial agreement, and check each part separately (Q&A 29).",
+    "boothPackageSplit": "Commercial sponsorship and Educational Grants must be kept apart. Put the educational funding in a separate Educational Grant, and check each part separately (Q&A 29).",
+    "grantToIndividual": "Grants may not be given to individual HCPs: they must be paid directly to the qualifying organisation (Chapter 4, Section 1). For an Event organised by individual HCPs, see the rules for In Kind support in Q&A 20.",
+    "grantToTravelAgency": "An Educational Grant or funds for education may not be given to a travel agency directly. The company may instead pay a travel agency on behalf of the recipient Healthcare Organisation or PCO (Chapter 4, Section 3).",
+    "grantToPatientOrg": "The Code does not cover Grants to patient organisations: MedTech Europe’s Patient Organisation Guidelines apply instead (Chapter 4, Section 1).",
+    "grantToPco": "Funds earmarked for education given to a PCO are subject to all the rules for Educational Grants (Q&A 35).",
+    "personalAccount": "No payment may be made to a personal bank account: Grants are paid directly to the recipient organisation, in its name (Chapter 4, Section 1).",
+    "grantPreCondition": "If the CVS decision is not available yet, the grant agreement can make a positive CVS decision a pre-condition of the grant. Nothing may be provided until that decision is given (Q&A 32).",
+    "inKindAllowed": "The Code allows In Kind support to an Event organised by individual HCPs, such as loaned Medical Technologies, Demonstration Products, direct payment of catering or venue invoices, or speakers under consulting agreements. This carries significant risks, which must be managed carefully (Q&A 20).",
+    "inKindMoney": "Financial support may never be transferred to an individual HCP’s bank account (Q&A 20).",
+    "inKindIdentifiable": "In Kind support must not be used to pay for or arrange the attendance of identifiable HCPs at a third-party conference (Q&A 14 and Q&A 20).",
+    "inKindCvs": "CVS approval is needed to support a Third Party Organised Educational Event that is within CVS scope (Annex I).",
+    "inKindTpptAttendance": "Paying for specific HCPs to attend a procedure training is direct support of their attendance: check it as “Pay an HCP’s costs to attend as a Delegate”.",
+    "tpptQualifiedDelegate": "On the answers given, the Event meets the Annex VII criteria for a Third Party Organised Procedure Training, so the company may pay HCPs’ registration fee, travel and hospitality directly (Chapter 2, Section 2). The exception is to be narrowly interpreted.",
+    "tpptQualifiedFaculty": "On the answers given, the Event meets the Annex VII criteria for a Third Party Organised Procedure Training, where Annex VI allows direct support of Faculty.",
+    "tpptQualifiedGrant": "The Event can be supported through an Educational Grant whether or not it qualifies as a procedure training (Chapter 2, Section 2).",
+    "tpptNotQualified": "On the answers given, the Event does not qualify as a Third Party Organised Procedure Training (Annex VII), so it is assessed as a Third Party Organised Educational Conference.",
+    "tpptUnknown": "Confirm the programme times and each Annex VII criterion before relying on the procedure-training exception.",
+    "tpptChanged": "With the participants’ hands-on part cancelled or moved online, the Event no longer qualifies as a Third Party Organised Procedure Training. The company may support it only through an Educational Grant and by paying the registration fee or access to the recording; travel may never be paid (Chapter 2, Section 2).",
+    "tpptVirtual": "An Event held only online cannot qualify as a Third Party Organised Procedure Training, which needs hands-on training delivered mostly in a clinical environment (Annex VII).",
+    "tpptCvs": "Cross-border and international procedure trainings must be submitted to CVS (CVS guidance).",
+    "tpptCompanyCheck": "Since 1 January 2024, CVS no longer confirms whether an Event qualifies as a procedure training: the sponsoring company must check the criteria itself (CVS guidance).",
+    "companyDelegateAllowed": "Annex VI allows the company to pay the costs of HCP Delegates at a Product and Procedure Training and Education Event that is not held at or around a third-party Event, where local laws allow it (Chapter 3, Section 2).",
+    "companyDelegateOverlap": "No support may be given to HCPs attending a Company Event as Delegates or trainees when it is held at or around a Third Party Organised Educational Event (Chapter 3, Section 3). A lunch or dinner at a business or scientific meeting with a few selected HCPs has its own conditions: check it as a meal.",
+    "businessDelegate": "For a Sales, Promotional and Other Business Meeting, the company may not pay HCPs’ travel or accommodation unless a demonstration of non-portable equipment requires it (Chapter 3, Section 4). Reasonable meals at the meeting are allowed.",
+    "servicesAllowed": "HCPs who provide services, for example as speakers or advisers, may be paid under a consulting agreement, including documented, actual and reasonable travel, meals and accommodation for the services (Chapter 5, Section 3).",
+    "servicesOverlap": "At a Company Event held at or around a Third Party Organised Educational Event, the company may pay only the agreed remuneration and expenses for the services at its own Event, and never the incremental costs of attending the third-party Event (Chapter 3, Section 3).",
+    "speakerGrantHospitality": "The HCP already benefits from an Educational Grant covering their attendance. Check whether it also covers their hospitality, to avoid duplicate benefits (Chapter 3, Section 3).",
+    "satelliteRules": "Speakers at the company’s satellite symposium or booth may be paid under a consulting agreement, including travel and accommodation for the speaker services and, where access depends on it, the registration fee (Q&A 17; Chapter 3, Section 3).",
+    "mealAtTpoe": "Hospitality at a company meeting held in the context of a Third Party Organised Educational Event must meet the conditions in Chapter 3, Section 3.",
+    "mealGeneral": "The company may offer reasonable hospitality at its meetings, subordinate in time and focus to the purpose of the meeting (Chapter 1, Section 4). Meals at business meetings do not need Employer Notification (Chapter 1, Section 6).",
+    "mealGrantHospitality": "Some invited HCPs already receive an Educational Grant covering their hospitality. The Code asks companies to pay special attention to this to avoid duplicate benefits (Chapter 3, Section 3).",
+    "items": "Gifts to HCPs and Healthcare Organisations are generally prohibited. The company may exceptionally give inexpensive educational or promotional items that meet Chapter 8, including prizes in a competition at an Event.",
+    "demosAllowed": "The company may provide its own Demonstration Products at no charge for awareness, education and training (Chapter 9, Section 2).",
+    "samplesAllowed": "The company may provide a reasonable number of Samples at no charge, so that HCPs can become familiar with the product in clinical use (Chapter 9, Section 3).",
+    "demoClinicalUse": "Demonstration Products are not for clinical use in patient care, nor for sale or other transfer (Chapter 9, Section 2). Products for use in patient care can be provided only as Samples, under Chapter 9, Section 3.",
+    "proctorshipNoCvs": "Proctorships and Preceptorships normally take place on Healthcare Organisation premises and do not need CVS approval: they are neither Third Party Organised Educational Events nor procedure trainings (Q&A 19). The supervising clinician’s services are a Consulting Arrangement (Chapter 5).",
+    "proctorshipElsewhere": "Training organised elsewhere, for example as a course for several HCPs, may be a Third Party Organised Procedure Training or a Company Event instead. Check it as that Event.",
+    "donationAllowed": "Charitable Donations may be made only to charitable organisations or other non-profit bodies whose main purposes are charitable or philanthropic (Chapter 4, Section 2).",
+    "donationHco": "A Charitable Donation may not support the general running of a hospital or other Healthcare Organisation (Q&A 26). A donation to a non-profit hospital is possible only in documented Financial Hardship, for specific needs identified in advance that benefit patients, or where national law explicitly permits it (Chapter 4, Section 2).",
+    "donationHcpCharity": "The company may not support an HCP’s favourite charity at the HCP’s request, whatever the reason (Q&A 28).",
+    "fundraiserHcps": "At a fundraising event, the company may use its tickets for its own employees, but may not invite HCPs at its expense or suggest HCPs for the organiser to invite (Chapter 4, Section 2).",
+    "virtualNoCvs": "Virtual Events are not subject to CVS (MedTech Europe Virtual Events Guidance). The rules of Chapters 1, 2, 3 and 4 still apply (Chapter 1, Section 7).",
+    "virtualNoDirect": "The company may not directly support HCPs’ attendance at a Third Party Organised Educational Event held as a Virtual Event (MedTech Europe Virtual Events Guidance).",
+    "hybridIsInPerson": "A hybrid Event is an in-person Event: broadcasting its sessions does not make it a Virtual Event, so all the rules for in-person Events apply, including CVS.",
+    "cvsRequired": "This support needs a positive CVS decision before anything is provided. CVS decisions are binding on all Member Companies.",
+    "cvsNotRequired": "This support does not need a CVS decision on the answers given. Chapter 1 and local rules still apply.",
+    "cvsInternal": "Annex I requires the company’s prior internal review instead of a CVS decision.",
+    "cvsUnknown": "Whether a CVS decision is needed depends on facts still to be confirmed.",
+    "cvsMecomed": "CVS refers Events in Mecomed countries to Mecomed’s guidelines.",
+    "cvsMissing": "No CVS decision has been confirmed for this Event. Find it in CVS and check that its status is Compliant. Events must be submitted to CVS at least 50 days before they start (CVS guidance).",
+    "cvsPending": "CVS has not given a final decision for this Event yet (status “{status}”). Wait for a Compliant decision before providing the support.",
+    "cvsPreCleared": "“Pre-Cleared” means that CVS has accepted only the Event’s location and venue. The support needs the final Compliant decision.",
+    "cvsPositive": "CVS has assessed this Event as Compliant. The decision is binding on all Member Companies. CVS decides on the Event itself, such as its location, venue, programme and social programme; it does not assess the company’s own arrangements.",
+    "cvsNegativeBinding": "CVS has assessed this Event as “{status}”. CVS decisions are binding on all Member Companies, so the company may not support the Event.",
+    "cvsNegativeAttendance": "CVS has assessed this Event as “{status}”. Company attendance at such an Event is not automatically excluded, but it needs the internal review described in Q&A 16.",
+    "cvsNotAssessed": "CVS did not assess this Event (status “{status}”), so the positive CVS decision this support needs does not exist.",
+    "cvsScopeDisagrees": "CVS records this Event as “{status}”, but your answers place the support within CVS scope. Confirm the Event’s audience and scope with CVS before proceeding.",
+    "cvsUnrecognised": "The checker does not recognise the CVS status “{status}”. Check its meaning on the CVS site.",
+    "cvsBindingCovered": "Covered by the Event’s Compliant CVS decision, which is binding on all Member Companies.",
+    "nationalRecordTitle": "Check the Event’s CVS record",
+    "nationalRecordPending": "This Event has a CVS record with status “{status}”. You indicated that its Delegates are local HCPs only, but it may still be within CVS scope, and a negative decision could still be issued. Confirm the Event’s CVS scope and current decision before proceeding.",
+    "nationalRecordNegative": "This Event has a CVS record with status “{status}”. You indicated that its Delegates are local HCPs only, but it may still be within CVS scope, and a negative decision is already recorded. Confirm the Event’s CVS scope and current decision before proceeding.",
+    "nationalRecordPositive": "This Event has a CVS record with status “{status}”. You indicated that its Delegates are local HCPs only, but it may still be within CVS scope. Its current decision is positive, but the record means its scope should still be confirmed. Confirm the Event’s CVS scope and current decision before proceeding.",
+    "nationalRecordNote": "This compares your answer with the live CVS record; it does not replace the Code’s rules.",
+    "scopeUnconfirmedTitle": "CVS scope not confirmed",
+    "scopeUnconfirmed": "You indicated that the Event’s Delegates are local HCPs only. That answer, a search with no match or a failed lookup does not confirm that the Event is outside CVS scope.",
+    "conditionsNotMet": "A Code requirement listed below is not met. Change the proposal so that it is met, then check again.",
+    "conditionsNeedReview": "A requirement listed below that allows for judgement is not met. This needs internal review.",
+    "expensesNeeded": "Select what the company would pay for.",
+    "expensesRemove": "Remove the costs marked “Not permitted”, then check the proposal again.",
+    "expAllowed": "Reasonable and documented, within the limits of Chapter 1.",
+    "expTpptAllowed": "The company may pay the registration fee, travel and hospitality directly (Chapter 2, Section 2).",
+    "expFeeNoServices": "A fee is paid only for genuine services. Delegates attend without providing services.",
+    "expFeeServices": "Under the consulting agreement, at Fair Market Value (Chapter 5, Section 3).",
+    "expServices": "Under the consulting agreement: documented, actual and reasonable, and listed in the agreement (Chapter 5, Section 3).",
+    "expRegistrationAccess": "Only if the HCP’s access to the satellite symposium or booth depends on registration, prorated to the days needed where possible (Chapter 3, Section 3).",
+    "expGrantDuplicate": "Only if no Educational Grant already covers the HCP’s attendance (Chapter 3, Section 3).",
+    "expGrantHospitality": "An Educational Grant may already cover this HCP’s hospitality: avoid duplicate benefits (Chapter 3, Section 3).",
+    "expIncremental": "Only expenses for the services at the company’s own meeting, never the incremental costs of attending the third-party Event (Chapter 3, Section 3).",
+    "expIncrementalRegistration": "The third-party Event’s registration fee is an incremental cost of attending it, which the company may not pay (Chapter 3, Section 3).",
+    "expNonPortable": "Only when a demonstration of non-portable equipment requires it (Chapter 3, Section 4).",
+    "expVirtualTravel": "Not needed for an HCP taking part online.",
+    "expVirtualHospitality": "Hospitality is offered only to HCPs attending in person, with no home delivery (Chapter 1, Section 4).",
+    "expChangedTppt": "After the hands-on part is cancelled or moved online, only the registration fee or access to the recording may be paid, and travel never (Chapter 2, Section 2).",
+    "missingActivity": "Choose what the company plans to provide.",
+    "chooseEventType": "Choose the kind of Event."
   }
 }

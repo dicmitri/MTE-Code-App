@@ -17,7 +17,7 @@ export async function handleCvsRequest(request, adapter = createCvsAdapter()) {
   // Same-origin integration: no public CORS proxy and no forwarding browser cookies.
   if ((request.headers.has('origin') && request.headers.get('origin') !== url.origin)
     || request.headers.get('sec-fetch-site') === 'cross-site') {
-    return json({ error: { code: 'INVALID_ORIGIN', message: 'Use the CVS prototype in this app.' } }, 403);
+    return json({ error: { code: 'INVALID_ORIGIN', message: 'Use the CVS lookup in this app.' } }, 403);
   }
   try {
     if (detail) return json(await adapter.getEventStatus(detail[1]));

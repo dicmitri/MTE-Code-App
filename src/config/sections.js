@@ -34,8 +34,8 @@ export const SECTIONS = [
   {
     id: 'event-support',
     title: 'Can I support this event?',
-    subtitle: 'Check a specific company proposal',
-    description: 'Assess support options, costs and conditions under the Code, with a live CVS check where relevant.',
+    subtitle: 'Check a proposal against the Code',
+    description: 'Check a planned grant, sponsorship, payment or other support for an Event, with its conditions and a live CVS check where one is needed.',
     icon: 'ShieldCheck',
     color: '#7654A1',
     available: true,

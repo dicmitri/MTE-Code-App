@@ -141,8 +141,11 @@ const App = () => {
 
   const readerMode = (activeSection === 'code' && activeId !== 'home')
     || (activeSection === 'transparency' && Boolean(activeDocumentId) && activeId !== 'home');
+  // The event support checker keeps its answers only while it is open, so the Code opens in a
+  // new tab from there instead of replacing the checker.
+  const checkerOpen = activeSection === 'event-support';
   const sidePanelFits = useSidePanelFits();
-  const sidePanelEnabled = readerMode && readerSidePanel === 'on' && sidePanelFits;
+  const sidePanelEnabled = (readerMode || checkerOpen) && readerSidePanel === 'on' && sidePanelFits;
 
   // A new page starts with the side panel closed.
   useEffect(() => {
@@ -183,6 +186,10 @@ const App = () => {
     navigateToReference(target);
   };
 
+  const openTargetInNewTab = (target) => {
+    window.open(getReferenceHref(target), '_blank', 'noopener,noreferrer');
+  };
+
   const glossaryTarget = getReferenceTarget(REFERENCE_INDEX, 'code:glossary');
 
   const buildDefinitionItem = (entry) => ({
@@ -193,13 +200,14 @@ const App = () => {
     ...(glossaryTarget && {
       target: glossaryTarget,
       href: getReferenceHref(glossaryTarget),
-      actionLabel: 'Open the Glossary',
+      actionLabel: checkerOpen ? 'Open the Glossary in a new tab' : 'Open the Glossary',
     }),
   });
 
   const buildReferenceItem = (target) => ({
     key: referenceKey(target),
     ...describeReferenceTarget(target),
+    ...(checkerOpen && { actionLabel: 'Open in the Code in a new tab' }),
     target,
     href: getReferenceHref(target),
   });
@@ -215,11 +223,19 @@ const App = () => {
   };
 
   // References in the text preview in the side panel when it fits, and open directly otherwise.
+  // In the checker they open in the definition dialog instead, so its answers are kept.
   const handleOpenReference = (key, opener) => {
     const target = getReferenceTarget(REFERENCE_INDEX, key);
     if (!target) return;
     if (sidePanelEnabled) openContextItem(buildReferenceItem(target), opener);
-    else navigateToReference(target);
+    else if (checkerOpen) {
+      const preview = describeReferenceTarget(target);
+      setActiveDefinition({
+        term: [preview.location, preview.title].filter(Boolean).join(' › '),
+        definition: preview.html,
+        action: { href: getReferenceHref(target), label: 'Open in the Code in a new tab' },
+      });
+    } else navigateToReference(target);
   };
 
   const findSearchResultTarget = (hit) => {
@@ -284,7 +300,7 @@ const App = () => {
     ? {
       item: contextItem,
       onClose: closeContextItem,
-      onOpenTarget: openContextTarget,
+      onOpenTarget: checkerOpen ? openTargetInNewTab : openContextTarget,
       resize: paneWidths.sidePane,
     }
     : null;
@@ -334,6 +350,7 @@ const App = () => {
       <DefinitionPopup
         term={activeDefinition?.term}
         definition={activeDefinition?.definition}
+        action={activeDefinition?.action}
         onClose={() => setActiveDefinition(null)}
       />
       <InstallPrompt show={showIosPrompt} onClose={() => setShowIosPrompt(false)} />
@@ -467,7 +484,14 @@ const App = () => {
               </main>
             }
           >
-            <EventSupportContent onGoHome={handleGoHome} scrollRef={scrollRef} />
+            <EventSupportContent
+              onGoHome={handleGoHome}
+              scrollRef={scrollRef}
+              glossaryMap={glossaryMap}
+              onTermClick={handleTermClick}
+              onOpenReference={handleOpenReference}
+              sidePane={sidePane}
+            />
           </Suspense>
         ) : activeSection === 'tppt' ? (
           <Suspense

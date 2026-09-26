@@ -8,7 +8,9 @@ const FOCUSABLE_SELECTOR = [
     '[tabindex]:not([tabindex="-1"])',
 ].join(',');
 
-export const DefinitionPopup = ({ term, definition, onClose }) => {
+// Also shows a referenced provision for the event support checker, whose answers would be lost
+// by leaving the page: `action` ({ href, label }) then opens the Code in a new tab.
+export const DefinitionPopup = ({ term, definition, onClose, action = null }) => {
     const isOpen = Boolean(term);
     const dialogRef = useRef(null);
     const closeButtonRef = useRef(null);
@@ -107,6 +109,19 @@ export const DefinitionPopup = ({ term, definition, onClose }) => {
                     className="p-6 max-h-[60vh] overflow-y-auto space-y-3 leading-relaxed text-gray-700 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#007A86]"
                     dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(definition) }}
                 />
+                {action && (
+                    <div className="px-6 pb-5">
+                        <a
+                            href={action.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-sm font-bold text-[#007A86] hover:text-[#7654A1] focus-visible:outline-2 focus-visible:outline-[#7654A1] rounded"
+                        >
+                            {action.label}
+                            <AppIcon name="ExternalLink" size={14} />
+                        </a>
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -7,7 +7,7 @@ const TIMEOUT_MS = 20000; // One budget for GET + POST + body consumption.
 export async function readBoundedText(response, maxBytes) {
   if (Number(response.headers.get('content-length')) > maxBytes) {
     await response.body?.cancel();
-    throw new CvsError('CVS_RESPONSE_INVALID', 'The response exceeds the prototype’s size limit.');
+    throw new CvsError('CVS_RESPONSE_INVALID', 'The CVS page is larger than expected.');
   }
   if (!response.body) throw new CvsError('CVS_RESPONSE_INVALID', 'The response body is missing.');
   const reader = response.body.getReader();
@@ -21,7 +21,7 @@ export async function readBoundedText(response, maxBytes) {
       bytes += chunk.value.byteLength;
       if (bytes > maxBytes) {
         await reader.cancel();
-        throw new CvsError('CVS_RESPONSE_INVALID', 'The response exceeds the prototype’s size limit.');
+        throw new CvsError('CVS_RESPONSE_INVALID', 'The CVS page is larger than expected.');
       }
       text += decoder.decode(chunk.value, { stream: true });
     }
@@ -68,7 +68,7 @@ async function withSession(operation, fetchImpl, timeoutMs) {
   const getHtml = async (url, init = {}) => {
     const response = await fetchImpl(url, {
       ...init, signal: controller.signal, redirect: 'manual',
-      headers: { Accept: 'text/html', 'User-Agent': 'MTE-Code-App-CVS-Prototype/1.0',
+      headers: { Accept: 'text/html', 'User-Agent': 'MTE-Code-App-CVS-Lookup/1.0',
         'Cache-Control': 'no-cache, no-store', ...init.headers },
       cf: { cacheTtl: 0, cacheEverything: false },
     });

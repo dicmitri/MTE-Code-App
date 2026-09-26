@@ -1,301 +1,700 @@
-import { getApplicableConditions, isSupportService as services } from './eventSupportConditions.js';
-import { getEventQuestions } from './eventSupportQuestions.js';
+// The event support checker's evaluator: applies the Code's rules to the answers and, for a
+// third-party Event, to its live CVS status. It returns message and source IDs; the wording is
+// in src/data/eventSupportRules.json, so the text can be corrected without touching the logic.
 import { calculateTpptEligibility } from './tpptParser.js';
+import { classifyCvsStatus, getCvsScopeWarning, getScopeUnconfirmedWarning } from './eventSupportCvs.js';
+import {
+  getActivity,
+  getAreaHcpsAnswer,
+  getContext,
+  getEventQuestions,
+  getEventType,
+  getQuestionIds,
+  isKnown,
+  isOutsideScope,
+} from './eventSupportQuestions.js';
 
-const normalizeStatus = (value) => typeof value === 'string' ? value.trim().replace(/\s+/g, ' ').toLowerCase() : '';
-const known = (value) => value && value !== 'unknown';
-const thirdParty = (a) => ['conference', 'tppt', 'exhibition'].includes(a.eventType);
-const companyEvent = (a) => a.eventType?.startsWith('company-');
+const GRANTS = ['grant-running', 'grant-attendance', 'grant-faculty'];
+const EXPENSE_ORDER = ['fee', 'registration', 'travel', 'accommodation', 'meals'];
+const TPPT_CRITERIA = ['procedureSkills', 'clinicalVenue', 'standalone', 'activeStations'];
+const CONDITION_OPTIONS = [['yes', 'Yes'], ['no', 'No'], ['unknown', 'Not sure yet']];
 
-export const isNationalAudience = (a) => a.crossBorder === 'no';
+// The tags a condition's "appliesTo" can use (see conditionTags below).
+export const CONDITION_TAGS = Object.freeze([
+  'all', 'eventSupport', 'inPersonEvent', 'meal', 'hospitality', 'travel', 'consulting',
+  'employerNotification', 'funding', 'grant', 'grantAttendance', 'grantOrganiser', 'pco',
+  'travelAgency', 'commercial', 'staff', 'companyTraining', 'companyVenue', 'companyBusiness',
+  'mealAtTpoe', 'items', 'products', 'samples', 'donation', 'inKind', 'intermediary',
+]);
 
-export function classifyCvsStatus(data, raw) {
-  const status = normalizeStatus(raw);
-  if (data.cvsExemptionStatuses.some((label) => normalizeStatus(label) === status)) return 'exempt';
-  if (status === 'compliant') return 'positive';
-  if (status === 'not compliant') return 'negative';
-  if (['waiting for information', 'under review', 'under correction notice', 'under appeal', 'to be reviewed', 'pending review', 'pending', 'pre-cleared'].includes(status)) return 'pending';
-  return 'unknown';
+// Facts about the Event and the company that stay true whatever is proposed. They are kept when
+// another activity is chosen, and also while a question before them is still unanswered; each
+// is read only where its own question applies.
+const SHARED_FACTS = new Set([
+  'member', 'eventType', 'format', 'eventArea', 'audience', 'areaAttendance', 'overlap',
+  'handsOnChanged', 'sessions', 'procedureSkills', 'streamingFollowed', 'clinicalVenue',
+  'standalone', 'activeStations', 'interactionInArea', 'intermediary',
+]);
+
+// Answers that belong to one proposal. Choosing another activity clears them.
+const ACTIVITY_ANSWERS = [
+  'facultyRole', 'beneficiariesInArea', 'recipientInArea', 'supportedHcpInArea', 'recipient',
+  'paymentRoute', 'packageMixed', 'packageEducation', 'expenses', 'accessRequired',
+  'grantCoversAttendance', 'incrementalCosts', 'nonPortable', 'inKindType', 'identifiableAttendance',
+  'mealGrantHospitality', 'demoKind', 'demoClinicalUse', 'proctorshipSetting', 'donationRecipient',
+  'fundraiserHcps',
+];
+
+/**
+ * Whether the Event qualifies as a Third Party Organised Procedure Training (Annex VII):
+ * 'qualified' | 'failed' | 'unknown' | 'changed' (hands-on part cancelled or moved online).
+ */
+export function getTpptQualification(answers) {
+  const agenda = calculateTpptEligibility(answers.sessions || []);
+  if (answers.handsOnChanged === 'yes') return { state: 'changed', agenda };
+  if (answers.format === 'virtual') return { state: 'failed', agenda };
+  const criteria = TPPT_CRITERIA.map((id) => answers[id]);
+  if (answers.sessions?.some((session) => session.type === 'Streaming')) criteria.push(answers.streamingFollowed);
+  const agendaComplete = agenda.valid && agenda.total > 0;
+  if (criteria.includes('no') || (agendaComplete && !agenda.passesAgenda)) return { state: 'failed', agenda };
+  if (!agendaComplete || criteria.some((value) => value !== 'yes')) return { state: 'unknown', agenda };
+  return { state: 'qualified', agenda };
 }
 
-export function getCvsScopeWarning(data, answers, evidence) {
-  if (!thirdParty(answers) || !isNationalAudience(answers) || !evidence) return null;
-  const state = classifyCvsStatus(data, evidence.status?.raw);
-  if (state === 'exempt') return null;
-  const assessment = state === 'negative' ? 'A negative assessment is already recorded.'
-    : state === 'positive' ? 'The current decision is positive, but the record still indicates that CVS scope needs to be confirmed.'
-      : 'A negative assessment could still be issued.';
+function createResult(data, answers) {
   return {
-    id: 'national-cvs-record',
-    text: `Although you indicated that no HCPs from different countries will attend, this event may still be in scope of CVS. ${assessment} Confirm its CVS scope and current decision before proceeding.`,
-    precaution: true,
+    version: data.version,
+    codeVersion: data.codeVersion,
+    activity: answers.activity || null,
+    permission: null, // 'conditional' | 'prohibited' | 'review' | 'outside' | 'handoff'
+    blocking: null, // for a prohibition: 'rule' (the activity itself) or 'proposal' (its details)
+    cvsRequirement: 'none', // 'none' | 'required' | 'internal' | 'mecomed' | 'unknown'
+    cvsState: 'missing',
+    cvsRelevant: false,
+    reasons: [],
+    missing: [],
+    warnings: [],
+    expenses: [],
+    conditions: [],
+    sources: [],
+    tppt: null,
+    evidence: null,
   };
 }
 
-export function getCodeScope(a) {
-  if (a.companyApplies === 'no') return 'review';
-  if (!known(a.companyApplies)) return 'unknown';
-  if (a.eventArea === 'in' || a.hcpArea === 'in' || a.hcoArea === 'in') return 'in';
-  if ([a.eventArea, a.hcpArea, a.hcoArea].includes('mecomed')) return 'review';
-  if (a.eventArea === 'out' && ['out', 'none'].includes(a.hcpArea) && ['out', 'none'].includes(a.hcoArea)) return 'outside';
-  return 'unknown';
+function createApi(result) {
+  const addSources = (source) => {
+    if (source) result.sources.push(...[].concat(source));
+  };
+  const add = (id, params, source) => {
+    result.reasons.push(params ? { id, params } : { id });
+    addSources(source);
+  };
+  const settled = () => ['prohibited', 'outside', 'handoff'].includes(result.permission);
+  return {
+    addSources,
+    reason: add,
+    allow() {
+      if (result.permission === null) result.permission = 'conditional';
+    },
+    review(id, params, source) {
+      if (!settled()) result.permission = 'review';
+      add(id, params, source);
+    },
+    prohibit(id, params, source, blocking = 'proposal') {
+      result.permission = 'prohibited';
+      if (result.blocking !== 'rule') result.blocking = blocking;
+      add(id, params, source);
+    },
+    outside(id, source) {
+      result.permission = 'outside';
+      add(id, null, source);
+    },
+    missing(entry) {
+      const key = entry.question || entry.id;
+      if (!result.missing.some((item) => (item.question || item.id) === key)) result.missing.push(entry);
+    },
+  };
 }
 
-export function getConferenceColumn(a) {
-  if (a.eventArea === 'in') {
-    if (a.crossBorder === 'no' && a.localDelegates === 'yes') return 0;
-    if (a.crossBorder === 'yes' && a.twoAreaCountries === 'yes') return 1;
+// Annex I column: 0 national, 1 international in the Area, 2 outside the Area with HCPs from the
+// Area, 3 outside the Area without them. Online Events use columns 2 and 3 for scope only.
+function annex1Column(ctx, answers) {
+  if (ctx.inArea) {
+    if (answers.audience === 'local') return 0;
+    if (answers.audience === 'international') return 1;
+    return null;
   }
-  if (a.eventArea === 'out') {
-    if (a.hcpArea === 'in') return 2;
-    if (a.hcpArea === 'out' || a.hcpArea === 'none') return 3;
+  if (ctx.outsideOrOnline) {
+    const areaHcps = getAreaHcpsAnswer(ctx, answers);
+    if (areaHcps === 'yes') return 2;
+    if (areaHcps === 'no') return 3;
   }
   return null;
 }
 
-export function getConferencePosition(data, a, activity = a.activity) {
-  const column = getConferenceColumn(a);
-  const cell = column === null ? null : data.conferenceMatrix[activity]?.[column];
-  if (!cell) return { permission: 'review', cvs: 'unknown', ruleId: 'annex1-unclassified' };
-  const [permission, cvs] = cell.split(':');
-  // Annex I footnote 5 includes the recipient HCO, not only the audience.
-  if (permission === 'outside' && a.hcoArea === 'in') return { permission: 'review', cvs: 'unknown', ruleId: 'annex1-footnote5' };
-  return { permission, cvs, ruleId: `annex1-${activity}-${column + 1}` };
+function annex1Cell(data, row, column) {
+  if (column === null) return null;
+  const [permission, cvs] = data.conferenceMatrix[row][column].split(':');
+  return { permission, cvs };
 }
 
-export function getDirectSupportPosition(data, a) {
-  let context = a.eventType;
-  if (a.eventType === 'conference' && ['satellite', 'booth'].includes(a.role)) context = a.role;
-  if (companyEvent(a) && a.overlap === 'yes') context = `${a.eventType}-overlap`;
-  if (a.eventType === 'company-consulting') context = a.overlap === 'yes' ? 'company-training-overlap' : 'company-training';
-  const role = ['delegate', 'poster'].includes(a.role) ? 'delegate' : known(a.role) ? 'faculty' : null;
-  if (!role) return 'review';
-  const position = data.directSupportMatrix[context]?.[role];
-  if (position === 'equipment-exception') return a.nonPortable === 'yes' ? 'conditional' : a.nonPortable === 'no' ? 'prohibited' : 'review';
-  return position || 'review';
+function quoteAnnex1(data, api, ctx, row, column) {
+  if (column === null || ctx.virtual) return;
+  api.reason('annex1Cell', { column: data.annex1Columns[column], text: data.annex1Text[row][column] }, 'annex1');
 }
 
-export function getTpptQualification(a) {
-  const agenda = calculateTpptEligibility(a.sessions || []);
-  if (a.handsOnChanged === 'yes') return { state: 'changed', agenda };
-  if (a.format === 'virtual') return { state: 'failed', agenda };
-  const qualitative = [a.procedureSkills, a.clinicalVenue, a.standalone, a.activeStations];
-  if (a.sessions?.some((s) => s.type === 'Streaming')) qualitative.push(a.streamingFollowed);
-  if (qualitative.includes('no') || (a.sessions?.length && agenda.valid && !agenda.passesAgenda)) return { state: 'failed', agenda };
-  if (!agenda.valid || !agenda.passesAgenda || qualitative.some((value) => value !== 'yes')) return { state: 'unknown', agenda };
-  return { state: 'qualified', agenda };
+function quoteAnnex6(data, api, setting, role) {
+  api.reason('annex6Cell', {
+    role: role === 'faculty' ? 'Faculty and speakers' : 'Delegates',
+    setting: data.annex6Settings[setting],
+    text: data.annex6Text[setting][role],
+  }, 'annex6');
 }
 
-export function evaluateEventSupport(data, a, evidence = null) {
-  const activity = data.activities.find((item) => item.id === a.activity);
-  const scope = getCodeScope(a);
-  const result = {
-    version: data.version, codeVersion: data.codeVersion, activity: a.activity,
-    permission: 'review', cvsRequirement: 'unknown', cvsState: evidence ? classifyCvsStatus(data, evidence.status?.raw) : 'missing',
-    codeScope: scope, ruleIds: activity ? [`activity-${activity.id}`] : [], reasons: [], sources: [...(activity?.sources || []), 'scope'],
-    warnings: [], conditions: [], missing: [], expenses: [], evidence,
+// A CVS decision is never needed for a Virtual Event; for Events in Mecomed countries CVS refers
+// companies to Mecomed's own guidelines.
+function setCvsRequirement(result, api, ctx, answers, cvs) {
+  if (ctx.virtual) {
+    result.cvsRequirement = 'none';
+    return;
+  }
+  if (cvs === 'required' && answers.eventArea === 'mecomed') {
+    result.cvsRequirement = 'mecomed';
+    api.reason('mecomedCvs', null, ['geography', 'cvsGuidance']);
+    return;
+  }
+  result.cvsRequirement = cvs;
+}
+
+function setUnclassifiedCvs(result, api, ctx, answers) {
+  result.cvsRequirement = ctx.virtual ? 'none' : 'unknown';
+  if (ctx.inArea && answers.audience === 'other') api.reason('audienceUnclassified', null, ['annex1', 'cvsGuidance']);
+}
+
+function assessExpenses(answers, ctx, api, result, context) {
+  const expenses = Array.isArray(answers.expenses) ? answers.expenses : null;
+  if (!expenses) return;
+  if (!expenses.length) {
+    api.missing({ id: 'expensesNeeded' });
+    return;
+  }
+  const yes = (value) => value === 'yes';
+  const no = (value) => value === 'no';
+  const byAnswer = (value, reason) => {
+    if (yes(value)) return ['allowed', reason];
+    if (no(value)) return ['not-allowed', reason];
+    return ['check', reason];
   };
-  const note = (text, source) => { result.reasons.push(text); if (source) result.sources.push(source); };
-  const prohibit = (text, source) => { result.permission = 'prohibited'; note(text, source); };
-  const review = (text, source) => { if (result.permission !== 'prohibited') result.permission = 'review'; note(text, source); };
-  if (!activity) { result.missing.push('Choose the planned support.'); return finish(result); }
-  const earlyWarning = getCvsScopeWarning(data, a, evidence);
-  if (scope === 'outside' && !['company-attendance', 'booth'].includes(a.activity)) {
-    result.permission = a.eventType === 'conference' ? getConferencePosition(data, a).permission : 'outside';
-    if (!['outside', 'na'].includes(result.permission)) result.permission = 'outside';
-    result.cvsRequirement = 'none';
-    if (earlyWarning) result.warnings.push(earlyWarning);
-    note('The facts place both the activity and the relevant HCP/HCO interactions outside the Code area. Other applicable requirements still need review.', 'footnotes');
-    return finish(result);
+  const assess = (expense) => {
+    // Nobody travels, stays or eats at the company's expense to take part online.
+    if (ctx.virtual && (expense === 'travel' || expense === 'accommodation')) return ['not-allowed', 'expVirtualTravel'];
+    if (ctx.virtual && expense === 'meals') return ['not-allowed', 'expVirtualHospitality'];
+    switch (context) {
+      case 'tppt-delegate':
+        return expense === 'fee' ? ['not-allowed', 'expFeeNoServices'] : ['allowed', 'expTpptAllowed'];
+      case 'tppt-changed':
+        return [expense === 'registration' ? 'allowed' : 'not-allowed', 'expChangedTppt'];
+      case 'satellite':
+        if (expense === 'fee') return ['allowed', 'expFeeServices'];
+        if (expense === 'registration') return byAnswer(answers.accessRequired, 'expRegistrationAccess');
+        if (expense === 'travel' || expense === 'accommodation') {
+          if (yes(answers.grantCoversAttendance)) return ['not-allowed', 'expGrantDuplicate'];
+          if (no(answers.grantCoversAttendance)) return ['allowed', 'expGrantDuplicate'];
+          return ['check', 'expGrantDuplicate'];
+        }
+        if (yes(answers.grantCoversAttendance)) return ['check', 'expGrantHospitality'];
+        return no(answers.grantCoversAttendance) ? ['allowed', 'expServices'] : ['check', 'expGrantHospitality'];
+      case 'company-delegate':
+        return expense === 'fee' ? ['not-allowed', 'expFeeNoServices'] : ['allowed', 'expAllowed'];
+      case 'business-delegate':
+        if (expense === 'fee') return ['not-allowed', 'expFeeNoServices'];
+        if (expense === 'travel' || expense === 'accommodation') return byAnswer(answers.nonPortable, 'expNonPortable');
+        return ['allowed', 'expAllowed'];
+      case 'services-overlap':
+        if (expense === 'fee') return ['allowed', 'expFeeServices'];
+        if (expense === 'registration') return ['not-allowed', 'expIncrementalRegistration'];
+        if (yes(answers.incrementalCosts)) return ['not-allowed', 'expIncremental'];
+        return no(answers.incrementalCosts) ? ['allowed', 'expIncremental'] : ['check', 'expIncremental'];
+      default: // services, and Faculty at a procedure training
+        return expense === 'fee' ? ['allowed', 'expFeeServices'] : ['allowed', 'expServices'];
+    }
+  };
+  for (const expense of EXPENSE_ORDER.filter((item) => expenses.includes(item))) {
+    const [state, reason] = assess(expense);
+    result.expenses.push({ id: expense, state, reason });
   }
-  if (scope === 'unknown') result.missing.push('Confirm Code applicability and the relevant event, HCP and HCO geography.');
-  if (scope === 'review') note('Company applicability or Mecomed geography needs internal review against the applicable association rules.', 'geography');
-  if (!known(a.eventType) || !known(a.format)) result.missing.push('Confirm the event type and format.');
-
-  if (a.activity === 'research' || a.activity === 'donation') {
-    result.permission = 'handoff'; result.cvsRequirement = 'none';
-    note(a.activity === 'research' ? 'Research funding and royalties require their dedicated Code provisions, rather than an event-support conclusion.' : 'Assess a genuine charitable donation under Chapter 4. Calling event sponsorship a donation does not remove the event rules; company-funded social celebrations remain prohibited.', activity.sources[0]);
-  } else if (['items', 'demos', 'hospitality', 'in-kind', 'proctorship'].includes(a.activity)) {
-    result.permission = ['in-kind', 'proctorship'].includes(a.activity) ? 'review' : 'conditional';
-    result.cvsRequirement = 'none';
-    note('Assess the specific arrangement and the conditions below; related event sponsorship must be checked separately.', activity.sources[0]);
-    if (a.activity === 'proctorship') {
-      if (a.onHcoPremises === 'yes') { result.cvsRequirement = 'none'; note('Proctorships/preceptorships on HCO premises are not subject to CVS as procedure training or a conference.', 'training'); }
-      else review('Confirm a genuine proctorship/preceptorship on HCO premises; another event type may apply.', 'training');
-    }
-    if (a.activity === 'in-kind') {
-      result.cvsRequirement = thirdParty(a) ? getConferencePosition(data, a, 'grant-running').cvs : 'unknown';
-      if (a.paymentRoute === 'personal') prohibit('Funds must never be transferred to an individual organiser’s personal bank account.', 'training');
-      else note('Individual-organiser support carries significant risks. Supplier payments or products require internal review and must not fund identifiable HCP conference attendance.', 'training');
-    }
-  } else if (a.eventType === 'conference') {
-    const matrixActivity = (a.activity === 'direct-faculty' && ['satellite', 'booth'].includes(a.role)) ? 'satellite' : a.activity;
-    const position = getConferencePosition(data, a, matrixActivity);
-    result.permission = position.permission; result.cvsRequirement = position.cvs; result.ruleIds.push(position.ruleId);
-    note('The applicable Annex I activity and event setting determine the initial position; further Code conditions still apply.', 'annex1');
-    if (a.activity === 'direct-faculty' || a.activity === 'direct-delegate') {
-      result.permission = getDirectSupportPosition(data, a);
-      if (result.permission === 'prohibited') { result.cvsRequirement = 'none'; note('Direct support of passive conference attendance or the main programme’s faculty is not permitted. A positive CVS result does not change this.', 'annex6'); }
-    }
-    if (a.activity === 'company-meeting') review('Classify your company meeting separately, then indicate whether it takes place around the third-party event.', 'overlap');
-  } else if (a.eventType === 'tppt') {
-    result.permission = 'conditional';
-    const column = getConferenceColumn(a);
-    result.cvsRequirement = column === 0 ? 'none' : column === 1 || column === 2 ? 'required' : 'unknown';
-    result.tppt = getTpptQualification(a);
-    note('Procedure training must satisfy the qualitative criteria as well as the shared agenda thresholds; CVS does not establish this qualification.', 'tppt');
-    result.sources.push('tpptOperational');
-    if (result.tppt.state === 'failed') {
-      if (['direct-delegate', 'direct-faculty'].includes(a.activity)) prohibit('The event does not qualify for the procedure-training exception on the supplied facts. Reassess it as a conference or change the arrangement.', 'training');
-      else review('The event does not qualify as procedure training. Check conference support instead.', 'tppt');
-    } else if (result.tppt.state === 'changed') {
-      note('With the hands-on element cancelled or made virtual, only educational grants and registration/access to recordings may support this changed event; travel may not be paid.', 'training');
-      if (a.expenses?.some((x) => !['registration'].includes(x)) && ['direct-delegate', 'direct-faculty'].includes(a.activity)) prohibit('The proposed expenses exceed the changed-training exception.', 'training');
-      if (!['grant-running', 'grant-attendance', 'grant-faculty', 'direct-delegate'].includes(a.activity)) review('Reassess this changed event under the conference rules.', 'training');
-    } else if (result.tppt.state !== 'qualified') result.missing.push('Confirm the procedure-training programme and qualitative criteria.');
-    if (a.activity === 'company-attendance') result.permission = 'review';
-  } else if (companyEvent(a)) {
-    result.cvsRequirement = 'none'; result.permission = 'conditional';
-    note('Apply the company-event provisions. A nearby congress does not make passive attendance support permissible.', 'company');
-    if (['direct-delegate', 'direct-faculty'].includes(a.activity) || (a.activity === 'company-meeting' && a.expenses?.length)) {
-      result.permission = getDirectSupportPosition(data, a);
-      if (result.permission === 'prohibited') note('Direct support of this participant in this setting is not permitted under the Annex VI chart.', 'annex6');
-    }
-    if (['grant-running', 'grant-attendance', 'grant-faculty', 'booth', 'satellite'].includes(a.activity)) review('This support choice is framed for third-party events. Confirm the company arrangement and use the company-meeting or direct-support scenario.', 'classification');
-    if (!known(a.overlap)) result.missing.push('Confirm the timing and location relative to a third-party event.');
-    if (a.eventType === 'company-consulting' && ['delegate', 'poster'].includes(a.role)) review('A consulting meeting requires actual services, not passive attendance.', 'consulting');
-  } else if (a.eventType === 'exhibition') {
-    result.permission = 'review'; result.cvsRequirement = 'none';
-    note('A purely promotional exhibition without educational sessions generally falls outside CVS assessment. Confirm the actual programme and assess the intended commercial activity internally.', 'conference');
-  } else review('Classify the event before determining the support position.', 'classification');
-
-  if (activity.group === 'grant') {
-    if (a.supportStage === 'planning' && result.cvsRequirement === 'required') note('A grant arrangement may include a condition requiring the appropriate positive CVS assessment. This does not authorise providing support before that condition is fulfilled.', 'educationalGrants');
-    if (a.recipient === 'individual' || a.paymentRoute === 'personal') prohibit('Educational grants must go to the qualifying organisation, not an individual HCP or personal bank account.', 'grants');
-    if (a.paymentRoute === 'supplier') review('Educational grants are paid to the qualifying organisation. Review a proposed direct supplier payment as a separate in-kind arrangement.', 'grants');
-    if (!known(a.recipient)) result.missing.push('Identify the grant recipient.');
-    if (a.recipient === 'other') review('Confirm that the recipient qualifies; a travel agency alone is not a way to bypass grant rules.', 'educationalGrants');
-    if (a.recipient === 'pco') note('Educational funds earmarked through a PCO need educational-grant safeguards even when the PCO is a commercial organisation.', 'educationalGrants');
-    if (a.packageMixed === 'yes') review('Separate educational funding from commercial consideration and assess each element independently.', 'educationalGrants');
-    if (a.identifiedBeneficiary === 'yes') review('Identifiable beneficiaries, including a one-person HCO or overly narrow criteria, require review to avoid indirect direct sponsorship.', 'educationalGrants');
-    if (a.activity === 'grant-attendance' && a.eventArea === 'out' && a.areaBeneficiaries !== 'yes') review('Confirm the educational-grant beneficiaries and Annex I footnote 3 before relying on the overseas attendance-funding classification.', 'footnotes');
+  if (result.expenses.some((expense) => expense.state === 'not-allowed')) api.prohibit('expensesRemove');
+  if (context === 'satellite' && yes(answers.grantCoversAttendance) && expenses.includes('meals')) {
+    api.review('speakerGrantHospitality', null, 'companyAtTpoe');
   }
-  if (a.eventType === 'conference' && a.activity === 'in-kind' && a.identifiableAttendance === 'yes') prohibit('In-kind support must not circumvent the ban on funding identifiable HCP conference attendance.', 'conference');
-  if (a.activity === 'demos' && a.demoKind === 'demo' && a.clinicalUse === 'yes') prohibit('Demonstration products are not for clinical patient use or onward sale. Genuine samples have different rules.', 'demoUse');
-  if (a.activity === 'demos' && (!known(a.demoKind) || !known(a.clinicalUse))) result.missing.push('Confirm whether these are demos or samples and whether patient care is intended.');
-  if (a.activity === 'booth' && a.packageMixed === 'yes') review('Separate any educational funding from the booth/advertising package and assess each element independently.', 'educationalGrants');
-  if (a.format === 'virtual' && a.expenses?.some((x) => ['travel', 'accommodation'].includes(x))) prohibit('Travel or accommodation is not justified for virtual participation.', 'virtual');
-  if (a.format === 'virtual') { result.cvsRequirement = 'none'; note('Virtual events are outside CVS assessment; relevant Code requirements still apply.', 'virtual'); }
-  if (scope === 'review' && result.permission !== 'prohibited') result.permission = 'review';
-
-  // Unknown answers remain unresolved even when the initial matrix cell allows support.
-  for (const question of getEventQuestions(data, a)) {
-    if (question.type === 'choice' && (!known(a[question.id]) || !question.options.some(([value]) => value === a[question.id]))) {
-      result.missing.push(question.label);
-    }
-    if (question.type === 'multi' && (!Array.isArray(a[question.id]) || a[question.id].some((value) => !question.options.some(([option]) => option === value)))) {
-      result.missing.push(question.label);
-    }
-  }
-  applyExpenses(a, result);
-  if ((['direct-delegate', 'direct-faculty', 'satellite', 'hospitality'].includes(a.activity) && !a.expenses?.length)
-    || (a.activity === 'company-meeting' && !Array.isArray(a.expenses))) result.missing.push('Specify the payment or expense to be assessed.');
-  if (a.intermediary !== 'yes' && a.intermediary !== 'no') result.missing.push('Confirm whether an intermediary is involved.');
-  for (const condition of getApplicableConditions(data, a)) {
-    const answer = a[condition.id];
-    result.conditions.push({ ...condition, answer: answer || 'unknown' });
-    result.sources.push(condition.source);
-    if (answer === 'no' && condition.failure === 'prohibited') prohibit(`The proposed support must change: ${condition.label}.`, condition.source);
-    else if (answer === 'no' && condition.failure === 'review') review(`Internal review is needed: ${condition.label}.`, condition.source);
-  }
-  if (thirdParty(a)) {
-    if (!known(a.crossBorder)) result.missing.push('Confirm whether HCP delegates from different countries will attend.');
-    if (a.format === 'hybrid') review('Assess the in-person and virtual components separately; the displayed CVS position concerns the in-person event.', 'virtual');
-    const warning = getCvsScopeWarning(data, a, evidence);
-    if (warning) result.warnings.push(warning);
-    if (isNationalAudience(a) && !evidence) {
-      result.warnings.push({ id: 'scope-unconfirmed', text: 'CVS scope not confirmed. A national-audience answer or an unsuccessful search does not establish that the event is outside CVS scope.' });
-    }
-  }
-  if (result.cvsRequirement === 'required' && result.cvsState === 'negative') prohibit('The required CVS assessment is negative; this proposed event support cannot proceed on that basis.', 'conference');
-  if (result.cvsRequirement === 'required' && result.cvsState === 'exempt') review('The CVS record and the entered event facts disagree on scope. Confirm the classification before proceeding.', 'annex1');
-  return finish(result);
 }
 
-function applyExpenses(a, result) {
-  const overlap = (companyEvent(a) && a.overlap === 'yes') || ['satellite', 'booth'].includes(a.role) || a.activity === 'satellite';
-  const baseProhibited = result.permission === 'prohibited';
-  for (const expense of a.expenses || []) {
-    let state = baseProhibited ? 'not permitted' : 'subject to conditions';
-    let reason = 'Reasonable, documented and limited to the permitted attendance or actual services.';
-    if (expense === 'fee' && !services(a)) { state = 'not permitted'; reason = 'An honorarium requires genuine services, not passive attendance.'; }
-    if (overlap && services(a) && expense === 'registration') {
-      if (a.activity === 'satellite' || ['satellite', 'booth'].includes(a.role)) {
-        state = a.accessRequired === 'yes' ? 'subject to conditions' : a.accessRequired === 'no' ? 'not permitted' : 'needs confirmation';
-        reason = 'Only when registration is required to access the contracted services; prorate where possible.';
-      } else { state = 'not permitted'; reason = 'No incremental congress registration costs for a separate company services meeting.'; }
-    }
-    if (overlap && services(a) && ['travel', 'accommodation'].includes(expense)) {
-      if (a.activity === 'satellite' || ['satellite', 'booth'].includes(a.role)) {
-        state = a.grantAlreadyCovers === 'no' ? 'subject to conditions' : a.grantAlreadyCovers === 'yes' ? 'not permitted' : 'needs confirmation';
-        reason = 'No duplicate support where an educational grant already covers attendance.';
-      } else {
-        state = a.incrementalCongressCosts === 'no' ? 'subject to conditions' : a.incrementalCongressCosts === 'yes' ? 'not permitted' : 'needs confirmation';
-        reason = 'Only actual service expenses; no incremental costs of congress attendance.';
-      }
-    }
-    if (expense === 'meals' && overlap && a.grantAlreadyCovers !== 'no') {
-      state = 'needs confirmation'; reason = 'Review existing grant hospitality, legitimate meeting purpose and perception; avoid duplicate benefits.';
-    }
-    if (baseProhibited) { state = 'not permitted'; reason = 'The underlying proposed support is prohibited on the supplied facts.'; }
-    result.expenses.push({ id: expense, state, reason });
-    if (state === 'not permitted') { result.permission = 'prohibited'; result.reasons.push(`${expense}: ${reason}`); }
-    if (state === 'needs confirmation') result.missing.push(`${expense}: ${reason}`);
+// Direct support of Delegates, or of Faculty in the Event's own programme: not allowed at a
+// Third Party Organised Educational Conference, allowed at a qualifying procedure training.
+function assessDirectSupport(data, answers, ctx, api, result) {
+  const row = ctx.role === 'delegate' ? 'direct-delegate' : 'direct-faculty';
+  const banned = () => {
+    if (ctx.virtual) api.prohibit('virtualNoDirect', null, ['virtualEvents', 'virtualGuidance'], 'rule');
+    api.prohibit('directSponsorshipBan', null, ['conferences', 'annex6'], 'rule');
+    quoteAnnex1(data, api, ctx, row, annex1Column(ctx, answers));
+    quoteAnnex6(data, api, 'conference', ctx.role);
+    result.cvsRequirement = 'none';
+  };
+  if (ctx.eventType === 'conference') {
+    if (answers.facultyRole === 'poster') api.reason('posterIsDelegate', null, ['annex6Definitions', 'glossary']);
+    banned();
+    return;
   }
-  if (overlap) result.sources.push('overlap');
+  // A procedure training.
+  api.addSources(['tppt', 'tpptCriteria']);
+  if (ctx.virtual) {
+    api.reason('tpptVirtual', null, 'tpptCriteria');
+    banned();
+    return;
+  }
+  const qualification = getTpptQualification(answers);
+  result.tppt = qualification;
+  if (qualification.state === 'failed') {
+    api.reason('tpptNotQualified', null, 'tpptCriteria');
+    banned();
+    return;
+  }
+  if (qualification.state === 'changed') {
+    api.reason('tpptChanged', null, 'tppt');
+    if (ctx.role === 'faculty') {
+      banned();
+      return;
+    }
+  } else {
+    if (qualification.state === 'qualified') {
+      api.reason(ctx.role === 'delegate' ? 'tpptQualifiedDelegate' : 'tpptQualifiedFaculty', null, ['tppt', 'tpptCriteria']);
+    } else {
+      api.missing({ id: 'tpptUnknown' });
+    }
+    quoteAnnex6(data, api, 'tppt', ctx.role);
+    api.reason('tpptCompanyCheck', null, 'tpptGuidance');
+  }
+  // Cross-border and international procedure trainings are submitted to CVS.
+  const column = annex1Column(ctx, answers);
+  if (column === 0) result.cvsRequirement = 'none';
+  else if (column === 1 || column === 2) {
+    api.reason('tpptCvs', null, 'tpptGuidance');
+    setCvsRequirement(result, api, ctx, answers, 'required');
+  } else setUnclassifiedCvs(result, api, ctx, answers);
+  api.allow();
+  let context = 'services';
+  if (qualification.state === 'changed') context = 'tppt-changed';
+  else if (ctx.role === 'delegate') context = 'tppt-delegate';
+  assessExpenses(answers, ctx, api, result, context);
+}
+
+function assessSatelliteSpeaker(data, answers, ctx, api, result) {
+  const column = annex1Column(ctx, answers);
+  api.reason('satelliteRules', null, ['conferences', 'companyAtTpoe']);
+  quoteAnnex6(data, api, 'satellite', 'faculty');
+  quoteAnnex1(data, api, ctx, 'satellite', column);
+  const cell = annex1Cell(data, 'satellite', column);
+  if (cell && column !== 3) setCvsRequirement(result, api, ctx, answers, cell.cvs);
+  else setUnclassifiedCvs(result, api, ctx, answers);
+  api.allow();
+  assessExpenses(answers, ctx, api, result, 'satellite');
+}
+
+function assessGrant(data, answers, ctx, api, result) {
+  const id = ctx.activity.id;
+  if (answers.recipient === 'individual') {
+    api.prohibit('grantToIndividual', null, ['grantsGeneral', 'tppt']);
+    return;
+  }
+  if (answers.recipient === 'agency') {
+    api.prohibit('grantToTravelAgency', null, 'educationalGrants');
+    return;
+  }
+  if (answers.recipient === 'patient') {
+    api.outside('grantToPatientOrg', 'grantsGeneral');
+    return;
+  }
+  if (answers.recipient === 'pco') api.reason('grantToPco', null, 'educationalGrants');
+  if (answers.paymentRoute === 'personal') api.prohibit('personalAccount', null, 'grantsGeneral');
+  if (answers.packageMixed === 'yes') api.review('grantPackageSplit', null, 'educationalGrants');
+  if (ctx.eventType === 'tppt') api.reason('tpptQualifiedGrant', null, 'tppt');
+  const column = annex1Column(ctx, answers);
+  let cell = annex1Cell(data, id, column);
+  if (column === 3) {
+    // Annex I, footnotes 3 and 5: a recipient in the Area brings the grant within the Code,
+    // without a CVS decision.
+    cell = null;
+    if (answers.recipientInArea === 'yes') {
+      api.reason('recipientInAreaApplies', null, 'annex1Footnotes');
+      api.reason(id === 'grant-attendance' ? 'beneficiariesNotInArea' : 'noAreaHcpsNoCvs', null, 'annex1Footnotes');
+      cell = { permission: 'conditional', cvs: 'none' };
+    }
+  } else {
+    if (column === 2 && id === 'grant-attendance') api.reason('beneficiariesInArea', null, 'annex1Footnotes');
+    quoteAnnex1(data, api, ctx, id, column);
+  }
+  if (cell) setCvsRequirement(result, api, ctx, answers, cell.cvs);
+  else setUnclassifiedCvs(result, api, ctx, answers);
+  api.allow();
+}
+
+function assessBooth(data, answers, ctx, api, result) {
+  if (answers.packageEducation === 'yes') api.review('boothPackageSplit', null, 'educationalGrants');
+  const column = annex1Column(ctx, answers);
+  quoteAnnex1(data, api, ctx, 'booth', column);
+  if (column === 3) {
+    api.review('boothOutsideReview', null, 'annex1');
+    result.cvsRequirement = 'internal';
+    return;
+  }
+  const cell = annex1Cell(data, 'booth', column);
+  if (cell) setCvsRequirement(result, api, ctx, answers, cell.cvs);
+  else setUnclassifiedCvs(result, api, ctx, answers);
+  api.allow();
+}
+
+function assessInKind(data, answers, ctx, api, result) {
+  const types = Array.isArray(answers.inKindType) ? answers.inKindType : [];
+  api.reason('inKindAllowed', null, 'tppt');
+  if (types.includes('money')) api.prohibit('inKindMoney', null, 'tppt');
+  if (answers.identifiableAttendance === 'yes') {
+    if (ctx.eventType === 'conference') api.prohibit('inKindIdentifiable', null, ['conferences', 'tppt']);
+    else api.review('inKindTpptAttendance', null, 'tppt');
+  }
+  // For CVS, In Kind support to the Event is treated like support for its general running.
+  const column = annex1Column(ctx, answers);
+  const cell = annex1Cell(data, 'grant-running', column);
+  if (cell && column !== 3) {
+    if (cell.cvs === 'required' && !ctx.virtual) api.reason('inKindCvs', null, ['cvs', 'annex1']);
+    setCvsRequirement(result, api, ctx, answers, cell.cvs);
+  } else setUnclassifiedCvs(result, api, ctx, answers);
+  api.allow();
+}
+
+function assessThirdPartyEvent(data, answers, ctx, api, result) {
+  const id = ctx.activity.id;
+  if (answers.format === 'hybrid') api.reason('hybridIsInPerson', null, 'glossary');
+  if (ctx.virtual) api.reason('virtualNoCvs', null, ['virtualEvents', 'virtualGuidance']);
+  if (id === 'company-attendance') {
+    api.review('companyAttendanceReview', null, 'conferences');
+    quoteAnnex1(data, api, ctx, id, annex1Column(ctx, answers));
+    result.cvsRequirement = 'internal';
+    return;
+  }
+  if (ctx.satelliteSpeaker) assessSatelliteSpeaker(data, answers, ctx, api, result);
+  else if (id === 'direct-delegate' || id === 'direct-faculty') assessDirectSupport(data, answers, ctx, api, result);
+  else if (GRANTS.includes(id)) assessGrant(data, answers, ctx, api, result);
+  else if (id === 'booth') assessBooth(data, answers, ctx, api, result);
+  else if (id === 'in-kind') assessInKind(data, answers, ctx, api, result);
+}
+
+function assessCompanyEvent(data, answers, ctx, api, result) {
+  const { eventType, role } = ctx;
+  const overlap = answers.overlap === 'yes';
+  result.cvsRequirement = 'none';
+  api.addSources('companyEvents');
+  if (eventType === 'company-services') {
+    api.reason('servicesAllowed', null, ['consultingFees', 'companyAtTpoe']);
+    if (overlap) api.reason('servicesOverlap', null, 'companyAtTpoe');
+    api.allow();
+    if (isKnown(answers.overlap)) assessExpenses(answers, ctx, api, result, overlap ? 'services-overlap' : 'services');
+    return;
+  }
+  if (!isKnown(answers.overlap)) return;
+  const setting = `${eventType}${overlap ? '-overlap' : ''}`;
+  quoteAnnex6(data, api, setting, role);
+  if (role === 'delegate') {
+    if (data.directSupportMatrix[setting].delegate === 'prohibited') {
+      api.prohibit('companyDelegateOverlap', null, 'companyAtTpoe', 'rule');
+      return;
+    }
+    if (eventType === 'company-training') api.reason('companyDelegateAllowed', null, 'companyTraining');
+    else api.reason('businessDelegate', null, ['businessMeetings', 'transparency']);
+    api.allow();
+    assessExpenses(answers, ctx, api, result, eventType === 'company-business' ? 'business-delegate' : 'company-delegate');
+    return;
+  }
+  api.reason('servicesAllowed', null, ['consultingFees', 'eventsGeneral']);
+  if (overlap) api.reason('servicesOverlap', null, 'companyAtTpoe');
+  api.allow();
+  assessExpenses(answers, ctx, api, result, overlap ? 'services-overlap' : 'services');
+}
+
+function assessOtherInteraction(answers, ctx, api, result) {
+  result.cvsRequirement = 'none';
+  switch (ctx.activity.id) {
+    case 'meal':
+      if (answers.overlap === 'yes') {
+        api.reason('mealAtTpoe', null, 'companyAtTpoe');
+        if (answers.mealGrantHospitality === 'yes') api.review('mealGrantHospitality', null, 'companyAtTpoe');
+      } else {
+        api.reason('mealGeneral', null, ['hospitality', 'transparency']);
+      }
+      break;
+    case 'items':
+      api.reason('items', null, 'items');
+      break;
+    case 'demos':
+      if (answers.demoKind === 'demo') {
+        if (answers.demoClinicalUse === 'yes') api.prohibit('demoClinicalUse', null, ['demos', 'samples']);
+        else api.reason('demosAllowed', null, 'demos');
+      }
+      if (answers.demoKind === 'sample') api.reason('samplesAllowed', null, 'samples');
+      break;
+    case 'proctorship':
+      api.reason('proctorshipNoCvs', null, ['tppt', 'glossary', 'consultingCriteria']);
+      if (answers.proctorshipSetting === 'no') api.review('proctorshipElsewhere', null, 'tppt');
+      break;
+    case 'donation':
+      api.reason('donationAllowed', null, 'donations');
+      if (answers.donationRecipient === 'hcp-charity') api.prohibit('donationHcpCharity', null, 'donations', 'rule');
+      if (answers.donationRecipient === 'hco') api.review('donationHco', null, 'donations');
+      if (answers.fundraiserHcps === 'yes') api.prohibit('fundraiserHcps', null, 'donations');
+      break;
+    default:
+      break;
+  }
+  api.allow();
+}
+
+function isAnswered(question, answers) {
+  const value = answers[question.id];
+  if (question.type === 'agenda') {
+    const agenda = calculateTpptEligibility(answers.sessions || []);
+    return agenda.valid && agenda.total > 0;
+  }
+  if (question.type === 'multi') {
+    return Array.isArray(value) && value.every((item) => question.options.some(([option]) => option === item));
+  }
+  return isKnown(value) && question.options.some(([option]) => option === value);
+}
+
+/**
+ * The Code's position from the answers alone, before the Event's CVS status and the conditions
+ * are taken into account.
+ */
+export function assessProposal(data, answers) {
+  const ctx = getContext(data, answers);
+  const result = createResult(data, answers);
+  const api = createApi(result);
+  result.context = ctx;
+  const { activity } = ctx;
+  if (!activity) {
+    api.missing({ id: 'missingActivity' });
+    return result;
+  }
+  api.addSources(activity.sources);
+  if (activity.id === 'research') {
+    result.permission = 'handoff';
+    api.reason('research', null, ['research', 'royalties']);
+    return result;
+  }
+  if (answers.member === 'no') {
+    api.outside('notMember', ['scope', 'transposition']);
+    return result;
+  }
+  if (isOutsideScope(ctx, answers)) {
+    const perHcp = ctx.eventActivity && (ctx.role !== null || ctx.satelliteSpeaker) && !ctx.company;
+    api.outside(perHcp ? 'outsideSupportedHcp' : 'outsideArea', ['scope', 'annex1Footnotes', 'geography']);
+    return result;
+  }
+  if (!ctx.eventActivity) assessOtherInteraction(answers, ctx, api, result);
+  else if (ctx.eventType && ctx.eventType !== 'unknown') {
+    if (ctx.thirdParty) assessThirdPartyEvent(data, answers, ctx, api, result);
+    else assessCompanyEvent(data, answers, ctx, api, result);
+  }
+  for (const question of getEventQuestions(data, answers)) {
+    if (!isAnswered(question, answers)) api.missing({ question: question.id });
+  }
+  api.addSources('scope');
+  return result;
+}
+
+function conditionTags(data, answers, result) {
+  const tags = new Set();
+  const ctx = result.context;
+  if (!ctx?.activity || ['prohibited', 'outside', 'handoff'].includes(result.permission)) return tags;
+  const id = ctx.activity.id;
+  const expenses = Array.isArray(answers.expenses) ? answers.expenses : [];
+  tags.add('all');
+  if (ctx.eventActivity && id !== 'company-attendance') {
+    tags.add('eventSupport');
+    if (!ctx.virtual) tags.add('inPersonEvent');
+  }
+  if (id === 'meal') tags.add('meal').add('hospitality');
+  if (expenses.includes('travel')) tags.add('travel');
+  if (expenses.includes('accommodation') || expenses.includes('meals')) tags.add('hospitality');
+  const consulting = ctx.satelliteSpeaker
+    || (id === 'direct-faculty' && ctx.role === 'faculty')
+    || id === 'proctorship'
+    || (id === 'in-kind' && answers.inKindType?.includes('speakers'));
+  if (consulting) tags.add('consulting').add('employerNotification');
+  if (id === 'direct-delegate' && (ctx.tpptDirect || ctx.company)) tags.add('employerNotification');
+  if (GRANTS.includes(id) || id === 'donation') tags.add('funding');
+  if (GRANTS.includes(id)) {
+    tags.add('grant');
+    tags.add(id === 'grant-attendance' ? 'grantAttendance' : 'grantOrganiser');
+    if (answers.recipient === 'pco') tags.add('pco');
+    if (answers.paymentRoute === 'agency') tags.add('travelAgency');
+  }
+  if (id === 'booth') tags.add('commercial');
+  if (id === 'company-attendance') tags.add('staff');
+  if (ctx.eventType === 'company-training') {
+    tags.add('companyTraining');
+    if (!ctx.virtual) tags.add('companyVenue');
+  }
+  if (ctx.eventType === 'company-business') tags.add('companyBusiness');
+  if ((id === 'meal' && answers.overlap === 'yes')
+    || (ctx.company && answers.overlap === 'yes' && expenses.includes('meals'))) tags.add('mealAtTpoe');
+  if (id === 'items') tags.add('items');
+  if (id === 'demos' || (id === 'in-kind' && answers.inKindType?.includes('products'))) tags.add('products');
+  if (id === 'demos' && answers.demoKind !== 'demo') tags.add('samples');
+  if (id === 'donation') tags.add('donation');
+  if (id === 'in-kind') tags.add('inKind');
+  if (answers.intermediary === 'yes') tags.add('intermediary');
+  return tags;
+}
+
+/**
+ * The Code requirements that apply to the proposal, from the answers alone.
+ */
+export function getApplicableConditions(data, answers, proposal = assessProposal(data, answers)) {
+  const tags = conditionTags(data, answers, proposal);
+  return data.conditions.filter((condition) => condition.appliesTo.some((tag) => tags.has(tag)));
+}
+
+// A Compliant CVS decision is binding on all Member Companies and settles the Event's own
+// criteria, so those conditions are not asked again.
+const coveredByCvs = (condition, ctx, cvsState) => Boolean(condition.coveredByCvs && ctx?.thirdParty && !ctx.virtual && cvsState === 'positive');
+
+export function getConditionQuestions(data, answers, evidence = null) {
+  const proposal = assessProposal(data, answers);
+  const evaluated = evaluateEventSupport(data, answers, evidence);
+  // Nothing more to confirm once a binding CVS decision rules the support out.
+  if (evaluated.permission === 'prohibited' && evaluated.blocking === 'rule') return [];
+  const cvsState = evaluated.cvsState;
+  return getApplicableConditions(data, answers, proposal)
+    .filter((condition) => !coveredByCvs(condition, proposal.context, cvsState))
+    .map((condition) => ({ ...condition, type: 'choice', options: CONDITION_OPTIONS }));
+}
+
+function applyCvsEvidence(data, answers, result, api, evidence) {
+  const ctx = result.context;
+  const id = ctx?.activity?.id;
+  if (!ctx?.thirdParty || ctx.virtual || ['outside', 'handoff'].includes(result.permission)) return;
+  if (result.permission === 'prohibited' && result.blocking === 'rule') return;
+  result.cvsRelevant = true;
+  result.evidence = evidence || null;
+  if (!evidence) {
+    if (result.cvsRequirement === 'required') api.reason('cvsMissing', null, ['cvs', 'cvsGuidance']);
+    if (result.cvsRequirement === 'required' && GRANTS.includes(id)) api.reason('grantPreCondition', null, 'educationalGrants');
+    return;
+  }
+  const state = classifyCvsStatus(data, evidence.status?.raw);
+  const params = { status: evidence.status.raw };
+  result.cvsState = state;
+  if (state === 'negative') {
+    if (id === 'company-attendance') api.review('cvsNegativeAttendance', params, ['conferences', 'cvs']);
+    else api.prohibit('cvsNegativeBinding', params, 'cvs', 'rule');
+    return;
+  }
+  if (state === 'positive') {
+    // A Compliant decision settles an audience Annex I does not classify: CVS has decided.
+    if (result.cvsRequirement === 'unknown') {
+      result.cvsRequirement = 'required';
+      result.reasons = result.reasons.filter((reason) => reason.id !== 'audienceUnclassified');
+    }
+    api.reason('cvsPositive', null, 'cvs');
+    return;
+  }
+  if (result.cvsRequirement !== 'required') return;
+  if (state === 'not-assessed') api.prohibit('cvsNotAssessed', params, ['cvs', 'cvsGuidance'], 'rule');
+  else if (state === 'exempt') api.review('cvsScopeDisagrees', params, ['annex1', 'cvsGuidance']);
+  else if (state === 'pre-cleared') api.reason('cvsPreCleared', null, 'cvsGuidance');
+  else if (state === 'pending') api.reason('cvsPending', params, 'cvs');
+  else api.reason('cvsUnrecognised', params, 'cvsGuidance');
+  if (GRANTS.includes(id) && !['not-assessed'].includes(state)) api.reason('grantPreCondition', null, 'educationalGrants');
+}
+
+function applyConditions(data, answers, result, api, proposal) {
+  if (result.permission === 'prohibited' && result.blocking === 'rule') return;
+  const ctx = result.context;
+  let notMet = false;
+  let needsReview = false;
+  for (const condition of getApplicableConditions(data, answers, proposal)) {
+    const covered = coveredByCvs(condition, ctx, result.cvsState);
+    const answer = covered ? 'covered' : (isKnown(answers[condition.id]) ? answers[condition.id] : 'unknown');
+    result.conditions.push({ id: condition.id, label: condition.label, sources: condition.sources, answer });
+    api.addSources(condition.sources);
+    if (answer === 'no' && condition.failure === 'prohibited') notMet = true;
+    if (answer === 'no' && condition.failure === 'review') needsReview = true;
+  }
+  if (notMet) api.prohibit('conditionsNotMet');
+  if (needsReview) api.review('conditionsNeedReview');
+}
+
+function applyWarnings(data, answers, result, evidence) {
+  const ctx = result.context;
+  if (!ctx || ['prohibited', 'outside', 'handoff'].includes(result.permission)) return;
+  const warning = getCvsScopeWarning(data, ctx, answers, evidence) || getScopeUnconfirmedWarning(ctx, answers, evidence);
+  if (warning) result.warnings.push(warning);
 }
 
 function finish(result) {
   result.sources = [...new Set(result.sources)];
-  const outstanding = result.conditions.some((c) => c.answer !== 'yes');
-  if (result.permission === 'prohibited') result.outcome = 'Not permitted under the Code';
-  else if (result.permission === 'outside') result.outcome = 'Outside the Code’s scope';
-  else if (result.permission === 'na') result.outcome = 'This scenario is not applicable';
-  else if (result.permission === 'handoff') result.outcome = 'Use the dedicated Code provisions';
-  else if (result.cvsRequirement === 'required' && result.cvsState !== 'positive') result.outcome = 'CVS assessment outstanding';
-  else if (result.missing.length) result.outcome = 'More information needed';
-  else if (result.permission === 'review' || result.warnings.length || result.cvsRequirement === 'unknown') result.outcome = 'Internal review required';
-  else result.outcome = 'Permitted subject to conditions';
-  result.ready = result.permission === 'conditional' && !outstanding && !result.missing.length && !result.warnings.length
-    && (['none', 'internal'].includes(result.cvsRequirement) || (result.cvsRequirement === 'required' && result.cvsState === 'positive'));
+  const conditionsConfirmed = result.conditions.every((condition) => ['yes', 'covered'].includes(condition.answer));
+  const cvsSatisfied = ['none', 'internal'].includes(result.cvsRequirement)
+    || (result.cvsRequirement === 'required' && result.cvsState === 'positive');
+  if (result.permission === 'prohibited') {
+    result.outcome = result.blocking === 'rule' ? 'not-permitted' : 'not-permitted-as-proposed';
+  } else if (result.permission === 'outside') result.outcome = 'outside';
+  else if (result.permission === 'handoff') result.outcome = 'handoff';
+  else if (result.cvsRequirement === 'required' && result.cvsState !== 'positive') result.outcome = 'cvs-needed';
+  else if (result.missing.length) result.outcome = 'more-info';
+  else if (result.permission === 'review' || result.permission === null || result.warnings.length
+    || ['unknown', 'mecomed'].includes(result.cvsRequirement)) result.outcome = 'review';
+  else result.outcome = conditionsConfirmed ? 'permitted-confirmed' : 'permitted';
+  result.ready = result.outcome === 'permitted-confirmed' && cvsSatisfied;
   return result;
 }
 
-export function validateEventSupportData(data, chapters) {
-  const errors = [];
-  const unique = (items, label) => { if (new Set(items).size !== items.length) errors.push(`Duplicate ${label}.`); };
-  unique(data.activities.map((a) => a.id), 'activity IDs'); unique(data.conditions.map((c) => c.id), 'condition IDs');
-  if (!data.version || !data.codeVersion || Object.keys(data.conferenceMatrix).length !== 8 || Object.keys(data.directSupportMatrix).length !== 8) errors.push('Missing rule version or incomplete baseline matrices.');
-  for (const [id, source] of Object.entries(data.sources)) {
-    if (source.url) {
-      if (!source.label || !source.url.startsWith('https://www.ethicalmedtech.eu/')) errors.push(`Invalid operational source ${id}.`);
-    } else if (!chapters.find((chapter) => chapter.id === source.chapter)?.sections[source.section]) errors.push(`Invalid event-support source ${id}.`);
+/**
+ * The full assessment: the answers, the Event's live CVS status (for a third-party Event) and
+ * the answers to the conditions.
+ */
+export function evaluateEventSupport(data, answers, evidence = null) {
+  const proposal = assessProposal(data, answers);
+  const result = { ...proposal, reasons: [...proposal.reasons], missing: [...proposal.missing], sources: [...proposal.sources], expenses: [...proposal.expenses] };
+  const api = createApi(result);
+  applyCvsEvidence(data, answers, result, api, evidence);
+  applyConditions(data, answers, result, api, proposal);
+  applyWarnings(data, answers, result, evidence);
+  return finish(result);
+}
+
+/**
+ * Records one answer and drops the answers that no longer apply. Choosing another activity keeps
+ * the facts about the Event and clears the answers that belong to the previous proposal.
+ */
+export function updateEventAnswer(data, answers, key, value) {
+  const next = { ...answers, [key]: value };
+  if (key === 'activity') {
+    for (const id of ACTIVITY_ANSWERS) delete next[id];
+    for (const condition of data.conditions) delete next[condition.id];
+    const activity = getActivity(data, value);
+    // A kind of Event implied by the previous activity (a satellite symposium is always at a
+    // conference) is kept as an answer when the new activity asks for it.
+    const implied = getEventType(data, answers);
+    if (!next.eventType && implied && implied !== 'unknown') next.eventType = implied;
+    if (next.eventType && !activity?.eventTypes.includes(next.eventType)) delete next.eventType;
   }
-  for (const item of [...data.activities, ...data.conditions]) {
-    if (!item.label || !item.id) errors.push('Missing event-support item ID or label.');
-    if (item.groups && !['conditional', 'review', 'prohibited'].includes(item.failure)) errors.push(`Invalid condition failure ${item.id}.`);
-    for (const source of item.sources || [item.source]) if (!data.sources[source]) errors.push(`Unknown source ${source} in ${item.id}.`);
-  }
-  for (const [id, cells] of Object.entries(data.conferenceMatrix)) {
-    if (!data.activities.some((a) => a.id === id) || cells.length !== 4 || cells.some((cell) => !/^(conditional|prohibited|review|outside|na):(none|required|internal)$/.test(cell))) errors.push(`Invalid Annex I row ${id}.`);
-  }
-  for (const [id, row] of Object.entries(data.directSupportMatrix)) {
-    if (Object.keys(row).length !== 2 || !['faculty', 'delegate'].every((role) => ['conditional', 'prohibited', 'equipment-exception'].includes(row[role]))) errors.push(`Invalid Annex VI row ${id}.`);
-  }
-  for (const [id, question] of Object.entries(data.questions || {})) {
-    if (question.id !== id || !question.label || !['choice', 'multi', 'agenda'].includes(question.type) || !Array.isArray(question.options)) errors.push(`Invalid question ${id}.`);
-    if (new Set(question.options.map(([value]) => value)).size !== question.options.length) errors.push(`Duplicate options in ${id}.`);
-  }
-  if (!data.questions?.companyApplies || !data.questions?.eventType || !data.questions?.crossBorder) errors.push('Incomplete event-support question registry.');
-  return errors;
+  const kept = new Set([
+    'activity',
+    ...SHARED_FACTS,
+    ...getQuestionIds(data, next),
+    ...getApplicableConditions(data, next).map((condition) => condition.id),
+  ]);
+  for (const id of Object.keys(next)) if (!kept.has(id)) delete next[id];
+  return next;
 }

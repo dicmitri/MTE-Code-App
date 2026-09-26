@@ -9,7 +9,7 @@ import {
   resolveTreeReference,
 } from '../src/utils/crossReferences.js';
 import { tokenizeAllWithOffsets, tokenizeWords } from '../src/utils/searchText.js';
-import { validateEventSupportData } from '../src/utils/eventSupportRules.js';
+import { CONDITION_TAGS } from '../src/utils/eventSupportRules.js';
 import { loadSplitCodeData } from './lib/code-content.mjs';
 import { loadTransparencyData } from './lib/transparency-content.mjs';
 
@@ -241,6 +241,155 @@ function validateCrossReferences({ chapters, transparencyDocuments, trees }, err
   return linked;
 }
 
+const EVENT_SUPPORT_CVS_STATUS_LISTS = ['exempt', 'positive', 'negative', 'notAssessed', 'preCleared', 'pending'];
+const EVENT_SUPPORT_ANNEX1_ROWS = [
+  'grant-running', 'grant-attendance', 'grant-faculty', 'satellite',
+  'company-attendance', 'booth', 'direct-delegate', 'direct-faculty',
+];
+const EVENT_SUPPORT_ANNEX6_SETTINGS = [
+  'conference', 'satellite', 'booth', 'tppt', 'company-training',
+  'company-training-overlap', 'company-business', 'company-business-overlap',
+];
+
+// The event support checker's rules (src/data/eventSupportRules.json): structure, links to Code
+// sections, and the "Chapter 4, Section 3" style references in its wording.
+function validateEventSupportRules(rules, chapters, errors, warnings) {
+  const path = 'eventSupportRules.json';
+  if (!rules || typeof rules !== 'object') {
+    errors.push(`${path}: expected an object.`);
+    return { activities: 0, conditions: 0 };
+  }
+  if (!isNonEmptyString(rules.version) || !isNonEmptyString(rules.codeVersion)) {
+    errors.push(`${path}: missing version or codeVersion.`);
+  }
+
+  const sources = rules.sources && typeof rules.sources === 'object' ? rules.sources : {};
+  for (const [key, source] of Object.entries(sources)) {
+    if (source?.url !== undefined) {
+      if (!isNonEmptyString(source.label) || !String(source.url).startsWith('https://www.ethicalmedtech.eu/')) {
+        errors.push(`${path} sources.${key}: guidance sources need a label and an ethicalmedtech.eu URL.`);
+      }
+    } else if (!chapters.find((chapter) => chapter?.id === source?.chapter)?.sections?.[source?.section]) {
+      errors.push(`${path} sources.${key}: chapter "${source?.chapter}" has no section ${source?.section}.`);
+    }
+  }
+  const checkSources = (list, itemPath) => {
+    if (!Array.isArray(list) || list.length === 0) errors.push(`${itemPath}: expected a non-empty sources array.`);
+    for (const key of asArray(list)) {
+      if (!sources[key]) errors.push(`${itemPath}: unknown source "${key}".`);
+    }
+  };
+
+  const questions = rules.questions && typeof rules.questions === 'object' ? rules.questions : {};
+  for (const [id, question] of Object.entries(questions)) {
+    const questionPath = `${path} questions.${id}`;
+    if (!['choice', 'multi', 'agenda'].includes(question?.type)) errors.push(`${questionPath}: unknown type.`);
+    if (!isNonEmptyString(question?.label) || typeof question?.help !== 'string') {
+      errors.push(`${questionPath}: missing label or help.`);
+    }
+    const options = asArray(question?.options);
+    if (question?.type !== 'agenda' && options.length < 2) errors.push(`${questionPath}: expected options.`);
+    for (const duplicate of findDuplicates(options.map((option) => option?.[0]))) {
+      errors.push(`${questionPath}: duplicate option "${duplicate}".`);
+    }
+  }
+  const eventTypes = new Set(asArray(questions.eventType?.options).map((option) => option?.[0]));
+  const groups = new Set(asArray(rules.activityGroups).map((group) => group?.id));
+
+  const activities = asArray(rules.activities);
+  for (const duplicate of findDuplicates(activities.map((activity) => activity?.id))) {
+    errors.push(`${path}: duplicate activity "${duplicate}".`);
+  }
+  activities.forEach((activity, index) => {
+    const activityPath = `${path} activities[${index}]`;
+    if (!isNonEmptyString(activity?.id) || !isNonEmptyString(activity?.label) || !isNonEmptyString(activity?.description)) {
+      errors.push(`${activityPath}: missing id, label or description.`);
+    }
+    if (!groups.has(activity?.group)) errors.push(`${activityPath}: unknown group "${activity?.group}".`);
+    for (const type of asArray(activity?.eventTypes)) {
+      if (!eventTypes.has(type) || type === 'unknown') errors.push(`${activityPath}: unknown event type "${type}".`);
+    }
+    checkSources(activity?.sources, activityPath);
+  });
+
+  const conditions = asArray(rules.conditions);
+  for (const duplicate of findDuplicates(conditions.map((condition) => condition?.id))) {
+    errors.push(`${path}: duplicate condition "${duplicate}".`);
+  }
+  conditions.forEach((condition, index) => {
+    const conditionPath = `${path} conditions[${index}]`;
+    if (!isNonEmptyString(condition?.id) || !isNonEmptyString(condition?.label)) {
+      errors.push(`${conditionPath}: missing id or label.`);
+    }
+    // Condition answers are stored beside question answers, so their IDs must differ.
+    if (questions[condition?.id]) errors.push(`${conditionPath}: ID "${condition.id}" is also a question ID.`);
+    if (!['prohibited', 'review'].includes(condition?.failure)) errors.push(`${conditionPath}: unknown failure "${condition?.failure}".`);
+    if (!Array.isArray(condition?.appliesTo) || condition.appliesTo.length === 0) {
+      errors.push(`${conditionPath}: expected appliesTo tags.`);
+    }
+    for (const tag of asArray(condition?.appliesTo)) {
+      if (!CONDITION_TAGS.includes(tag)) errors.push(`${conditionPath}: unknown tag "${tag}".`);
+    }
+    checkSources(condition?.sources, conditionPath);
+  });
+
+  const annex1 = rules.conferenceMatrix || {};
+  const annex1Text = rules.annex1Text || {};
+  if (asArray(rules.annex1Columns).length !== 4) errors.push(`${path}: annex1Columns needs the 4 Annex I columns.`);
+  if (Object.keys(annex1).sort().join() !== [...EVENT_SUPPORT_ANNEX1_ROWS].sort().join()) {
+    errors.push(`${path}: conferenceMatrix must have exactly the ${EVENT_SUPPORT_ANNEX1_ROWS.length} Annex I rows.`);
+  }
+  for (const row of EVENT_SUPPORT_ANNEX1_ROWS) {
+    const cells = asArray(annex1[row]);
+    if (cells.length !== 4 || cells.some((cell) => !/^(conditional|prohibited|review|outside|na):(none|required|internal)$/.test(cell))) {
+      errors.push(`${path} conferenceMatrix.${row}: expected 4 "permission:cvs" cells.`);
+    }
+    if (asArray(annex1Text[row]).length !== 4 || asArray(annex1Text[row]).some((text) => !isNonEmptyString(text))) {
+      errors.push(`${path} annex1Text.${row}: expected the 4 Annex I cell texts.`);
+    }
+  }
+  const annex6 = rules.directSupportMatrix || {};
+  for (const setting of EVENT_SUPPORT_ANNEX6_SETTINGS) {
+    for (const role of ['faculty', 'delegate']) {
+      if (!['conditional', 'prohibited', 'equipment-exception'].includes(annex6[setting]?.[role])) {
+        errors.push(`${path} directSupportMatrix.${setting}.${role}: expected an Annex VI position.`);
+      }
+      if (!isNonEmptyString(rules.annex6Text?.[setting]?.[role])) {
+        errors.push(`${path} annex6Text.${setting}.${role}: expected the Annex VI cell text.`);
+      }
+    }
+    if (!isNonEmptyString(rules.annex6Settings?.[setting])) errors.push(`${path} annex6Settings.${setting}: missing label.`);
+  }
+
+  const statusLabels = [];
+  for (const list of EVENT_SUPPORT_CVS_STATUS_LISTS) {
+    if (!Array.isArray(rules.cvsStatuses?.[list])) errors.push(`${path} cvsStatuses.${list}: expected a list.`);
+    statusLabels.push(...asArray(rules.cvsStatuses?.[list]).map((label) => String(label).toLowerCase()));
+  }
+  for (const duplicate of findDuplicates(statusLabels)) {
+    errors.push(`${path} cvsStatuses: "${duplicate}" is listed more than once.`);
+  }
+
+  // References in the checker's wording must name real chapters, sections, annexes and Q&As.
+  const index = createReferenceIndex({
+    codeChapters: chapters.filter((chapter) => isNonEmptyString(chapter?.id) && Array.isArray(chapter.sections) && chapter.part !== 'website'),
+  });
+  const texts = [
+    ...Object.entries(rules.messages || {}).map(([id, text]) => [`messages.${id}`, text]),
+    ...Object.entries(questions).flatMap(([id, question]) => [[`questions.${id}.label`, question?.label], [`questions.${id}.help`, question?.help]]),
+    ...conditions.map((condition, conditionIndex) => [`conditions[${conditionIndex}].label`, condition?.label]),
+  ];
+  for (const [textPath, text] of texts) {
+    if (!isNonEmptyString(text)) continue;
+    for (const reference of findCrossReferences(text, { index, context: { publication: 'code', unitId: null } })) {
+      if (reference.status === 'unresolved') errors.push(`${path} ${textPath}: "${reference.text}" does not match anything (${reference.note}).`);
+      if (reference.status === 'fallback') warnings.push(`${path} ${textPath}: "${reference.text}": ${reference.note}.`);
+    }
+  }
+
+  return { activities: activities.length, conditions: conditions.length };
+}
+
 function asArray(value) {
   if (value === null || value === undefined) return [];
   return Array.isArray(value) ? value : [value];
@@ -268,6 +417,7 @@ export function validateProjectData({
   transparencyData = [],
   iconSource = '',
   searchPhrasebook,
+  eventSupportRules,
 }) {
   const errors = [];
   const warnings = [];
@@ -622,6 +772,10 @@ export function validateProjectData({
     warnings,
   );
 
+  const eventSupport = eventSupportRules === undefined
+    ? { activities: 0, conditions: 0 }
+    : validateEventSupportRules(eventSupportRules, chapters, errors, warnings);
+
   return {
     errors,
     warnings,
@@ -638,6 +792,8 @@ export function validateProjectData({
       transparencyQas: transparencyQaCount,
       phrasebookGroups,
       crossReferences,
+      eventSupportActivities: eventSupport.activities,
+      eventSupportConditions: eventSupport.conditions,
     },
   };
 }
@@ -671,9 +827,9 @@ export function validateCurrentProject() {
     transparencyData: loadTransparencyData(PROJECT_ROOT),
     iconSource: readFileSync(resolve(PROJECT_ROOT, 'src/components/AppIcons.jsx'), 'utf8'),
     searchPhrasebook: phrasebook.value,
+    eventSupportRules: readJson('src/data/eventSupportRules.json'),
   });
   if (phrasebook.error) result.errors.push(phrasebook.error);
-  result.errors.push(...validateEventSupportData(readJson('src/data/eventSupportRules.json'), codeData.chapters));
   return result;
 }
 
@@ -703,6 +859,7 @@ function printReport({ errors, warnings, stats }) {
     + `${stats.transparencyQas} Q&As`,
   );
   console.log(`${stats.crossReferences} cross-references linked`);
+  console.log(`Event support checker: ${stats.eventSupportActivities} activities, ${stats.eventSupportConditions} conditions`);
   printNotes(warnings);
 }
 

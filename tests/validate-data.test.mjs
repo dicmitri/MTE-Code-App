@@ -94,6 +94,8 @@ test('accepts a structurally valid project fixture', () => {
     transparencyQas: 1,
     phrasebookGroups: 2,
     crossReferences: 0,
+    eventSupportActivities: 0,
+    eventSupportConditions: 0,
   });
   assert.deepEqual(result.warnings, []);
 });

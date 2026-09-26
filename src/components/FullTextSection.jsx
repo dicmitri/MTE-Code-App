@@ -7,7 +7,8 @@ import { AppIcon } from './AppIcons';
 import { getTreesBySection } from '../data/treeData';
 import { buildCodeSectionPath } from '../utils/routeUtils';
 import { resolveResourceLinks } from '../utils/resourceUtils';
-import { isPlainLinkClick, linkCrossReferences } from '../utils/crossReferences';
+import { linkCrossReferences } from '../utils/crossReferences';
+import { createLinkedTextHandlers } from '../utils/linkedTextEvents';
 
 const EMPTY_RESOURCE_LINKS = Object.freeze({});
 
@@ -216,37 +217,8 @@ export const FullTextSection = ({
         await copyWithFeedback(textToCopy, 'Plain text copied to clipboard!');
     };
 
-    const openGlossaryTerm = (target) => {
-        const termNode = target.closest?.('.glossary-term');
-        if (!termNode) return false;
-        onTermClick?.(termNode.getAttribute('data-term'), termNode);
-        return true;
-    };
-
-    // A plain click on a reference opens it in the app (a preview on wide screens); modified
-    // clicks keep the browser's behaviour, such as opening a new tab.
-    const openCrossReference = (event) => {
-        const link = event.target.closest?.('a.cross-reference');
-        if (!link || !onOpenReference || !isPlainLinkClick(event)) return false;
-        event.preventDefault();
-        onOpenReference(link.getAttribute('data-reference'), link);
-        return true;
-    };
-
-    const handleClick = (e) => {
-        if (openGlossaryTerm(e.target) || openCrossReference(e)) e.stopPropagation();
-    };
-
-    // Glossary terms are role="button" spans so they wrap with the text; give them a
-    // native button's keys: Enter on key down, Space on key up (without scrolling the page).
-    const handleKeyDown = (e) => {
-        if (e.key === 'Enter' && openGlossaryTerm(e.target)) e.preventDefault();
-        if (e.key === ' ' && e.target.closest?.('.glossary-term')) e.preventDefault();
-    };
-
-    const handleKeyUp = (e) => {
-        if (e.key === ' ') openGlossaryTerm(e.target);
-    };
+    // Glossary terms open their definition; references open a preview, or the Code.
+    const { handleClick, handleKeyDown, handleKeyUp } = createLinkedTextHandlers({ onTermClick, onOpenReference });
 
     const isBookmarked = bookmarksControls?.isBookmarked(
         id,
