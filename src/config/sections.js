@@ -32,6 +32,15 @@ export const SECTIONS = [
     available: true,
   },
   {
+    id: 'event-support',
+    title: 'Can I support this event?',
+    subtitle: 'Check a specific company proposal',
+    description: 'Assess support options, costs and conditions under the Code, with a live CVS check where relevant.',
+    icon: 'ShieldCheck',
+    color: '#7654A1',
+    available: true,
+  },
+  {
     id: 'quiz',
     title: 'Knowledge Quiz',
     subtitle: 'Test your understanding of the Code',

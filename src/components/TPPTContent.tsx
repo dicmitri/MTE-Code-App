@@ -126,6 +126,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
     handsOn: number;
     practical: number;
     passesAgenda: boolean;
+    valid: boolean;
   } | null>(null);
 
   const [showExportModal, setShowExportModal] = useState(false);
@@ -328,7 +329,7 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
   const formatHrs = formatDuration;
 
   const getFinalResult = () => {
-    if (!result) return null;
+    if (!result || !result.valid) return null;
     if (!result.passesAgenda) return 'TPOEE';
     if (qVenue && qStandalone && qSize) {
       if (qVenue === 'Yes' && qStandalone === 'No' && qSize === 'Yes') return 'TPPT';
@@ -841,8 +842,14 @@ export const TPPTContent: React.FC<TPPTContentProps> = ({ onGoHome }) => {
                 </div>
               </div>
 
+              {!result.valid && (
+                <p role="alert" className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+                  A session has a blank or negative duration. Correct it, then check the agenda again.
+                </p>
+              )}
+
               {/* Fail warning if criteria not met */}
-              {!result.passesAgenda && (
+              {result.valid && !result.passesAgenda && (
                 <div className="flex flex-col gap-3 p-6 bg-slate-50 border border-slate-200 rounded-2xl text-gray-900 shadow-inner animate-fade-in">
                   <div className="flex items-center gap-2 font-bold text-sm sm:text-base text-gray-900">
                     <div className="text-[#007A86] shrink-0"><AppIcon name="AlertCircle" size={18} /></div>

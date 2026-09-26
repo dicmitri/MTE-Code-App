@@ -30,6 +30,19 @@ test('requires at least one third hands-on and more than half practical time', (
   assert.equal(exactlyHalfPractical.passesAgenda, false);
 });
 
+test('refuses blank, negative or non-numeric durations and unknown session types', () => {
+  for (const durationMinutes of [-120, Infinity, NaN, '', '   ', null, true]) {
+    const calculation = calculateTpptEligibility([
+      { durationMinutes: 60, type: 'Hands-on' },
+      { durationMinutes, type: 'General Educational' },
+    ]);
+    assert.equal(calculation.valid, false, String(durationMinutes));
+    assert.equal(calculation.passesAgenda, false, String(durationMinutes));
+  }
+  assert.equal(calculateTpptEligibility([{ durationMinutes: 60, type: 'Workshop' }]).valid, false);
+  assert.equal(calculateTpptEligibility([{ durationMinutes: '45', type: 'Hands-on' }]).valid, true);
+});
+
 test('parses a simple timed agenda without adding unstable IDs', () => {
   const sessions = parseTpptSessions([
     '08:00 - 08:30 Registration and welcome',

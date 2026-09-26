@@ -46,6 +46,7 @@ test('serves the app shell for nested app routes instead of redirecting home', a
     '/trees/dt-ch1-event-location',
     '/quiz',
     '/tppt',
+    '/event-support',
   ]) {
     const { response } = await fetchFromWorker(path);
 

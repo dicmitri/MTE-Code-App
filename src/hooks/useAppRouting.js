@@ -5,6 +5,7 @@ import {
   buildChapterPath,
   buildCodeHomePath,
   buildCodeSectionPath,
+  buildEventSupportPath,
   buildHomePath,
   buildQuizPath,
   buildTpptPath,
@@ -110,6 +111,7 @@ export const useAppRouting = ({
   const navigateTree = useCallback((treeId) => navigateTo(buildTreePath(treeId)), [navigateTo]);
   const navigateQuiz = useCallback(() => navigateTo(buildQuizPath()), [navigateTo]);
   const navigateTppt = useCallback(() => navigateTo(buildTpptPath()), [navigateTo]);
+  const navigateEventSupport = useCallback(() => navigateTo(buildEventSupportPath()), [navigateTo]);
   const navigateTransparencyHome = useCallback(() => {
     navigateTo(buildTransparencyHomePath());
   }, [navigateTo]);
@@ -132,6 +134,7 @@ export const useAppRouting = ({
     navigateTree,
     navigateQuiz,
     navigateTppt,
+    navigateEventSupport,
     navigateTransparencyHome,
     navigateTransparencyDocument,
     navigateTransparencyUnit,

@@ -8,6 +8,7 @@
  */
 
 import { handleHistoricalDeclarationsRequest } from './historical-declarations-api.js';
+import { handleCvsRequest } from './cvs-api.js';
 
 /**
  * Generate an HMAC-signed state token for CSRF protection.
@@ -151,6 +152,11 @@ export default {
     // index.html for any dotless path and would otherwise swallow these.
     if (url.pathname.startsWith('/api/historical-declarations')) {
       return handleHistoricalDeclarationsRequest(request, env);
+    }
+
+    // Live CVS event lookup used by the event support checker; keep before the SPA fallback.
+    if (url.pathname === '/api/cvs' || url.pathname.startsWith('/api/cvs/')) {
+      return handleCvsRequest(request);
     }
 
     // 4. Fallback: Serve static assets

@@ -9,6 +9,7 @@ import {
   resolveTreeReference,
 } from '../src/utils/crossReferences.js';
 import { tokenizeAllWithOffsets, tokenizeWords } from '../src/utils/searchText.js';
+import { validateEventSupportData } from '../src/utils/eventSupportRules.js';
 import { loadSplitCodeData } from './lib/code-content.mjs';
 import { loadTransparencyData } from './lib/transparency-content.mjs';
 
@@ -662,8 +663,9 @@ function readSearchPhrasebook() {
 
 export function validateCurrentProject() {
   const phrasebook = readSearchPhrasebook();
+  const codeData = loadSplitCodeData(PROJECT_ROOT);
   const result = validateProjectData({
-    codeData: loadSplitCodeData(PROJECT_ROOT),
+    codeData,
     treeData: readJson('src/data/treeData.json'),
     quizData: readJson('src/data/quizData.json'),
     transparencyData: loadTransparencyData(PROJECT_ROOT),
@@ -671,6 +673,7 @@ export function validateCurrentProject() {
     searchPhrasebook: phrasebook.value,
   });
   if (phrasebook.error) result.errors.push(phrasebook.error);
+  result.errors.push(...validateEventSupportData(readJson('src/data/eventSupportRules.json'), codeData.chapters));
   return result;
 }
 

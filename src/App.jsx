@@ -47,6 +47,15 @@ const TPPTContent = lazy(() =>
     }))
 );
 
+const EventSupportContent = lazy(() =>
+  import('./components/EventSupportContent')
+    .catch(() => ({
+      default: ({ onGoHome }) => (
+        <SectionLoadError sectionName="Can I support this event?" onGoHome={onGoHome} />
+      ),
+    }))
+);
+
 if (typeof FULL_CODE_DATA !== 'undefined') {
   FULL_CODE_DATA.forEach(chapter => {
     chapter.sections.forEach((section, idx) => {
@@ -56,7 +65,7 @@ if (typeof FULL_CODE_DATA !== 'undefined') {
 }
 
 const App = () => {
-  const [activeSection, setActiveSection] = useState(null); // null = Home, 'code', 'trees', 'quiz', 'tppt', 'transparency'
+  const [activeSection, setActiveSection] = useState(null); // null = Home, 'code', 'trees', 'quiz', 'tppt', 'transparency', 'event-support'
   const [activeId, setActiveId] = useState('home');
   const [activeDocumentId, setActiveDocumentId] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -98,6 +107,7 @@ const App = () => {
     navigateTree,
     navigateQuiz,
     navigateTppt,
+    navigateEventSupport,
     navigateTransparencyHome,
     navigateTransparencyDocument,
     navigateTransparencyUnit,
@@ -289,6 +299,7 @@ const App = () => {
     if (sectionId === 'trees') navigateTreesHome();
     if (sectionId === 'quiz') navigateQuiz();
     if (sectionId === 'tppt') navigateTppt();
+    if (sectionId === 'event-support') navigateEventSupport();
     if (sectionId === 'transparency') navigateTransparencyHome();
   };
 
@@ -371,6 +382,7 @@ const App = () => {
           onNavigateChapter={navigateChapter}
           onNavigateCodeSection={navigateCodeSection}
           onNavigateTrees={navigateTreesHome}
+          onNavigateEventSupport={navigateEventSupport}
           onNavigateTransparency={navigateTransparencyHome}
           onNavigateTransparencyDocument={navigateTransparencyDocument}
           onNavigateTransparencyUnit={navigateTransparencyUnit}
@@ -445,6 +457,18 @@ const App = () => {
           <QuizContent
             onExit={handleGoHome}
           />
+        ) : activeSection === 'event-support' ? (
+          <Suspense
+            fallback={
+              <main className="flex-1 h-full overflow-y-auto bg-gray-50/50 custom-scrollbar p-8">
+                <div className="max-w-4xl mx-auto bg-white border border-slate-100 rounded-2xl shadow-sm p-6 text-sm font-semibold text-gray-500">
+                  Loading the event support checker...
+                </div>
+              </main>
+            }
+          >
+            <EventSupportContent onGoHome={handleGoHome} scrollRef={scrollRef} />
+          </Suspense>
         ) : activeSection === 'tppt' ? (
           <Suspense
             fallback={

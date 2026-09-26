@@ -71,6 +71,10 @@ export function buildTpptPath() {
   return '/tppt';
 }
 
+export function buildEventSupportPath() {
+  return '/event-support';
+}
+
 export function buildTransparencyHomePath() {
   return '/transparency';
 }
@@ -322,6 +326,10 @@ export function createRouteUtils(chapters, trees, transparencyDocuments = []) {
 
     if (segments.length === 1 && segments[0] === 'tppt') {
       return createRoute('tppt', 'tppt-home', buildTpptPath());
+    }
+
+    if (segments.length === 1 && segments[0] === 'event-support') {
+      return createRoute('event-support', 'event-support-home', buildEventSupportPath());
     }
 
     return resolveLegacyHash(hash) || createRoute(null, 'home', buildHomePath());

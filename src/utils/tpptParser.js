@@ -613,10 +613,25 @@ export function parseTpptSessions(inputText, options = {}) {
   });
 }
 
+// A blank, negative or non-numeric duration, or an unknown session type, would skew the
+// percentages, so the calculation refuses it (valid: false) instead of guessing.
+const isValidSession = (session) => {
+  if (!session || !SESSION_TYPES.includes(session.type)) return false;
+  const { durationMinutes } = session;
+  if (typeof durationMinutes === "string" && durationMinutes.trim() === "") return false;
+  if (typeof durationMinutes !== "number" && typeof durationMinutes !== "string") return false;
+  const duration = Number(durationMinutes);
+  return Number.isFinite(duration) && duration >= 0;
+};
+
 export function calculateTpptEligibility(sessions) {
   let total = 0;
   let handsOn = 0;
   let practical = 0;
+
+  if (!Array.isArray(sessions) || !sessions.every(isValidSession)) {
+    return { total: 0, handsOn: 0, practical: 0, passesAgenda: false, valid: false };
+  }
 
   sessions.forEach((session) => {
     const duration = Number(session.durationMinutes) || 0;
@@ -637,7 +652,8 @@ export function calculateTpptEligibility(sessions) {
     total,
     handsOn,
     practical,
-    passesAgenda: meetsHandsOn && meetsPractical
+    passesAgenda: meetsHandsOn && meetsPractical,
+    valid: true
   };
 }
 

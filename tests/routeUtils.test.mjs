@@ -10,6 +10,7 @@ import { loadTransparencyData } from '../scripts/lib/transparency-content.mjs';
 import {
   buildChapterPath,
   buildCodeSectionPath,
+  buildEventSupportPath,
   buildHistoricalDeclarationsPath,
   buildQuizPath,
   buildTransparencyDocumentPath,
@@ -45,6 +46,14 @@ test('parses the canonical top-level routes', () => {
   assert.equal(parseAppLocation('/trees', '').activeId, 'trees-home');
   assert.equal(parseAppLocation('/quiz', '').activeSection, 'quiz');
   assert.equal(parseAppLocation('/tppt', '').activeSection, 'tppt');
+  assert.deepEqual(parseAppLocation('/event-support', ''), {
+    activeSection: 'event-support',
+    activeId: 'event-support-home',
+    anchor: null,
+    canonicalUrl: buildEventSupportPath(),
+  });
+  assert.equal(parseAppLocation('/event-support/', '').canonicalUrl, '/event-support');
+  assert.equal(parseAppLocation('/event-support/extra', '').activeSection, null);
   assert.deepEqual(parseAppLocation('/transparency', ''), {
     activeSection: 'transparency',
     activeId: 'transparency-home',

@@ -80,7 +80,7 @@ const getDefaultExpandedGroups = ({
     groups.add('code-part1');
     groups.add('code-part2');
     groups.add('code-part3');
-  } else if (activeSection === 'trees') {
+  } else if (activeSection === 'trees' || activeSection === 'event-support') {
     groups.add('section-trees');
   } else if (activeSection === 'transparency') {
     groups.add('section-transparency');
@@ -121,6 +121,7 @@ export const Sidebar = ({
   onNavigateChapter,
   onNavigateCodeSection,
   onNavigateTrees,
+  onNavigateEventSupport,
   onNavigateTransparency,
   onNavigateTransparencyDocument,
   onNavigateTransparencyUnit,
@@ -654,6 +655,24 @@ export const Sidebar = ({
                   <AppIcon name="GitBranch" size={18} />
                 </span>
                 <span className="line-clamp-2 flex-1">Browse Decision Trees</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  onNavigateEventSupport();
+                  setSidebarOpen(false);
+                }}
+                aria-current={activeSection === 'event-support' ? 'page' : undefined}
+                className={`w-[calc(100%-0.5rem)] group text-left px-3 py-2.5 rounded-xl text-sm transition-all flex items-center gap-3 ml-2 ${
+                  activeSection === 'event-support'
+                    ? 'bg-[#7654A1] text-white shadow-md'
+                    : 'text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                <span className={`shrink-0 ${activeSection === 'event-support' ? 'text-white' : 'text-gray-400'}`}>
+                  <AppIcon name="ShieldCheck" size={18} />
+                </span>
+                <span className="line-clamp-2 flex-1">Can I support this event?</span>
               </button>
             </CollapsibleGroup>
 
