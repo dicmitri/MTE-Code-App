@@ -1,4 +1,4 @@
-# Event support checker (“Can I support this event?”)
+# Event support checker (“Can we support this event?”)
 
 Route: `/event-support`, from the Home Hub and the sidebar’s Decision Trees group.
 

@@ -33,7 +33,7 @@ export const SECTIONS = [
   },
   {
     id: 'event-support',
-    title: 'Can I support this event?',
+    title: 'Can we support this event?',
     subtitle: 'Check a proposal against the Code',
     description: 'Check a planned grant, sponsorship, payment or other support for an Event, with its conditions and a live CVS check where one is needed.',
     icon: 'ShieldCheck',

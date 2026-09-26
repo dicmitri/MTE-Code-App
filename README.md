@@ -60,7 +60,7 @@ The app is built using **React**, **Vite**, and **Cloudflare Workers**. All the 
 | `SearchResults.jsx` | Ranked search results: type badges, snippets, "Matched:" lines, and the expansion and spelling notes |
 | `Sidebar.jsx` | Navigation sidebar with the search box, ranked search results, bookmarks, and history; docked and resizable from 1024px, a slide-in menu below |
 | `TableOfContents.jsx` | "On This Page" list in the side panel; shrinks to one line while a definition or preview is open |
-| `EventSupportContent.jsx` | “Can I support this event?” checker: steps, answer, alternatives and side panel. Lazy-loaded. Rules in `src/data/eventSupportRules.json` and `src/utils/eventSupportRules.js`; see [`docs/event-support.md`](docs/event-support.md) |
+| `EventSupportContent.jsx` | “Can we support this event?” checker: steps, answer, alternatives and side panel. Lazy-loaded. Rules in `src/data/eventSupportRules.json` and `src/utils/eventSupportRules.js`; see [`docs/event-support.md`](docs/event-support.md) |
 | `EventSupportResult.jsx` | The checker's answer: outcome, reasons, CVS position, costs, conditions and sources |
 | `EventSupportAgenda.jsx` | Agenda import and session editor for the checker's procedure-training questions (uses the TPPT parser) |
 | `CvsEventLookup.jsx` | Search for an Event in CVS and show its live status, through the Worker's `/api/cvs` endpoints |
@@ -112,7 +112,7 @@ The app is organized into independently navigable **sections**, all accessible f
 - **Transparency** — Standalone transparency publications, initially the Disclosure Guidelines.
 - **Decision Trees** — Interactive compliance decision guides based on the Code.
 - **Knowledge Quiz** — A testing module that challenges users with randomized multiple-choice questions on selected chapters.
-- **Can I support this event?** — Checks one planned form of support (an Educational Grant, booth, payment to an HCP, meal, item, donation and more) against the Code, with a live CVS check for third-party Events, its conditions and sources, and a comparison of other options. See [`docs/event-support.md`](docs/event-support.md).
+- **Can we support this event?** — Checks one planned form of support (an Educational Grant, booth, payment to an HCP, meal, item, donation and more) against the Code, with a live CVS check for third-party Events, its conditions and sources, and a comparison of other options. See [`docs/event-support.md`](docs/event-support.md).
 - **TPPT Checker** — A compliance tool for evaluating whether a medical event qualifies as a Third Party Procedural Training meeting. Parses PDF/Word/text agendas, classifies sessions by type (Hands-on, Streaming, Case Study, etc.), checks the Code's practical-session thresholds, and exports a formatted PDF report.
 
 The currently active section is tracked via `activeSection` state in `App.jsx` (`null` = Home, `'code'`, `'transparency'`, `'trees'`, `'quiz'`, `'tppt'`, or `'event-support'`). Transparency also tracks its active standalone publication in `activeDocumentId`. The `SECTIONS` registry supplies Home Hub metadata; it is not a complete navigation or routing registry. Adding a new section (e.g. "Materials") requires:

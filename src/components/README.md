@@ -16,7 +16,7 @@ answers. It may wrap existing visible words but must never change
 standalone-publication wording. The Knowledge Quiz remains outside this reader
 behavior.
 
-`EventSupportContent.jsx` is the “Can I support this event?” checker. Its wording
+`EventSupportContent.jsx` is the “Can we support this event?” checker. Its wording
 comes from `src/data/eventSupportRules.json` and passes through the same glossary and
 cross-reference linking as the reader; terms and references open in the side panel
 from 1280px and in `DefinitionPopup` below that, and the Code opens in a new tab so the

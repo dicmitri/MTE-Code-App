@@ -51,7 +51,7 @@ const EventSupportContent = lazy(() =>
   import('./components/EventSupportContent')
     .catch(() => ({
       default: ({ onGoHome }) => (
-        <SectionLoadError sectionName="Can I support this event?" onGoHome={onGoHome} />
+        <SectionLoadError sectionName="Can we support this event?" onGoHome={onGoHome} />
       ),
     }))
 );

@@ -672,7 +672,7 @@ export const Sidebar = ({
                 <span className={`shrink-0 ${activeSection === 'event-support' ? 'text-white' : 'text-gray-400'}`}>
                   <AppIcon name="ShieldCheck" size={18} />
                 </span>
-                <span className="line-clamp-2 flex-1">Can I support this event?</span>
+                <span className="line-clamp-2 flex-1">Can we support this event?</span>
               </button>
             </CollapsibleGroup>
 

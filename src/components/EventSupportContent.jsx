@@ -305,7 +305,7 @@ export default function EventSupportContent({ onGoHome, scrollRef, glossaryMap, 
           <div className="mb-7">
             <p className="text-xs font-bold uppercase tracking-widest text-[#7654A1]">Event support · MedTech Europe Code, {data.codeVersion}</p>
             <h1 ref={headingRef} tabIndex={-1} className="mt-2 text-3xl font-bold tracking-tight text-slate-800 outline-none sm:text-4xl">
-              Can I support this event?
+              Can we support this event?
             </h1>
             <p className="mt-3 text-slate-600">
               Check what the company plans to provide against the Code and, for a third-party Event, its CVS status. Then compare other ways to support the same Event.
